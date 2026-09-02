@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JVM & .NET CLR AOT Compiler Engine — Apple //c Ultra Developer Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .section-title { border-left: 4px solid #fdb827; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Developer Module 06 — Exhaustive Technical Reference</span>
+        <h1 class="text-base font-extrabold text-white">Java & .NET CLR Ahead-of-Time (AOT) Compiler Engine</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
+
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. The Lineage: Sweet16, UCSD Pascal & Modern AOT</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        In 1977, Steve Wozniak created <strong>Sweet16</strong>, a 16-bit virtual machine interpreter embedded in Apple II Integer BASIC ROM ($F689..$F7FC). It simulated sixteen 16-bit virtual registers (R0-R15) in Zero Page. In 1979, the <strong>UCSD Pascal p-System</strong> introduced stack-based p-code bytecode execution to the 6502. The Apple //c Ultra advances this historical lineage by compiling high-level <strong>Java</strong> and <strong>C# .NET</strong> object-oriented source code directly into native, optimized 65C02 CMOS machine code ahead of time.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. Zero Page Virtual Register Allocation ($80–$EF)</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Because the 65C02 only has three 8-bit registers (<code>A</code>, <code>X</code>, <code>Y</code>), the AOT compiler maps 16-bit and 32-bit modern types to a dedicated pool of Zero Page virtual registers in Auxiliary RAM:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+          <thead class="bg-[#161b22] text-amber-400">
+            <tr>
+              <th class="p-2.5 border-b border-[#30363d]">Virtual Register</th>
+              <th class="p-2.5 border-b border-[#30363d]">Address (ZP)</th>
+              <th class="p-2.5 border-b border-[#30363d]">Width</th>
+              <th class="p-2.5 border-b border-[#30363d]">Usage & Calling Convention</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr>
+              <td class="p-2.5 text-white font-bold">R0 (vAcc)</td>
+              <td class="p-2.5 text-cyan-300">$80, $81</td>
+              <td class="p-2.5">16-bit</td>
+              <td class="p-2.5">Primary arithmetic accumulator and method return value</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R1 (vArg1)</td>
+              <td class="p-2.5 text-cyan-300">$82, $83</td>
+              <td class="p-2.5">16-bit</td>
+              <td class="p-2.5">First method argument / left operand in binary operations</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R2 (vArg2)</td>
+              <td class="p-2.5 text-cyan-300">$84, $85</td>
+              <td class="p-2.5">16-bit</td>
+              <td class="p-2.5">Second method argument / right operand</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R3 (vThis)</td>
+              <td class="p-2.5 text-cyan-300">$86, $87</td>
+              <td class="p-2.5">16-bit</td>
+              <td class="p-2.5">Pointer to active object instance ('this' pointer in Java / C#)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R4-R7 (vTemp)</td>
+              <td class="p-2.5 text-cyan-300">$88 - $8F</td>
+              <td class="p-2.5">16-bit each</td>
+              <td class="p-2.5">Compiler scratch registers for complex sub-expression evaluation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">3. Concrete Example: C# Method Lowering Walkthrough</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Consider this C# method calculating Euclidean distance:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-4 text-xs font-mono">
+        <pre><code class="text-cyan-300">// C# Source Code
+public static int DistanceSq(int x0, int y0, int x1, int y1) {
+    int dx = x1 - x0;
+    int dy = y1 - y0;
+    return (dx * dx) + (dy * dy);
+}</code></pre>
+      </div>
+
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The AOT compiler lowers this into the following native 65C02 CMOS assembly:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-4 text-xs font-mono">
+        <pre><code class="text-amber-300">; --- Lowered 65C02 Assembly ---
+DISTSQ: ; dx = x1 - x0 (R1 = R2 - R1)
+        SEC
+        LDA $84         ; Low byte x1
+        SBC $82         ; Subtract Low byte x0
+        STA $88         ; Store in vTemp dx (Low)
+        LDA $85         ; High byte x1
+        SBC $83         ; Subtract High byte x0
+        STA $89         ; Store in vTemp dx (High)
+
+        ; dy = y1 - y0 (R2 = R4 - R3)
+        SEC
+        LDA $88         ; Low byte y1
+        SBC $86         ; Subtract Low byte y0
+        STA $8A         ; Store in vTemp dy (Low)
+        ...
+        ; (dx*dx) + (dy*dy) computed via 16-bit shift-and-add hardware subroutine
+        JSR MULT16      ; Multiplies dx * dx -> R0
+        RTS</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">4. Standard Class Libraries & Zero-Dependency Execution</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The AOT compiler allows compiling pure Java and C# without importing any Apple-specific packages:
+      </p>
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3 text-xs font-mono">
+        <h3 class="text-amber-400 font-bold text-sm">How Standard APIs Execute on 65C02 Silicon</h3>
+        <ul class="list-disc list-inside text-gray-300 space-y-2 leading-relaxed">
+          <li><strong>System.Console.WriteLine & System.out.println:</strong> Character strings are converted to Apple II high-bit ASCII (<code>ch | 0x80</code>) and iterated through the Apple Monitor ROM Character Output vector (<code>JSR $FDED [COUT]</code>), followed by a carriage return (<code>JSR $FD8E [CROUT]</code>).</li>
+          <li><strong>System.Collections.Generic.List&lt;T&gt; & java.util.ArrayList:</strong> Dynamically allocate contiguous object pointers in Auxiliary RAM ($4000-$BFFF).</li>
+          <li><strong>System.Math & java.lang.Math:</strong> <code>Min</code>, <code>Max</code>, and <code>Abs</code> are lowered into 16-bit Zero Page register comparisons (<code>CMP</code>, <code>BEQ</code>, <code>BMI</code>, <code>BPL</code>) without requiring any external CRT or runtime libraries.</li>
+          <li><strong>Optional Hardware Packages:</strong> <code class="text-amber-300">Apple2.Ultra</code> and <code class="text-cyan-300">apple2.hardware</code> are purely optional interfaces for developers who specifically want direct access to retro hardware switches ($C050/$C057/$C05F Double Hi-Res, $C064 paddles, and Mockingboard PSG voices).</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+  </footer>
+
+</body>
+</html>

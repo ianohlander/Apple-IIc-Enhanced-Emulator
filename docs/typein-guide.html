@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Magazine Type-In Transcription Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d1117;
+      color: #e6edf3;
+    }
+    .font-mono-code {
+      font-family: 'Space Mono', monospace;
+    }
+    .rainbow-border {
+      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <header class="bg-[#161b22] border-b border-[#30363d] px-6 py-4 flex items-center justify-between shadow-md">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg">
+        
+      </div>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra</span>
+        <h1 class="text-base font-extrabold text-white">Magazine Type-In Transcription Guide</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">
+        ⚡ Launch Emulator
+      </a>
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
+        Docs Hub
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto p-6 md:p-10 space-y-8 text-sm">
+
+    <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-6 shadow-2xl">
+      <h2 class="text-2xl font-black text-white mb-2">Transcribing Vintage Magazine Programs</h2>
+      <p class="text-gray-400 text-xs leading-relaxed">
+        Step-by-step instructions for bringing classic Applesoft BASIC and machine code monitor listings from <em>Compute!</em>, <em>inCider</em>, <em>Nibble</em>, and <em>Softalk</em> into the Apple //c Ultra.
+      </p>
+    </div>
+
+    <!-- Workflow 1 -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
+      <div class="flex items-center gap-2 text-amber-400 font-mono font-bold text-base">
+        <span>Method 1: Direct Text Pasting & Auto-Typer</span>
+      </div>
+      <p class="text-gray-300 text-xs">
+        Use this method when you have copied program listings from websites, PDF text layers, or text files.
+      </p>
+      <ol class="list-decimal list-inside space-y-1.5 text-xs text-gray-400 font-mono">
+        <li>Click the <strong>"Magazine Type-In"</strong> tab under the hood.</li>
+        <li>Switch to the <strong>"Text Editor / Typer"</strong> tab.</li>
+        <li>Paste your Applesoft BASIC program (with line numbers) or Monitor hex dump (<code class="text-emerald-400">300: A9 00 8D 50 C0 60</code>).</li>
+        <li>Select typing speed: <strong>Human (50ms)</strong> for retro nostalgia, <strong>Fast (15ms)</strong> for quick entry, or <strong>Instant</strong> for immediate memory injection.</li>
+        <li>Click <strong>"Feed into Apple II"</strong>. Once typing finishes, type <code class="text-amber-400">RUN</code> or <code class="text-amber-400">CALL 768</code> in the emulator.</li>
+      </ol>
+    </section>
+
+    <!-- Workflow 2 -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
+      <div class="flex items-center gap-2 text-emerald-400 font-mono font-bold text-base">
+        <span>Method 2: Magazine Scan Screenshot OCR</span>
+      </div>
+      <p class="text-gray-300 text-xs">
+        Use this method when you have a scanned image, screenshot, or camera photo of a physical magazine page.
+      </p>
+      <ol class="list-decimal list-inside space-y-1.5 text-xs text-gray-400 font-mono">
+        <li>Switch to the <strong>"Magazine Scan (OCR)"</strong> tab in the Type-In Studio.</li>
+        <li>Drag and drop or upload your image file.</li>
+        <li>The OCR engine enhances contrast and extracts BASIC lines, automatically correcting common vintage OCR errors:
+          <ul class="list-disc list-inside pl-4 pt-1 space-y-1 text-gray-300">
+            <li>Letter <code class="text-amber-400">O</code> mistakenly scanned as number <code class="text-emerald-400">0</code> in line numbers.</li>
+            <li>Letter <code class="text-amber-400">I</code> or <code class="text-amber-400">l</code> mistakenly scanned as number <code class="text-emerald-400">1</code>.</li>
+            <li>Typographic curly quotes (<code class="text-amber-400">“ ”</code>) converted to standard ASCII (<code class="text-emerald-400">"</code>).</li>
+          </ul>
+        </li>
+        <li>Preview the extracted code in the editor, make any edits, and click <strong>"Feed into Apple II"</strong>.</li>
+      </ol>
+    </section>
+
+    <!-- Workflow 3 -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
+      <div class="flex items-center gap-2 text-cyan-400 font-mono font-bold text-base">
+        <span>Method 3: URL & Online Archive Importer</span>
+      </div>
+      <p class="text-gray-300 text-xs">
+        Import listings directly from online repositories (such as GitHub Gists or Asimov archives).
+      </p>
+      <ol class="list-decimal list-inside space-y-1.5 text-xs text-gray-400 font-mono">
+        <li>Switch to the <strong>"URL / Archive"</strong> tab.</li>
+        <li>Paste the URL to the raw text or BASIC listing.</li>
+        <li>Click <strong>"Fetch & Parse"</strong>: The code will load directly into the editor ready for typing.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">
+    Apple //c Ultra • Magazine Type-In Transcription Guide 
+  </footer>
+
+</body>
+</html>

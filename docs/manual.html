@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Technical Reference Manual & Complete User's Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --apple-beige: #e8e3d5;
+      --apple-dark-beige: #d5cebc;
+      --apple-platinum: #f4f1ea;
+      --apple-red: #e03a3e;
+      --apple-orange: #f58220;
+      --apple-yellow: #fdb827;
+      --apple-green: #61bb46;
+      --apple-blue: #009ddc;
+      --apple-purple: #963d97;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d1117;
+      color: #e6edf3;
+    }
+    .font-mono-code {
+      font-family: 'Space Mono', monospace;
+    }
+    .font-retro {
+      font-family: 'VT323', monospace;
+    }
+    .rainbow-border {
+      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+    }
+    pre code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Top Navigation -->
+  <header class="bg-[#161b22] border-b border-[#30363d] sticky top-1.5 z-40 px-4 lg:px-8 py-3 flex items-center justify-between shadow-md">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg">
+        
+      </div>
+      <div>
+        <span class="text-[11px] font-mono text-amber-400 font-bold tracking-widest uppercase">Apple Computer Reference Library</span>
+        <h1 class="text-sm font-extrabold text-white tracking-wide">Apple //c Ultra Technical Reference Manual</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition flex items-center gap-1.5 shadow">
+        <span>⚡ Launch Emulator</span>
+      </a>
+      <a href="docs/index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
+        Docs Hub
+      </a>
+    </div>
+  </header>
+
+  <div class="flex-1 max-w-7xl w-full mx-auto flex flex-col lg:flex-row gap-8 p-4 lg:p-8">
+
+    <!-- Sticky Table of Contents -->
+    <aside class="lg:w-72 shrink-0">
+      <div class="sticky top-20 bg-[#161b22] border border-[#30363d] rounded-xl p-4 shadow-lg text-xs space-y-3 font-mono">
+        <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+          <span class="font-bold text-amber-400 tracking-wider">MANUAL CHAPTERS</span>
+          <span class="text-[10px] text-gray-500">Full Details</span>
+        </div>
+
+        <nav class="space-y-1 text-gray-300">
+          <a href="#ch1" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">1. The 1984 Ultra Vision</a>
+          <a href="#ch2" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">2. Hardware Capabilities</a>
+          <a href="#ch3" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">3. First Boot & Chassis</a>
+          <a href="#ch4" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">4. Floppy & 32MB Hard Disk</a>
+          <a href="#ch5" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">5. Custom ROM Studio</a>
+          <a href="#ch6" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">6. Magazine Type-In Studio</a>
+          <a href="#ch7" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">7. Java & C# on 65C02</a>
+          <a href="#ch8" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">8. DHGR & Mockingboard</a>
+          <a href="#ch9" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">9. Under the Hood Suite</a>
+          <a href="#ch10" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">10. Complete Memory Maps</a>
+        </nav>
+
+        <div class="pt-3 border-t border-[#30363d] text-[10px] text-gray-500">
+          Part No. A2S4000-ULTRA<br>
+          Cupertino, California & Modern Web
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 min-w-0 space-y-12 leading-relaxed">
+
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-8 lg:p-10 shadow-2xl relative overflow-hidden space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-mono">
+          <span>Apple Computer Homebrew Edition</span> • <span>Full Details Mode</span>
+        </div>
+
+        <h1 class="text-3xl lg:text-4xl font-black text-white tracking-tight">
+          The Apple //c Ultra Technical Reference Manual
+        </h1>
+        <p class="text-gray-400 text-sm max-w-3xl leading-relaxed">
+          Welcome, Apple II enthusiast! Whether you are a retrocomputing historian exploring Wozniak's ingenious hardware softswitches or a modern developer compiling object-oriented Java and C# into raw 65C02 machine code, this reference manual provides an exhaustive, treasure-trove guide to every register, circuit, timing loop, and runtime feature of the <strong>Apple //c Ultra</strong>.
+        </p>
+      </div>
+
+      <!-- Chapter 1: The 1984 Ultra Vision -->
+      <section id="ch1" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 1</span>
+          <h2 class="text-xl font-bold text-white">The 1984 Ultra Vision: Vintage Soul, Modern Superpowers</h2>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          On April 24, 1984, at the Moscone Center in San Francisco, Apple Computer declared: <em>"Apple II Forever."</em> The centerpiece of that vision was the Apple //c — a lightweight, closed-architecture portable computer designed to sit elegantly on any desk.
+        </p>
+
+        <p class="text-gray-300 text-sm">
+          The <strong>Apple //c Ultra</strong> poses a thrilling historical "what if?": <em>What if the 1984 Apple //c were engineered with access to future breakthroughs while preserving 100% cycle-accurate backward compatibility?</em>
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 font-mono text-xs">
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-amber-400 block mb-1">Authentic 1984 Foundation</strong>
+            100% binary compatibility with 6502/65C02 software, Apple DOS 3.3, ProDOS, and standard Double Hi-Res artwork.
+          </div>
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-emerald-400 block mb-1">50 MHz Turbo Compute</strong>
+            Dynamic clock throttling from 1.023 MHz to 50 MHz enables complex physics, 3D math, and instant compilation.
+          </div>
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-cyan-400 block mb-1">OOP Language Bridge</strong>
+            Seamless Ahead-Of-Time compilation of Java and C# down to native 65C02 machine instructions.
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 2: Hardware Capabilities Comparison -->
+      <section id="ch2" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 2</span>
+          <h2 class="text-xl font-bold text-white">Hardware Capabilities: Vintage vs. Ultra Specification</h2>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          The following exhaustive matrix highlights the architectural differences between the original 1984 Apple //c and the Apple //c Ultra:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono border-collapse">
+            <thead>
+              <tr class="border-b border-[#30363d] bg-[#0d1117] text-amber-400">
+                <th class="p-3">Component</th>
+                <th class="p-3">Original 1984 Apple //c</th>
+                <th class="p-3 text-emerald-400">Apple //c Ultra Enhancement</th>
+                <th class="p-3 text-cyan-400">Underlying Technology Bridge</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr>
+                <td class="p-3 font-bold text-white">CPU Core</td>
+                <td class="p-3">NCR / Synertek 65C02 @ 1.023 MHz</td>
+                <td class="p-3 text-emerald-400 font-semibold">CMOS 65C02 @ 1.02, 2.8, 4.0, 8.0, 16.0 & 50.0 MHz Turbo</td>
+                <td class="p-3 text-gray-400">Zip Chip / TransWarp dynamic frequency scaling</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-white">Addressable RAM</td>
+                <td class="p-3">128 KB (64K Main + 64K Aux)</td>
+                <td class="p-3 text-emerald-400 font-semibold">1,024 KB to 16 MB Slinky & RamWorks Banked Memory</td>
+                <td class="p-3 text-gray-400">Apple II Memory Expansion Card ($C071–$C075)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-white">Mass Storage</td>
+                <td class="p-3">140 KB 5.25" Floppy only</td>
+                <td class="p-3 text-emerald-400 font-semibold">32 Megabyte SmartPort Virtual Hard Drive (Slot 7)</td>
+                <td class="p-3 text-gray-400">ProDOS Block Device Protocol & IndexedDB OPFS</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-white">Floppy Drives</td>
+                <td class="p-3">Single internal 140 KB drive</td>
+                <td class="p-3 text-emerald-400 font-semibold">Dual 5.25" IWM Drives (.DSK, .PO, .DO, .NIB, .WOZ flux)</td>
+                <td class="p-3 text-gray-400">Integrated Woz Machine (IWM) 6-and-2 GCR encoder</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-white">Display & Phosphors</td>
+                <td class="p-3">Composite NTSC / Mono Green</td>
+                <td class="p-3 text-emerald-400 font-semibold">Double Hi-Res (560×192 16-color) + NTSC, P1 Green, P3 Amber, P4 White</td>
+                <td class="p-3 text-gray-400">NTSC 3.58 MHz color subcarrier artifact simulation</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-white">Sound Generation</td>
+                <td class="p-3">1-bit speaker pulse ($C030)</td>
+                <td class="p-3 text-emerald-400 font-semibold">1-bit speaker + Dual AY-3-8910 Mockingboard (6 channels) + 8-bit DAC</td>
+                <td class="p-3 text-gray-400">Dual 6522 Versatile Interface Adapters in Slot 4</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-white">ROM Subsystem</td>
+                <td class="p-3">Fixed 32KB masked ROM</td>
+                <td class="p-3 text-emerald-400 font-semibold">Custom ROM Studio: Bake ProDOS 2.4 / DOS 3.3 into motherboard</td>
+                <td class="p-3 text-gray-400">Language Card $D000–$FFFF shadow flash RAM</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-white">Software Runtimes</td>
+                <td class="p-3">Applesoft BASIC, Integer BASIC</td>
+                <td class="p-3 text-emerald-400 font-semibold">AOT Java VM & C# .NET CLR Compilers emitting native 65C02</td>
+                <td class="p-3 text-gray-400">Evolution of Woz's Sweet16 & UCSD Pascal p-System</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Chapter 3: First Boot-Up & Operating Essentials -->
+      <section id="ch3" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 3</span>
+          <h2 class="text-xl font-bold text-white">First Boot-Up & Operating Essentials</h2>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          Operating the Apple //c Ultra is intuitive and authentic:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+            <h4 class="text-sm font-bold text-amber-400">Physical Controls & Chassis</h4>
+            <ul class="space-y-1.5 text-gray-300">
+              <li><strong>Power Rocker Switch:</strong> Powers the virtual motherboard and initiates reset vector ($FFFC).</li>
+              <li><strong>Dynamic Clock Dial:</strong> Select 1.02 MHz (vintage games), 2.8 MHz (IIGS), 4.0/8.0 MHz (accelerated), or 50.0 MHz Turbo mode.</li>
+              <li><strong>Volume & Mute:</strong> Regulates the audio output from the internal speaker and Mockingboard synthesizer.</li>
+              <li><strong>Drive Status LEDs:</strong> Green (Drive 1), Amber (Drive 2), Red (32MB SmartPort HD).</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+            <h4 class="text-sm font-bold text-emerald-400">Keyboard & Special Switches</h4>
+            <ul class="space-y-1.5 text-gray-300">
+              <li><strong>Open Apple ($C061):</strong> Mapped to the left Alt / Command key.</li>
+              <li><strong>Solid Apple ($C062):</strong> Mapped to the right Alt / Option key.</li>
+              <li><strong>40/80 Column Switch ($C00C/$C00D):</strong> Toggles between 40-column and crisp 80-column text display.</li>
+              <li><strong>Control-Reset:</strong> Performs a warm restart back into Applesoft or ProDOS.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 4: Floppy & 32MB Hard Disk Management -->
+      <section id="ch4" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 4</span>
+          <h2 class="text-xl font-bold text-white">Storage Architecture: Floppy Disks & 32MB Hard Disk</h2>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          Understanding the Apple II storage architecture reveals why Woz's 1978 Disk II controller remains a masterpiece of engineering:
+        </p>
+
+        <div class="space-y-4 font-mono text-xs">
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+            <h4 class="text-sm font-bold text-amber-400">How Floppy 6-and-2 GCR Encoding Works</h4>
+            <p class="text-gray-300">
+              A standard 5.25" floppy track contains 16 sectors of 256 bytes (4,096 user data bytes). To prevent shift-register clock drift, Woz devised <strong>6-and-2 Group Code Recording (GCR)</strong>, converting 256 8-bit bytes into 342 6-bit disk nibbles, each guaranteed to have no more than two consecutive zero bits and high bit 7 always set (<code class="text-emerald-400">$96–$FF</code>).
+            </p>
+            <p class="text-gray-400">
+              The Apple //c Ultra faithfully simulates the 4-phase stepper motor phases (<code class="text-amber-400">$C0E0–$C0E7</code>), track quarter-stepping, and generates authentic stepping sounds through Web Audio.
+            </p>
+          </div>
+
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+            <h4 class="text-sm font-bold text-emerald-400">The 32 Megabyte SmartPort Hard Disk (Slot 7)</h4>
+            <p class="text-gray-300">
+              In 1984, the Apple SmartPort protocol allowed intelligent block devices to attach to Slot 7. The Apple //c Ultra implements a full 32MB virtual volume (65,536 blocks of 512 bytes):
+            </p>
+            <ul class="list-disc list-inside text-gray-400 pl-2 space-y-1">
+              <li><strong>Block 0:</strong> ProDOS Boot Loader.</li>
+              <li><strong>Block 2:</strong> Volume Directory Header (<code class="text-white">/HD</code>).</li>
+              <li><strong>Blocks 3–5:</strong> Volume Bit Map (tracking all 65,536 allocation blocks).</li>
+              <li><strong>Persistence:</strong> Automatic background synchronization to browser IndexedDB storage.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 5: Custom ROM Builder -->
+      <section id="ch5" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 5</span>
+          <h2 class="text-xl font-bold text-white">The Custom ROM Builder Studio: Baking OS into Silicon</h2>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          Instead of relying on boot floppies, the **Custom ROM Studio** allows you to construct custom 32KB/64KB Apple //c ROM packages and flash them into the motherboard:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <h4 class="font-bold text-amber-400 mb-2">Baking ProDOS 2.4.x / DOS 3.3</h4>
+            <p class="text-gray-400">
+              Bake ProDOS, BASIC.SYSTEM, or DOS 3.3 directly into the Language Card ROM shadow at <code class="text-emerald-400">$D000–$FFFF</code>. Powering on the machine boots straight into your command prompt in 0.001 seconds!
+            </p>
+          </div>
+
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <h4 class="font-bold text-emerald-400 mb-2">Custom Boot Banner & Entry Vectors</h4>
+            <p class="text-gray-400">
+              Personalize your computer's power-on message at <code class="text-emerald-400">$3A10</code> (e.g. <code class="text-white">*** APPLE //c ULTRA HOMEBREW EDITION ***</code>) and customize reset vectors at <code class="text-emerald-400">$FFFC</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 6: Magazine Type-In Studio -->
+      <section id="ch6" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 6</span>
+          <h2 class="text-xl font-bold text-white">The Magazine Type-In Studio: Reviving Compute!, inCider & Nibble</h2>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          Throughout the 1980s, computer magazines were the lifeblood of the Apple II community. The **Magazine Type-In Studio** bridges those historical publications to your modern workflow:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-amber-400 block mb-1">1. Text Typer & Injector</strong>
+            Paste Applesoft BASIC or Monitor hex dumps (<code class="text-emerald-400">300: A9 00 8D...</code>). Feed keystrokes into the keyboard strobe buffer with authentic typing rhythm or instant memory injection.
+          </div>
+
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-emerald-400 block mb-1">2. Magazine Scan OCR</strong>
+            Upload a scan or screenshot of a vintage magazine page. OCR parses line numbers, cleans curly quotes, and fixes <code class="text-white">O/0</code> and <code class="text-white">I/1</code> optical errors.
+          </div>
+
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-cyan-400 block mb-1">3. URL Archive Importer</strong>
+            Paste a URL to a raw GitHub Gist or retro archive listing to pull the code directly into the transcription engine.
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 7: Java & C# on the 65C02 -->
+      <section id="ch7" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#30363d] pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 7</span>
+            <h2 class="text-xl font-bold text-white">Writing & Deploying Java and C# on the 65C02</h2>
+          </div>
+          <a href="docs/csharp-game-engineering.html" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold font-mono rounded text-xs transition shadow flex items-center gap-1">
+            <span>🕹️ View Full-Stack C# Game Case Study</span> →
+          </a>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          How can a 65C02 microprocessor execute modern object-oriented code? Just as Steve Wozniak built **Sweet16** (1977) to execute 16-bit bytecode and the **UCSD Pascal p-System** (1979) executed p-code on the 6502, the Apple //c Ultra uses an Ahead-Of-Time (AOT) compiler to translate Java and C# into raw 65C02 machine instructions!
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Java -->
+          <div class="space-y-2 font-mono text-xs">
+            <h4 class="font-bold text-emerald-400">Java: Double Hi-Res Graphics Demo</h4>
+            <pre class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-emerald-400 overflow-x-auto"><code>import apple2.hardware.*;
+
+public class UltraGraphics {
+  public static void main(String[] args) {
+    // 1. Switch to 560x192 16-Color DHGR
+    AppleGraphics.setVideoMode(
+      AppleGraphics.MODE_DOUBLE_HIRES
+    );
+    AppleGraphics.clearScreen(0);
+    
+    // 2. Play Welcome Sound
+    AppleAudio.beep(880, 200);
+    
+    // 3. Print Telemetry
+    AppleSystem.print("JAVA RUNNING ON 65C02!");
+  }
+}</code></pre>
+          </div>
+
+          <!-- C# -->
+          <div class="space-y-2 font-mono text-xs">
+            <h4 class="font-bold text-cyan-400">C#: Mockingboard Polyphonic Synthesizer</h4>
+            <pre class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-cyan-300 overflow-x-auto"><code>using Apple2.Ultra;
+
+namespace SoundEngine {
+  public class Program {
+    public static void Main() {
+      // Engage Double Hi-Res
+      AppleVideo.SetDoubleHiRes(true);
+      
+      // Trigger Speaker Pulse
+      AppleSound.Beep(523, 100);
+      AppleSound.Beep(659, 100);
+      AppleSound.Beep(783, 200);
+      
+      // Output to Screen
+      Console.WriteLine("C# .NET CLR ONLINE");
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 8: Sound & Graphics -->
+      <section id="ch8" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 8</span>
+          <h2 class="text-xl font-bold text-white">Sound & Graphics System: Double Hi-Res & Mockingboard</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+            <h4 class="text-sm font-bold text-amber-400">Double Hi-Res Video (DHGR)</h4>
+            <p class="text-gray-300">
+              Double Hi-Res provides 560×192 monochrome resolution or 140×192 with 16 distinct colors.
+            </p>
+            <p class="text-gray-400">
+              It interleaves 7-bit pixel slices between Auxiliary Memory (<code class="text-emerald-400">$2000–$3FFF</code>) and Main Memory (<code class="text-emerald-400">$2000–$3FFF</code>). By shifting the phase of each 4-bit nibble across the 3.579545 MHz NTSC color subcarrier, 16 vibrant colors are synthesized on composite monitors!
+            </p>
+          </div>
+
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+            <h4 class="text-sm font-bold text-purple-400">Dual AY-3-8910 Mockingboard (Slot 4)</h4>
+            <p class="text-gray-300">
+              Slot 4 contains dual 6522 Versatile Interface Adapters driving two General Instrument AY-3-8910 Programmable Sound Generators:
+            </p>
+            <ul class="list-disc list-inside text-gray-400 pl-2 space-y-1">
+              <li><strong>6 Simultaneous Tone Voices:</strong> Channels A, B, C across 2 PSG chips.</li>
+              <li><strong>White Noise Generators:</strong> 17-bit LFSR pseudo-random noise.</li>
+              <li><strong>Hardware Envelopes:</strong> 8 hardware shape modulators.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter 9: Under the Hood Hacker Guide -->
+      <section id="ch9" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 9</span>
+          <h2 class="text-xl font-bold text-white">Under the Hood: The Vintage Hacker Workbench</h2>
+        </div>
+
+        <p class="text-gray-300 text-sm">
+          The **Under the Hood Inspector** provides complete introspective power into the virtual motherboard:
+        </p>
+
+        <ul class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <li class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-amber-400 block mb-1">65C02 CPU Debugger</strong>
+            Live disassembler, registers (A, X, Y, SP, PC), condition flags, instruction step (F10), step-over, and breakpoint manager.
+          </li>
+          <li class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-emerald-400 block mb-1">Memory Hex Editor</strong>
+            Inspect and edit all 64K Main RAM, 64K Aux RAM, 1MB Slinky RAM, Language Card, and System ROM banks.
+          </li>
+          <li class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+            <strong class="text-cyan-400 block mb-1">Softswitch Matrix</strong>
+            Real-time interactive matrix of hardware switches: 80STORE, RAMRD, RAMWRT, ALTZP, 80COL, TEXT, HIRES, DHIRES.
+          </li>
+        </ul>
+      </section>
+
+      <!-- Chapter 10: Technical Reference Tables -->
+      <section id="ch10" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+        <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 10</span>
+          <h2 class="text-xl font-bold text-white">Technical Reference Tables: Memory Maps & Softswitches</h2>
+        </div>
+
+        <h3 class="text-sm font-bold text-amber-400 font-mono">Essential Softswitch Register Reference ($C000–$C0FF)</h3>
+        <div class="overflow-x-auto font-mono text-xs">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-[#30363d] bg-[#0d1117] text-amber-400">
+                <th class="p-2">Address</th>
+                <th class="p-2">Name</th>
+                <th class="p-2">R / W</th>
+                <th class="p-2">Hardware Action & Description</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr><td class="p-2 font-bold text-white">$C000</td><td class="p-2 text-amber-300">KBD</td><td class="p-2">Read</td><td>Keyboard data / Strobe bit (Bit 7 = Key Pressed)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C010</td><td class="p-2 text-amber-300">KBDSTRB</td><td class="p-2">R/W</td><td>Clear keyboard strobe</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C030</td><td class="p-2 text-amber-300">SPKR</td><td class="p-2">R/W</td><td>Toggle 1-bit speaker output cone</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C000 / $C001</td><td class="p-2 text-amber-300">80STORE</td><td class="p-2">Write</td><td>Disable / Enable Aux video RAM mapping via PAGE2 ($C054/$C055)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C002 / $C003</td><td class="p-2 text-amber-300">RAMRD</td><td class="p-2">Write</td><td>Select Main / Auxiliary RAM for reads ($0200–$BFFF)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C004 / $C005</td><td class="p-2 text-amber-300">RAMWRT</td><td class="p-2">Write</td><td>Select Main / Auxiliary RAM for writes ($0200–$BFFF)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C008 / $C009</td><td class="p-2 text-amber-300">ALTZP</td><td class="p-2">Write</td><td>Select Main / Auxiliary Zero Page ($0000–$00FF) & Stack ($0100–$01FF)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C00C / $C00D</td><td class="p-2 text-amber-300">80COL</td><td class="p-2">Write</td><td>Select 40-Column / 80-Column Display Mode</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C050 / $C051</td><td class="p-2 text-amber-300">TXTCLR/SET</td><td class="p-2">R/W</td><td>Display Graphics / Display Text</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C052 / $C053</td><td class="p-2 text-amber-300">MIXCLR/SET</td><td class="p-2">R/W</td><td>Full Screen / Mixed Screen (Bottom 4 lines Text)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C054 / $C055</td><td class="p-2 text-amber-300">PAGE1 / PAGE2</td><td class="p-2">R/W</td><td>Select Video Page 1 / Video Page 2</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C056 / $C057</td><td class="p-2 text-amber-300">LORES / HIRES</td><td class="p-2">R/W</td><td>Select Lo-Res / Hi-Res Graphics Mode</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C05E / $C05F</td><td class="p-2 text-amber-300">DHIRES</td><td class="p-2">R/W</td><td>Double Hi-Res Off / On (560x192 16-color)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C071</td><td class="p-2 text-emerald-400">SLINKY_DATA</td><td class="p-2">R/W</td><td>Slinky 1MB-16MB Expanded RAM Data Port (Auto-Increment)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C073–$C075</td><td class="p-2 text-emerald-400">SLINKY_ADDR</td><td class="p-2">Write</td><td>Slinky 24-bit RAM Address Registers (Low, Mid, High)</td></tr>
+              <tr><td class="p-2 font-bold text-white">$C080–$C08F</td><td class="p-2 text-cyan-300">LANG_CARD</td><td class="p-2">R/W</td><td>Language Card Bank 1 / Bank 2 RAM/ROM Controller ($D000–$FFFF)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-center text-xs font-mono text-gray-500 pt-8 pb-12 border-t border-[#30363d]">
+        Apple //c Ultra • Technical Reference Manual & Programming Guide • Cupertino, California 
+      </footer>
+
+    </main>
+  </div>
+
+</body>
+</html>

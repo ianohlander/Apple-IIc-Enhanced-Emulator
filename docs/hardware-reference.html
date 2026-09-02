@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Hardware Schematics & Softswitch Encyclopedia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d1117;
+      color: #e6edf3;
+    }
+    .font-mono-code {
+      font-family: 'Space Mono', monospace;
+    }
+    .rainbow-border {
+      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <header class="bg-[#161b22] border-b border-[#30363d] px-6 py-4 flex items-center justify-between shadow-md">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg">
+        
+      </div>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Hardware</span>
+        <h1 class="text-base font-extrabold text-white">Hardware Schematics & Softswitch Encyclopedia</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">
+        ⚡ Launch Emulator
+      </a>
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
+        Docs Hub
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto p-6 md:p-10 space-y-10 text-sm">
+
+    <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-8 shadow-2xl space-y-3">
+      <h2 class="text-3xl font-black text-white">The Definitive Hardware & Softswitch Reference</h2>
+      <p class="text-gray-400 text-xs leading-relaxed">
+        Complete register mappings, MMU banking logic, Slinky 1MB-16MB expanded memory protocols, IWM Disk II shift registers, Mockingboard 6522 VIAs, and SmartPort 32MB block volume architecture.
+      </p>
+    </div>
+
+    <!-- Section 1: Complete Softswitch Reference Table -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <h3 class="text-base font-bold text-amber-400">Complete Hardware Softswitch Matrix ($C000–$C0FF)</h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-[#30363d] bg-[#0d1117] text-amber-400">
+              <th class="p-2">Address</th>
+              <th class="p-2">Name</th>
+              <th class="p-2">R / W</th>
+              <th class="p-2">Hardware Function & Effect</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr><td class="p-2 text-white font-bold">$C000</td><td class="p-2 text-amber-300">KBD</td><td class="p-2">Read</td><td>Read keyboard data; Bit 7 indicates key pressed.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C000</td><td class="p-2 text-amber-300">80STOREOFF</td><td class="p-2">Write</td><td>Disable 80STORE; PAGE2 ($C054/$C055) selects video pages directly.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C001</td><td class="p-2 text-amber-300">80STOREON</td><td class="p-2">Write</td><td>Enable 80STORE; PAGE2 routes video RAM ($0400-$07FF / $2000-$3FFF) to Aux RAM.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C002</td><td class="p-2 text-amber-300">RAMRDOFF</td><td class="p-2">Write</td><td>Read from Main RAM ($0200–$BFFF).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C003</td><td class="p-2 text-amber-300">RAMRDON</td><td class="p-2">Write</td><td>Read from Auxiliary RAM ($0200–$BFFF).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C004</td><td class="p-2 text-amber-300">RAMWRTOFF</td><td class="p-2">Write</td><td>Write to Main RAM ($0200–$BFFF).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C005</td><td class="p-2 text-amber-300">RAMWRTON</td><td class="p-2">Write</td><td>Write to Auxiliary RAM ($0200–$BFFF).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C008</td><td class="p-2 text-amber-300">ALTZPOFF</td><td class="p-2">Write</td><td>Select Main Zero Page ($0000–$00FF) & Stack ($0100–$01FF).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C009</td><td class="p-2 text-amber-300">ALTZPON</td><td class="p-2">Write</td><td>Select Auxiliary Zero Page ($0000–$00FF) & Stack ($0100–$01FF).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C00C</td><td class="p-2 text-amber-300">80COLOFF</td><td class="p-2">Write</td><td>Set 40-Column Display Mode.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C00D</td><td class="p-2 text-amber-300">80COLON</td><td class="p-2">Write</td><td>Set 80-Column Display Mode (Interleaves Main & Aux text).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C010</td><td class="p-2 text-amber-300">KBDSTRB</td><td class="p-2">R/W</td><td>Clear keyboard strobe bit 7.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C030</td><td class="p-2 text-amber-300">SPKR</td><td class="p-2">R/W</td><td>Toggle 1-bit speaker output state.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C050 / $C051</td><td class="p-2 text-amber-300">TXTCLR / TXTSET</td><td class="p-2">R/W</td><td>Display Graphics Mode / Display Text Mode.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C052 / $C053</td><td class="p-2 text-amber-300">MIXCLR / MIXSET</td><td class="p-2">R/W</td><td>Full Screen Graphics / Mixed Screen (Bottom 4 lines Text).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C054 / $C055</td><td class="p-2 text-amber-300">TXTPAGE1 / TXTPAGE2</td><td class="p-2">R/W</td><td>Select Video Page 1 / Video Page 2.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C056 / $C057</td><td class="p-2 text-amber-300">LORES / HIRES</td><td class="p-2">R/W</td><td>Select Lo-Res (40x48) / Hi-Res (280x192) Graphics.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C05E / $C05F</td><td class="p-2 text-amber-300">DHIRESOFF / DHIRESON</td><td class="p-2">R/W</td><td>Select Standard Graphics / Double Hi-Res (560x192).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C061</td><td class="p-2 text-amber-300">OPENAPPLE</td><td class="p-2">Read</td><td>Bit 7 = 1 if Open Apple (Command) key is pressed.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C062</td><td class="p-2 text-amber-300">SOLIDAPPLE</td><td class="p-2">Read</td><td>Bit 7 = 1 if Solid Apple (Option) key is pressed.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C071</td><td class="p-2 text-emerald-400">SLINKY_DATA</td><td class="p-2">R/W</td><td>Slinky 1MB-16MB Expanded RAM Data Port (Auto-Increments Address).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C073</td><td class="p-2 text-emerald-400">SLINKY_ADR_L</td><td class="p-2">Write</td><td>Slinky 24-bit Address Register: Low Byte (Bits 0–7).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C074</td><td class="p-2 text-emerald-400">SLINKY_ADR_M</td><td class="p-2">Write</td><td>Slinky 24-bit Address Register: Mid Byte (Bits 8–15).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C075</td><td class="p-2 text-emerald-400">SLINKY_ADR_H</td><td class="p-2">Write</td><td>Slinky 24-bit Address Register: High Byte (Bits 16–23).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C080–$C08F</td><td class="p-2 text-cyan-300">LANG_CARD</td><td class="p-2">R/W</td><td>Language Card Bank 1 / Bank 2 RAM/ROM Controller ($D000–$FFFF).</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C0B0–$C0BF</td><td class="p-2 text-blue-300">UTHERNET</td><td class="p-2">R/W</td><td>Slot 3 CS8900A Ethernet Controller.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C0C0–$C0CF</td><td class="p-2 text-purple-300">MOCKINGBOARD</td><td class="p-2">R/W</td><td>Slot 4 Dual 6522 VIAs & Dual AY-3-8910 Sound Synthesizers.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C0E0–$C0EF</td><td class="p-2 text-amber-300">DISK_II</td><td class="p-2">R/W</td><td>Slot 6 IWM / Disk II 4-Phase Stepper Motor & Shift Register.</td></tr>
+            <tr><td class="p-2 text-white font-bold">$C0F0–$C0FF</td><td class="p-2 text-emerald-300">SMARTPORT</td><td class="p-2">R/W</td><td>Slot 7 32MB SmartPort Block Hard Disk Controller.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 2: Slinky 1MB-16MB Memory Expansion -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <h3 class="text-base font-bold text-emerald-400">Slinky 1MB-16MB Expanded RAM Protocol</h3>
+      <p class="text-gray-300">
+        The Apple //c Ultra implements the Apple Memory Expansion Card ("Slinky") protocol. It exposes a 24-bit auto-incrementing address counter that enables rapid block transfers of up to 16 megabytes:
+      </p>
+
+      <pre class="bg-[#0d1117] p-4 rounded border border-[#30363d] text-emerald-400"><code>; Set 24-Bit Slinky Address to $040000 (256 KB Offset)
+LDA #$00 : STA $C073 ; Address Low
+LDA #$00 : STA $C074 ; Address Mid
+LDA #$04 : STA $C075 ; Address High
+
+; Stream 256 bytes into Slinky RAM (Address increments automatically)
+LDX #$00
+LOOP: LDA BUFFER,X
+      STA $C071      ; Writes byte and increments 24-bit pointer
+      INX
+      BNE LOOP</code></pre>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">
+    Apple //c Ultra • Hardware Schematics & Softswitch Encyclopedia 
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Vertical Stack Trace: C# to 65C02 to Browser — Apple //c Ultra</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.76rem; line-height: 1.45; }
+    .section-title { border-left: 5px solid #009ddc; padding-left: 1rem; }
+    .layer-card { transition: all 0.2s ease; }
+    .layer-card:hover { border-color: #009ddc; transform: translateY(-2px); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-5 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-4">
+      <a href="index.html" class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-700 flex items-center justify-center shadow text-white font-bold text-2xl"></a>
+      <div>
+        <span class="text-xs font-mono text-cyan-400 font-bold tracking-widest uppercase">Deep Architecture Walkthrough</span>
+        <h1 class="text-lg font-extrabold text-white">Full Vertical Stack Trace: High-Level C# &rarr; 65C02 Assembly &rarr; Silicon Emulation &rarr; Browser Web APIs</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Developer Hub</a>
+      <a href="../../index-standalone.html" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Live Emulator</a>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-[#161b22] border-b border-[#30363d] px-6 py-3 sticky top-1.5 z-40 text-xs font-mono overflow-x-auto">
+    <div class="max-w-7xl mx-auto flex items-center space-x-6 whitespace-nowrap text-gray-400">
+      <span class="text-cyan-400 font-bold">Stack Layers:</span>
+      <a href="#layer1" class="hover:text-white transition">1. C# Source</a>
+      <a href="#layer2" class="hover:text-white transition">2. AOT Lowering</a>
+      <a href="#layer3" class="hover:text-white transition">3. 65C02 Machine Code</a>
+      <a href="#layer4" class="hover:text-white transition">4. Emulation Engine</a>
+      <a href="#layer5" class="hover:text-white transition">5. Browser Runtime</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-6 py-10 w-full space-y-16 flex-grow">
+
+    <!-- Introduction -->
+    <section class="space-y-4">
+      <h2 class="text-3xl font-black text-white section-title">End-to-End Vertical Pipeline Overview</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        This document traces a complete, non-trivial user application through all five vertical layers of the system. We follow a C# arcade paddle and tone-generation routine as it is compiled ahead-of-time, translated to 65C02 machine instructions, executed across emulated silicon gates and softswitches, and finally presented to the user through modern browser Canvas and Web Audio APIs.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs font-mono">
+        <div class="p-3 bg-[#161b22] border border-[#30363d] rounded-lg text-center">
+          <span class="text-cyan-400 font-bold block mb-1">Layer 1</span>
+          <span class="text-white font-semibold">C# Source Code</span>
+          <p class="text-gray-500 text-[0.68rem] mt-1">High-Level OOP Logic</p>
+        </div>
+        <div class="p-3 bg-[#161b22] border border-[#30363d] rounded-lg text-center">
+          <span class="text-cyan-400 font-bold block mb-1">Layer 2</span>
+          <span class="text-white font-semibold">AOT Lowering</span>
+          <p class="text-gray-500 text-[0.68rem] mt-1">Zero-Page Allocation</p>
+        </div>
+        <div class="p-3 bg-[#161b22] border border-[#30363d] rounded-lg text-center">
+          <span class="text-cyan-400 font-bold block mb-1">Layer 3</span>
+          <span class="text-white font-semibold">65C02 Assembly</span>
+          <p class="text-gray-500 text-[0.68rem] mt-1">Hex Opcodes & Vectors</p>
+        </div>
+        <div class="p-3 bg-[#161b22] border border-[#30363d] rounded-lg text-center">
+          <span class="text-cyan-400 font-bold block mb-1">Layer 4</span>
+          <span class="text-white font-semibold">Silicon Emulation</span>
+          <p class="text-gray-500 text-[0.68rem] mt-1">CPU, MMU, PSG, Video</p>
+        </div>
+        <div class="p-3 bg-[#161b22] border border-[#30363d] rounded-lg text-center">
+          <span class="text-cyan-400 font-bold block mb-1">Layer 5</span>
+          <span class="text-white font-semibold">Browser Runtime</span>
+          <p class="text-gray-500 text-[0.68rem] mt-1">Canvas, Web Audio, DOM</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layer 1 -->
+    <section id="layer1" class="space-y-4">
+      <h2 class="text-2xl font-black text-white section-title">Layer 1: High-Level C# Source Application</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Here is a complete C# program that reads the analog paddle controller, draws a Double Hi-Res bounding box, prints a message, and generates a dynamic sound tone based on paddle position:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono">
+        <pre><code class="text-cyan-300">// RetroPaddleController.cs — High-Level C# Application
+using System;
+using Apple2.Ultra;
+
+namespace ArcadeExperience
+{
+    public class PaddleApp
+    {
+        public static void Main()
+        {
+            // 1. Initialize Double Hi-Res 560x192 Graphics Mode
+            AppleVideo.SetDoubleHiRes(true);
+            AppleVideo.Clear(AppleVideo.Black);
+
+            // 2. Standard Console Character Stream Output
+            Console.WriteLine("PADDLE TRACKER ULTRA (65C02)");
+
+            // 3. Read Analog Paddle 0 ($C064) & Synthesize Sound
+            int paddlePos = AppleSystem.GetMouseX(); // 0..255
+            int frequency = 440 + (paddlePos * 4);   // 440 Hz .. 1460 Hz
+            AppleSound.Beep(frequency, 60);
+
+            // 4. Render Paddle Line at bottom of CRT Screen
+            AppleVideo.DrawLine(paddlePos * 2, 180, (paddlePos * 2) + 40, 180, AppleVideo.White);
+        }
+    }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Layer 2 -->
+    <section id="layer2" class="space-y-4">
+      <h2 class="text-2xl font-black text-white section-title">Layer 2: AOT Compiler AST Lowering & Register Allocation</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Ahead-of-Time compiler traverses the Abstract Syntax Tree (AST) and maps the high-level C# expressions to <strong>Zero-Page virtual registers ($80-$8F)</strong> and hardware softswitch memory locations:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+          <thead class="bg-[#161b22] text-cyan-400">
+            <tr>
+              <th class="p-2.5 border-b border-[#30363d]">C# Expression / Variable</th>
+              <th class="p-2.5 border-b border-[#30363d]">Target Architecture Binding</th>
+              <th class="p-2.5 border-b border-[#30363d]">Lowering Transformation Strategy</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">AppleVideo.SetDoubleHiRes(true)</td>
+              <td class="p-2.5 text-cyan-300">$C050, $C057, $C00D, $C05F</td>
+              <td class="p-2.5">Emits hardware softswitch strobes: <code>STA $C050</code> (Graphics), <code>STA $C057</code> (Hi-Res), <code>STA $C00D</code> (80Col), <code>STA $C05F</code> (DHiRes).</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">Console.WriteLine("...")</td>
+              <td class="p-2.5 text-cyan-300">ROM Vector $FDED (COUT)</td>
+              <td class="p-2.5">Converts string characters to high-bit ASCII (<code>ch | 0x80</code>) and loops with <code>LDA #$XX</code> / <code>JSR $FDED</code>.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">int paddlePos = GetMouseX()</td>
+              <td class="p-2.5 text-cyan-300">Virtual Register R1 ($82,$83)</td>
+              <td class="p-2.5">Reads hardware paddle register <code>$C064</code>, stores into Zero Page 16-bit register <code>$82</code>.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">frequency = 440 + (paddlePos * 4)</td>
+              <td class="p-2.5 text-cyan-300">Virtual Register R0 ($80,$81)</td>
+              <td class="p-2.5">Shifts <code>paddlePos</code> left twice (<code>ASL</code> x2), then performs 16-bit addition with immediate constant 440 (<code>$01B8</code>).</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">AppleSound.Beep(frequency, 60)</td>
+              <td class="p-2.5 text-cyan-300">Speaker Flip-Flop $C030</td>
+              <td class="p-2.5">Passes frequency to cycle-exact delay loop that toggles <code>STA $C030</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Layer 3 -->
+    <section id="layer3" class="space-y-4">
+      <h2 class="text-2xl font-black text-white section-title">Layer 3: Generated 65C02 Native Assembly & Hex Machine Code</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The compiler outputs pure, relocatable 65C02 CMOS machine code loaded at target address <code>$2000</code>:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono">
+        <pre><code class="text-amber-300">; ==============================================================================
+; GENERATED 65C02 CMOS ASSEMBLY LISTING FOR RETROPADDLECONTROLLER
+; TARGET LOAD ADDRESS: $2000 | ENTRY POINT: $2000
+; ==============================================================================
+* = $2000
+
+START:
+  $2000: D8         CLD                     ; Clear decimal mode flag
+  $2001: A2 FF      LDX #$FF                ; Initialize hardware stack pointer
+  $2003: 9A         TXS                     ; SP = $FF
+
+; --- Step 1: Set Double Hi-Res Graphics Mode ($C050, $C057, $C00D, $C05F) ---
+  $2004: 8D 50 C0   STA $C050               ; Softswitch: TXTCLR (Graphics display on)
+  $2007: 8D 57 C0   STA $C057               ; Softswitch: HIRES (Hi-Res graphics on)
+  $200A: 8D 0D C0   STA $C00D               ; Softswitch: 80COLSET (80-column video on)
+  $200D: 8D 5F C0   STA $C05F               ; Softswitch: DHIRESON (Double Hi-Res on)
+
+; --- Step 2: Output Banner String via Apple Monitor ROM ($FDED: COUT) ---
+  $2010: A9 D0      LDA #$D0                ; ASCII 'P' | 0x80
+  $2012: 20 ED FD   JSR $FDED               ; Call Monitor ROM COUT routine
+  $2015: A9 C1      LDA #$C1                ; ASCII 'A' | 0x80
+  $2017: 20 ED FD   JSR $FDED
+  $201A: A9 C4      LDA #$C4                ; ASCII 'D' | 0x80
+  $201C: 20 ED FD   JSR $FDED
+  $201F: A9 C4      LDA #$C4                ; ASCII 'D' | 0x80
+  $2021: 20 ED FD   JSR $FDED
+  $2024: A9 CC      LDA #$CC                ; ASCII 'L' | 0x80
+  $2026: 20 ED FD   JSR $FDED
+  $2029: A9 C5      LDA #$C5                ; ASCII 'E' | 0x80
+  $202B: 20 ED FD   JSR $FDED
+  $202E: 20 8E FD   JSR $FD8E               ; Call Monitor ROM CROUT (Carriage Return)
+
+; --- Step 3: Read Paddle 0 ($C064) and Calculate Frequency ---
+  $2031: AD 64 C0   LDA $C064               ; Read hardware Game Paddle 0 (0..255)
+  $2034: 85 82      STA $82                 ; Store into Zero Page R1 (vArg1 Low)
+  $2036: 64 83      STZ $83                 ; 65C02 Store Zero: R1 High = $00
+
+  $2038: 0A         ASL A                   ; Multiply by 2 (paddlePos * 2)
+  $2039: 0A         ASL A                   ; Multiply by 2 again (paddlePos * 4)
+  $203A: 18         CLC                     ; Clear carry for 16-bit addition
+  $203B: 69 B8      ADC #$B8                ; Add 440 ($01B8) Low Byte ($B8)
+  $203D: 85 80      STA $80                 ; Store into Zero Page R0 (vAcc Low)
+  $203F: A9 01      LDA #$01                ; High byte $01
+  $2041: 69 00      ADC #$00                ; Add carry
+  $2043: 85 81      STA $81                 ; Store into Zero Page R0 (vAcc High)
+
+; --- Step 4: Generate Speaker Tone via $C030 Toggle Loop ---
+TONE_LOOP:
+  $2045: 8D 30 C0   STA $C030               ; Toggle 1-bit speaker diaphragm
+  $2048: A2 40      LDX #$40                ; Delay constant based on frequency
+DELAY:
+  $204A: CA         DEX                     ; Decrement delay counter
+  $204B: D0 FD      BNE DELAY               ; Loop until X == 0
+  $204D: C6 80      DEC $80                 ; Decrement duration counter
+  $204F: D0 F4      BNE TONE_LOOP           ; Continue tone pulse train
+
+; --- Step 5: Clean Exit ---
+  $2051: 60         RTS                     ; Return from subroutine to ProDOS / Caller</code></pre>
+      </div>
+    </section>
+
+    <!-- Layer 4 -->
+    <section id="layer4" class="space-y-4">
+      <h2 class="text-2xl font-black text-white section-title">Layer 4: TypeScript Silicon Emulation Engine Execution</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        When the 65C02 executes opcode <code>$8D $50 $C0</code> (<code>STA $C050</code>), the emulation engine intercepts the write at the MMU and updates the internal video generator state:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono space-y-4">
+        <h3 class="text-emerald-400 font-bold text-sm">TypeScript CPU & MMU State Transition</h3>
+        <pre><code class="text-emerald-300">// 1. CPU Opcode Dispatch in CPU65C02.step()
+const opcode = this.readByte(this.pc++); // Reads 0x8D
+const targetAddr = this.readWord(this.pc); // Reads 0xC050
+this.pc += 2;
+this.cycles += 4;
+
+// 2. Memory Bus Write Routing in Apple2cMMU.writeByte()
+if (targetAddr >= 0xC000 && targetAddr <= 0xC0FF) {
+    this.handleSoftswitchWrite(targetAddr, this.a);
+}
+
+// 3. Video Mode Switch Update in Apple2cVideo.ts
+case 0xC050: // TXTCLR
+    this.textMode = false;
+    this.dirty = true;
+    break;
+case 0xC057: // HIRES
+    this.hiresMode = true;
+    this.dirty = true;
+    break;
+case 0xC05F: // DHIRESON
+    this.doubleHiresMode = true;
+    this.dirty = true;
+    break;</code></pre>
+      </div>
+    </section>
+
+    <!-- Layer 5 -->
+    <section id="layer5" class="space-y-4">
+      <h2 class="text-2xl font-black text-white section-title">Layer 5: Browser Runtime Presentation (Canvas 2D & Web Audio)</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The hardware state changes are rendered directly to physical hardware in the browser through standard HTML5 APIs:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
+        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-3">
+          <h3 class="text-cyan-400 font-bold text-sm">A. Video Rendering (HTML5 Canvas 2D)</h3>
+          <p class="text-gray-300">
+            For Double Hi-Res, the engine reads 80 bytes (40 Aux + 40 Main) for each scanline, serializes 560 monochrome dots, applies 4-dot NTSC composite phase artifacting to determine pixel RGB colors, and draws onto the `<canvas>`:
+          </p>
+          <pre><code class="text-cyan-300">const imgData = ctx.createImageData(560, 192);
+// Serialize 7 bits per byte from Aux and Main RAM
+for (let y = 0; y < 192; y++) {
+    const addr = getScanlineAddr(y);
+    // Draw pixels with CRT phosphor persistence & scanline darkening
+}
+ctx.putImageData(imgData, 0, 0);</code></pre>
+        </div>
+
+        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-3">
+          <h3 class="text-pink-400 font-bold text-sm">B. Audio Output (Web Audio API)</h3>
+          <p class="text-gray-300">
+            Speaker toggles at <code>$C030</code> are buffered into an `AudioContext` pulse stream:
+          </p>
+          <pre><code class="text-pink-300">const audioCtx = new AudioContext();
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'square';
+osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.06);
+osc.connect(gain).connect(audioCtx.destination);
+osc.start(); osc.stop(audioCtx.currentTime + 0.06);</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-cyan-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Full-Stack Vertical Trace
+  </footer>
+
+</body>
+</html>

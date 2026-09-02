@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Cookbooks & Case Studies — Apple //c Ultra Developer Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .section-title { border-left: 4px solid #f58220; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
+      <div>
+        <span class="text-xs font-mono text-yellow-400 font-bold tracking-widest uppercase">Developer Module 08 — Exhaustive Technical Reference</span>
+        <h1 class="text-base font-extrabold text-white">Developer Cookbooks & Production-Grade Case Studies</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
+
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. Full-Stack C# Retro Breakout Arcade Engine</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        A complete, object-oriented Breakout arcade game in C# utilizing Double Hi-Res graphics, 2D brick collision physics, paddle tracking via Apple II game paddles ($C064), and Mockingboard sound effects:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono">
+        <pre><code class="text-yellow-300">using System;
+using System.Collections.Generic;
+using Apple2.Ultra;
+
+namespace RetroBreakout
+{
+    public class Brick
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Color { get; set; }
+        public bool IsAlive { get; set; }
+
+        public Brick(int x, int y, int color)
+        {
+            X = x;
+            Y = y;
+            Color = color;
+            IsAlive = true;
+        }
+
+        public void Draw()
+        {
+            if (!IsAlive) return;
+            // Draw a 32x8 pixel Double Hi-Res Brick
+            for (int r = 0; r < 8; r++)
+            {
+                AppleVideo.DrawLine(X, Y + r, X + 30, Y + r, Color);
+            }
+        }
+    }
+
+    public class BreakoutGame
+    {
+        private List&lt;Brick&gt; _bricks;
+        private int _score;
+        private int _lives;
+        private int _ballX, _ballY;
+        private int _ballDx, _ballDy;
+
+        public BreakoutGame()
+        {
+            _score = 0;
+            _lives = 3;
+            _ballX = 280;
+            _ballY = 120;
+            _ballDx = 2;
+            _ballDy = -2;
+            _bricks = new List&lt;Brick&gt;();
+
+            // Populate 4 rows of 14 bricks (56 bricks total)
+            int[] rowColors = { AppleVideo.DeepRed, AppleVideo.Orange, AppleVideo.LightGreen, AppleVideo.Yellow };
+            for (int row = 0; row < 4; row++)
+            {
+                for (int col = 0; col < 14; col++)
+                {
+                    _bricks.Add(new Brick(20 + col * 36, 25 + row * 12, rowColors[row]));
+                }
+            }
+        }
+
+        public void Run()
+        {
+            AppleVideo.SetDoubleHiRes(true);
+            AppleVideo.Clear(AppleVideo.Black);
+            Console.WriteLine("RETRO BREAKOUT ULTRA IN C# ACTIVE!");
+            AppleSound.Beep(587, 80);
+            AppleSound.Beep(880, 120);
+
+            foreach (var b in _bricks) b.Draw();
+
+            while (_lives > 0 && _bricks.Count > 0)
+            {
+                int paddleX = AppleSystem.GetMouseX() * 2; // Map paddle 0..510
+                AppleVideo.DrawLine(paddleX, 184, paddleX + 48, 184, AppleVideo.White);
+                UpdateBall(paddleX);
+            }
+        }
+
+        private void UpdateBall(int paddleX)
+        {
+            _ballX += _ballDx;
+            _ballY += _ballDy;
+
+            // Wall collisions
+            if (_ballX <= 5 || _ballX >= 555) _ballDx = -_ballDx;
+            if (_ballY <= 5) _ballDy = -_ballDy;
+
+            // Paddle collision
+            if (_ballY >= 180 && _ballX >= paddleX && _ballX <= paddleX + 48)
+            {
+                _ballDy = -_ballDy;
+                AppleSound.Beep(1200, 20);
+            }
+
+            // Brick collision
+            for (int i = 0; i < _bricks.Count; i++)
+            {
+                var b = _bricks[i];
+                if (b.IsAlive && _ballX >= b.X && _ballX <= b.X + 32 && _ballY >= b.Y && _ballY <= b.Y + 8)
+                {
+                    b.IsAlive = false;
+                    _ballDy = -_ballDy;
+                    _score += 100;
+                    AppleSound.Beep(880, 15);
+                    // Erase brick with black box
+                    for (int r = 0; r < 8; r++) AppleVideo.DrawLine(b.X, b.Y + r, b.X + 30, b.Y + r, AppleVideo.Black);
+                    break;
+                }
+            }
+        }
+    }
+}</code></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-yellow-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+  </footer>
+
+</body>
+</html>

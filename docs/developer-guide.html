@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Java & C# 65C02 Developer & Runtime Engineering Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d1117;
+      color: #e6edf3;
+    }
+    .font-mono-code {
+      font-family: 'Space Mono', monospace;
+    }
+    .rainbow-border {
+      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+    }
+    pre code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <header class="bg-[#161b22] border-b border-[#30363d] px-6 py-4 flex items-center justify-between shadow-md">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg">
+        
+      </div>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Engineering</span>
+        <h1 class="text-base font-extrabold text-white">Java & C# 65C02 Runtime & Developer Guide</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">
+        ⚡ Launch Emulator
+      </a>
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
+        Docs Hub
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto p-6 md:p-10 space-y-10 text-sm">
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-8 shadow-2xl space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-mono">
+        <span>From Sweet16 & UCSD Pascal to 2026 OOP Runtimes</span>
+      </div>
+      <h2 class="text-3xl font-black text-white">How Java & C# Execute on the 65C02 CPU</h2>
+      <p class="text-gray-400 text-sm leading-relaxed">
+        A deep architectural exploration of modern Object-Oriented bytecode translation, Zero Page register virtualization, memory layout, and the Apple II hardware API bindings.
+      </p>
+    </div>
+
+    <!-- Section 1: Historical Roots -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+      <h3 class="text-lg font-bold text-amber-400 font-mono flex items-center gap-2">
+        <span>1. The Lineage: Sweet16, UCSD Pascal & Virtual Machines</span>
+      </h3>
+      <p class="text-gray-300 text-xs leading-relaxed">
+        Running higher-level virtual machine bytecodes on an 8-bit Apple II is not a foreign concept; it is part of Apple's deepest DNA:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+          <h4 class="font-bold text-emerald-400">Sweet16 (Steve Wozniak, 1977)</h4>
+          <p class="text-gray-400">
+            Woz created <strong>Sweet16</strong>, a 16-bit virtual processor implemented as a 6502 bytecode interpreter in the Apple II Integer BASIC ROM. It mapped 16 virtual 16-bit registers (R0–R15) into Zero Page ($00–$1F), enabling 16-bit pointer arithmetic and memory addressing in compact code.
+          </p>
+        </div>
+
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+          <h4 class="font-bold text-cyan-400">UCSD Pascal p-System (1979)</h4>
+          <p class="text-gray-400">
+            The Apple II Pascal system compiled structured Pascal source code into intermediate <strong>p-code</strong>, which was interpreted by a native 6502 p-machine runtime. It brought structured programming and separate compilation units to 64KB machines.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-gray-300 text-xs leading-relaxed">
+        The <strong>Apple //c Ultra</strong> takes this heritage to its ultimate conclusion: using modern Ahead-Of-Time (AOT) compiler theory to take modern Java and C# source trees, parse their Abstract Syntax Trees (AST), and compile them directly down to native, un-emulated CMOS 65C02 machine instructions that run at up to 50 MHz Turbo clock rates!
+      </p>
+    </section>
+
+    <!-- Section 2: Architecture of the AOT Compiler -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">
+        <span>2. The 65C02 AOT Compilation Pipeline</span>
+      </h3>
+
+      <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-3">
+        <p class="text-gray-300">
+          The compilation process operates through three distinct compilation stages:
+        </p>
+
+        <div class="space-y-2 text-gray-400">
+          <div class="p-2 bg-[#161b22] rounded border border-[#30363d]">
+            <strong class="text-white">Stage 1: Lexical Analysis & Statement Dispatch</strong><br>
+            Source lines are tokenized, isolating class definitions, methods, hardware API calls (<code class="text-amber-400">AppleGraphics</code>, <code class="text-amber-400">AppleAudio</code>, <code class="text-amber-400">AppleSystem</code>), loops, and arithmetic assignments.
+          </div>
+
+          <div class="p-2 bg-[#161b22] rounded border border-[#30363d]">
+            <strong class="text-white">Stage 2: Zero Page Virtual Register Allocation</strong><br>
+            High-level variables and evaluation stacks are mapped into dedicated fast Zero Page memory locations ($80–$EF), while the hardware stack ($0100–$01FF) is reserved for function frames and subroutine calls (<code class="text-emerald-400">JSR / RTS</code>).
+          </div>
+
+          <div class="p-2 bg-[#161b22] rounded border border-[#30363d]">
+            <strong class="text-white">Stage 3: 65C02 Instruction Generation & Vector Linking</strong><br>
+            Emits optimized 65C02 instructions (including CMOS extensions like <code class="text-purple-400">BRA</code>, <code class="text-purple-400">STZ</code>, <code class="text-purple-400">PHX/PLX</code>, <code class="text-purple-400">PHY/PLY</code>), creates the program header at <code class="text-amber-400">$2000</code>, and initializes softswitch states.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Hardware API Specification -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <h3 class="text-lg font-bold text-cyan-400 flex items-center gap-2">
+        <span>3. Standard Hardware API Library Specification</span>
+      </h3>
+
+      <div class="space-y-4">
+        <!-- Graphics -->
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+          <h4 class="text-sm font-bold text-amber-400 mb-2">Class: AppleGraphics (Java) / AppleVideo (C#)</h4>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-[#30363d] text-gray-500">
+                <th class="py-1.5">Method</th>
+                <th class="py-1.5">Generated 65C02 Sequence</th>
+                <th class="py-1.5">Description</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr>
+                <td class="py-1.5 text-emerald-400">setVideoMode(MODE_DOUBLE_HIRES)</td>
+                <td class="py-1.5 text-gray-400">STA $C050, STA $C057, STA $C00D, STA $C05F</td>
+                <td class="py-1.5">Engages 560×192 16-color Double Hi-Res mode.</td>
+              </tr>
+              <tr>
+                <td class="py-1.5 text-emerald-400">clearScreen(color)</td>
+                <td class="py-1.5 text-gray-400">LDA #col, LDY #$00, STA $2000,Y...</td>
+                <td class="py-1.5">Fills video memory $2000–$3FFF with color byte.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Audio -->
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+          <h4 class="text-sm font-bold text-purple-400 mb-2">Class: AppleAudio (Java) / AppleSound (C#)</h4>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-[#30363d] text-gray-500">
+                <th class="py-1.5">Method</th>
+                <th class="py-1.5">Generated 65C02 Sequence</th>
+                <th class="py-1.5">Description</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr>
+                <td class="py-1.5 text-purple-400">beep(freq, duration)</td>
+                <td class="py-1.5 text-gray-400">BEEP: LDA $C030, DLY: DEY, BNE DLY...</td>
+                <td class="py-1.5">Toggles 1-bit speaker cone at calibrated frequency.</td>
+              </tr>
+              <tr>
+                <td class="py-1.5 text-purple-400">playMockingboard(voice, freq, vol)</td>
+                <td class="py-1.5 text-gray-400">STA $C0C0, STA $C0C1 (VIA in Slot 4)</td>
+                <td class="py-1.5">Programs AY-3-8910 tone generator voices 1–6.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- System -->
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d]">
+          <h4 class="text-sm font-bold text-cyan-400 mb-2">Class: AppleSystem (Java) / Console (C#)</h4>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-[#30363d] text-gray-500">
+                <th class="py-1.5">Method</th>
+                <th class="py-1.5">Generated 65C02 Sequence</th>
+                <th class="py-1.5">Description</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr>
+                <td class="py-1.5 text-cyan-400">print(string) / WriteLine(string)</td>
+                <td class="py-1.5 text-gray-400">LDA #char | 0x80, JSR $FDED (COUT)</td>
+                <td class="py-1.5">Outputs characters through Apple IIc ROM terminal.</td>
+              </tr>
+              <tr>
+                <td class="py-1.5 text-cyan-400">poke(address, value)</td>
+                <td class="py-1.5 text-gray-400">LDA #val, STA addr</td>
+                <td class="py-1.5">Direct memory write to MMU bus.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Complete Realistic Code Examples & Case Study -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+      <div class="flex justify-between items-center border-b border-[#30363d] pb-3">
+        <h3 class="text-lg font-bold text-amber-400 font-mono flex items-center gap-2">
+          <span>4. Complete Real-World Applications & Game Case Study</span>
+        </h3>
+        <a href="csharp-game-engineering.html" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold font-mono rounded text-xs transition shadow">
+          🕹️ Open Retro Breakout C# Case Study →
+        </a>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Java Code -->
+        <div class="space-y-2 font-mono">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-emerald-400">Java: Polyphonic Chime & Double Hi-Res Splash</span>
+            <span class="text-gray-500">Target: $2000</span>
+          </div>
+          <pre class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-emerald-400 overflow-x-auto text-xs"><code>import apple2.hardware.AppleGraphics;
+import apple2.hardware.AppleAudio;
+import apple2.hardware.AppleSystem;
+
+public class UltraArcadeIntro {
+    public static void main(String[] args) {
+        // Step 1: Engage 560x192 Double Hi-Res Color Display
+        AppleGraphics.setVideoMode(AppleGraphics.MODE_DOUBLE_HIRES);
+        AppleGraphics.clearScreen(AppleGraphics.COLOR_BLACK);
+        
+        // Step 2: Play Dual Mockingboard & 1-Bit Speaker Fanfare
+        AppleAudio.beep(523, 100); // C5
+        AppleAudio.beep(659, 100); // E5
+        AppleAudio.beep(783, 150); // G5
+        AppleAudio.beep(1046, 250); // C6
+        
+        // Step 3: Print Welcome Message to Apple //c Screen
+        AppleSystem.print("APPLE //C ULTRA - JAVA RUNTIME READY");
+    }
+}</code></pre>
+        </div>
+
+        <!-- C# Code -->
+        <div class="space-y-2 font-mono">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-cyan-400">C#: Hardware Diagnostics & Turbo Pulse</span>
+            <span class="text-gray-500">Target: $2000</span>
+          </div>
+          <pre class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-cyan-300 overflow-x-auto text-xs"><code>using System;
+using Apple2.Ultra;
+
+namespace RetroUltra {
+    public class SystemDiagnostics {
+        public static void Main() {
+            // Activate Double Hi-Res Graphics
+            AppleVideo.SetDoubleHiRes(true);
+            
+            // Pulse Speaker
+            AppleSound.Beep(880, 200);
+            
+            // Console Telemetry Output
+            Console.WriteLine("C# .NET CLR ONLINE");
+            Console.WriteLine("CPU: 65C02 @ 50.0 MHZ TURBO");
+            Console.WriteLine("RAM: 1,024 KB SLINKY EXPANSION");
+            Console.WriteLine("HD: 32 MB SMARTPORT VOLUME");
+        }
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">
+    Apple //c Ultra • Java & C# 65C02 Runtime & Developer Guide 
+  </footer>
+
+</body>
+</html>

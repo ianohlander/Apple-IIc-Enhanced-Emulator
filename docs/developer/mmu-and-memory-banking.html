@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMU Banking & Slinky 16MB RAM — Apple //c Ultra Developer Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .section-title { border-left: 4px solid #009ddc; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-cyan-500 to-cyan-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
+      <div>
+        <span class="text-xs font-mono text-cyan-400 font-bold tracking-widest uppercase">Developer Module 02 — Exhaustive Technical Reference</span>
+        <h1 class="text-base font-extrabold text-white">Memory Management Unit (MMU), Banking & 16MB Slinky RAM</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
+
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. Full 64KB Address Space Architecture</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c uses a unified 16-bit address bus spanning $0000 through $FFFF. The custom Apple MMU gate array partitions this address space into distinct functional regions, dynamically bank-switching between 128KB of onboard RAM (Main & Auxiliary), 32KB of Motherboard ROM, and 16MB of Slinky expanded RAM.
+      </p>
+
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+        <h3 class="text-base font-bold text-cyan-400 font-mono">Apple //c Ultra 64KB Memory Map Breakdown</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+            <thead class="bg-[#0d1117] text-gray-400">
+              <tr>
+                <th class="p-2.5 border-b border-[#30363d]">Address Range</th>
+                <th class="p-2.5 border-b border-[#30363d]">Size</th>
+                <th class="p-2.5 border-b border-[#30363d]">Primary Function</th>
+                <th class="p-2.5 border-b border-[#30363d]">Banking Mechanism & Controls</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$0000 - $00FF</td>
+                <td class="p-2.5">256 B</td>
+                <td class="p-2.5">Zero Page (High-speed 1-byte pointer & variable space)</td>
+                <td class="p-2.5">Banked via <strong>ALTZP</strong> (<code>$C008</code>=Aux, <code>$C009</code>=Main)</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$0100 - $01FF</td>
+                <td class="p-2.5">256 B</td>
+                <td class="p-2.5">Hardware 65C02 Stack Page</td>
+                <td class="p-2.5">Banked via <strong>ALTZP</strong> along with Zero Page</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$0200 - $03FF</td>
+                <td class="p-2.5">512 B</td>
+                <td class="p-2.5">Input buffer ($0200), Vectors, ProDOS global page ($0300)</td>
+                <td class="p-2.5">Banked via <strong>RAMRD / RAMWRT</strong> (<code>$C002-$C005</code>)</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$0400 - $07FF</td>
+                <td class="p-2.5">1 KB</td>
+                <td class="p-2.5">Text Screen Page 1 / Lo-Res Graphics Page 1</td>
+                <td class="p-2.5">Banked via <strong>80STORE</strong> (<code>$C001</code>) and <strong>PAGE2</strong> (<code>$C054/$C055</code>)</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$0800 - $0BFF</td>
+                <td class="p-2.5">1 KB</td>
+                <td class="p-2.5">Text Screen Page 2 / Lo-Res Graphics Page 2</td>
+                <td class="p-2.5">Switched via <code>PAGE2</code> softswitch</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$0C00 - $1FFF</td>
+                <td class="p-2.5">5 KB</td>
+                <td class="p-2.5">Applesoft BASIC program memory / User RAM space</td>
+                <td class="p-2.5">Banked via <code>RAMRD / RAMWRT</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$2000 - $3FFF</td>
+                <td class="p-2.5">8 KB</td>
+                <td class="p-2.5">Hi-Res Graphics Page 1 / Double Hi-Res (Main + Aux)</td>
+                <td class="p-2.5">Banked via <code>80STORE + HIRES + PAGE2</code> or <code>RAMRD/RAMWRT</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$4000 - $BFFF</td>
+                <td class="p-2.5">32 KB</td>
+                <td class="p-2.5">Main Program Code, Modern Runtimes, Java/C# AOT Binary</td>
+                <td class="p-2.5">Banked via <code>RAMRD / RAMWRT</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$C000 - $CFFF</td>
+                <td class="p-2.5">4 KB</td>
+                <td class="p-2.5">Hardware I/O Softswitches, Mockingboard, Slinky, Disk II</td>
+                <td class="p-2.5">Internal peripheral address decoding ($C000-$C0FF)</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">$D000 - $FFFF</td>
+                <td class="p-2.5">12 KB</td>
+                <td class="p-2.5">Language Card Banked RAM (16KB) or Motherboard ROM</td>
+                <td class="p-2.5">Banked via <code>$C080-$C08F</code> (Bank 1 / Bank 2)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. Auxiliary RAM, 80STORE & Video Page Banking Truth Table</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c features 128KB of total dynamic RAM divided into 64KB Main RAM and 64KB Auxiliary RAM. The <code>80STORE</code> softswitch overrides general <code>RAMRD/RAMWRT</code> controls specifically for video memory buffers ($0400-$07FF and $2000-$3FFF):
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+          <thead class="bg-[#161b22] text-cyan-400">
+            <tr>
+              <th class="p-2.5 border-b border-[#30363d]">80STORE ($C000/$C001)</th>
+              <th class="p-2.5 border-b border-[#30363d]">PAGE2 ($C054/$C055)</th>
+              <th class="p-2.5 border-b border-[#30363d]">HIRES ($C056/$C057)</th>
+              <th class="p-2.5 border-b border-[#30363d]">Memory Range</th>
+              <th class="p-2.5 border-b border-[#30363d]">Active Physical Target</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr>
+              <td class="p-2.5 text-red-400">0 (Off)</td>
+              <td class="p-2.5 text-gray-400">0 (Page 1)</td>
+              <td class="p-2.5 text-gray-400">X (Don't care)</td>
+              <td class="p-2.5">$0400 - $07FF</td>
+              <td class="p-2.5 text-white">Main RAM Text Page 1</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-red-400">0 (Off)</td>
+              <td class="p-2.5 text-emerald-400">1 (Page 2)</td>
+              <td class="p-2.5 text-gray-400">X (Don't care)</td>
+              <td class="p-2.5">$0800 - $0BFF</td>
+              <td class="p-2.5 text-white">Main RAM Text Page 2</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-emerald-400">1 (On)</td>
+              <td class="p-2.5 text-red-400">0 (Main Aux)</td>
+              <td class="p-2.5 text-red-400">0 (Text)</td>
+              <td class="p-2.5">$0400 - $07FF</td>
+              <td class="p-2.5 text-cyan-300 font-bold">Main RAM Text Page 1</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-emerald-400">1 (On)</td>
+              <td class="p-2.5 text-emerald-400">1 (Aux Video)</td>
+              <td class="p-2.5 text-red-400">0 (Text)</td>
+              <td class="p-2.5">$0400 - $07FF</td>
+              <td class="p-2.5 text-cyan-300 font-bold">Auxiliary RAM Text Page 1 (80-Column Even Bytes)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-emerald-400">1 (On)</td>
+              <td class="p-2.5 text-red-400">0 (Main Aux)</td>
+              <td class="p-2.5 text-emerald-400">1 (Hi-Res)</td>
+              <td class="p-2.5">$2000 - $3FFF</td>
+              <td class="p-2.5 text-purple-300 font-bold">Main RAM Hi-Res Page 1</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-emerald-400">1 (On)</td>
+              <td class="p-2.5 text-emerald-400">1 (Aux Video)</td>
+              <td class="p-2.5 text-emerald-400">1 (Hi-Res)</td>
+              <td class="p-2.5">$2000 - $3FFF</td>
+              <td class="p-2.5 text-purple-300 font-bold">Auxiliary RAM Hi-Res Page 1 (DHGR Aux Bytes)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">3. Language Card 16KB Flip-Flop State Machine</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Language Card bank-switches the upper 12KB of address space ($D000..$FFFF) between Motherboard ROM and high-speed RAM. Softswitches in the range $C080 through $C08F control four parameters:
+      </p>
+      <ul class="list-disc list-inside text-xs font-mono text-gray-300 space-y-1">
+        <li><strong>Bank Selection:</strong> Bit 3 ($08) determines whether Bank 1 ($D000-$DFFF, 4KB) or Bank 2 ($D000-$DFFF, 4KB alternate) is active. ($E000-$FFFF 8KB is shared).</li>
+        <li><strong>Read Source:</strong> Bits 0 and 1 determine whether CPU reads come from RAM ($D000-$FFFF) or ROM.</li>
+        <li><strong>Write Protection State Machine:</strong> Enabling RAM writes requires <strong>two consecutive read cycles</strong> to an odd address ($C081, $C083, $C089, $C08B). Any write cycle resets the pre-write flip-flop.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">4. Slinky 16MB Expanded RAM Engine & Streaming DMA</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra implements the Apple II Memory Expansion Card (Slinky) extended to 16 Megabytes. It uses four hardware registers mapped at $C071-$C075:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+          <thead class="bg-[#161b22] text-cyan-400">
+            <tr>
+              <th class="p-2.5 border-b border-[#30363d]">Register</th>
+              <th class="p-2.5 border-b border-[#30363d]">Address</th>
+              <th class="p-2.5 border-b border-[#30363d]">Type</th>
+              <th class="p-2.5 border-b border-[#30363d]">Behavior & Auto-Increment</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr>
+              <td class="p-2.5 text-white font-bold">SLINKSW_ADDR_LOW</td>
+              <td class="p-2.5 text-amber-300">$C071</td>
+              <td class="p-2.5">R/W</td>
+              <td class="p-2.5">Bits 0-7 of 24-bit pointer address (Low Byte)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">SLINKSW_ADDR_MID</td>
+              <td class="p-2.5 text-amber-300">$C072</td>
+              <td class="p-2.5">R/W</td>
+              <td class="p-2.5">Bits 8-15 of 24-bit pointer address (Middle Byte)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">SLINKSW_ADDR_HIGH</td>
+              <td class="p-2.5 text-amber-300">$C075</td>
+              <td class="p-2.5">R/W</td>
+              <td class="p-2.5">Bits 16-23 of 24-bit pointer address (High Byte, up to 16MB)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">SLINKSW_DATA</td>
+              <td class="p-2.5 text-amber-300">$C073</td>
+              <td class="p-2.5">R/W</td>
+              <td class="p-2.5"><strong>Auto-Incrementing Data Window:</strong> Reading or writing automatically increments the 24-bit pointer by 1 byte.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-4 text-xs font-mono">
+        <pre><code class="text-cyan-300">; --- High-Speed 65C02 Slinky RAM Block Transfer ---
+; Reads 256 bytes from 16MB Slinky into $4000 RAM buffer
+        LDA #$00
+        STA $C071       ; Set 24-bit address low = $00
+        STA $C072       ; Set address mid = $00
+        LDA #$01
+        STA $C075       ; Set address high = $01 (Address = $010000 = 64KB mark)
+
+        LDX #$00
+READLP: LDA $C073       ; Read byte from Slinky (Auto-increments 24-bit pointer!)
+        STA $4000,X     ; Store into local RAM buffer
+        INX
+        BNE READLP      ; Loop 256 times
+        RTS</code></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-cyan-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+  </footer>
+
+</body>
+</html>

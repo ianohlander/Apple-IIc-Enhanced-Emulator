@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio & Sound Synthesis — Apple //c Ultra Developer Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .section-title { border-left: 4px solid #e03a3e; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-pink-500 to-pink-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
+      <div>
+        <span class="text-xs font-mono text-pink-400 font-bold tracking-widest uppercase">Developer Module 04 — Exhaustive Technical Reference</span>
+        <h1 class="text-base font-extrabold text-white">Audio Synthesis: 1-Bit Speaker & Dual AY-3-8910 Mockingboard</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
+
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. 1-Bit Speaker Pulse Physics & Frequency Math</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The onboard Apple II speaker is connected directly to a hardware flip-flop at memory address <code>$C030</code>. Reading or writing this address flips the logic level between 0V and +5V, causing the speaker cone to push out or pull in. Generating a musical frequency \(f\) requires toggling <code>$C030</code> every half-period \(T/2 = \frac{1}{2f}\) seconds.
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 space-y-4 text-xs font-mono">
+        <h3 class="text-pink-400 font-bold text-sm">Cycle Calculation Formula for Desired Frequency</h3>
+        <p class="text-gray-300">
+          At standard Apple II clock frequency \(f_{\text{cpu}} = 1.022727\text{ MHz}\), the cycle count per half-period is:
+        </p>
+        <div class="p-3 bg-[#161b22] border border-[#30363d] rounded text-pink-300">
+          \(\text{Cycles Half-Period} = \frac{f_{\text{cpu}}}{2 \times f_{\text{desired}}} = \frac{1022727}{2 \times f_{\text{desired}}}\)
+        </div>
+        <p class="text-gray-400">
+          For Middle C (261.63 Hz): \(\text{Cycles} \approx \frac{1022727}{523.26} \approx 1954\text{ CPU cycles per toggle}\).
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. Dual AY-3-8910 Mockingboard Sound Synthesizer</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra integrates a Slot 4 Mockingboard featuring dual General Instrument AY-3-8910 Programmable Sound Generator (PSG) chips driven by dual MOS 6522 Versatile Interface Adapters (VIAs). This provides 6 independent analog tone voices, 2 independent 17-bit pseudo-random noise generators, and 2 hardware envelope generators.
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+          <thead class="bg-[#161b22] text-pink-400">
+            <tr>
+              <th class="p-2.5 border-b border-[#30363d]">PSG Register</th>
+              <th class="p-2.5 border-b border-[#30363d]">Name & Description</th>
+              <th class="p-2.5 border-b border-[#30363d]">Width</th>
+              <th class="p-2.5 border-b border-[#30363d]">Mathematical Frequency Formula</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr>
+              <td class="p-2.5 text-white font-bold">R0 / R1</td>
+              <td class="p-2.5">Channel A Tone Period (Fine / Coarse)</td>
+              <td class="p-2.5 text-cyan-300">12-bit (0..4095)</td>
+              <td class="p-2.5">\(f_{\text{tone}} = \frac{f_{\text{clock}}}{16 \times \text{Period}}\) (\(f_{\text{clock}} = 1.0227\text{ MHz}\))</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R2 / R3</td>
+              <td class="p-2.5">Channel B Tone Period (Fine / Coarse)</td>
+              <td class="p-2.5 text-cyan-300">12-bit (0..4095)</td>
+              <td class="p-2.5">Channel B tone generator</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R4 / R5</td>
+              <td class="p-2.5">Channel C Tone Period (Fine / Coarse)</td>
+              <td class="p-2.5 text-cyan-300">12-bit (0..4095)</td>
+              <td class="p-2.5">Channel C tone generator</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R6</td>
+              <td class="p-2.5">Noise Generator Period</td>
+              <td class="p-2.5 text-cyan-300">5-bit (0..31)</td>
+              <td class="p-2.5">\(f_{\text{noise}} = \frac{f_{\text{clock}}}{16 \times \text{Period}}\)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R7</td>
+              <td class="p-2.5">Audio Mixer Control (Tone / Noise Enables)</td>
+              <td class="p-2.5 text-cyan-300">8-bit mask</td>
+              <td class="p-2.5">Bits 0-2: Tone Enable (A,B,C); Bits 3-5: Noise Enable (A,B,C). Active LOW.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R8, R9, R10</td>
+              <td class="p-2.5">Channel A/B/C Volume & Envelope Mode</td>
+              <td class="p-2.5 text-cyan-300">5-bit</td>
+              <td class="p-2.5">Bits 0-3: 16-step log volume (0=silent, 15=max); Bit 4: Enable hardware envelope</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R11 / R12</td>
+              <td class="p-2.5">Envelope Period (Fine / Coarse)</td>
+              <td class="p-2.5 text-cyan-300">16-bit (0..65535)</td>
+              <td class="p-2.5">\(T_{\text{envelope}} = \frac{256 \times \text{Period}}{f_{\text{clock}}}\)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">R13</td>
+              <td class="p-2.5">Envelope Shape / Cycle</td>
+              <td class="p-2.5 text-cyan-300">4-bit (0..15)</td>
+              <td class="p-2.5">Selects Sawtooth, Triangle, Decaying, and Sustained wave shapes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-pink-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+  </footer>
+
+</body>
+</html>

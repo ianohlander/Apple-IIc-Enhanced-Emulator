@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Complete Full-Stack Architecture & Silicon Engineering Compendium</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.76rem; line-height: 1.45; }
+    .section-title { border-left: 5px solid #f58220; padding-left: 1rem; }
+    .sub-section-title { border-left: 3px solid #009ddc; padding-left: 0.75rem; }
+    .table-header { background-color: #161b22; color: #f58220; font-family: 'Space Mono', monospace; font-size: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-5 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-4">
+      <a href="index.html" class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-2xl"></a>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Master Architectural Specification</span>
+        <h1 class="text-lg font-extrabold text-white">Apple //c Ultra: Complete Full-Stack Architecture & Silicon Engineering Compendium</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Developer Hub</a>
+      <a href="../../index-standalone.html" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Live Emulator</a>
+    </div>
+  </header>
+
+  <!-- Table of Contents Navigation -->
+  <nav class="bg-[#161b22] border-b border-[#30363d] px-6 py-3 sticky top-1.5 z-40 text-xs font-mono overflow-x-auto">
+    <div class="max-w-7xl mx-auto flex items-center space-x-6 whitespace-nowrap text-gray-400">
+      <span class="text-amber-400 font-bold">Quick Navigation:</span>
+      <a href="#sec-overview" class="hover:text-white transition">1. System Overview</a>
+      <a href="#sec-cpu" class="hover:text-white transition">2. 65C02 CPU Silicon</a>
+      <a href="#sec-mmu" class="hover:text-white transition">3. MMU & Memory Banking</a>
+      <a href="#sec-video" class="hover:text-white transition">4. Video & DHGR Engine</a>
+      <a href="#sec-audio" class="hover:text-white transition">5. Audio & Mockingboard</a>
+      <a href="#sec-storage" class="hover:text-white transition">6. Floppy GCR & SmartPort 32MB</a>
+      <a href="#sec-aot" class="hover:text-white transition">7. JVM / CLR AOT Compilers</a>
+      <a href="#sec-assembly" class="hover:text-white transition">8. 65C02 Assembly Reference</a>
+      <a href="#sec-cookbook" class="hover:text-white transition">9. Full-Stack Cookbooks</a>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto px-6 py-10 w-full space-y-16 flex-grow">
+
+    <!-- Section 1: Overview & Stack Hierarchy -->
+    <section id="sec-overview" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">1. Full-Stack System Overview & Architecture Hierarchy</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra is an enhanced 8-bit workstation uniting authentic 1984 WDC 65C02 CMOS silicon emulation with modern high-speed extensions: 50 MHz turbo clocks, 16MB Slinky memory expansion, 32MB SmartPort hard disk block I/O, Dual AY-3-8910 Mockingboard sound synthesis, and native Ahead-Of-Time (AOT) compilers for <strong>Java</strong> and <strong>C# .NET</strong>.
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 font-mono text-xs text-gray-300 space-y-4">
+        <h3 class="text-amber-400 font-bold text-sm">Full-Stack Architectural Layer Diagram</h3>
+        <pre><code class="text-cyan-300">┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ 1. USER APPLICATION LAYER                                                              │
+│    • C# .NET Core Source (.cs)      • Java 17 OOP Source (.java)   • 65C02 Assembly    │
+│    • Applesoft BASIC Programs       • Magazine Type-Ins (Compute!, inCider, Nibble)    │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 2. STANDARD RUNTIME CLASS LIBRARIES & APIS                                             │
+│    • System.*, Collections.Generic, System.IO, Apple2.Ultra.* (C# Core Framework)      │
+│    • java.lang, java.util, java.io, apple2.hardware.* (Java Standard Library)          │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 3. AHEAD-OF-TIME (AOT) COMPILER & LOWERING ENGINE                                      │
+│    • Lexer & AST Tokenizer         • Type Checker & Struct Layout Flattener            │
+│    • Zero Page Virtual Register Allocator (R0-R7: $80-$8F in Auxiliary RAM)            │
+│    • Native 65C02 Code Generator (Emits Binary at $2000-$BFFF with RTS termination)    │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 4. EMULATION SILICON CORE (TypeScript / ES2022, Strict OOP, SOLID, CC ≤ 7)             │
+│    • CPU65C02: 1-50 MHz Turbo, Cycle Counter, Binary/BCD ALU, CMOS Opcodes, Interrupts │
+│    • Apple2cMMU: 128KB Aux RAM, ALTZP, 80STORE, Language Card 16KB, Slinky 16MB Port  │
+│    • Apple2cVideo: Text 40/80, Lo-Res, Hi-Res, DHGR 560x192 16-Color, NTSC Artifacting  │
+│    • Mockingboard: Dual AY-3-8910 (6 Tone Channels, 2 Noise, 2 Envelopes) + 6522 VIAs  │
+│    • DiskII & SmartPort: Wozniak 6-and-2 GCR Nibble Engine, 32MB Hard Disk Block I/O   │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 5. HOST PLATFORM RUNTIME (Modern Web Browser / Node.js Host)                           │
+│    • HTML5 Canvas 2D Rendering Pipeline (Scanline shaders, P1/P3/P4 CRT phosphors)     │
+│    • Web Audio API AudioContext (Pulse-width modulated square waves & PSG synthesis)   │
+│    • IndexedDB Origin Private File System (OPFS) Persistent Storage (32MB Block Vol)   │
+│    • Host Keyboard & Mouse Pointer Tracking (Mapped to $C000 Keyboard & $C064 Paddles)│
+└────────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 2: 65C02 CPU Silicon Deep Dive -->
+    <section id="sec-cpu" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">2. WDC 65C02 CPU Emulation & Instruction Pipeline</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The central processor is an accurate emulation of the <strong>Western Design Center (WDC) 65C02 CMOS</strong> microprocessor. In addition to executing the standard 151 opcodes of the original NMOS 6502, the 65C02 includes 27 new instructions, eliminates illegal opcodes, and provides bug-free decimal arithmetic flags.
+      </p>
+
+      <!-- ALU Math Proofs -->
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+        <h3 class="text-lg font-bold text-amber-400 font-mono sub-section-title">Binary & BCD Decimal Arithmetic (ALU)</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          The 65C02 ALU supports both binary two's-complement arithmetic and Binary-Coded Decimal (BCD) arithmetic controlled by the Decimal flag (\(D \in P\)).
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-4 bg-[#0d1117] rounded border border-[#30363d] space-y-2">
+            <h4 class="text-cyan-300 font-bold">Binary Mode ADC / SBC Formula</h4>
+            <p class="text-gray-300">Given Accumulator \(A\), Operand \(M\), and Carry In \(C_{in}\):</p>
+            <div class="text-emerald-400">$$\text{Sum} = A + M + C_{in}$$</div>
+            <div class="text-emerald-400">$$A_{new} = \text{Sum} \pmod{256}$$</div>
+            <p class="text-gray-400">Flags:</p>
+            <ul class="list-disc list-inside text-gray-300 space-y-1">
+              <li>\(C = (\text{Sum} > 255)\)</li>
+              <li>\(Z = (A_{new} == 0)\)</li>
+              <li>\(N = (A_{new} \ \& \ 0x80) \neq 0\)</li>
+              <li>\(V = (\sim(A \oplus M) \ \& \ (A \oplus \text{Sum}) \ \& \ 0x80) \neq 0\)</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-[#0d1117] rounded border border-[#30363d] space-y-2">
+            <h4 class="text-amber-300 font-bold">Decimal Mode (BCD) ADC Algorithm</h4>
+            <p class="text-gray-300">Each byte represents two 4-bit decimal digits (00..99):</p>
+            <ol class="list-decimal list-inside text-gray-300 space-y-1">
+              <li>\(AL = (A \pmod{16}) + (M \pmod{16}) + C_{in}\)</li>
+              <li>If \(AL > 9\): \(AL = (AL + 6) \pmod{16}\), \(AH_{carry} = 1\)</li>
+              <li>\(AH = \lfloor A/16 \rfloor + \lfloor M/16 \rfloor + AH_{carry}\)</li>
+              <li>If \(AH > 9\): \(AH = (AH + 6) \pmod{16}\), \(C_{out} = 1\)</li>
+              <li>\(A_{new} = (AH \times 16) + AL\)</li>
+              <li><strong>65C02 Fix:</strong> \(Z = (A_{new} == 0)\), \(N = (A_{new} \ \& \ 0x80) \neq 0\)</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: MMU & Memory Banking -->
+    <section id="sec-mmu" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">3. MMU Banking, Memory Mapping & 16MB Slinky RAM</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c MMU manages bank switching between 128KB of onboard dynamic RAM (64KB Main + 64KB Auxiliary), 32KB Motherboard ROM, and 16MB of Slinky expanded RAM through hardware I/O softswitches in the $C000-$C0FF range.
+      </p>
+
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+        <h3 class="text-lg font-bold text-cyan-400 font-mono sub-section-title">Language Card 16KB Banking State Machine</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          The Language Card region ($D000-$FFFF) maps 16KB of high-speed RAM over motherboard ROM. Softswitches in the range <code>$C080..$C08F</code> control Bank 1 ($D000-$DFFF 4KB), Bank 2 ($D000-$DFFF alternate 4KB), RAM Read vs ROM Read, and RAM Write-Enable protection.
+        </p>
+
+        <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-4 text-xs font-mono">
+          <pre><code class="text-cyan-300">// Language Card 2-Cycle Read Write-Enable Protection Engine
+public handleLanguageCardAccess(address: number, isWrite: boolean): void {
+    const bank1 = (address & 0x08) === 0;
+    const readRam = (address & 0x03) === 0x03 || (address & 0x03) === 0x00;
+    const writeEnable = (address & 0x01) === 0x01;
+
+    this.lcBank1 = bank1;
+    this.lcReadRam = readRam;
+
+    if (writeEnable) {
+        // Must perform TWO consecutive READ cycles to an odd address ($C081, $C083, $C089, $C08B)
+        if (this.preWriteFlipFlop && !isWrite) {
+            this.lcWriteRam = true;
+        }
+        this.preWriteFlipFlop = !isWrite;
+    } else {
+        this.lcWriteRam = false;
+        this.preWriteFlipFlop = false;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Video Pipeline & Double Hi-Res -->
+    <section id="sec-video" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">4. Video Pipeline, Scanline Geometry & DHGR Graphics</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Steve Wozniak designed the Apple II video generator to eliminate expensive multiplier circuits. The 192 scanlines are interleaved into three 64-line tiers ("boxes"), eight 8-line character rows per box, and eight scanlines per character row.
+      </p>
+
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+        <h3 class="text-lg font-bold text-purple-400 font-mono sub-section-title">Double Hi-Res (DHGR 560×192 16-Color) Dot Serialization</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          Double Hi-Res graphics serializes 7 visual pixels from Auxiliary RAM and 7 visual pixels from Main RAM for every pair of display column bytes. Over the 40-byte row width, this outputs 80 bytes = 560 monochrome dots per scanline clocked at 14.31818 MHz. 4 consecutive monochrome dots form a 16-color composite pixel via NTSC color subcarrier phase shifting.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 5: Audio & Mockingboard -->
+    <section id="sec-audio" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">5. Audio Synthesis: 1-Bit Speaker & Dual AY-3-8910 Mockingboard</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra provides both the classic 1-bit speaker toggle at <code>$C030</code> and a Slot 4 Mockingboard featuring dual General Instrument AY-3-8910 Programmable Sound Generator (PSG) chips driven by dual MOS 6522 VIAs.
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono space-y-2">
+        <h3 class="text-pink-400 font-bold text-sm">AY-3-8910 Programmable Sound Generator (PSG) Register Map</h3>
+        <ul class="space-y-1 text-gray-300">
+          <li><strong>R0 / R1:</strong> Channel A Tone Period (12-bit) — \(f = \frac{1022727}{16 \times \text{Period}}\)</li>
+          <li><strong>R2 / R3:</strong> Channel B Tone Period (12-bit)</li>
+          <li><strong>R4 / R5:</strong> Channel C Tone Period (12-bit)</li>
+          <li><strong>R6:</strong> Noise Generator Period (5-bit) — 17-bit LFSR pseudo-random noise</li>
+          <li><strong>R7:</strong> Audio Mixer Control (Tone / Noise enable mask, Active LOW)</li>
+          <li><strong>R8, R9, R10:</strong> Channel A, B, C Volume (4-bit logarithmic amplitude + envelope enable bit)</li>
+          <li><strong>R11 / R12:</strong> Envelope Period (16-bit) — \(T = \frac{256 \times \text{Period}}{1022727}\)</li>
+          <li><strong>R13:</strong> Envelope Shape / Cycle (Sawtooth, Triangle, Attack/Decay)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 6: Storage Floppy GCR & SmartPort 32MB -->
+    <section id="sec-storage" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">6. Storage Architecture: Floppy GCR & SmartPort 32MB Hard Disk</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra supports both standard 5.25-inch 140KB floppy disks using Wozniak 6-and-2 Group Code Recording (GCR) and a 32MB SmartPort virtual hard disk volume ($/HD$) partitioned into 65,536 contiguous 512-byte blocks.
+      </p>
+    </section>
+
+    <!-- Section 7: Java & .NET AOT Compilers -->
+    <section id="sec-aot" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">7. Java & .NET CLR Ahead-of-Time (AOT) Compilers</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Ahead-of-Time (AOT) compiler translates modern object-oriented Java and C# source code directly into native, optimized 65C02 CMOS machine code. It allocates 16-bit and 32-bit types into a dedicated pool of Zero Page virtual registers ($80-$8F) in Auxiliary RAM.
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 font-mono text-xs text-gray-300 space-y-3">
+        <h3 class="text-amber-400 font-bold text-sm">Zero Page Virtual Register Allocation Table ($80-$8F)</h3>
+        <ul class="space-y-1 text-gray-300">
+          <li><code>$80, $81:</code> <strong>R0 (vAcc):</strong> Primary arithmetic accumulator and method return value (16-bit)</li>
+          <li><code>$82, $83:</code> <strong>R1 (vArg1):</strong> First method argument / binary left operand (16-bit)</li>
+          <li><code>$84, $85:</code> <strong>R2 (vArg2):</strong> Second method argument / binary right operand (16-bit)</li>
+          <li><code>$86, $87:</code> <strong>R3 (vThis):</strong> Active object instance pointer ('this' in Java / C#) (16-bit)</li>
+          <li><code>$88 - $8F:</code> <strong>R4-R7 (vTemp):</strong> Scratch registers for sub-expression evaluation (16-bit each)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 8: 65C02 Complete Assembly Reference -->
+    <section id="sec-assembly" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">8. 65C02 Assembly Language & Apple II Monitor ROM Reference</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Developers can interact directly with the hardware through the built-in Apple II Monitor ROM routines and 65C02 assembly language:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+          <thead class="bg-[#161b22] text-amber-400">
+            <tr>
+              <th class="p-2.5 border-b border-[#30363d]">ROM Routine</th>
+              <th class="p-2.5 border-b border-[#30363d]">Address</th>
+              <th class="p-2.5 border-b border-[#30363d]">Input Registers</th>
+              <th class="p-2.5 border-b border-[#30363d]">Functionality</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr>
+              <td class="p-2.5 text-white font-bold">COUT</td>
+              <td class="p-2.5 text-cyan-300">$FDED</td>
+              <td class="p-2.5">A = ASCII character | 0x80</td>
+              <td class="p-2.5">Outputs character to current text cursor position and advances cursor.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">CROUT</td>
+              <td class="p-2.5 text-cyan-300">$FD8E</td>
+              <td class="p-2.5">None</td>
+              <td class="p-2.5">Outputs a carriage return ($0D) and scrolls screen if at row 23.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">PRBYTE</td>
+              <td class="p-2.5 text-cyan-300">$FDDA</td>
+              <td class="p-2.5">A = Byte value</td>
+              <td class="p-2.5">Prints byte as two hexadecimal ASCII characters.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">HOME / CLS</td>
+              <td class="p-2.5 text-cyan-300">$FC58</td>
+              <td class="p-2.5">None</td>
+              <td class="p-2.5">Clears the 40/80 column text screen and resets cursor to row 0, col 0.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">RDKEY</td>
+              <td class="p-2.5 text-cyan-300">$FD0C</td>
+              <td class="p-2.5">None</td>
+              <td class="p-2.5">Waits for keyboard keypress, displays blinking cursor, returns key in A.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-white font-bold">BELL</td>
+              <td class="p-2.5 text-cyan-300">$FF3A</td>
+              <td class="p-2.5">None</td>
+              <td class="p-2.5">Generates authentic 1000 Hz speaker beep (0.1 second).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 9: Full-Stack Cookbooks -->
+    <section id="sec-cookbook" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">9. Full-Stack Production Cookbooks & Game Engineering</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Explore production-grade implementations linking high-level languages with 65C02 silicon:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono text-gray-300 space-y-3">
+        <h3 class="text-yellow-400 font-bold text-sm">C# Retro Breakout Arcade Game Listing</h3>
+        <pre><code class="text-yellow-300">using System;
+using Apple2.Ultra;
+
+namespace RetroBreakout
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            AppleVideo.SetDoubleHiRes(true);
+            AppleVideo.Clear(AppleVideo.Black);
+            Console.WriteLine("RETRO BREAKOUT ULTRA IN C# ACTIVE!");
+            AppleSound.Beep(587, 80);
+            AppleSound.Beep(880, 120);
+
+            int ballX = 280, ballY = 100, dx = 2, dy = -2;
+            while (true)
+            {
+                int paddleX = AppleSystem.GetMouseX() * 2;
+                AppleVideo.DrawLine(paddleX, 184, paddleX + 48, 184, AppleVideo.White);
+                ballX += dx;
+                ballY += dy;
+                if (ballX <= 5 || ballX >= 555) dx = -dx;
+                if (ballY <= 5) dy = -dy;
+                if (ballY >= 180 && ballX >= paddleX && ballX <= paddleX + 48)
+                {
+                    dy = -dy;
+                    AppleSound.Beep(1200, 20);
+                }
+            }
+        }
+    }
+}</code></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Full-Stack Architecture Compendium
+  </footer>
+
+</body>
+</html>

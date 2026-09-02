@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Developer Architecture & Engineering Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    .card-hover { transition: all 0.2s ease; }
+    .card-hover:hover { transform: translateY(-3px); border-color: #f58220; box-shadow: 0 10px 25px -5px rgba(245, 130, 32, 0.15); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Top Navigation -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-xl"></div>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Architecture</span>
+        <h1 class="text-base font-extrabold text-white">Developer Engineering & Subsystem Hub</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+      <a href="../comprehensive-ultra-tutorial.html" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded transition font-bold">📖 Master Tutorial</a>
+      <a href="../index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">User Docs</a>
+      <a href="../test-report.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-emerald-400 rounded transition border border-[#30363d]">QA Test Report</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-7xl mx-auto px-6 py-10 w-full">
+    <div class="bg-gradient-to-br from-[#161b22] to-[#0d1117] border border-[#30363d] rounded-2xl p-8 shadow-xl">
+      <div class="inline-block px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono rounded-full mb-4">
+        HARDWARE EMULATION & RUNTIME COMPILER SPECIFICATION
+      </div>
+      <h2 class="text-3xl font-extrabold text-white mb-4">Complete Developer Guide to the Apple //c Ultra Architecture</h2>
+      <p class="text-gray-300 text-sm max-w-4xl leading-relaxed mb-6">
+        The Apple //c Ultra is an enhanced 8-bit workstation uniting authentic 1984 WDC 65C02 CMOS silicon emulation with modern high-speed extensions: 50 MHz turbo clocks, 16MB Slinky memory expansion, 32MB SmartPort hard disk block I/O, Dual AY-3-8910 Mockingboard sound synthesis, and native Ahead-Of-Time (AOT) compilers for <strong>Java</strong> and <strong>C# .NET</strong>.
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-[#30363d] text-xs font-mono mb-6">
+        <div><span class="text-gray-500 block">CPU Core:</span> <span class="text-amber-400 font-bold">WDC 65C02 (1-50 MHz)</span></div>
+        <div><span class="text-gray-500 block">Memory Range:</span> <span class="text-amber-400 font-bold">128KB Aux + 16MB Slinky</span></div>
+        <div><span class="text-gray-500 block">Sound Engine:</span> <span class="text-amber-400 font-bold">1-Bit Spkr + 6-Ch Mockingboard</span></div>
+        <div><span class="text-gray-500 block">AOT Runtimes:</span> <span class="text-amber-400 font-bold">Java 17 / C# 10 to 65C02 ASM</span></div>
+      </div>
+
+      <div class="pt-2 flex flex-wrap gap-3">
+        <a href="full-stack-architecture.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-bold font-mono text-xs rounded-xl shadow-lg transition">
+          📖 Read Exhaustive Full-Stack Architecture & Silicon Compendium →
+        </a>
+        <a href="full-stack-vertical-trace.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold font-mono text-xs rounded-xl shadow-lg transition">
+          🔬 Full Vertical Stack Trace: C# → 65C02 → Browser →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Developer Modules Grid -->
+  <main class="max-w-7xl mx-auto px-6 pb-16 w-full flex-grow">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-lg font-bold text-white uppercase tracking-wider font-mono text-amber-400">Developer Modules & Topic Index</h3>
+      <span class="text-xs text-gray-500 font-mono">10 Deep-Dive Specifications</span>
+    </div>
+
+    <!-- Master Compendium Banner Card -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <a href="full-stack-architecture.html" class="block bg-gradient-to-r from-[#1c222b] via-[#161b22] to-[#1c222b] border border-amber-500/50 rounded-2xl p-6 card-hover shadow-2xl">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-3 py-1 bg-amber-500/20 border border-amber-500/40 text-amber-400 font-mono font-bold rounded-full">
+            ★ MASTER COMPENDIUM — SILICON SPECIFICATION
+          </span>
+          <span class="text-2xl">🏛️</span>
+        </div>
+        <h4 class="text-lg font-bold text-white mb-2">Apple //c Ultra: Complete Full-Stack Architecture Compendium</h4>
+        <p class="text-xs text-gray-300 leading-relaxed mb-4">
+          Definitive reference covering TypeScript and Web APIs down to 65C02 cycles, BCD ALU math, MMU banking, DHGR video, Mockingboard PSG, GCR floppies, 32MB SmartPort HD, and JVM/CLR AOT compilation.
+        </p>
+        <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-1">
+          Open Complete Master Compendium (9 Chapters) →
+        </span>
+      </a>
+
+      <a href="full-stack-vertical-trace.html" class="block bg-gradient-to-r from-[#1c222b] via-[#161b22] to-[#1c222b] border border-cyan-500/50 rounded-2xl p-6 card-hover shadow-2xl">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-3 py-1 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 font-mono font-bold rounded-full">
+            ★ FULL VERTICAL TRACE — CODE TO SILICON TO BROWSER
+          </span>
+          <span class="text-2xl">🔬</span>
+        </div>
+        <h4 class="text-lg font-bold text-white mb-2">Complete Vertical Stack Trace: C# → 65C02 Machine Code → Browser</h4>
+        <p class="text-xs text-gray-300 leading-relaxed mb-4">
+          End-to-end trace of a C# program through AST lowering, Zero Page virtual register allocation ($80-$8F), 65C02 opcode emission, MMU softswitch intercept, and HTML5 Canvas / Web Audio output.
+        </p>
+        <span class="text-xs font-mono text-cyan-400 font-bold flex items-center gap-1">
+          Explore Interactive 5-Layer Stack Trace →
+        </span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Module 1 -->
+      <a href="emulation-architecture.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">⚙️</span>
+          <span class="text-xs font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">CPU Engine</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">65C02 CPU Emulation Deep Dive</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          Cycle-accurate instruction dispatch, ALU binary & BCD decimal arithmetic, CMOS opcodes (BRA, STZ, PHX/PLX, TRB/TSB), and stack pointer dynamics.
+        </p>
+        <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+      <!-- Module 2 -->
+      <a href="mmu-and-memory-banking.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">🧠</span>
+          <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/40">MMU & RAM</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">MMU Banking & Slinky 16MB RAM</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          Zero Page & Stack switching (ALTZP), Main/Aux 128KB RAMRD/RAMWRT, 80STORE video mapping, Language Card 16KB 2-cycle write enable, and Slinky streaming.
+        </p>
+        <span class="text-xs font-mono text-cyan-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+      <!-- Module 3 -->
+      <a href="video-and-graphics-pipeline.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">🎨</span>
+          <span class="text-xs font-mono text-purple-400 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-800/40">Video Engine</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">Video Pipeline & Double Hi-Res Graphics</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          Text 40/80 interleaving, non-linear scanline address formula, DHGR 560×192 16-color composite bitstreams, NTSC artifacting, and CRT phosphor decay.
+        </p>
+        <span class="text-xs font-mono text-purple-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+      <!-- Module 4 -->
+      <a href="audio-sound-synthesis.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">🔊</span>
+          <span class="text-xs font-mono text-pink-400 bg-pink-950/60 px-2 py-0.5 rounded border border-pink-800/40">Audio Synthesis</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">Speaker & Mockingboard Sound Engine</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          1-bit speaker pulse toggling ($C030), Dual AY-3-8910 programmable sound generator synthesis (6 tone voices, 17-bit LFSR noise, 16-bit envelopes), and 6522 VIA.
+        </p>
+        <span class="text-xs font-mono text-pink-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+      <!-- Module 5 -->
+      <a href="storage-floppy-and-smartport.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">💾</span>
+          <span class="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">Storage I/O</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">Floppy GCR & 32MB SmartPort HD</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          Wozniak 6-and-2 GCR nibble encoding table, 4-phase stepper motor stepping, SmartPort 32MB hard disk block I/O (65,536 blocks), and IndexedDB OPFS persistence.
+        </p>
+        <span class="text-xs font-mono text-emerald-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+      <!-- Module 6 -->
+      <a href="jvm-clr-aot-runtime.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">☕</span>
+          <span class="text-xs font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">AOT Compilers</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">Java & .NET CLR AOT Compiler Engine</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          Sweet16 & UCSD Pascal lineage, Zero Page virtual register allocation ($80–$EF), AST lowering, class vtables, and native 65C02 machine code generation.
+        </p>
+        <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+      <!-- Module 7 -->
+      <a href="standard-libraries-reference.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">📚</span>
+          <span class="text-xs font-mono text-blue-400 bg-blue-950/60 px-2 py-0.5 rounded border border-blue-800/40">Standard Libs</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">Java & .NET Class Libraries Reference</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          Complete API specifications for java.lang, java.util, java.io, apple2.hardware, System, System.Collections.Generic, System.IO, and Apple2.Ultra.
+        </p>
+        <span class="text-xs font-mono text-blue-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+      <!-- Module 8 -->
+      <a href="practical-examples-and-cookbooks.html" class="block bg-[#161b22] border border-[#30363d] rounded-xl p-6 card-hover">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">🕹️</span>
+          <span class="text-xs font-mono text-yellow-400 bg-yellow-950/60 px-2 py-0.5 rounded border border-yellow-800/40">Cookbooks</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-2">Developer Cookbooks & Case Studies</h4>
+        <p class="text-xs text-gray-400 leading-relaxed mb-4">
+          Step-by-step game engineering: C# Retro Breakout Arcade, Java 3D Wireframe Graphics, 65C02 Assembly Chiptune Player, and Slinky RAM Data Store.
+        </p>
+        <span class="text-xs font-mono text-yellow-400 font-bold flex items-center gap-1">Read Specification →</span>
+      </a>
+
+    </div>
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    Apple //c Ultra Workstation Architecture & Engineering Guide • 1984 Vintage Heritage & 2026 High-Performance Toolchains
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Pipeline & Double Hi-Res Graphics — Apple //c Ultra Developer Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .section-title { border-left: 4px solid #963d97; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
+      <div>
+        <span class="text-xs font-mono text-purple-400 font-bold tracking-widest uppercase">Developer Module 03 — Exhaustive Technical Reference</span>
+        <h1 class="text-base font-extrabold text-white">Video Generation, Scanline Mathematics & DHGR 16-Color Pipeline</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
+
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. Wozniak Scanline Interleaving & Mathematical Derivation</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Steve Wozniak designed the Apple II video generator to eliminate expensive multiplier circuits and FIFO line buffers. Instead of linear frame buffers, the video counter hardware generates scanline addresses by dividing the 192 scanlines into three 64-line tiers ("boxes"), eight 8-line character rows per box, and eight scanline sublines per row.
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 space-y-4 text-xs font-mono">
+        <h3 class="text-purple-400 font-bold text-sm">Mathematical Formulation of Scanline Base Address</h3>
+        <p class="text-gray-300">
+          For any scanline Y from 0 to 191:
+        </p>
+        <div class="p-4 bg-[#161b22] border border-[#30363d] rounded text-cyan-300 space-y-2 text-sm">
+          <div>• <strong>Box:</strong> \(\text{Box} = \lfloor Y / 64 \rfloor \in \{0, 1, 2\}\)</div>
+          <div>• <strong>Row:</strong> \(\text{Row} = \lfloor (Y \bmod 64) / 8 \rfloor \in \{0..7\}\)</div>
+          <div>• <strong>Subline:</strong> \(\text{Sub} = Y \bmod 8 \in \{0..7\}\)</div>
+          <div class="text-amber-400 pt-2 font-bold border-t border-[#30363d] text-base">
+            \(\text{Base Address}(Y) = \$2000 + (\text{Sub} \times \$0400) + (\text{Row} \times \$0080) + (\text{Box} \times \$0028)\)
+          </div>
+        </div>
+
+        <div class="p-4 bg-[#161b22] border border-[#30363d] rounded-lg text-gray-300 space-y-1">
+          <strong class="text-white">Sample Calculated Addresses for Key Scanlines:</strong><br>
+          • <strong>Scanline 0:</strong> Box=0, Row=0, Sub=0 &rarr; <strong>$2000</strong><br>
+          • <strong>Scanline 1:</strong> Box=0, Row=0, Sub=1 &rarr; <strong>$2400</strong><br>
+          • <strong>Scanline 8:</strong> Box=0, Row=1, Sub=0 &rarr; <strong>$2080</strong><br>
+          • <strong>Scanline 64:</strong> Box=1, Row=0, Sub=0 &rarr; <strong>$2028</strong><br>
+          • <strong>Scanline 191:</strong> Box=2, Row=7, Sub=7 &rarr; <strong>$3FD0</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. Double Hi-Res (DHGR 560×192 16-Color) Bitstream Pipeline</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Double Hi-Res graphics doubles the horizontal resolution by multiplexing 7 visual pixels from Auxiliary RAM and 7 visual pixels from Main RAM for every pair of display column bytes. The 14.31818 MHz master oscillator clocks out 560 monochrome dots per scanline.
+      </p>
+
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+        <h3 class="text-purple-400 font-bold font-mono text-sm">4-Dot NTSC Phase Shift Color Synthesis</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          Because the NTSC color subcarrier frequency is \(f_{\text{color}} = 3.579545\text{ MHz} = \frac{14.31818\text{ MHz}}{4}\), exactly 4 monochrome dots span one 360° color subcarrier cycle. The 4-bit repeating binary pattern of dots generates a specific phase angle and amplitude, synthesizing 16 solid composite colors:
+        </p>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-black border border-gray-600 mr-1"></span> 0: 0000 = Black</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#901740] mr-1"></span> 1: 0001 = Deep Red</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#402CA5] mr-1"></span> 2: 0010 = Dark Blue</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#D043E5] mr-1"></span> 3: 0011 = Purple</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#006940] mr-1"></span> 4: 0100 = Dark Green</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#808080] mr-1"></span> 5: 0101 = Dark Gray</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#2F95E5] mr-1"></span> 6: 0110 = Medium Blue</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#BFABFF] mr-1"></span> 7: 0111 = Light Blue</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#405400] mr-1"></span> 8: 1000 = Brown</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#D06A1A] mr-1"></span> 9: 1001 = Orange</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#808080] mr-1"></span> 10: 1010 = Light Gray</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#FF96BF] mr-1"></span> 11: 1011 = Pink</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#2FBC1A] mr-1"></span> 12: 1100 = Light Green</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#BFD35A] mr-1"></span> 13: 1101 = Yellow</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-[#6FE8BF] mr-1"></span> 14: 1110 = Aquamarine</div>
+          <div class="p-2 bg-[#0d1117] rounded border border-[#30363d]"><span class="inline-block w-3 h-3 bg-white mr-1"></span> 15: 1111 = White</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">3. CRT Phosphor Physics & Shader Emulation</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The CRT display engine models electron beam scanning and phosphor decay across 4 monitor profiles:
+      </p>
+      <ul class="list-disc list-inside text-xs font-mono text-gray-300 space-y-2">
+        <li><strong>Color NTSC:</strong> Full 16-color composite decoding with 4-dot artifacting.</li>
+        <li><strong>P1 Green Phosphor (525nm):</strong> Classic Apple Monitor /// phosphor with long exponential persistence curve (\(I(t) = I_0 e^{-t/\tau}\) where decay time constant \(\tau \approx 28\text{ ms}\)).</li>
+        <li><strong>P3 Amber Phosphor (605nm):</strong> High-contrast amber display with medium persistence (\(\tau \approx 12\text{ ms}\)).</li>
+        <li><strong>P4 White Phosphor (Apple Monitor //c):</strong> Crisp monochrome phosphor matched to the original 9-inch Apple //c CRT display.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-purple-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+  </footer>
+
+</body>
+</html>

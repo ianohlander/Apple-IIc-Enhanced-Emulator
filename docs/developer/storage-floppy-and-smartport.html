@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storage Architecture & SmartPort 32MB HD — Apple //c Ultra Developer Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .section-title { border-left: 4px solid #61bb46; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
+      <div>
+        <span class="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">Developer Module 05 — Exhaustive Technical Reference</span>
+        <h1 class="text-base font-extrabold text-white">Storage Subsystem: Floppy GCR & SmartPort 32MB Hard Disk Block I/O</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
+
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. Wozniak 6-and-2 Group Code Recording (GCR)</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Standard 5.25-inch floppy drives use magnetic flux transitions to represent binary ones and zeros. If more than two consecutive zero bits occur on the physical media, the drive read-head loses clock synchronization, causing a "bit-slip" error. Steve Wozniak solved this by designing the <strong>6-and-2 GCR</strong> encoding scheme:
+      </p>
+
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+        <h3 class="text-emerald-400 font-bold font-mono text-sm">Nibblization: Converting 256 User Bytes into 342 Disk Bytes</h3>
+        <ol class="list-decimal list-inside text-xs font-mono text-gray-300 space-y-2 leading-relaxed">
+          <li>A 256-byte sector is split into two arrays: a 256-byte primary array holding the upper 6 bits of each byte, and an 86-byte secondary array holding the lower 2 bits of three distinct bytes packed together (\(86 \times 3 = 258 \ge 256\)).</li>
+          <li>Each 6-bit value is translated through a 64-entry lookup table into an 8-bit GCR disk byte where the most significant bit (bit 7) is always 1 and no more than two adjacent zeros exist.</li>
+          <li>Before each sector data field, the controller writes a unique 3-byte synchronization header: <code>$D5 $AA $96</code> (for address field) and <code>$D5 $AA $AD</code> (for data field).</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. 4-Phase Stepper Motor Head Positioning Logic</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The 5.25-inch floppy read/write head is positioned using a 4-phase stepper motor controlled by softswitches <code>$C0E0..$C0E7</code>. Energizing Phase 0, 1, 2, or 3 moves the head inward or outward by 1/2 track increments. Full-tracking requires cycling through phases in sequence: \(\text{Phase 0} \to \text{Phase 1} \to \text{Phase 2} \to \text{Phase 3}\).
+      </p>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">3. SmartPort 32MB Hard Disk Block I/O Engine</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra implements the Apple SmartPort firmware protocol configured with an extended 32 Megabyte virtual hard disk ($/HD$). The storage volume is partitioned into 65,536 contiguous 512-byte blocks. ProDOS 2.4.2 communicates directly with the driver using standard block read/write commands:
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-4 text-xs font-mono">
+        <pre><code class="text-emerald-300">// SmartPort Block Transfer Packet Layout
+struct SmartPortPacket {
+    byte command;       // 0x01 = Status, 0x02 = Read Block, 0x03 = Write Block, 0x04 = Format
+    byte unitNumber;    // 0x01 = First SmartPort Device ($/HD)
+    word bufferPointer; // Pointer in RAM to 512-byte payload buffer
+    word blockNumber;   // 16-bit Block Number (0..65535)
+};</code></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-emerald-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+  </footer>
+
+</body>
+</html>

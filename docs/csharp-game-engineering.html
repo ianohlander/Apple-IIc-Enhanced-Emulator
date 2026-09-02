@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Full-Stack C# to 65C02 Video Game Engineering Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d1117;
+      color: #e6edf3;
+    }
+    .font-mono-code {
+      font-family: 'Space Mono', monospace;
+    }
+    .rainbow-border {
+      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+    }
+    pre code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+    }
+    .asm-line {
+      border-left: 3px solid #f58220;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <header class="bg-[#161b22] border-b border-[#30363d] px-6 py-4 flex items-center justify-between shadow-md">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg">
+        
+      </div>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Engineering</span>
+        <h1 class="text-base font-extrabold text-white">Full-Stack C# to 65C02 Video Game Engineering</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">
+        ⚡ Launch Emulator
+      </a>
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
+        Docs Hub
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto p-6 md:p-10 space-y-12 text-sm">
+
+    <!-- Hero Banner -->
+    <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-8 shadow-2xl space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-mono">
+        <span>Architectural Case Study: Retro Breakout Ultra</span>
+      </div>
+      <h2 class="text-3xl font-black text-white">From Modern C# to 65C02 Silicon</h2>
+      <p class="text-gray-400 text-sm leading-relaxed">
+        An exhaustive walkthrough demonstrating how an object-oriented 1980s arcade game written in clean modern C# is parsed, lowered, allocated in memory, and translated directly down to native 65C02 machine instructions, Double Hi-Res video buffers, and Mockingboard sound registers.
+      </p>
+    </div>
+
+    <!-- Section 1: The Complete C# Video Game Source -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <h3 class="text-base font-bold text-amber-400">1. The High-Level C# Source: "RetroBreakout"</h3>
+        <span class="text-[11px] text-gray-500">Object-Oriented Design</span>
+      </div>
+
+      <p class="text-gray-300">
+        Below is the clean C# implementation using classes, encapsulation, inheritance, and the <code>Apple2.Ultra</code> hardware abstraction layer:
+      </p>
+
+      <pre class="bg-[#0d1117] p-5 rounded-lg border border-[#30363d] text-emerald-400 overflow-x-auto leading-relaxed"><code>using System;
+using Apple2.Ultra;
+
+namespace RetroBreakout
+{
+    // -------------------------------------------------------------
+    // Vector Entity Base Class (Encapsulation & Inheritance)
+    // -------------------------------------------------------------
+    public abstract class GameObject
+    {
+        public byte X { get; set; }
+        public byte Y { get; set; }
+
+        public abstract void Draw();
+    }
+
+    // -------------------------------------------------------------
+    // Player Paddle Entity
+    // -------------------------------------------------------------
+    public class Paddle : GameObject
+    {
+        public byte Width { get; } = 24;
+
+        public void MoveLeft()  { if (X > 5)  X -= 4; }
+        public void MoveRight() { if (X < 110) X += 4; }
+
+        public override void Draw()
+        {
+            AppleVideo.DrawHLine(X, Y, Width, AppleVideo.ColorWhite);
+        }
+    }
+
+    // -------------------------------------------------------------
+    // Ball Physics Entity
+    // -------------------------------------------------------------
+    public class Ball : GameObject
+    {
+        public sbyte VelocityX { get; set; } = 1;
+        public sbyte VelocityY { get; set; } = -1;
+
+        public void Update()
+        {
+            X = (byte)(X + VelocityX);
+            Y = (byte)(Y + VelocityY);
+
+            // Wall Collisions
+            if (X <= 2 || X >= 136) { VelocityX = (sbyte)-VelocityX; AppleSound.Beep(880, 20); }
+            if (Y <= 2)             { VelocityY = (sbyte)-VelocityY; AppleSound.Beep(880, 20); }
+        }
+
+        public override void Draw()
+        {
+            AppleVideo.DrawPixel(X, Y, AppleVideo.ColorYellow);
+        }
+    }
+
+    // -------------------------------------------------------------
+    // Brick Matrix (Array Data Structure)
+    // -------------------------------------------------------------
+    public class BrickGrid
+    {
+        public byte[] Bricks = new byte[32]; // 4 rows of 8 bricks
+
+        public void Reset()
+        {
+            for (byte i = 0; i < 32; i++) Bricks[i] = 1; // 1 = Active
+        }
+
+        public bool CheckCollision(byte bx, byte by)
+        {
+            if (by < 10 || by > 50) return false;
+            byte row = (byte)((by - 10) / 10);
+            byte col = (byte)(bx / 17);
+            byte idx = (byte)(row * 8 + col);
+
+            if (idx < 32 && Bricks[idx] == 1)
+            {
+                Bricks[idx] = 0; // Destroy brick
+                AppleSound.PlayMockingboard(voice: 1, freq: 440, vol: 15);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // -------------------------------------------------------------
+    // Main Game Controller
+    // -------------------------------------------------------------
+    public class BreakoutGame
+    {
+        private Paddle player = new Paddle { X = 60, Y = 180 };
+        private Ball ball = new Ball { X = 70, Y = 100 };
+        private BrickGrid grid = new BrickGrid();
+        private int score = 0;
+
+        public void Run()
+        {
+            // Initialize 560x192 Double Hi-Res Graphics
+            AppleVideo.SetDoubleHiRes(true);
+            AppleVideo.ClearScreen(AppleVideo.ColorBlack);
+            grid.Reset();
+
+            while (true)
+            {
+                // 1. Process Input
+                char key = AppleInput.GetKey();
+                if (key == 'A' || key == 'a') player.MoveLeft();
+                if (key == 'D' || key == 'd') player.MoveRight();
+
+                // 2. Update Physics
+                ball.Update();
+
+                // 3. Collision with Paddle
+                if (ball.Y >= player.Y - 2 && ball.X >= player.X && ball.X <= player.X + player.Width)
+                {
+                    ball.VelocityY = -1;
+                    AppleSound.Beep(523, 30);
+                }
+
+                // 4. Collision with Bricks
+                if (grid.CheckCollision(ball.X, ball.Y))
+                {
+                    ball.VelocityY = 1;
+                    score += 10;
+                }
+
+                // 5. Render Scene
+                player.Draw();
+                ball.Draw();
+            }
+        }
+    }
+}</code></pre>
+    </section>
+
+    <!-- Section 2: Memory Layout & Object Allocation -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <h3 class="text-base font-bold text-emerald-400">2. How C# Objects & Fields Live in Apple II Memory</h3>
+        <span class="text-[11px] text-gray-500">Memory Architecture</span>
+      </div>
+
+      <p class="text-gray-300">
+        In modern systems, an object has a 64-bit reference pointer, object headers, and GC sync blocks. On the 65C02 CPU, the AOT compiler eliminates overhead by compiling objects into flat struct byte offsets with Zero Page fast references:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+          <h4 class="font-bold text-amber-400">Zero Page Fast-Register Mapping ($80–$FF)</h4>
+          <ul class="space-y-1 text-gray-400">
+            <li><code class="text-white">$80:$81</code>: <code>this</code> pointer (16-bit address of current object).</li>
+            <li><code class="text-white">$82:$83</code>: <code>player</code> instance memory address ($6000).</li>
+            <li><code class="text-white">$84:$85</code>: <code>ball</code> instance memory address ($6010).</li>
+            <li><code class="text-white">$86:$87</code>: <code>grid</code> array memory address ($6020).</li>
+            <li><code class="text-white">$88:$89</code>: Evaluation operand scratchpad.</li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
+          <h4 class="font-bold text-cyan-400">Ball Object Struct Layout ($6010)</h4>
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b border-[#30363d] text-gray-500">
+                <th>Offset</th>
+                <th>Field Name</th>
+                <th>Type</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr><td>+0</td><td>X (Horizontal Pos)</td><td>byte</td><td>0–139</td></tr>
+              <tr><td>+1</td><td>Y (Vertical Pos)</td><td>byte</td><td>0–191</td></tr>
+              <tr><td>+2</td><td>VelocityX</td><td>sbyte</td><td>+1 / -1</td></tr>
+              <tr><td>+3</td><td>VelocityY</td><td>sbyte</td><td>+1 / -1</td></tr>
+              <tr><td>+4:+5</td><td>VTable Pointer</td><td>uint16</td><td>Draw() @ $2450</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Line-by-Line Translation & Source Mapping -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <h3 class="text-base font-bold text-cyan-400">3. Line-by-Line C# to 65C02 Assembly Translation</h3>
+        <span class="text-[11px] text-gray-500">Source Mapping Links</span>
+      </div>
+
+      <p class="text-gray-300">
+        Let us examine the exact 65C02 assembly routines produced by the compiler for critical sections of the game:
+      </p>
+
+      <!-- Routine 1: Ball.Update() -->
+      <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-3">
+        <div class="flex justify-between items-center text-amber-400 font-bold border-b border-[#30363d] pb-1.5">
+          <span>C# Routine: ball.Update()</span>
+          <span class="text-gray-500">Generated Routine @ $2200</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <span class="text-gray-400 block mb-1">C# Source:</span>
+            <pre class="bg-[#161b22] p-3 rounded text-emerald-400"><code>X = (byte)(X + VelocityX);
+Y = (byte)(Y + VelocityY);
+
+if (X <= 2 || X >= 136) {
+    VelocityX = (sbyte)-VelocityX;
+    AppleSound.Beep(880, 20);
+}</code></pre>
+          </div>
+
+          <div class="asm-line pl-3">
+            <span class="text-gray-400 block mb-1">65C02 Assembly Output:</span>
+            <pre class="bg-[#161b22] p-3 rounded text-amber-300"><code>; --- Update Ball X & Y ---
+BALL_UPD:
+       LDY #$00       ; Offset 0 (X)
+       LDA ($84),Y    ; Load Ball.X
+       LDY #$02       ; Offset 2 (VelocityX)
+       CLC
+       ADC ($84),Y    ; X + VelocityX
+       LDY #$00
+       STA ($84),Y    ; Store back to Ball.X
+
+       LDY #$01       ; Offset 1 (Y)
+       LDA ($84),Y    ; Load Ball.Y
+       LDY #$03       ; Offset 3 (VelocityY)
+       CLC
+       ADC ($84),Y    ; Y + VelocityY
+       LDY #$01
+       STA ($84),Y    ; Store back to Ball.Y
+
+; --- Check X Wall Bounce ---
+       LDY #$00
+       LDA ($84),Y    ; Load Ball.X
+       CMP #$02       ; Left wall collision?
+       BMI BOUNCE_X
+       CMP #$88       ; Right wall (136)?
+       BCC NO_BOUNCE
+
+BOUNCE_X:
+       LDY #$02
+       LDA ($84),Y    ; Load VelocityX
+       EOR #$FF       ; Two's complement negation
+       INC A
+       STA ($84),Y    ; VelocityX = -VelocityX
+
+       ; Inline Speaker Pulse ($C030)
+       JSR SOUND_BEEP_880
+NO_BOUNCE:
+       RTS</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Routine 2: Double Hi-Res Video Address Calculation -->
+      <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-3">
+        <div class="flex justify-between items-center text-purple-400 font-bold border-b border-[#30363d] pb-1.5">
+          <span>C# Routine: AppleVideo.DrawPixel(X, Y, Color)</span>
+          <span class="text-gray-500">Hardware Video Blitter @ $2300</span>
+        </div>
+
+        <p class="text-gray-400 text-[11px]">
+          The Apple II video RAM is notoriously non-linear. The compiler generates an efficient jump table using the scanline formula:
+        </p>
+
+        <pre class="bg-[#161b22] p-3 rounded text-purple-300 overflow-x-auto"><code>; Input: A = X (0..139), X = Y (0..191), Y = Color (0..15)
+DRAW_PIXEL:
+       PHX            ; Save Y scanline
+       PHA            ; Save X coordinate
+       
+       ; 1. Resolve 16-bit scanline base address from Table
+       TXA
+       ASL A          ; Multiply Y by 2 for 16-bit table index
+       TAX
+       LDA HGR_L,X    ; Low address byte ($00, $80, $00...)
+       STA $88
+       LDA HGR_H,X    ; High address byte ($20, $24, $28...)
+       STA $89
+       
+       ; 2. Determine Main vs Auxiliary Video Bank ($C00D / $C05F)
+       PLA            ; Restore X
+       LSR A          ; Divide X by 2 (Even X = Aux Bank, Odd X = Main Bank)
+       TAY            ; Y register holds screen column offset (0..39)
+       BCC USE_AUX
+
+USE_MAIN:
+       STA $C004      ; RAMWRTOFF -> Main RAM
+       BRA PLOT_BYTE
+USE_AUX:
+       STA $C005      ; RAMWRTON -> Aux RAM
+
+PLOT_BYTE:
+       LDA ($88),Y    ; Load existing pixel byte
+       ORA #$7F       ; Apply color mask
+       STA ($88),Y    ; Write to Video RAM ($2000-$3FFF)
+       STA $C004      ; Reset back to Main RAM write
+       PLX
+       RTS</code></pre>
+      </div>
+
+      <!-- Routine 3: Mockingboard AY-3-8910 Audio Trigger -->
+      <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-3">
+        <div class="flex justify-between items-center text-emerald-400 font-bold border-b border-[#30363d] pb-1.5">
+          <span>C# Routine: AppleSound.PlayMockingboard(voice, freq, vol)</span>
+          <span class="text-gray-500">Slot 4 6522 VIA Driver @ $2400</span>
+        </div>
+
+        <pre class="bg-[#161b22] p-3 rounded text-emerald-300 overflow-x-auto"><code>; Programs AY-3-8910 Sound Chip in Slot 4 ($C0C0-$C0CF)
+MOCKING_SND:
+       LDA #$00       ; Register 0: Tone Period Channel A Fine Tune
+       STA $C0C0      ; VIA Port A (Register Select)
+       LDA #$07       ; Latch address strobe
+       STA $C0C4      ; Control Register
+       LDA #$40       ; Frequency Fine Tune Byte
+       STA $C0C0      ; Write data byte
+       LDA #$06       ; Write strobe
+       STA $C0C4
+       
+       LDA #$08       ; Register 8: Channel A Volume
+       STA $C0C0
+       LDA #$0F       ; Full Volume (15)
+       STA $C0C0
+       RTS</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 4: Slinky RAM & Hard Disk High Score Archival -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <h3 class="text-base font-bold text-amber-400">4. High Score Persistence to Slinky 1MB RAM & 32MB Hard Disk</h3>
+        <span class="text-[11px] text-gray-500">Persistent Storage</span>
+      </div>
+
+      <p class="text-gray-300">
+        When the game finishes, high scores are archived into the 1MB Slinky RAM bank or saved as a ProDOS block directly to the 32MB SmartPort hard disk volume:
+      </p>
+
+      <pre class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-amber-300 overflow-x-auto"><code>; Archive High Score into Slinky RAM Bank $020000 (128KB offset)
+SAVE_HIGHSCORE:
+       LDA #$00 : STA $C073  ; Slinky Address Low = $00
+       LDA #$00 : STA $C074  ; Slinky Address Mid = $00
+       LDA #$02 : STA $C075  ; Slinky Address High = $02
+       
+       ; Stream High Score bytes (Address auto-increments with each write)
+       LDA SCORE_L : STA $C071
+       LDA SCORE_H : STA $C071
+       RTS</code></pre>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">
+    Apple //c Ultra • Full-Stack C# to 65C02 Video Game Engineering Guide 
+  </footer>
+
+</body>
+</html>

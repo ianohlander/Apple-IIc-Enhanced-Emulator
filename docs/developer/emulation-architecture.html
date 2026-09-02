@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>65C02 CPU Emulation Deep Dive — Apple //c Ultra Developer Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .section-title { border-left: 4px solid #f58220; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Developer Module 01 — Exhaustive Technical Reference</span>
+        <h1 class="text-base font-extrabold text-white">65C02 CPU Emulation, Cycle Pipeline & Arithmetic Engine</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
+
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. WDC 65C02 Core Architecture & Silicon Enhancements</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra is powered by an cycle-accurate emulation of the <strong>Western Design Center (WDC) 65C02 CMOS</strong> microprocessor. First released in 1983, the 65C02 represents a major evolution over the classic NMOS 6502 found in the original 1977 Apple II and II Plus. It is manufactured in high-density static CMOS silicon, drastically reducing power consumption while adding 27 new instructions, 8 new addressing modes, and fixing several notorious hardware bugs that plagued the NMOS version.
+      </p>
+
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+        <h3 class="text-base font-bold text-amber-400 font-mono">Detailed Silicon Comparison: NMOS 6502 vs. WDC 65C02</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+            <thead class="bg-[#0d1117] text-gray-400">
+              <tr>
+                <th class="p-2.5 border-b border-[#30363d]">Architectural Feature</th>
+                <th class="p-2.5 border-b border-[#30363d]">Classic NMOS 6502 (1975)</th>
+                <th class="p-2.5 border-b border-[#30363d]">WDC 65C02 CMOS (1983 / Ultra)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#30363d] text-gray-300">
+              <tr>
+                <td class="p-2.5 text-white font-bold">Indirect JMP Page Boundary Bug</td>
+                <td class="p-2.5 text-red-400"><strong>Broken:</strong> <code>JMP ($xxFF)</code> fetches low byte from <code>$xxFF</code> and high byte incorrectly from <code>$xx00</code> instead of crossing page boundary into <code>$xx+1 00</code>.</td>
+                <td class="p-2.5 text-emerald-400"><strong>Fixed:</strong> <code>JMP ($xxFF)</code> correctly increments high address byte across page boundary to fetch target address without corruption.</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-bold">Decimal Mode Arithmetic Flags</td>
+                <td class="p-2.5 text-red-400"><strong>Undefined:</strong> When Decimal Flag ($D=1$), <code>ADC</code> and <code>SBC</code> leave the Zero ($Z$) and Negative ($N$) flags in an invalid, undefined state. Takes 1 extra cycle.</td>
+                <td class="p-2.5 text-emerald-400"><strong>Valid & Deterministic:</strong> Zero ($Z$) and Negative ($N$) flags reflect the actual BCD result. Decimal execution is 1 cycle faster.</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-bold">Read-Modify-Write (RMW) Dummy Writes</td>
+                <td class="p-2.5 text-red-400"><strong>Spurious Writes:</strong> Instructions like <code>INC $C030</code> or <code>ROR $C000</code> write the unmodified value to memory before writing the modified value, triggering hardware softswitches twice!</td>
+                <td class="p-2.5 text-emerald-400"><strong>Clean Bus Cycles:</strong> Modifies internal registers before bus write; does not trigger double softswitch strobe.</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-bold">Extended CMOS Instructions</td>
+                <td class="p-2.5 text-gray-500">None (151 valid opcodes, 105 undefined/crash opcodes).</td>
+                <td class="p-2.5 text-emerald-400">27 new opcodes: <code>BRA</code>, <code>STZ</code>, <code>PHX/PLX</code>, <code>PHY/PLY</code>, <code>TRB/TSB</code>, <code>BBR/BBS</code>, <code>RMB/SMB</code>, <code>INC A</code>, <code>DEC A</code>.</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-white font-bold">Clock Frequency Range</td>
+                <td class="p-2.5 text-gray-400">1.0227 MHz (Standard Apple II)</td>
+                <td class="p-2.5 text-amber-400"><strong>1.00 MHz to 50.00 MHz Turbo Mode</strong> with dynamic software throttling.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. CPU Register Model & Status Flags (P)</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The 65C02 possesses six fundamental hardware registers:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-5 font-mono text-xs space-y-3">
+          <h3 class="text-amber-400 font-bold text-sm">Primary Execution Registers</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><strong class="text-white">A (Accumulator, 8-bit):</strong> Central arithmetic and logical register. All mathematical computations (addition, subtraction, shifts, AND, OR, XOR) operate on A.</li>
+            <li><strong class="text-white">X (Index Register X, 8-bit):</strong> Used for array indexing, loop counting, and addressing modes such as <code>ZeroPage,X</code> and <code>Absolute,X</code>.</li>
+            <li><strong class="text-white">Y (Index Register Y, 8-bit):</strong> Used for secondary indexing, string traversal, and indirect-indexed addressing <code>(Indirect),Y</code>.</li>
+            <li><strong class="text-white">SP (Stack Pointer, 8-bit):</strong> Points into hardware stack page 1 ($0100-$01FF). Decrements on Push (<code>PHA, PHP, PHX, PHY, JSR</code>) and increments on Pull (<code>PLA, PLP, PLX, PLY, RTS, RTI</code>).</li>
+            <li><strong class="text-white">PC (Program Counter, 16-bit):</strong> Holds the address of the next instruction byte to fetch ($0000-$FFFF).</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-5 font-mono text-xs space-y-3">
+          <h3 class="text-cyan-400 font-bold text-sm">Processor Status Register P [7 6 5 4 3 2 1 0]</h3>
+          <ul class="space-y-1 text-gray-300">
+            <li><strong class="text-cyan-300">Bit 7 — N (Negative):</strong> Set to bit 7 of the calculation result (sign bit). 1 = Negative, 0 = Positive.</li>
+            <li><strong class="text-cyan-300">Bit 6 — V (Overflow):</strong> Set when a signed arithmetic operation overflows the range [-128..+127]. Also set directly by <code>BIT</code> instruction.</li>
+            <li><strong class="text-gray-500">Bit 5 — Unused:</strong> Always reads as logic 1 when pushed to stack.</li>
+            <li><strong class="text-cyan-300">Bit 4 — B (Break Flag):</strong> Distinguishes hardware interrupts (IRQ/NMI, B=0) from software <code>BRK</code> instructions (B=1) during stack pushes.</li>
+            <li><strong class="text-cyan-300">Bit 3 — D (Decimal Mode):</strong> When set (<code>SED</code>), ADC and SBC perform BCD decimal arithmetic. Cleared via <code>CLD</code>.</li>
+            <li><strong class="text-cyan-300">Bit 2 — I (Interrupt Disable):</strong> When set (<code>SEI</code>), masks maskable hardware IRQ line interrupts. Cleared via <code>CLI</code>.</li>
+            <li><strong class="text-cyan-300">Bit 1 — Z (Zero):</strong> Set to 1 if arithmetic or logical result equals $00; cleared to 0 otherwise.</li>
+            <li><strong class="text-cyan-300">Bit 0 — C (Carry):</strong> Set if an addition overflows 8 bits (> 255) or if a subtraction does not require a borrow.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">3. Binary & BCD Decimal Arithmetic Deep Dive</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The 65C02 Arithmetic Logic Unit (ALU) performs two completely distinct modes of math depending on the state of the Decimal ($D$) flag. In Binary Mode ($D=0$), it executes standard two's-complement arithmetic. In Decimal Mode ($D=1$), it processes Binary Coded Decimal (BCD), where an 8-bit byte stores two decimal digits between 00 and 99.
+      </p>
+
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 space-y-4 text-xs font-mono">
+        <h3 class="text-amber-400 font-bold text-sm">Exact Mathematical Formulation of BCD Addition (ADC)</h3>
+        <p class="text-gray-300">
+          Given accumulator \(A\) and operand \(M\), with carry \(C_{in}\):
+        </p>
+        <ol class="list-decimal list-inside space-y-2 text-gray-300">
+          <li><strong>Low Nibble Addition:</strong> \(AL = (A \pmod{16}) + (M \pmod{16}) + C_{in}\). If \(AL > 9\), adjust: \(AL = (AL + 6) \pmod{16}\), and propagate carry \(AH_{carry} = 1\).</li>
+          <li><strong>High Nibble Addition:</strong> \(AH = \lfloor A / 16 \rfloor + \lfloor M / 16 \rfloor + AH_{carry}\).</li>
+          <li><strong>High Nibble Overflow:</strong> If \(AH > 9\), adjust: \(AH = (AH + 6) \pmod{16}\), and set Carry Out \(C_{out} = 1\). Otherwise, \(C_{out} = 0\).</li>
+          <li><strong>Final Decimal Result:</strong> \(A_{new} = (AH \times 16) + AL\).</li>
+          <li><strong>Flags Update (65C02 Standard):</strong> \(Z = (A_{new} == 0)\), \(N = (A_{new} \ \& \ 0x80) \neq 0\).</li>
+        </ol>
+
+        <div class="p-4 bg-[#161b22] border border-[#30363d] rounded-lg text-emerald-300">
+          <strong>Concrete Example:</strong> Adding $29 + $43 with Carry = 0.<br>
+          • Low nibble: \(9 + 3 + 0 = 12\) ($0C). Since \(12 > 9\), \(AL = (12 + 6) \pmod{16} = 2\), \(AH_{carry} = 1\).<br>
+          • High nibble: \(2 + 4 + 1 = 7\). Since \(7 \le 9\), \(AH = 7\), \(C_{out} = 0\).<br>
+          • Final Result: \(A = \$72\) (representing decimal 72). Valid: \(29 + 43 = 72\)!
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="space-y-4">
+      <h2 class="text-2xl font-extrabold text-white section-title">4. Hardware Interrupt Processing & Vector Table</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The 65C02 architecture utilizes a dedicated 6-byte hardware interrupt vector table hardwired at the top of memory address space ($FFFA-$FFFF):
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border border-[#30363d] text-left">
+          <thead class="bg-[#161b22] text-amber-400">
+            <tr>
+              <th class="p-2.5 border-b border-[#30363d]">Vector Address</th>
+              <th class="p-2.5 border-b border-[#30363d]">Interrupt Type</th>
+              <th class="p-2.5 border-b border-[#30363d]">Trigger Condition</th>
+              <th class="p-2.5 border-b border-[#30363d]">CPU Action & Stack Sequence</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#30363d] text-gray-300">
+            <tr>
+              <td class="p-2.5 text-cyan-300 font-bold">$FFFA / $FFFB</td>
+              <td class="p-2.5 text-white font-bold">NMI (Non-Maskable Interrupt)</td>
+              <td class="p-2.5">Negative-edge trigger on /NMI hardware pin (cannot be masked by I flag).</td>
+              <td class="p-2.5">Pushes PC high, PC low, and status register P (with B=0). Sets I=1. Jumps to address at ($FFFA). (Takes 7 cycles).</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300 font-bold">$FFFC / $FFFD</td>
+              <td class="p-2.5 text-white font-bold">RESET</td>
+              <td class="p-2.5">Low pulse on /RESET pin or pressing Control+Open-Apple+Reset.</td>
+              <td class="p-2.5">Sets I=1, D=0 (Decimal cleared on 65C02), sets SP=$FF, loads PC from ($FFFC). (Takes 7 cycles).</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300 font-bold">$FFFE / $FFFF</td>
+              <td class="p-2.5 text-white font-bold">IRQ / BRK</td>
+              <td class="p-2.5">Level-sensitive /IRQ line (Mockingboard VIA timer / mouse) or software <code>BRK</code>.</td>
+              <td class="p-2.5">If I=0: pushes PC+2, P (B=1 if BRK, B=0 if IRQ). Sets I=1. Jumps to address at ($FFFE). (Takes 7 cycles).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+  </footer>
+
+</body>
+</html>

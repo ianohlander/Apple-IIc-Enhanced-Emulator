@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standard Class Libraries & Hardware API Reference — Apple //c Ultra</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.76rem; line-height: 1.45; }
+    .section-title { border-left: 5px solid #2F95E5; padding-left: 1rem; }
+    .sub-section-title { border-left: 3px solid #fdb827; padding-left: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-5 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-4">
+      <a href="index.html" class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center shadow text-white font-bold text-2xl"></a>
+      <div>
+        <span class="text-xs font-mono text-cyan-400 font-bold tracking-widest uppercase">Developer Module 07 — Complete Architecture Guide</span>
+        <h1 class="text-lg font-extrabold text-white">Java & .NET Standard Class Libraries & Optional Hardware APIs</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Developer Hub</a>
+      <a href="../../index-standalone.html" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Live Emulator</a>
+    </div>
+  </header>
+
+  <!-- Table of Contents Navigation -->
+  <nav class="bg-[#161b22] border-b border-[#30363d] px-6 py-3 sticky top-1.5 z-40 text-xs font-mono overflow-x-auto">
+    <div class="max-w-7xl mx-auto flex items-center space-x-6 whitespace-nowrap text-gray-400">
+      <span class="text-cyan-400 font-bold">Contents:</span>
+      <a href="#philosophy" class="hover:text-white transition">1. Architectural Philosophy</a>
+      <a href="#dotnet-std" class="hover:text-white transition">2. .NET Core Standard Library</a>
+      <a href="#java-std" class="hover:text-white transition">3. Java Standard Library</a>
+      <a href="#hardware-apis" class="hover:text-white transition">4. Optional Hardware APIs</a>
+      <a href="#comparisons" class="hover:text-white transition">5. Code Comparison Cookbook</a>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto px-6 py-10 w-full space-y-16 flex-grow">
+
+    <!-- Section 1: Philosophy -->
+    <section id="philosophy" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">1. Architectural Philosophy: Pure Standard Runtimes vs Optional Hardware APIs</h2>
+      
+      <div class="bg-gradient-to-r from-[#1c2430] to-[#161b22] border border-blue-500/40 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 bg-blue-500/20 text-cyan-300 font-mono text-xs font-bold rounded">CORE DESIGN PRINCIPLE</span>
+          <span class="text-xs text-gray-400 font-mono">Zero Platform-Lock-In</span>
+        </div>
+        <h3 class="text-xl font-bold text-white">Write Standard Modern Code Without Apple II Imports</h3>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          The Apple //c Ultra is engineered so that developers can write and compile <strong>pure, standard C# .NET Core and Java applications</strong> using standard namespaces (<code class="text-amber-300">System</code>, <code class="text-amber-300">System.Collections.Generic</code>, <code class="text-cyan-300">java.lang</code>, <code class="text-cyan-300">java.util</code>) <strong>without requiring any Apple II-specific packages or imports</strong>.
+        </p>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          The Apple-specific packages (<code class="text-emerald-300">Apple2.Ultra</code> and <code class="text-emerald-300">apple2.hardware</code>) are <strong>purely optional low-level hardware abstraction layers</strong>. They are provided for developers who specifically want direct, explicit access to vintage retro hardware features—such as Double Hi-Res 560&times;192 graphics switches (<code class="text-cyan-300">$C050</code>, <code class="text-cyan-300">$C057</code>, <code class="text-cyan-300">$C05F</code>), analog game paddle timers (<code class="text-cyan-300">$C064</code>), and Mockingboard Dual AY-3-8910 6-voice programmable sound chips.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
+        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-3">
+          <h4 class="text-amber-400 font-bold text-sm">Mode A: Pure Standard Application Mode</h4>
+          <ul class="list-disc list-inside text-gray-300 space-y-1.5 leading-relaxed">
+            <li>Imports standard namespaces only: <code class="text-white">using System; using System.Collections.Generic;</code> or <code class="text-white">import java.util.ArrayList;</code>.</li>
+            <li><code class="text-amber-300">Console.WriteLine()</code> and <code class="text-cyan-300">System.out.println()</code> automatically lower to Apple ROM character output (<code class="text-white">$FDED [COUT]</code>).</li>
+            <li>Collections like <code class="text-white">List&lt;T&gt;</code> and <code class="text-white">ArrayList</code> manage dynamic heap buffers in Auxiliary RAM.</li>
+            <li>100% portable code: same source can compile on modern PC, Linux, macOS, and native 65C02 silicon.</li>
+          </ul>
+        </div>
+
+        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-3">
+          <h4 class="text-cyan-400 font-bold text-sm">Mode B: Hardware-Enhanced Mode (Optional)</h4>
+          <ul class="list-disc list-inside text-gray-300 space-y-1.5 leading-relaxed">
+            <li>Optionally imports <code class="text-white">Apple2.Ultra</code> or <code class="text-white">apple2.hardware</code>.</li>
+            <li>Directly controls 560&times;192 16-color Double Hi-Res graphics rasterizers.</li>
+            <li>Reads physical analog game paddles and mouse coordinates (<code class="text-white">$C064/$C065</code>).</li>
+            <li>Programs the Slot 4 Mockingboard dual AY-3-8910 sound generator (6 polyphonic voices).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: .NET Core Standard Library Reference -->
+    <section id="dotnet-std" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">2. .NET Core Standard Class Library Reference</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The C# Ahead-of-Time compiler natively supports the following standard .NET Core namespaces and types:
+      </p>
+
+      <div class="space-y-6 font-mono text-xs">
+        
+        <!-- System.Console -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <h3 class="text-amber-400 font-bold text-base sub-section-title">Namespace: System &bull; Class: Console</h3>
+          <p class="text-gray-300">Provides standard character stream I/O for text and terminal applications.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Description</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 Silicon Lowering Behavior</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Console.Write(string value)</td>
+                  <td class="p-2">Outputs a string to the screen.</td>
+                  <td class="p-2">Converts chars to high-bit ASCII (<code>ch | 0x80</code>) and loops <code>LDA #$XX</code> &rarr; <code>JSR $FDED [COUT]</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Console.WriteLine(string value)</td>
+                  <td class="p-2">Outputs a string followed by a newline.</td>
+                  <td class="p-2">Executes string <code>COUT</code> loop, followed by <code>JSR $FD8E [CROUT]</code> (Carriage Return).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Console.WriteLine(int value)</td>
+                  <td class="p-2">Converts integer to decimal string and outputs.</td>
+                  <td class="p-2">Calls 16-bit binary-to-decimal ASCII conversion subroutine in Zero Page, then invokes <code>COUT</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Console.Clear()</td>
+                  <td class="p-2">Clears the text screen and resets cursor.</td>
+                  <td class="p-2">Calls Apple ROM routine <code>$FC58 [HOME]</code> to clear text buffer and reset row/col to (0,0).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- System.Math -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <h3 class="text-amber-400 font-bold text-base sub-section-title">Namespace: System &bull; Class: Math</h3>
+          <p class="text-gray-300">Provides common mathematical constants and functions.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Member Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Description</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 Silicon Lowering Behavior</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Math.Abs(int val)</td>
+                  <td class="p-2">Returns the absolute value of an integer.</td>
+                  <td class="p-2">Tests sign bit with <code>BPL</code>; if negative, negates using two's complement (<code>EOR #$FF</code> + <code>INC</code>).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Math.Max(int a, int b)</td>
+                  <td class="p-2">Returns the larger of two 16-bit integers.</td>
+                  <td class="p-2">Performs 16-bit Zero Page comparison: <code>SEC</code> &rarr; <code>LDA a</code> &rarr; <code>SBC b</code> &rarr; <code>BMI return_b</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Math.Min(int a, int b)</td>
+                  <td class="p-2">Returns the smaller of two 16-bit integers.</td>
+                  <td class="p-2">Performs 16-bit Zero Page comparison: <code>SEC</code> &rarr; <code>LDA a</code> &rarr; <code>SBC b</code> &rarr; <code>BPL return_b</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- System.Collections.Generic.List<T> -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <h3 class="text-amber-400 font-bold text-base sub-section-title">Namespace: System.Collections.Generic &bull; Class: List&lt;T&gt;</h3>
+          <p class="text-gray-300">Provides dynamically resizing generic array collections.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Member</th>
+                  <th class="p-2 border-b border-[#30363d]">Description</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 Silicon Lowering Behavior</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">void Add(T item)</td>
+                  <td class="p-2">Appends an item to the end of the collection.</td>
+                  <td class="p-2">Stores item pointer into heap table at <code>base + (size * 2)</code>; increments size counter.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">int Count</td>
+                  <td class="p-2">Gets the number of elements contained in the list.</td>
+                  <td class="p-2">Reads 16-bit integer at struct offset <code>+2</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">T this[int index]</td>
+                  <td class="p-2">Gets or sets the element at the specified index.</td>
+                  <td class="p-2">Computes <code>base + (index * 2)</code> using 16-bit shift (<code>ASL</code>) and loads 16-bit pointer.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Java Standard Library Reference -->
+    <section id="java-std" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">3. Java Standard Library (JDK 17) Reference</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Java Ahead-of-Time compiler natively supports the following standard Java packages and classes:
+      </p>
+
+      <div class="space-y-6 font-mono text-xs">
+        
+        <!-- java.lang.System -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <h3 class="text-cyan-400 font-bold text-base sub-section-title">Package: java.lang &bull; Class: System</h3>
+          <p class="text-gray-300">Provides system facilities including standard output character streams.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method / Field</th>
+                  <th class="p-2 border-b border-[#30363d]">Description</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 Silicon Lowering Behavior</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300">
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">System.out.println(String s)</td>
+                  <td class="p-2">Prints string followed by a newline.</td>
+                  <td class="p-2">Lowers to sequential <code>LDA #$XX</code> &rarr; <code>JSR $FDED [COUT]</code>, followed by <code>JSR $FD8E [CROUT]</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">System.out.print(String s)</td>
+                  <td class="p-2">Prints string without trailing newline.</td>
+                  <td class="p-2">Lowers to sequential <code>LDA #$XX</code> &rarr; <code>JSR $FDED [COUT]</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">System.currentTimeMillis()</td>
+                  <td class="p-2">Returns system time in milliseconds.</td>
+                  <td class="p-2">Reads the 6522 VIA hardware counter registers.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- java.util.ArrayList -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <h3 class="text-cyan-400 font-bold text-base sub-section-title">Package: java.util &bull; Class: ArrayList&lt;E&gt;</h3>
+          <p class="text-gray-300">Provides resizable-array implementation of the List interface.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method</th>
+                  <th class="p-2 border-b border-[#30363d]">Description</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 Silicon Lowering Behavior</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300">
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">boolean add(E element)</td>
+                  <td class="p-2">Appends element to list.</td>
+                  <td class="p-2">Allocates element pointer into heap table; increments size counter in Zero Page.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">E get(int index)</td>
+                  <td class="p-2">Returns element at index.</td>
+                  <td class="p-2">Calculates pointer offset using 16-bit shift (<code>ASL</code>) and loads reference.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">int size()</td>
+                  <td class="p-2">Returns number of elements in list.</td>
+                  <td class="p-2">Loads 16-bit integer from object header offset <code>+2</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Optional Hardware APIs Reference -->
+    <section id="hardware-apis" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">4. Optional Hardware Platform APIs Reference</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        For developers who explicitly choose to write retro-hardware software, the optional namespaces <code class="text-emerald-300">Apple2.Ultra</code> (C#) and <code class="text-emerald-300">apple2.hardware</code> (Java) provide direct access to the retro architecture:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
+        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-4">
+          <h3 class="text-emerald-400 font-bold text-sm">C# Hardware API: Apple2.Ultra</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><strong class="text-white">AppleVideo.SetDoubleHiRes(bool):</strong> Strobes softswitches <code>$C050</code>, <code>$C057</code>, <code>$C00D</code>, <code>$C05F</code>.</li>
+            <li><strong class="text-white">AppleVideo.DrawLine(x0, y0, x1, y1, color):</strong> Fast Bresenham Double Hi-Res rasterizer.</li>
+            <li><strong class="text-white">AppleSound.Beep(frequency, durationMs):</strong> Cycles 1-bit speaker flip-flop at <code>$C030</code>.</li>
+            <li><strong class="text-white">AppleSound.PlayMockingboard(voice, freq, vol):</strong> Writes AY-3-8910 PSG registers (Slot 4).</li>
+            <li><strong class="text-white">AppleSystem.GetMouseX() / GetMouseY():</strong> Reads paddle registers <code>$C064/$C065</code>.</li>
+            <li><strong class="text-white">AppleMemory.SetSlinkyAddress(addr24):</strong> Sets 24-bit pointer into 16MB RAM (<code>$C071-$C075</code>).</li>
+          </ul>
+        </div>
+
+        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-4">
+          <h3 class="text-emerald-400 font-bold text-sm">Java Hardware API: apple2.hardware</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><strong class="text-white">AppleGraphics.setVideoMode(mode):</strong> Sets <code>MODE_TEXT40</code>, <code>MODE_HIRES</code>, or <code>MODE_DOUBLE_HIRES</code>.</li>
+            <li><strong class="text-white">AppleGraphics.drawLine(x0, y0, x1, y1, color):</strong> Double Hi-Res line renderer.</li>
+            <li><strong class="text-white">AppleAudio.beep(freqHz, durationMs):</strong> 1-bit speaker pulse generator.</li>
+            <li><strong class="text-white">AppleAudio.playMockingboard(ch, freq, vol):</strong> 6-channel PSG voice synthesizer.</li>
+            <li><strong class="text-white">AppleSystem.readPaddle(paddleNum):</strong> Reads paddle registers.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Side-by-Side Comparison Cookbook -->
+    <section id="comparisons" class="space-y-6">
+      <h2 class="text-3xl font-black text-white section-title">5. Side-by-Side Application Comparison Cookbook</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
+        <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-5 space-y-2">
+          <h4 class="text-amber-400 font-bold">Standard C# App (Zero Apple Imports)</h4>
+          <pre><code class="text-amber-300">using System;
+using System.Collections.Generic;
+
+namespace PureDotNetApp
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("HELLO FROM STANDARD C#!");
+            List&lt;string&gt; items = new List&lt;string&gt;();
+            items.Add("CPU: 65C02 (50 MHz)");
+            items.Add("RAM: 128KB EXPANDED");
+            for (int i = 0; i < items.Count; i++)
+            {
+                Console.WriteLine("ITEM " + (i+1) + ": " + items[i]);
+            }
+            int result = Math.Max(10, 100);
+            Console.WriteLine("RESULT: " + result);
+        }
+    }
+}</code></pre>
+        </div>
+
+        <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-5 space-y-2">
+          <h4 class="text-cyan-400 font-bold">Standard Java App (Zero Apple Imports)</h4>
+          <pre><code class="text-cyan-300">import java.util.ArrayList;
+
+public class PureJavaApp
+{
+    public static void main(String[] args)
+    {
+        System.out.println("HELLO FROM STANDARD JAVA!");
+        ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();
+        list.add("PURE OBJECT RUNTIME");
+        list.add("ZERO PAGE REGISTERS");
+        for (int i = 0; i < list.size(); i++)
+        {
+            System.out.println("ENTRY " + (i+1) + ": " + list.get(i));
+        }
+        int calc = Math.max(10, 50) + Math.abs(-42);
+        System.out.println("RESULT: " + calc);
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
+    <a href="index.html" class="text-blue-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Standard Libraries Reference
+  </footer>
+
+</body>
+</html>
