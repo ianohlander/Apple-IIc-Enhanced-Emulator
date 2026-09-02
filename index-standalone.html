@@ -328,6 +328,9 @@ $200A: 60         RTS</pre>
     // -------------------------------------------------------------
     // 100% Virtual 65C02 CMOS CPU & Apple II Hardware Architecture
     // -------------------------------------------------------------
+    // -------------------------------------------------------------
+    // Authentic 65C02 CMOS Silicon Core & Apple II System ROM Engine
+    // -------------------------------------------------------------
     class Apple2cEmulator {
       constructor(canvas) {
         this.canvas = canvas;
@@ -487,7 +490,7 @@ $200A: 60         RTS</pre>
           0x8D, 0x54, 0xC0, // STA $C054 (PAGE1)
           0x8D, 0x52, 0xC0, // STA $C052 (MIXCLR)
           0x20, 0x58, 0xFC, // JSR $FC58 (HOME)
-          0x60              // RTS
+          0x4C, 0x00, 0xFA  // JMP $FA00 (KEYIN LOOP)
         ];
         this.rom.set(resetHandler, 0x3800);
 
@@ -508,6 +511,15 @@ $200A: 60         RTS</pre>
           0x60              // RTS
         ];
         this.rom.set(homeHandler, 0x3c58);
+
+        // Idle KEYIN Loop ($FA00 = ROM offset $3A00): Polls $C000 cleanly without stepping into random memory
+        const idleKeyinLoop = [
+          0xAD, 0x00, 0xC0, // LDA $C000
+          0x10, 0xFB,       // BPL $FA00 (Wait for key)
+          0x8D, 0x10, 0xC0, // STA $C010 (Clear strobe)
+          0x4C, 0x00, 0xFA  // JMP $FA00
+        ];
+        this.rom.set(idleKeyinLoop, 0x3a00);
       }
 
       reset() {
@@ -552,7 +564,7 @@ $200A: 60         RTS</pre>
             if (this.keyQueue.length > 0) {
               return (this.keyQueue[0] | 0x80) & 0xff;
             }
-            return this.lastKeyPressed & 0x7f;
+            return 0x00; // Bit 7 clear when no key pending
           }
           if (addr === 0xc010) {
             // Keyboard Strobe Clear ($C010)
@@ -815,9 +827,16 @@ $200A: 60         RTS</pre>
 
       runCycles(targetCycles) {
         let executed = 0;
+        // If CPU is in KEYIN idle loop ($FA00-$FA07) and no keys pending, don't spin needlessly
+        if (this.pc >= 0xFA00 && this.pc <= 0xFA08 && this.keyQueue.length === 0) {
+          return;
+        }
         while (executed < targetCycles) {
           this.step();
           executed += 2;
+          if (this.pc >= 0xFA00 && this.pc <= 0xFA08 && this.keyQueue.length === 0) {
+            break;
+          }
         }
       }
 
@@ -844,7 +863,8 @@ $200A: 60         RTS</pre>
 
       setSpeed(mhz) {
         this.speed = parseFloat(mhz);
-        document.getElementById('header-speed').innerText = mhz + ' MHz';
+        const el = document.getElementById('header-speed');
+        if (el) el.innerText = mhz + ' MHz';
       }
 
       playBeep(freq = 880, duration = 0.05) {
@@ -897,10 +917,29 @@ $200A: 60         RTS</pre>
         this.clearRow(23);
       }
 
+      scrollUpMixed() {
+        for (let r = 20; r < 23; r++) {
+          const srcBase = this.getRowBase(r + 1);
+          const dstBase = this.getRowBase(r);
+          for (let c = 0; c < 40; c++) {
+            this.ram[dstBase + c] = this.ram[srcBase + c];
+          }
+        }
+        this.clearRow(23);
+      }
+
       ensureRow() {
-        while (this.cursorRow >= 23) {
-          this.scrollUp();
-          this.cursorRow--;
+        if (this.isGraphicsMode && this.mixedGraphics) {
+          if (this.cursorRow < 20) this.cursorRow = 20;
+          while (this.cursorRow >= 24) {
+            this.scrollUpMixed();
+            this.cursorRow--;
+          }
+        } else {
+          while (this.cursorRow >= 24) {
+            this.scrollUp();
+            this.cursorRow--;
+          }
         }
       }
 
@@ -909,7 +948,6 @@ $200A: 60         RTS</pre>
         this.currentInput += ch;
         this.clearRow(this.cursorRow);
         this.writeString(this.cursorRow, 0, "] " + this.currentInput + "█");
-        this.playBeep(1200, 0.015);
       }
 
       backspace() {
@@ -917,11 +955,9 @@ $200A: 60         RTS</pre>
         this.currentInput = this.currentInput.slice(0, -1);
         this.clearRow(this.cursorRow);
         this.writeString(this.cursorRow, 0, "] " + this.currentInput + "█");
-        this.playBeep(800, 0.015);
       }
 
       handleReturn() {
-        this.playBeep(900, 0.02);
         this.clearRow(this.cursorRow);
         this.writeString(this.cursorRow, 0, "] " + this.currentInput);
 
@@ -1008,18 +1044,34 @@ $200A: 60         RTS</pre>
         // Immediate mode statements
         const immediateStmts = this.splitBasicStatements(cmd);
         if (immediateStmts.length > 0) {
+          let hasError = false;
           const startRow = this.cursorRow;
+
           for (const stmt of immediateStmts) {
-            this.executeBasicStatement(stmt, 0);
-          }
-          if (!this.isGraphicsMode) {
-            if (this.cursorRow === startRow) {
+            const ok = this.executeBasicStatement(stmt, 0);
+            if (!ok) {
               this.cursorRow++;
+              this.ensureRow();
+              this.writeString(this.cursorRow, 0, "?SYNTAX ERROR IN " + stmt);
+              hasError = true;
+              break;
             }
-            this.ensureRow();
-            this.writeString(this.cursorRow, 0, "] █");
-          } else if (this.mixedGraphics) {
-            if (this.cursorRow < 20 || this.cursorRow > 23) this.cursorRow = 20;
+          }
+
+          if (!hasError) {
+            if (!this.isGraphicsMode) {
+              if (this.cursorRow === startRow) {
+                this.cursorRow++;
+              }
+              this.ensureRow();
+              this.writeString(this.cursorRow, 0, "] █");
+            } else if (this.mixedGraphics) {
+              if (this.cursorRow < 20 || this.cursorRow > 23) this.cursorRow = 20;
+              this.ensureRow();
+              this.writeString(this.cursorRow, 0, "] █");
+            }
+          } else {
+            this.cursorRow++;
             this.ensureRow();
             this.writeString(this.cursorRow, 0, "] █");
           }
@@ -1120,6 +1172,10 @@ $200A: 60         RTS</pre>
               this.cursorRow++;
               this.ensureRow();
               this.writeString(this.cursorRow, 0, "] █");
+            } else if (this.mixedGraphics) {
+              if (this.cursorRow < 20 || this.cursorRow > 23) this.cursorRow = 20;
+              this.ensureRow();
+              this.writeString(this.cursorRow, 0, "] █");
             }
             this.renderScreen();
             return;
@@ -1127,7 +1183,18 @@ $200A: 60         RTS</pre>
 
           const currentLineObj = this.parsedBasicLines[this.basicLinePtr];
           const stmt = currentLineObj.statements[this.basicStmtPtr];
-          this.executeBasicStatement(stmt, currentLineObj.lineNum);
+          const ok = this.executeBasicStatement(stmt, currentLineObj.lineNum);
+          if (!ok) {
+            this.isRunningBasic = false;
+            this.cursorRow++;
+            this.ensureRow();
+            this.writeString(this.cursorRow, 0, `?SYNTAX ERROR IN ${currentLineObj.lineNum}`);
+            this.cursorRow++;
+            this.ensureRow();
+            this.writeString(this.cursorRow, 0, "] █");
+            this.renderScreen();
+            return;
+          }
           steps++;
         }
 
@@ -1140,17 +1207,17 @@ $200A: 60         RTS</pre>
       executeBasicStatement(stmt, lineNum) {
         if (!stmt) {
           this.advanceBasic();
-          return;
+          return true;
         }
 
-        const upper = stmt.toUpperCase();
+        const upper = stmt.toUpperCase().trim();
 
         if (upper.startsWith('REM')) {
           if (this.isRunningBasic && this.parsedBasicLines && this.parsedBasicLines[this.basicLinePtr]) {
             this.basicStmtPtr = this.parsedBasicLines[this.basicLinePtr].statements.length;
           }
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper === 'HOME' || upper === 'CLS') {
@@ -1158,7 +1225,7 @@ $200A: 60         RTS</pre>
           this.cursorRow = this.isGraphicsMode && this.mixedGraphics ? 20 : 0;
           this.renderScreen();
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper === 'HGR') {
@@ -1173,7 +1240,7 @@ $200A: 60         RTS</pre>
           this.cursorRow = 20;
           this.renderScreen();
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper === 'HGR2') {
@@ -1186,7 +1253,7 @@ $200A: 60         RTS</pre>
           this.lastHplotY = 0;
           this.renderScreen();
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper === 'TEXT') {
@@ -1195,7 +1262,7 @@ $200A: 60         RTS</pre>
           this.isHires = false;
           this.renderScreen();
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper === 'GR') {
@@ -1205,7 +1272,7 @@ $200A: 60         RTS</pre>
           this.hiresLines = [];
           this.renderScreen();
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper.startsWith('HCOLOR=') || upper.startsWith('HCOLOR =')) {
@@ -1213,14 +1280,28 @@ $200A: 60         RTS</pre>
           const colVal = this.evalBasicExpr(colExpr);
           this.hcolor = Math.floor(Number(colVal) || 3) % 8;
           this.advanceBasic();
-          return;
+          return true;
+        }
+
+        if (upper.startsWith('COLOR=') || upper.startsWith('COLOR =')) {
+          const colExpr = stmt.replace(/^COLOR\s*=\s*/i, '');
+          const colVal = this.evalBasicExpr(colExpr);
+          this.hcolor = Math.floor(Number(colVal) || 3) % 16;
+          this.advanceBasic();
+          return true;
+        }
+
+        // HCOLOR or COLOR without '=' is a syntax error!
+        if (upper === 'HCOLOR' || upper === 'COLOR' || /^HCOLOR\s+[0-9]/i.test(upper) || /^COLOR\s+[0-9]/i.test(upper)) {
+          return false;
         }
 
         if (upper.startsWith('HPLOT')) {
-          this.handleHplot(stmt);
+          const ok = this.handleHplot(stmt);
+          if (!ok) return false;
           this.renderScreen();
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper.startsWith('VTAB')) {
@@ -1228,7 +1309,7 @@ $200A: 60         RTS</pre>
           const rVal = this.evalBasicExpr(rExpr);
           this.cursorRow = Math.max(0, Math.min(23, (Math.floor(Number(rVal) || 1) - 1)));
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper.startsWith('HTAB')) {
@@ -1236,7 +1317,7 @@ $200A: 60         RTS</pre>
           const cVal = this.evalBasicExpr(cExpr);
           this.cursorCol = Math.max(0, Math.min(39, (Math.floor(Number(cVal) || 1) - 1)));
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper.startsWith('CALL')) {
@@ -1249,7 +1330,7 @@ $200A: 60         RTS</pre>
             this.playBeep(880, 0.05);
           }
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper.startsWith('POKE')) {
@@ -1266,14 +1347,14 @@ $200A: 60         RTS</pre>
             }
           }
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper.startsWith('SPEED=') || upper.startsWith('SPEED =')) {
           const spd = this.evalBasicExpr(stmt.replace(/^SPEED\s*=\s*/i, ''));
           this.setSpeed(Number(spd) || 1);
           this.advanceBasic();
-          return;
+          return true;
         }
 
         if (upper === 'END' || upper === 'STOP') {
@@ -1284,7 +1365,7 @@ $200A: 60         RTS</pre>
             this.writeString(this.cursorRow, 0, "] █");
           }
           this.renderScreen();
-          return;
+          return true;
         }
 
         // FOR var = start TO end [STEP s]
@@ -1303,7 +1384,7 @@ $200A: 60         RTS</pre>
             stmtPtr: this.basicStmtPtr + 1
           };
           this.advanceBasic();
-          return;
+          return true;
         }
 
         // NEXT [var]
@@ -1316,13 +1397,13 @@ $200A: 60         RTS</pre>
             if (!isDone) {
               this.basicLinePtr = loop.linePtr;
               this.basicStmtPtr = loop.stmtPtr;
-              return;
+              return true;
             } else {
               delete this.basicForLoops[varName];
             }
           }
           this.advanceBasic();
-          return;
+          return true;
         }
 
         // IF cond THEN stmt
@@ -1337,18 +1418,17 @@ $200A: 60         RTS</pre>
               if (targetIdx !== -1) {
                 this.basicLinePtr = targetIdx;
                 this.basicStmtPtr = 0;
-                return;
+                return true;
               }
             } else {
-              this.executeBasicStatement(thenStmt, lineNum);
-              return;
+              return this.executeBasicStatement(thenStmt, lineNum);
             }
           } else {
             if (this.parsedBasicLines && this.parsedBasicLines[this.basicLinePtr]) {
               this.basicStmtPtr = this.parsedBasicLines[this.basicLinePtr].statements.length;
             }
             this.advanceBasic();
-            return;
+            return true;
           }
         }
 
@@ -1364,24 +1444,26 @@ $200A: 60         RTS</pre>
           }
           this.renderScreen();
           this.advanceBasic();
-          return;
+          return true;
         }
 
-        // LET var = expr
+        // LET var = expr or var = expr
         const assignMatch = stmt.replace(/^LET\s*/i, '').match(/^([A-Z0-9$%]+)\s*=\s*(.*)$/i);
         if (assignMatch) {
           const varName = assignMatch[1].toUpperCase();
           const val = this.evalBasicExpr(assignMatch[2]);
           this.basicVars[varName] = val;
           this.advanceBasic();
-          return;
+          return true;
         }
 
-        this.advanceBasic();
+        // Unrecognized statement -> syntax error!
+        return false;
       }
 
       handleHplot(stmt) {
         const clean = stmt.replace(/^HPLOT\s*/i, '').trim();
+        if (!clean) return false;
         const segments = clean.split(/\s+TO\s+/i);
 
         let currentX = this.lastHplotX || 0;
@@ -1407,8 +1489,11 @@ $200A: 60         RTS</pre>
             }
             this.lastHplotX = currentX;
             this.lastHplotY = currentY;
+          } else {
+            return false;
           }
         }
+        return true;
       }
 
       advanceBasic() {
