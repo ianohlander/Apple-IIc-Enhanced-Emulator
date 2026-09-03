@@ -1787,11 +1787,6 @@ $200A: 60         RTS</pre>
         }
       }
 
-      if (window.emulator.isGraphicsMode) {
-        window.emulator.stopGraphics();
-        return;
-      }
-
       if (e.key === 'Enter') {
         e.preventDefault();
         window.emulator.handleReturn();
@@ -1855,11 +1850,6 @@ $200A: 60         RTS</pre>
         window.emulator.stopBasic(true);
         return;
       }
-      if (window.emulator.isGraphicsMode) {
-        window.emulator.stopGraphics();
-        return;
-      }
-      window.emulator.playBeep(900, 0.02);
       if (e.button === 0) window.emulator.mouseButton0 = true;
       if (e.button === 2) window.emulator.mouseButton1 = true;
     });
@@ -1879,10 +1869,6 @@ $200A: 60         RTS</pre>
           window.emulator.stopBasic(true);
           return;
         }
-      }
-      if (window.emulator.isGraphicsMode) {
-        window.emulator.stopGraphics();
-        return;
       }
       if (key === 'RESET') {
         window.emulator.reset();

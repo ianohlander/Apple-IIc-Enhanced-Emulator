@@ -3,52 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Master Architecture & Developer Tutorial</title>
+  <title>Apple //c Ultra — Master Systems Architecture & Hands-On Engineering Tutorial</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
   <style>
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #0b0e14;
-      color: #e6edf3;
-    }
-    .font-mono-code {
-      font-family: 'Space Mono', monospace;
-    }
-    .font-crt {
-      font-family: 'VT323', monospace;
-    }
-    .rainbow-border {
-      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
-    }
-    pre code {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-    }
-    .crt-preview {
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .font-crt { font-family: 'VT323', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .crt-box {
       background: #061008;
-      border: 3px solid #1a3820;
+      border: 2px solid #1a3820;
       border-radius: 0.5rem;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 10px 25px -5px rgba(0,0,0,0.7);
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.9), 0 8px 20px -4px rgba(0,0,0,0.6);
       color: #33ff44;
       text-shadow: 0 0 6px rgba(51, 255, 68, 0.6);
       font-family: 'VT323', monospace;
     }
-    .badge-feat {
-      background: rgba(245, 130, 32, 0.12);
+    .task-badge {
+      background: rgba(245, 130, 32, 0.15);
       border: 1px solid rgba(245, 130, 32, 0.4);
       color: #fb923c;
     }
-    .badge-concept {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      color: #38bdf8;
-    }
-    .badge-step {
-      background: rgba(34, 197, 94, 0.12);
+    .step-badge {
+      background: rgba(34, 197, 94, 0.15);
       border: 1px solid rgba(34, 197, 94, 0.4);
       color: #4ade80;
     }
@@ -58,24 +40,24 @@
 
   <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
 
-  <!-- Top Navigation Header -->
+  <!-- Header -->
   <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-3">
     <div class="flex items-center space-x-3">
       <div class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg">
         
       </div>
       <div>
-        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Mastery Course</span>
-        <h1 class="text-base font-extrabold text-white">The Comprehensive Architecture & Systems Tutorial</h1>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Comprehensive Master Tutorial</span>
+        <h1 class="text-base font-extrabold text-white">Apple //c Ultra Architecture, Systems & Hands-On Guided Labs</h1>
       </div>
     </div>
 
     <div class="flex items-center space-x-3 text-xs font-mono">
       <a href="../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">
-        ⚡ Launch Emulator
+        ⚡ Open Live Emulator
       </a>
       <a href="test-report.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-emerald-400 rounded transition border border-[#30363d]">
-        ✓ QA Test Report
+        ✓ QA Test Report (34/34)
       </a>
       <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
         Docs Hub
@@ -83,37 +65,37 @@
     </div>
   </header>
 
-  <!-- Hero Container -->
-  <main class="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 space-y-14 text-sm font-sans">
+  <!-- Main Body -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 space-y-16 text-sm font-sans">
 
-    <!-- Hero Title Box -->
+    <!-- Hero Curriculum Overview -->
     <div class="bg-gradient-to-br from-[#161b22] to-[#1c232d] border border-[#30363d] rounded-2xl p-8 shadow-2xl space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-mono font-bold">
-          COMPLETE END-TO-END CURRICULUM
+          INTERACTIVE HANDS-ON CURRICULUM
         </span>
-        <span class="text-xs font-mono text-gray-400">Target: Retro Enthusiasts, Systems Engineers & Modern Polyglots</span>
+        <span class="text-xs font-mono text-gray-400">Complete Architectural Deep-Dive & Lab Exercises</span>
       </div>
 
       <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">
-        Mastering the Apple //c Ultra: From 1984 Silicon to 50 MHz Modern Polyglot AOT
+        The Definitive Guide & Hands-On Engineering Practicum
       </h2>
       <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
-        This comprehensive tutorial walks you through <strong>every single capability, architectural layer, and homebrew enhancement</strong> of the Apple //c Ultra workstation. You will learn the deep conceptual mechanics behind 65C02 memory banking, Hi-Res vector mathematics, dual AY-3-8910 chiptune synthesis, custom ROM creation, 6 distinct program ingestion pipelines, and modern C#/.NET & Java ahead-of-time compilation.
+        This master tutorial does not merely explain features—it provides <strong>deep conceptual breakdowns and step-by-step interactive tasks</strong> for you to execute in the live emulator. You will master 65C02 memory banking, video scanline interleaving math, dual AY-3-8910 chiptune synthesis, custom ROM creation, 6 program ingestion methods, and high-level C#/.NET and Java AOT compilation.
       </p>
 
-      <!-- Table of Contents Cards -->
+      <!-- Table of Contents -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-4 border-t border-[#30363d] font-mono text-xs">
         <a href="#module-1" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#30363d] rounded-lg transition flex items-center justify-between">
           <span class="text-amber-400 font-bold">1. System Architecture</span>
           <span class="text-gray-500">→</span>
         </a>
         <a href="#module-2" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#30363d] rounded-lg transition flex items-center justify-between">
-          <span class="text-emerald-400 font-bold">2. Six Program Pipelines</span>
+          <span class="text-emerald-400 font-bold">2. Six Program Entry Methods</span>
           <span class="text-gray-500">→</span>
         </a>
         <a href="#module-3" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#30363d] rounded-lg transition flex items-center justify-between">
-          <span class="text-cyan-400 font-bold">3. Graphics & Video</span>
+          <span class="text-cyan-400 font-bold">3. Video & Scanline Math</span>
           <span class="text-gray-500">→</span>
         </a>
         <a href="#module-4" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#30363d] rounded-lg transition flex items-center justify-between">
@@ -121,7 +103,7 @@
           <span class="text-gray-500">→</span>
         </a>
         <a href="#module-5" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#30363d] rounded-lg transition flex items-center justify-between">
-          <span class="text-pink-400 font-bold">5. ROM & Firmware</span>
+          <span class="text-pink-400 font-bold">5. ROM & Firmware Creation</span>
           <span class="text-gray-500">→</span>
         </a>
         <a href="#module-6" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#30363d] rounded-lg transition flex items-center justify-between">
@@ -136,61 +118,56 @@
       <div class="flex items-center gap-3">
         <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold flex items-center justify-center border border-amber-500/40">1</span>
         <div>
-          <h3 class="text-2xl font-extrabold text-white tracking-tight">The Apple //c Architecture: 1984 Silicon vs. Ultra Enhancements</h3>
-          <span class="text-xs font-mono text-gray-400">Understanding the core hardware model, memory maps, and homebrew accelerators</span>
+          <h3 class="text-2xl font-extrabold text-white tracking-tight">System Architecture: 1984 Silicon vs. Ultra Enhancements</h3>
+          <span class="text-xs font-mono text-gray-400">Memory map partitioning, bank switching, and hardware accelerators</span>
         </div>
       </div>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h4 class="text-base font-bold text-amber-300">The 1984 Original Baseline</h4>
+        <h4 class="text-base font-bold text-amber-300">The 64KB Main vs. 64KB Aux Banking Model</h4>
         <p class="text-gray-300 leading-relaxed">
-          Released in April 1984, the original <strong>Apple //c (A2S4000)</strong> was Apple's first portable, closed-architecture computer. It was engineered around the <strong>WDC 65C02 CMOS CPU</strong> running at exactly <strong>1.023 MHz</strong>. It shipped with <strong>128 KB of RAM</strong> split evenly into two 64KB banks:
+          The Apple //c addresses memory via a 16-bit bus ($0000–$FFFF). To support 128KB of RAM, the hardware uses softswitch-controlled multiplexers:
         </p>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
           <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] space-y-2">
-            <span class="text-amber-400 font-bold block">Main 64KB RAM Bank</span>
+            <span class="text-amber-400 font-bold block">Main 64KB RAM Bank ($C008 ALTZPOFF)</span>
             <ul class="text-gray-400 space-y-1 list-disc list-inside">
-              <li><code>$0000–$00FF</code>: Main Zero Page (CPU direct addressing)</li>
+              <li><code>$0000–$00FF</code>: Zero Page (CPU direct addressing & pointers)</li>
               <li><code>$0100–$01FF</code>: Hardware Stack ($01FF down to $0100)</li>
-              <li><code>$0400–$07FF</code>: Text & Lo-Res Graphics Primary Page</li>
-              <li><code>$0801–$95FF</code>: Applesoft BASIC Program Memory</li>
-              <li><code>$2000–$3FFF</code>: Primary Hi-Res Graphics Screen</li>
+              <li><code>$0400–$07FF</code>: Text Page 1 / Lo-Res Screen (40 columns)</li>
+              <li><code>$0801–$95FF</code>: Applesoft BASIC Program Storage</li>
+              <li><code>$2000–$3FFF</code>: Hi-Res Page 1 Framebuffer (8,192 bytes)</li>
               <li><code>$D000–$FFFF</code>: Banked Language Card (RAM/ROM)</li>
             </ul>
           </div>
           <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] space-y-2">
-            <span class="text-emerald-400 font-bold block">Auxiliary 64KB RAM Bank</span>
+            <span class="text-emerald-400 font-bold block">Auxiliary 64KB RAM Bank ($C009 ALTZPON)</span>
             <ul class="text-gray-400 space-y-1 list-disc list-inside">
-              <li><code>$0000–$00FF</code>: Aux Zero Page (via <code>ALTZP $C009</code>)</li>
-              <li><code>$0100–$01FF</code>: Aux Stack</li>
-              <li><code>$0400–$07FF</code>: 80-Column Text Odd Columns</li>
-              <li><code>$2000–$3FFF</code>: Double Hi-Res Aux Byte Interleave</li>
+              <li><code>$0000–$00FF</code>: Aux Zero Page (via softswitch <code>ALTZP</code>)</li>
+              <li><code>$0100–$01FF</code>: Aux Hardware Stack</li>
+              <li><code>$0400–$07FF</code>: 80-Column Text Odd Columns (via <code>80COL</code>)</li>
+              <li><code>$2000–$3FFF</code>: Double Hi-Res Aux Byte Interleave (560x192)</li>
               <li><code>$D000–$FFFF</code>: Aux Language Card Extended Storage</li>
             </ul>
           </div>
         </div>
 
-        <h4 class="text-base font-bold text-amber-300 pt-4">The "Ultra" Homebrew Enhancements</h4>
-        <p class="text-gray-300 leading-relaxed">
-          The <strong>Apple //c Ultra</strong> preserves 100% cycle-accurate compatibility with vintage software while expanding the machine with modern homebrew modifications:
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
-          <div class="p-3 bg-[#0d1117] border border-amber-500/30 rounded-lg">
-            <span class="text-amber-400 font-bold block">⚡ 50 MHz Turbo Boost</span>
-            <p class="text-gray-400 text-[11px] mt-1">Accelerates execution up to 50× vintage speed, selectable dynamically from 1.0 to 50.0 MHz.</p>
+        <!-- Practical Task 1 -->
+        <div class="p-4 bg-[#0d1117] border-l-4 border-amber-500 rounded-r-lg space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono task-badge font-bold">LAB EXERCISE 1.1</span>
+            <span class="font-bold text-white text-xs">Inspecting CPU Speed & Memory Softswitches</span>
           </div>
-          <div class="p-3 bg-[#0d1117] border border-purple-500/30 rounded-lg">
-            <span class="text-purple-400 font-bold block">💾 1MB Slinky RAM</span>
-            <p class="text-gray-400 text-[11px] mt-1">24-bit auto-incrementing data port ($C071–$C073) providing 1,024 KB of banked memory.</p>
-          </div>
-          <div class="p-3 bg-[#0d1117] border border-cyan-500/30 rounded-lg">
-            <span class="text-cyan-400 font-bold block">💽 32MB SmartPort HD</span>
-            <p class="text-gray-400 text-[11px] mt-1">65,536 blocks of 512 bytes with direct block I/O dispatch ($C0B0–$C0BF).</p>
-          </div>
-          <div class="p-3 bg-[#0d1117] border border-emerald-500/30 rounded-lg">
-            <span class="text-emerald-400 font-bold block">🎵 Mockingboard PSG</span>
-            <p class="text-gray-400 text-[11px] mt-1">Dual AY-3-8910 programmable sound chips with 6 tone channels & white noise generators.</p>
-          </div>
+          <p class="text-xs text-gray-300">
+            Open the emulator, type the following commands to change the CPU turbo clock and inspect the hardware memory registers:
+          </p>
+          <pre class="text-emerald-400 p-2 bg-[#061008] rounded border border-[#1a3820]"><code>] SPEED= 50
+] POKE 49200, 0    &lt;-- Toggles speaker ($C030 / 49200)
+] ? PEEK(49152)    &lt;-- Reads keyboard data latch ($C000)</code></pre>
+          <p class="text-[11px] text-gray-400">
+            <strong>Expected Output:</strong> The emulator header updates dynamically to <code>50 MHz</code>, a speaker click sounds, and the keyboard register is read.
+          </p>
         </div>
       </div>
     </section>
@@ -200,128 +177,86 @@
       <div class="flex items-center gap-3">
         <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center border border-emerald-500/40">2</span>
         <div>
-          <h3 class="text-2xl font-extrabold text-white tracking-tight">Six Ways to Enter and Run Programs</h3>
-          <span class="text-xs font-mono text-gray-400">Mastering immediate mode, stored programs, magazine transcribing, clipboard, AOT compilers, and ROM hex monitors</span>
+          <h3 class="text-2xl font-extrabold text-white tracking-tight">Six Program Entry & Execution Pipelines</h3>
+          <span class="text-xs font-mono text-gray-400">Mastering immediate execution, stored programs, magazine transcribing, clipboard paste, modern AOT, and monitor hex dumps</span>
         </div>
       </div>
 
       <div class="space-y-4">
-        <!-- Pipeline 1: Immediate Mode -->
+        <!-- Lab 2.1: Immediate Mode vs Stored Mode -->
         <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-base font-bold text-emerald-400">Method 1: Direct Immediate Mode (Command Line Execution)</span>
-            <span class="px-2 py-0.5 rounded text-[11px] font-mono badge-concept">Interactive Prompt</span>
-          </div>
-          <p class="text-gray-300 leading-relaxed">
-            Immediate mode allows you to execute any Applesoft BASIC statement directly at the <code>]</code> prompt without assigning a line number. You can even combine multiple commands using colons (<code>:</code>).
+          <span class="text-base font-bold text-emerald-400">Method 1 & 2: Immediate Mode vs. Stored Program Mode</span>
+          <p class="text-gray-300 leading-relaxed text-xs">
+            Statements without a line number execute immediately. Statements prefixed with a line number are tokenized and stored into RAM ($0801+). You can combine multiple statements using colons (<code>:</code>).
           </p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] font-mono text-xs">
-              <span class="text-amber-400 font-bold block mb-2">Example Immediate Commands:</span>
-              <pre class="text-gray-300"><code>] HGR
-] HCOLOR= 3
-] HPLOT 0,0 TO 279,191
-] PRINT 25 * 4 + 10
-] SPEED= 50
-] HOME
-] HGR : HCOLOR=3 : HPLOT 10,10 TO 200,100</code></pre>
-            </div>
-            <div class="crt-preview p-4 rounded-lg flex flex-col justify-center text-sm">
-              <div>] HGR : HCOLOR=3 : HPLOT 10,10 TO 200,100</div>
-              <div>] PRINT 25 * 4 + 10</div>
-              <div>110</div>
-              <div>] █</div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Pipeline 2: Stored Programs -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-base font-bold text-emerald-400">Method 2: Interactive Stored Program Entry & Line Editing</span>
-            <span class="px-2 py-0.5 rounded text-[11px] font-mono badge-concept">Applesoft Memory</span>
-          </div>
-          <p class="text-gray-300 leading-relaxed">
-            Typing a statement prefixed by a line number stores it in RAM. Typing a line number by itself deletes that line. Entering <code>LIST</code> displays the program currently residing in memory, while <code>RUN</code> executes it.
-          </p>
-          <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] font-mono text-xs space-y-2">
-            <span class="text-amber-400 font-bold block">Line Editing Lifecycle:</span>
-            <pre class="text-gray-300"><code>] 10 HOME
-] 20 PRINT "APPLE //c FOREVER"
-] 30 FOR X = 1 TO 5 : PRINT "COUNT: "; X : NEXT X
-] 40 END
+          <div class="p-4 bg-[#0d1117] border-l-4 border-emerald-500 rounded-r-lg space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-mono step-badge font-bold">LAB EXERCISE 2.1</span>
+              <span class="font-bold text-white text-xs">Multi-Statement Immediate & Program Editing</span>
+            </div>
+            <p class="text-xs text-gray-300">Type the following sequence step-by-step:</p>
+            <pre class="text-emerald-400 p-2 bg-[#061008] rounded border border-[#1a3820]"><code>] HOME : PRINT "APPLE IIc ULTRA" : ? 25 * 8
+APPLE IIc ULTRA
+200
+
+] 10 HOME
+] 20 FOR X = 1 TO 4 : PRINT "STEP: "; X : NEXT X
+] 30 END
 ] LIST
 10 HOME
-20 PRINT "APPLE //c FOREVER"
-30 FOR X = 1 TO 5 : PRINT "COUNT: "; X : NEXT X
-40 END
+20 FOR X = 1 TO 4 : PRINT "STEP: "; X : NEXT X
+30 END
 ] RUN
-APPLE //c FOREVER
-COUNT: 1
-COUNT: 2
-COUNT: 3
-COUNT: 4
-COUNT: 5
-] NEW    &lt;-- Wipes program memory to clean slate []</code></pre>
+STEP: 1
+STEP: 2
+STEP: 3
+STEP: 4</code></pre>
           </div>
         </div>
 
-        <!-- Pipeline 3: Magazine Transcriber -->
+        <!-- Lab 2.2: Magazine Transcriber -->
         <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-base font-bold text-emerald-400">Method 3: Magazine Type-In Studio & OCR Scrubber</span>
-            <span class="px-2 py-0.5 rounded text-[11px] font-mono badge-feat">Built-In Studio</span>
-          </div>
-          <p class="text-gray-300 leading-relaxed">
-            In the 1980s, hobbyists spent hours typing listings from magazines like <em>inCider</em>, <em>Compute!</em>, and <em>Nibble</em>. When scanning these magazines today via OCR, errors frequently appear (e.g. curly quotes <code>“”</code>, letter <code>O</code> instead of digit <code>0</code>, letter <code>I</code> instead of digit <code>1</code>). The Type-In Studio automatically scrubs these errors and injects sorted, clean Applesoft code straight into memory.
+          <span class="text-base font-bold text-emerald-400">Method 3: Magazine Type-In Studio & OCR Scrubber</span>
+          <p class="text-gray-300 leading-relaxed text-xs">
+            In the 1980s, hobbyists typed magazine listings manually. Today, scanning magazines with OCR creates typos (e.g. curly quotes <code>“”</code>, letter <code>O</code> in place of <code>0</code>). The built-in Studio repairs these and streams the code directly into RAM.
           </p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-            <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg">
-              <span class="text-amber-400 font-bold block">inCider Kaleidoscope (1984)</span>
-              <p class="text-gray-400 text-[11px] mt-1">Trigonometric polar coordinate vector art utilizing <code>HGR</code>, <code>COS(A)</code>, and <code>SIN(A)</code>.</p>
+
+          <div class="p-4 bg-[#0d1117] border-l-4 border-cyan-500 rounded-r-lg space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-mono task-badge font-bold">LAB EXERCISE 2.2</span>
+              <span class="font-bold text-white text-xs">Transcribing & Running inCider Kaleidoscope</span>
             </div>
-            <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg">
-              <span class="text-emerald-400 font-bold block">Compute! Lunar Lander (1984)</span>
-              <p class="text-gray-400 text-[11px] mt-1">Physics simulation tracking altitude, descent velocity, and retro-rocket fuel burn.</p>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
+              <li>Click the <strong>Magazine Type-In Studio</strong> tab at the bottom of the workstation.</li>
+              <li>Click the <strong>inCider Kaleidoscope (1984)</strong> preset button.</li>
+              <li>Click <strong>⚡ Feed into Apple II & Run</strong>.</li>
+              <li>Observe trigonometric polar coordinates (<code>COS(A)</code> and <code>SIN(A)</code>) rendered to the screen in real time!</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Lab 2.3: Monitor Hex Dump -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
+          <span class="text-base font-bold text-emerald-400">Method 4: System Monitor Hex Dumps & Assembly Execution</span>
+          <p class="text-gray-300 leading-relaxed text-xs">
+            You can directly deposit raw 65C02 machine code bytes into memory and execute them using <code>CALL</code> or <code>300G</code>.
+          </p>
+
+          <div class="p-4 bg-[#0d1117] border-l-4 border-purple-500 rounded-r-lg space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-mono step-badge font-bold">LAB EXERCISE 2.3</span>
+              <span class="font-bold text-white text-xs">Executing 65C02 Machine Code via Monitor Routine</span>
             </div>
-            <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg">
-              <span class="text-cyan-400 font-bold block">Nibble 3D Starfield Warp (1983)</span>
-              <p class="text-gray-400 text-[11px] mt-1">Perspective projection loop rendering 3D star coordinates toward the observer.</p>
-            </div>
+            <p class="text-xs text-gray-300">
+              In the Type-In Studio tab, select <strong>65C02 Monitor Hex Dump</strong> and click feed. Then type:
+            </p>
+            <pre class="text-emerald-400 p-2 bg-[#061008] rounded border border-[#1a3820]"><code>] CALL 768
+APPLE (65C02 JSR $FDED COUT)</code></pre>
+            <p class="text-[11px] text-gray-400">
+              The CPU jumps to address <code>$0300</code> (768), loads ASCII characters, and invokes the ROM <code>COUT</code> routine at <code>$FDED</code>!
+            </p>
           </div>
-        </div>
-
-        <!-- Pipeline 4: System Clipboard -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-base font-bold text-emerald-400">Method 4: System Clipboard Fast-Injection</span>
-            <span class="px-2 py-0.5 rounded text-[11px] font-mono badge-concept">Ctrl+V / Cmd+V</span>
-          </div>
-          <p class="text-gray-300 leading-relaxed">
-            You can copy any vintage BASIC listing (even 1,000+ lines like <em>Night Drive</em>) from your desktop and press <kbd class="px-1.5 py-0.5 bg-[#21262d] border border-[#30363d] rounded text-xs font-mono text-amber-300">Ctrl+V</kbd> anywhere on the emulator screen. The workstation will parse, sort, and store the listing into RAM without keyboard lag.
-          </p>
-        </div>
-
-        <!-- Pipeline 5: Modern Polyglot AOT (C# & Java) -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-base font-bold text-emerald-400">Method 5: Modern Language Compilation (C# .NET & Java 17)</span>
-            <span class="px-2 py-0.5 rounded text-[11px] font-mono badge-feat">AOT Silicon Lowering</span>
-          </div>
-          <p class="text-gray-300 leading-relaxed">
-            Write modern object-oriented C# or Java code in the IDE tab. The AOT compiler lowers your classes, methods, collections, and math calculations directly into 65C02 machine code and injects the executable binary into RAM at <code>$2000</code>.
-          </p>
-        </div>
-
-        <!-- Pipeline 6: Monitor Hex Dumps -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-base font-bold text-emerald-400">Method 6: System Monitor Hex Dumps & Assembly Injection</span>
-            <span class="px-2 py-0.5 rounded text-[11px] font-mono badge-concept">ROM Monitor</span>
-          </div>
-          <p class="text-gray-300 leading-relaxed">
-            Directly deposit machine code bytes into RAM using standard Apple II System Monitor syntax (e.g. <code>300: A9 41 20 ED FD 60</code>) and trigger execution with <code>300G</code> or <code>CALL 768</code>.
-          </p>
         </div>
       </div>
     </section>
@@ -331,303 +266,170 @@ COUNT: 5
       <div class="flex items-center gap-3">
         <span class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 font-mono font-bold flex items-center justify-center border border-cyan-500/40">3</span>
         <div>
-          <h3 class="text-2xl font-extrabold text-white tracking-tight">The Video & Graphics Pipeline</h3>
-          <span class="text-xs font-mono text-gray-400">Understanding address interleaving, Hi-Res color shifts, Double Hi-Res, and mixed graphics modes</span>
+          <h3 class="text-2xl font-extrabold text-white tracking-tight">The Video & Graphics Pipeline: Scanline Mathematics</h3>
+          <span class="text-xs font-mono text-gray-400">Understanding DRAM refresh sharing, 3-tier address interleaving, and color phase shifting</span>
         </div>
       </div>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h4 class="text-base font-bold text-cyan-300">Why Apple II Video Memory is Interleaved</h4>
-        <p class="text-gray-300 leading-relaxed">
-          Unlike modern linear framebuffers, Steve Wozniak engineered the Apple II video generator to share DRAM refresh circuitry with the 6502 CPU. Because of this, scanline addresses are calculated using a 3-tier box interleaving formula:
+        <h4 class="text-base font-bold text-cyan-300">Why Video Memory is Interleaved (The Woz Hardware Optimization)</h4>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          In 1977, dynamic RAM (DRAM) required refresh pulses every 2ms across 128 rows. To eliminate dedicated refresh chips and save manufacturing costs, Steve Wozniak designed the Apple II video generator to cycle through DRAM row addresses while fetching video pixels.
+        </p>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          Because DRAM address counters incremented linearly while scanning CRT raster lines, consecutive scanlines $Y=0, 1, 2dots$ do NOT sit contiguously in memory. Instead, memory is split into 3 vertical boxes of 64 scanlines, each containing 8 groups of 8 lines:
         </p>
 
+        <!-- Math Formula Box -->
         <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] font-mono text-xs">
+          <span class="text-amber-400 font-bold block mb-2">Hi-Res Scanline Base Address Formula:</span>
           $$\text{Base}(Y) = \$2000 + 1024 \times (Y \bmod 8) + 128 \times (\lfloor Y / 64 \rfloor) + 40 \times (\lfloor (Y \bmod 64) / 8 \rfloor)$$
         </div>
 
-        <h4 class="text-base font-bold text-cyan-300 pt-3">Hi-Res Graphics (280 × 192, 6 Colors)</h4>
-        <p class="text-gray-300 leading-relaxed">
-          In <code>HGR</code> mode, each byte controls 7 pixels (bits 0–6). Bit 7 does not define a pixel—it shifts the subcarrier color clock by half a cycle ($180^\circ$), switching the available color palette:
+        <h4 class="text-base font-bold text-cyan-300 pt-3">How 65C02 Machine Code Plots a Pixel</h4>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          When executing <code>HPLOT X, Y</code>, the CPU calculates:
         </p>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
-          <div class="p-2 bg-[#0d1117] border border-[#30363d] rounded text-center">
-            <span class="text-gray-400 block font-bold">Bit 7 = 0</span>
-            <span class="text-green-400">Green</span> / <span class="text-purple-400">Purple</span>
-          </div>
-          <div class="p-2 bg-[#0d1117] border border-[#30363d] rounded text-center">
-            <span class="text-gray-400 block font-bold">Bit 7 = 1</span>
-            <span class="text-orange-400">Orange</span> / <span class="text-blue-400">Blue</span>
-          </div>
-          <div class="p-2 bg-[#0d1117] border border-[#30363d] rounded text-center">
-            <span class="text-gray-400 block font-bold">All 0s</span>
-            <span class="text-black bg-stone-300 px-1 rounded">Black</span>
-          </div>
-          <div class="p-2 bg-[#0d1117] border border-[#30363d] rounded text-center">
-            <span class="text-gray-400 block font-bold">All 1s</span>
-            <span class="text-white">White</span>
-          </div>
-        </div>
+        <ol class="text-xs font-mono text-gray-300 list-decimal list-inside space-y-1 bg-[#0d1117] p-3 rounded border border-[#30363d]">
+          <li><strong>Scanline Pointer</strong>: Computes $\text{Base}(Y)$ into Zero Page pointer <code>$26/$27</code>.</li>
+          <li><strong>Byte Offset</strong>: Divides horizontal coordinate $X$ by 7: <code>Y = X / 7</code>.</li>
+          <li><strong>Pixel Bit Mask</strong>: Computes bit mask: <code>Mask = 1 &lt;&lt; (X % 7)</code> (bits 0–6).</li>
+          <li><strong>Palette Subcarrier Shift (Bit 7)</strong>: If bit 7 = 0, colors are <em>Green / Purple</em>. If bit 7 = 1, the color subcarrier is delayed $180^\circ$, producing <em>Orange / Blue</em>!</li>
+          <li><strong>Memory Write</strong>: Executes <code>STA ($26),Y</code> to store the pixel byte into VRAM!</li>
+        </ol>
 
-        <h4 class="text-base font-bold text-cyan-300 pt-3">Mixed Graphics Mode (Top Graphics + Bottom 4 Text Lines)</h4>
-        <p class="text-gray-300 leading-relaxed">
-          When executing <code>HGR</code>, the screen switches to mixed mode: the top 160 scanlines display Hi-Res graphics ($Y=0\dots159$), while the bottom 32 scanlines ($Y=160\dots191$) display 4 rows of text (rows 20–23, accessed via <code>VTAB 21</code> through <code>VTAB 24</code>). Full-screen graphics is activated via <code>HGR2</code> or <code>POKE -16302, 0</code>.
-        </p>
+        <!-- Practical Task 3 -->
+        <div class="p-4 bg-[#0d1117] border-l-4 border-cyan-500 rounded-r-lg space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono step-badge font-bold">LAB EXERCISE 3.1</span>
+            <span class="font-bold text-white text-xs">Hi-Res Vector Spiral in Mixed Graphics Mode</span>
+          </div>
+          <p class="text-xs text-gray-300">Type the following immediate commands directly at the prompt:</p>
+          <pre class="text-emerald-400 p-2 bg-[#061008] rounded border border-[#1a3820]"><code>] HGR
+] HCOLOR= 3
+] HPLOT 0,0 TO 279,0 TO 279,159 TO 0,159 TO 0,0
+] HPLOT 0,0 TO 279,159
+] HPLOT 279,0 TO 0,159
+] VTAB 22 : PRINT "HI-RES RECTANGLE & DIAGONALS DRAWN"</code></pre>
+          <p class="text-[11px] text-gray-400">
+            <strong>Observation:</strong> The upper 160 scanlines display the vector graphics, while the bottom 4 text lines (rows 20–23) stay fully accessible for typing and debugging!
+          </p>
+        </div>
       </div>
     </section>
 
-    <!-- MODULE 4: Sound Creation & Mockingboard Synthesis -->
+    <!-- MODULE 4: Sound Creation -->
     <section id="module-4" class="space-y-6">
       <div class="flex items-center gap-3">
         <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 font-mono font-bold flex items-center justify-center border border-purple-500/40">4</span>
         <div>
           <h3 class="text-2xl font-extrabold text-white tracking-tight">Sound Creation: 1-Bit Speaker to 6-Channel Mockingboard</h3>
-          <span class="text-xs font-mono text-gray-400">Mastering 1-bit cycle timing, AY-3-8910 tone divisors, noise synthesis, and arcade SFX sound design</span>
+          <span class="text-xs font-mono text-gray-400">Square wave timing, AY-3-8910 tone divisors, white noise, and arcade sound effects</span>
         </div>
       </div>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h4 class="text-base font-bold text-purple-300">1. The Vintage 1-Bit Speaker ($C030 / 49200)</h4>
-        <p class="text-gray-300 leading-relaxed">
-          The original Apple II had no dedicated sound chip. Reading or writing address <code>$C030</code> (49200) toggles a hardware flip-flop connected to a small speaker cone, generating a single click. By toggling $C030 inside a tight cycle-counted delay loop, square wave frequencies are produced:
-        </p>
-        <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] font-mono text-xs">
-          <pre class="text-gray-300"><code>; 65C02 Routine: Play 880 Hz Beep
-BEEP:   LDY #$80        ; Duration count
-LOOP1:  LDA $C030       ; Toggle speaker
-        LDX #$72        ; Pitch delay period (~568 microseconds)
-LOOP2:  DEX
-        BNE LOOP2
-        DEY
-        BNE LOOP1
-        RTS</code></pre>
-        </div>
-
-        <h4 class="text-base font-bold text-purple-300 pt-3">2. The Dual AY-3-8910 Mockingboard PSG Architecture</h4>
-        <p class="text-gray-300 leading-relaxed">
-          The Apple //c Ultra integrates dual General Instrument <strong>AY-3-8910 Programmable Sound Generators (PSGs)</strong> controlled via 6522 VIAs. Each chip provides 3 independent square-wave channels (total 6 channels across stereo L/R):
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-          <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg space-y-1">
-            <span class="text-amber-400 font-bold block">12-Bit Tone Generator</span>
-            <p class="text-gray-400 text-[11px]">Calculates tone frequency via 12-bit period divisor $R0–R5$:</p>
-            <div class="text-cyan-300 pt-1">$$f = \frac{1\,000\,000}{16 \times \text{Period}}$$</div>
-          </div>
-          <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg space-y-1">
-            <span class="text-emerald-400 font-bold block">5-Bit Noise Generator</span>
-            <p class="text-gray-400 text-[11px]">Linear-feedback shift register ($R6$) generating white noise for explosions, snares, and laser hits.</p>
-          </div>
-          <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg space-y-1">
-            <span class="text-purple-400 font-bold block">16-Bit Envelope Modulator</span>
-            <p class="text-gray-400 text-[11px]">$R11–R13$ hardware attack, decay, sustain, and cyclic triangle/sawtooth amplitude shapes.</p>
-          </div>
-        </div>
-
-        <h4 class="text-base font-bold text-purple-300 pt-3">Sound Effect (SFX) Design Recipes</h4>
+        <h4 class="text-base font-bold text-purple-300">1-Bit Speaker Toggle ($C030 / 49200) vs. AY-3-8910 Synthesis</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <span class="text-amber-400 font-bold block mb-1">Laser Cannon Blast</span>
-            <p class="text-gray-400 text-[11px]">Sweep period divisor from $0020 (high pitch) down to $0200 (low pitch) in a rapid decrement loop while enabling white noise on Channel A.</p>
+          <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] space-y-2">
+            <span class="text-amber-400 font-bold block">1-Bit Speaker Cone ($C030)</span>
+            <p class="text-gray-400 text-[11px]">
+              Every access to $C030 physically pulses the speaker cone. Frequency is determined by the CPU cycle delay between pulses:
+            </p>
+            <div class="text-cyan-300">$$f = \frac{1\,023\,000}{2 \times \text{Delay Cycles}}$$</div>
           </div>
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <span class="text-pink-400 font-bold block mb-1">Explosion Rumble</span>
-            <p class="text-gray-400 text-[11px]">Set Noise Period $R6 = $1F (deep rumble), Mixer $R7 = $37 (noise only on Channel A), and Envelope Shape $R13 = $00 (single decay fade).</p>
+          <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] space-y-2">
+            <span class="text-emerald-400 font-bold block">Dual AY-3-8910 Mockingboard PSG</span>
+            <p class="text-gray-400 text-[11px]">
+              6 independent hardware tone generators with 12-bit period registers ($R0–R5$), 5-bit white noise ($R6$), and 16-bit envelopes:
+            </p>
+            <div class="text-cyan-300">$$f = \frac{1\,000\,000}{16 \times \text{Period Divisor}}$$</div>
           </div>
+        </div>
+
+        <!-- Practical Task 4 -->
+        <div class="p-4 bg-[#0d1117] border-l-4 border-purple-500 rounded-r-lg space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono task-badge font-bold">LAB EXERCISE 4.1</span>
+            <span class="font-bold text-white text-xs">Synthesizing an Arcade Laser Sound Sweep</span>
+          </div>
+          <p class="text-xs text-gray-300">Enter this short program into the emulator:</p>
+          <pre class="text-emerald-400 p-2 bg-[#061008] rounded border border-[#1a3820]"><code>10 HOME : PRINT "PLAYING ARCADE LASER SOUND..."
+20 FOR P = 100 TO 800 STEP 50
+30   POKE 49200, 0
+40   FOR D = 1 TO 15 : NEXT D
+50 NEXT P
+60 PRINT "LASER BLAST COMPLETED!"
+RUN</code></pre>
         </div>
       </div>
     </section>
 
-    <!-- MODULE 5: Custom ROM & Firmware Creation -->
+    <!-- MODULE 5: Custom ROM Creation -->
     <section id="module-5" class="space-y-6">
       <div class="flex items-center gap-3">
         <span class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 font-mono font-bold flex items-center justify-center border border-pink-500/40">5</span>
         <div>
-          <h3 class="text-2xl font-extrabold text-white tracking-tight">Custom ROM & Firmware Creation</h3>
-          <span class="text-xs font-mono text-gray-400">Mastering 65C02 vector tables, custom bootloaders, and firmware patching</span>
+          <h3 class="text-2xl font-extrabold text-white tracking-tight">Custom ROM & Firmware Construction</h3>
+          <span class="text-xs font-mono text-gray-400">Linking 65C02 hardware interrupt vectors ($FFFA–$FFFF) and writing custom bootloaders</span>
         </div>
       </div>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h4 class="text-base font-bold text-pink-300">The 32KB System ROM Structure ($D000–$FFFF)</h4>
-        <p class="text-gray-300 leading-relaxed">
-          The Apple //c ROM image occupies the upper 32KB of the address space and consists of three critical sub-modules:
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-          <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg">
-            <span class="text-amber-400 font-bold block">$C100–$C7FF: Slot ROMs</span>
-            <p class="text-gray-400 text-[11px] mt-1">Built-in firmware for Serial 1/2 ($C100/$C200), 80-Column Display ($C300), Mouse ($C400), and Disk II ($C600).</p>
-          </div>
-          <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg">
-            <span class="text-emerald-400 font-bold block">$E000–$F7FF: Applesoft ROM</span>
-            <p class="text-gray-400 text-[11px] mt-1">Microsoft / Marc McDonald BASIC token parser, expression evaluator, and Hi-Res graphics math runtime.</p>
-          </div>
-          <div class="p-3 bg-[#0d1117] border border-[#30363d] rounded-lg">
-            <span class="text-cyan-400 font-bold block">$F800–$FFFF: System Monitor</span>
-            <p class="text-gray-400 text-[11px] mt-1">Steve Wozniak / Allen Baum autostart reset vector, COUT character I/O ($FDED), and hex debugger.</p>
-          </div>
-        </div>
-
-        <h4 class="text-base font-bold text-pink-300 pt-3">Building Custom Firmware & Patching Vectors</h4>
-        <p class="text-gray-300 leading-relaxed">
-          When building custom ROMs for the Apple //c Ultra, three mandatory hardware vectors must be linked at the very top of memory ($FFFA–$FFFF):
+        <h4 class="text-base font-bold text-pink-300">The 32KB System ROM Vector Table</h4>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          When the 65C02 CPU powers on or resets, it fetches the 16-bit address stored at <code>$FFFC–$FFFD</code> and begins execution. To build custom firmware, you must supply:
         </p>
 
         <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] font-mono text-xs">
           <pre class="text-gray-300"><code>.ORG $FFFA
-        .WORD NMI_HANDLER   ; $FFFA-$FFFB: Non-Maskable Interrupt
-        .WORD COLD_BOOT     ; $FFFC-$FFFD: RESET Vector (Executed on Power-Up & RESET button)
-        .WORD IRQ_HANDLER   ; $FFFE-$FFFF: Maskable Interrupt / BRK instruction
+        .WORD NMI_SERVICE   ; $FFFA-$FFFB: Non-Maskable Interrupt
+        .WORD COLD_BOOT     ; $FFFC-$FFFD: Cold Reset Vector (Power-Up)
+        .WORD IRQ_SERVICE   ; $FFFE-$FFFF: Maskable Interrupt / BRK
 
 COLD_BOOT:
         SEI                 ; Disable interrupts
         CLD                 ; Clear decimal mode
         LDX #$FF
-        TXS                 ; Initialize stack pointer to $01FF
-        STA $C051           ; Set Text Mode ($C051 TXTSET)
-        STA $C054           ; Page 1 Video ($C054 PAGE2 off)
-        JSR $FC58           ; HOME: Clear screen
-        ; Jump to Custom Ultra Diagnostics or ProDOS Bootloader
-        JMP $2000</code></pre>
+        TXS                 ; Set stack pointer to $01FF
+        STA $C051           ; TXTSET (Text Mode)
+        STA $C054           ; PAGE1 (Page 1)
+        STA $C052           ; MIXCLR (Full screen text)
+        JSR $FC58           ; HOME (Clear VRAM $0400-$07FF)
+        JMP $2000           ; Jump to Custom User Operating System!</code></pre>
         </div>
       </div>
     </section>
 
-    <!-- MODULE 6: C# & Java Ahead-Of-Time Lowering -->
+    <!-- MODULE 6: Modern Languages AOT -->
     <section id="module-6" class="space-y-6">
       <div class="flex items-center gap-3">
         <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold flex items-center justify-center border border-amber-500/40">6</span>
         <div>
-          <h3 class="text-2xl font-extrabold text-white tracking-tight">Modern Languages on 65C02 Silicon: The AOT Pipeline</h3>
-          <span class="text-xs font-mono text-gray-400">Zero-Page virtual register architecture, portable class libraries, and vertical execution traces</span>
+          <h3 class="text-2xl font-extrabold text-white tracking-tight">Modern Languages on 65C02 Silicon: The C# & Java AOT Engine</h3>
+          <span class="text-xs font-mono text-gray-400">Zero-Page virtual register allocation ($80–$8F) and zero platform lock-in</span>
         </div>
       </div>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h4 class="text-base font-bold text-amber-300">Zero-Page Virtual Register Allocation ($80–$8F)</h4>
-        <p class="text-gray-300 leading-relaxed">
-          Modern managed runtimes (CLR & JVM) expect 32-bit registers and stack evaluation. The 65C02 has only an 8-bit Accumulator, X, and Y register. The AOT compiler bridges this by dedicating Zero-Page locations <code>$80–$8F</code> as virtual machine registers:
+        <h4 class="text-base font-bold text-amber-300">Compiling C# .NET Core and Java 17 to Native 65C02 Binary</h4>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          High-level languages use 32-bit stack frames. The AOT engine maps these to dedicated Zero Page virtual registers:
+          <code>$80–$81 (R0 Accumulator)</code>, <code>$82–$83 (R1 Operand)</code>, and <code>$84–$85 (R2 Counter)</code>.
         </p>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs font-mono">
-          <div class="p-2.5 bg-[#0d1117] border border-[#30363d] rounded">
-            <span class="text-amber-400 font-bold block">$80–$81 (R0)</span>
-            <span class="text-gray-400 text-[11px]">Primary 16-bit Accumulator & Return Value</span>
+        <!-- Practical Task 6 -->
+        <div class="p-4 bg-[#0d1117] border-l-4 border-amber-500 rounded-r-lg space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono step-badge font-bold">LAB EXERCISE 6.1</span>
+            <span class="font-bold text-white text-xs">Compiling & Executing C# .NET on the Apple IIc</span>
           </div>
-          <div class="p-2.5 bg-[#0d1117] border border-[#30363d] rounded">
-            <span class="text-cyan-400 font-bold block">$82–$83 (R1)</span>
-            <span class="text-gray-400 text-[11px]">Secondary Operand / Method Argument 0</span>
-          </div>
-          <div class="p-2.5 bg-[#0d1117] border border-[#30363d] rounded">
-            <span class="text-emerald-400 font-bold block">$84–$85 (R2)</span>
-            <span class="text-gray-400 text-[11px]">Loop Counter & Dynamic Index Pointer</span>
-          </div>
-          <div class="p-2.5 bg-[#0d1117] border border-[#30363d] rounded">
-            <span class="text-purple-400 font-bold block">$86–$87 (OBJ)</span>
-            <span class="text-gray-400 text-[11px]">Current Object <code>this</code> Pointer in Heap</span>
-          </div>
-        </div>
-
-        <h4 class="text-base font-bold text-amber-300 pt-3">Zero Platform Lock-In: Portable C# vs Retro Hardware APIs</h4>
-        <p class="text-gray-300 leading-relaxed">
-          The workstation supports both 100% portable modern code (no retro imports) and explicit low-level hardware control:
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-          <div class="bg-[#0d1117] p-4 rounded-lg border border-cyan-500/30">
-            <span class="text-cyan-400 font-bold block mb-2">1. Pure Portable C# (.NET Core)</span>
-            <pre class="text-gray-300"><code>using System;
-using System.Collections.Generic;
-
-public class MathDemo {
-  public static void Main() {
-    Console.WriteLine("HELLO FROM PORTABLE C#");
-    List&lt;string&gt; items = new List&lt;string&gt;();
-    items.Add("50 MHZ TURBO");
-    items.Add("1MB RAM");
-    for (int i = 0; i &lt; items.Count; i++) {
-      Console.WriteLine("ITEM " + (i+1) + ": " + items[i]);
-    }
-  }
-}</code></pre>
-          </div>
-          <div class="bg-[#0d1117] p-4 rounded-lg border border-amber-500/30">
-            <span class="text-amber-400 font-bold block mb-2">2. Hardware-Accelerated Arcade C#</span>
-            <pre class="text-gray-300"><code>using Apple2.Ultra;
-
-public class BreakoutGame {
-  public static void Main() {
-    AppleVideo.SetDoubleHiRes(true);
-    AppleSound.Beep(587, 80);
-    AppleSound.Beep(880, 120);
-    Console.WriteLine("RETRO BREAKOUT ULTRA ACTIVE!");
-    Console.WriteLine("PADDLE: $C064 | SCORE: 1450");
-  }
-}</code></pre>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MODULE 7: Hands-On Guided Practicums -->
-    <section class="space-y-6">
-      <div class="flex items-center gap-3">
-        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center border border-emerald-500/40">7</span>
-        <div>
-          <h3 class="text-2xl font-extrabold text-white tracking-tight">Guided Hands-On Practicums</h3>
-          <span class="text-xs font-mono text-gray-400">Step-by-step exercises to solidify your mastery of every workstation feature</span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Practicum 1 -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-amber-300">Exercise 1: Hi-Res Vector Animation</span>
-            <span class="badge-step px-2 py-0.5 rounded text-[11px] font-mono">Applesoft</span>
-          </div>
-          <p class="text-gray-400 text-xs">
-            Open the emulator, type <code>NEW</code>, enter the following lines, and execute <code>RUN</code> to draw a mixed-mode geometric spiral:
-          </p>
-          <pre class="bg-[#0d1117] p-3 rounded border border-[#30363d] font-mono text-[11px] text-emerald-400"><code>10 HGR : HCOLOR= 3
-20 FOR R = 10 TO 80 STEP 5
-30   HPLOT 140-R, 96-R TO 140+R, 96-R TO 140+R, 96+R TO 140-R, 96+R TO 140-R, 96-R
-40 NEXT R
-50 VTAB 22 : PRINT "GEOMETRIC SPIRAL COMPLETE"</code></pre>
-        </div>
-
-        <!-- Practicum 2 -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-cyan-300">Exercise 2: Transcribing a Vintage Listing</span>
-            <span class="badge-step px-2 py-0.5 rounded text-[11px] font-mono">Transcriber</span>
-          </div>
-          <p class="text-gray-400 text-xs">
-            Switch to the <strong>Magazine Type-In Studio</strong> tab, click <strong>inCider Kaleidoscope</strong>, inspect the code, and click <strong>⚡ Feed into Apple II & Run</strong>. Observe the trigonometric math in real time!
-          </p>
-        </div>
-
-        <!-- Practicum 3 -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-purple-300">Exercise 3: C# Ahead-Of-Time Compilation</span>
-            <span class="badge-step px-2 py-0.5 rounded text-[11px] font-mono">C# AOT</span>
-          </div>
-          <p class="text-gray-400 text-xs">
-            Switch to the <strong>Code Compiler</strong> tab, select <strong>C# (.NET Core)</strong>, click <strong>⚡ Compile & Run on Apple II</strong>, and watch your high-level managed collections execute on 65C02 silicon at 50 MHz!
-          </p>
-        </div>
-
-        <!-- Practicum 4 -->
-        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-5 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-pink-300">Exercise 4: System Monitor Hex Dump Injection</span>
-            <span class="badge-step px-2 py-0.5 rounded text-[11px] font-mono">Monitor</span>
-          </div>
-          <p class="text-gray-400 text-xs">
-            Switch to the <strong>Type-In Studio</strong> tab, click <strong>65C02 Monitor Hex Dump</strong>, feed it into the Apple II, and type <code>CALL 768</code> to execute raw CMOS machine code directly from RAM!
-          </p>
+          <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
+            <li>Click the <strong>Code Compiler (C# / Java)</strong> tab at the bottom of the workstation.</li>
+            <li>Select <strong>C# (.NET Core)</strong> and inspect the standard library collections code.</li>
+            <li>Click <strong>⚡ Compile & Run on Apple II</strong>.</li>
+            <li>Watch the AOT compiler emit native 65C02 opcodes into RAM at <code>$2000</code> and execute at 50 MHz Turbo speed!</li>
+          </ol>
         </div>
       </div>
     </section>
@@ -636,7 +438,7 @@ public class BreakoutGame {
 
   <!-- Footer -->
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 px-6 text-center text-xs font-mono text-gray-500">
-    Apple //c Ultra Systems Engineering & Architectural Education • Zero Platform Lock-In • 1984–2026
+    Apple //c Ultra Comprehensive Systems Engineering & Architectural Education • Zero Platform Lock-In • 1984–2026
   </footer>
 
 </body>
