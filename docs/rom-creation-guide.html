@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Complete Custom ROM & Firmware Engineering Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .font-crt { font-family: 'VT323', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.8rem; line-height: 1.45; }
+    .task-card {
+      background: #0d121c;
+      border-left: 4px solid #ec4899;
+      border-radius: 0 0.5rem 0.5rem 0;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+    .diagram-panel {
+      background: #0c1017;
+      border: 1px solid #252d3d;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .table-tech {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+    }
+    .table-tech th {
+      background: #161f2e;
+      color: #fdb827;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 2px solid #2d3748;
+    }
+    .table-tech td {
+      padding: 0.55rem 0.8rem;
+      border-bottom: 1px solid #1a2230;
+      color: #cbd5e1;
+    }
+    .table-tech tr:hover {
+      background: #111827;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-pink-500 selection:text-white">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Main Nav Header -->
+  <header class="bg-[#10141d] border-b border-[#212836] px-6 py-4 flex flex-wrap items-center justify-between shadow-lg gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded bg-gradient-to-br from-pink-500 to-purple-700 flex items-center justify-center shadow text-white font-bold text-xl">
+        ⚡
+      </div>
+      <div>
+        <span class="text-[10px] font-mono text-pink-400 font-bold tracking-widest uppercase">Firmware Engineering Guide</span>
+        <h1 class="text-base font-extrabold text-white">Apple //c 32KB Custom ROM & Kernel Creation Guide</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded shadow transition">
+        ⚡ Launch Live Emulator
+      </a>
+      <a href="comprehensive-ultra-tutorial.html" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded transition font-bold">
+        📖 Master Tutorial
+      </a>
+      <a href="index.html" class="px-3 py-1.5 bg-[#1b2230] hover:bg-[#252f42] text-gray-300 rounded transition border border-[#2d384e]">
+        Docs Hub
+      </a>
+    </div>
+  </header>
+
+  <!-- Content Container -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 space-y-16 text-sm">
+
+    <!-- Hero Title Banner -->
+    <div class="bg-gradient-to-br from-[#18101d] via-[#1a1325] to-[#251536] border border-[#3d2154] rounded-2xl p-8 md:p-10 shadow-2xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <span class="px-3 py-1 bg-pink-500/15 border border-pink-500/40 rounded-full text-pink-400 text-xs font-mono font-bold">
+          OFFICIAL FIRMWARE DEVELOPER MANUAL
+        </span>
+        <span class="text-xs font-mono text-gray-400">27C256 EPROM Burning • Vector Table Linking • Custom OS Kernels</span>
+      </div>
+
+      <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+        Custom ROM & Firmware Engineering Manual
+      </h2>
+      <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
+        This comprehensive guide explains how to construct, assemble, link, and flash custom <strong>32KB System ROM firmware images ($C000–$FFFF)</strong> and <strong>Character Generator ROMs</strong> for the Apple //c. Whether building custom boot diagnostics, arcade game auto-boot cartridges, or alternate operating systems, this manual provides complete assembly listings, vector maps, and step-by-step hands-on labs.
+      </p>
+
+      <!-- Table of Contents -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-6 border-t border-[#3d2154] font-mono text-xs">
+        <a href="#sec1" class="p-3 bg-[#0f0917] hover:bg-[#1a0f27] border border-[#2f1a45] rounded-lg transition flex items-center justify-between">
+          <span class="text-pink-400 font-bold">1. 32KB ROM Architecture</span>
+          <span class="text-gray-500">&rarr;</span>
+        </a>
+        <a href="#sec2" class="p-3 bg-[#0f0917] hover:bg-[#1a0f27] border border-[#2f1a45] rounded-lg transition flex items-center justify-between">
+          <span class="text-purple-400 font-bold">2. Vector Table Linking</span>
+          <span class="text-gray-500">&rarr;</span>
+        </a>
+        <a href="#sec3" class="p-3 bg-[#0f0917] hover:bg-[#1a0f27] border border-[#2f1a45] rounded-lg transition flex items-center justify-between">
+          <span class="text-amber-400 font-bold">3. Cold Boot Reset Routine</span>
+          <span class="text-gray-500">&rarr;</span>
+        </a>
+        <a href="#sec4" class="p-3 bg-[#0f0917] hover:bg-[#1a0f27] border border-[#2f1a45] rounded-lg transition flex items-center justify-between">
+          <span class="text-cyan-400 font-bold">4. Custom Character ROMs</span>
+          <span class="text-gray-500">&rarr;</span>
+        </a>
+        <a href="#sec5" class="p-3 bg-[#0f0917] hover:bg-[#1a0f27] border border-[#2f1a45] rounded-lg transition flex items-center justify-between">
+          <span class="text-emerald-400 font-bold">5. Toolchain & Flashing</span>
+          <span class="text-gray-500">&rarr;</span>
+        </a>
+        <a href="#sec6" class="p-3 bg-[#0f0917] hover:bg-[#1a0f27] border border-[#2f1a45] rounded-lg transition flex items-center justify-between">
+          <span class="text-pink-400 font-bold">6. Hands-On Projects</span>
+          <span class="text-gray-500">&rarr;</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SECTION 1: 32KB Physical ROM Architecture -->
+    <section id="sec1" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-pink-500/20 text-pink-400 font-mono font-bold text-lg flex items-center justify-center border border-pink-500/40">1</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Section 1: 32KB Physical ROM Architecture ($C000–$FFFF)</h3>
+          <span class="text-xs font-mono text-gray-400">27C256 EPROM memory mapping, language card banking, and address decoding</span>
+        </div>
+      </div>
+
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+        <p class="text-gray-300 leading-relaxed text-xs">
+          On the Apple //c motherboard, the System ROM is housed in a 28-pin 32KB 27C256 EPROM (or 64KB 27C512 EPROM on Revision 3/4 machines). The upper 16KB of physical address space ($C000–$FFFF) is multiplexed across multiple internal sub-blocks:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="table-tech">
+            <thead>
+              <tr>
+                <th>Physical Address</th>
+                <th>ROM File Offset</th>
+                <th>Subsystem / Routine</th>
+                <th>Description & Function</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>$C000–$C0FF</code></td>
+                <td>N/A (Hardware I/O)</td>
+                <td>Memory-Mapped Softswitches</td>
+                <td>Keyboard, Speaker ($C030), Video, and MMU multiplexer softswitches.</td>
+              </tr>
+              <tr>
+                <td><code>$C100–$C7FF</code></td>
+                <td><code>$0100–$07FF</code></td>
+                <td>Slot ROM Extensions (Slots 1–7)</td>
+                <td>Internal firmware drivers: Serial Port 1 ($C100), Serial Port 2 ($C200), 80-Col Firmware ($C300), Mouse ($C400), SmartPort HD ($C500), Disk II ($C600).</td>
+              </tr>
+              <tr>
+                <td><code>$C800–$CFFF</code></td>
+                <td><code>$0800–$0FFF</code></td>
+                <td>Shared Expansion ROM</td>
+                <td>Shared banking space for auxiliary slot device subroutines.</td>
+              </tr>
+              <tr>
+                <td><code>$D000–$F7FF</code></td>
+                <td><code>$1000–$37FF</code></td>
+                <td>Applesoft BASIC Interpreter</td>
+                <td>Floating-point math engine, syntax tokenizer, and interpreter loops.</td>
+              </tr>
+              <tr>
+                <td><code>$F800–$FFFA</code></td>
+                <td><code>$3800–$3FFA</code></td>
+                <td>System Monitor & Drivers</td>
+                <td>Cold boot reset ($F800), HOME ($FC58), COUT ($FDED), KEYIN ($FD1B), and mini-assembler.</td>
+              </tr>
+              <tr class="bg-[#1a0f27]">
+                <td><code>$FFFA–$FFFF</code></td>
+                <td><code>$3FFA–$3FFF</code></td>
+                <td>65C02 Hardware Vector Table</td>
+                <td>NMI ($FFFA), Cold Reset ($FFFC), and IRQ/BRK ($FFFE) entry vectors.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Vector Table Linking -->
+    <section id="sec2" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-purple-500/20 text-purple-400 font-mono font-bold text-lg flex items-center justify-center border border-purple-500/40">2</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Section 2: 65C02 Hardware Interrupt Vector Table ($FFFA–$FFFF)</h3>
+          <span class="text-xs font-mono text-gray-400">Linking NMI, Cold Reset, and IRQ/BRK vectors in Little-Endian machine format</span>
+        </div>
+      </div>
+
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+        <p class="text-gray-300 leading-relaxed text-xs">
+          The 65C02 microprocessor relies entirely on the final 6 bytes of the 64KB memory map ($FFFA–$FFFF) to direct execution upon power-up or hardware interrupt triggers. All addresses are stored in Little-Endian byte order (Low Byte followed by High Byte):
+        </p>
+
+        <div class="diagram-panel space-y-3 font-mono text-xs">
+          <div class="p-3 bg-[#0a0e17] rounded border border-[#252f42] text-gray-300">
+            <span class="text-pink-400 font-bold block mb-2">Vector Table Assembly Definition (.ORG $FFFA):</span>
+            <pre class="text-gray-200"><code>.ORG $FFFA
+        .WORD NMI_HANDLER   ; $FFFA-$FFFB: Non-Maskable Interrupt (e.g. Keyboard Reset / Debugger)
+        .WORD RESET_HANDLER ; $FFFC-$FFFD: Cold Reset Vector (Power-Up / Hardware Reset)
+        .WORD IRQ_HANDLER   ; $FFFE-$FFFF: Maskable Interrupt (VIA 6522, Mockingboard, BRK opcode)</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Cold Boot Reset Routine -->
+    <section id="sec3" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-lg flex items-center justify-center border border-amber-500/40">3</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Section 3: Anatomy of a Production Cold Boot Initialization Handler</h3>
+          <span class="text-xs font-mono text-gray-400">Step-by-step assembly initialization of CPU registers, stack, MMU, and Video VRAM</span>
+        </div>
+      </div>
+
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+        <p class="text-gray-300 leading-relaxed text-xs">
+          When constructing custom firmware, your Cold Boot routine must initialize the machine from an undefined power-on silicon state:
+        </p>
+
+        <div class="bg-[#070a10] p-4 rounded-lg border border-[#21293a] font-mono text-xs">
+          <pre class="text-gray-200"><code>; =====================================================================
+; APPLE //c ULTRA CUSTOM FIRMWARE COLD BOOT HANDLER ($F800)
+; =====================================================================
+        .ORG $F800
+
+COLD_BOOT:
+        SEI                 ; 1. Disable maskable IRQ interrupts
+        CLD                 ; 2. Clear decimal mode flag (ensure binary ALU math)
+        LDX #$FF
+        TXS                 ; 3. Initialize Stack Pointer to top of Page 1 ($01FF)
+
+        ; 4. Initialize MMU Memory Banking to Main 64KB RAM Bank
+        STA $C000           ; 80STOREOFF: Normal video page mapping
+        STA $C008           ; ALTZPOFF: Main Zero Page ($0000-$00FF) & Stack
+        STA $C002           ; RAMRDOFF: Read from Main 64K RAM
+        STA $C004           ; RAMWRTOFF: Write to Main 64K RAM
+
+        ; 5. Initialize Video Display Controller to 40-Column Fullscreen Text
+        STA $C051           ; TXTSET: Text Mode
+        STA $C054           ; PAGE1: Display Video Page 1 ($0400-$07FF)
+        STA $C052           ; MIXCLR: Full 24-Row Display (No split graphics)
+
+        ; 6. Clear Video RAM Text Page 1 ($0400-$07FF) to High-Bit Blank Spaces ($A0)
+        JSR CLEAR_SCREEN
+
+        ; 7. Write Custom Firmware Power-On Banner to Row 0
+        LDY #0
+PRINT_BANNER:
+        LDA BANNER_TEXT,Y
+        BEQ START_KERNEL
+        ORA #$80            ; Convert ASCII to Apple II High-Bit ASCII
+        STA $0400 + 10,Y    ; Write to Row 0 Center VRAM ($0400)
+        INY
+        BNE PRINT_BANNER
+
+START_KERNEL:
+        ; 8. Speaker Power-On Chime ($C030)
+        JSR PLAY_POWER_CHIME
+
+        ; 9. Enter Kernel Command Loop
+        JMP KERNEL_LOOP
+
+CLEAR_SCREEN:
+        LDY #0
+        LDA #$A0            ; High-bit space ($A0)
+CLR_LOOP:
+        STA $0400,Y
+        STA $0480,Y
+        STA $0500,Y
+        STA $0580,Y
+        STA $0600,Y
+        STA $0680,Y
+        STA $0700,Y
+        STA $0780,Y
+        INY
+        BNE CLR_LOOP
+        RTS
+
+PLAY_POWER_CHIME:
+        LDX #100
+CHIME_LOOP:
+        STA $C030           ; Pulse speaker cone
+        LDY #50
+CHIME_WAIT:
+        DEY
+        BNE CHIME_WAIT
+        DEX
+        BNE CHIME_LOOP
+        RTS
+
+BANNER_TEXT:
+        .ASCII "APPLE //c ULTRA CUSTOM ROM v1.0"
+        .BYTE 0</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Custom Character ROM Hacking -->
+    <section id="sec4" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-cyan-500/20 text-cyan-400 font-mono font-bold text-lg flex items-center justify-center border border-cyan-500/40">4</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Section 4: Designing Custom Character Generator ROMs (7x8 Font Matrix)</h3>
+          <span class="text-xs font-mono text-gray-400">Pixel encoding, bitfield fonts, custom game tiles, and international character sets</span>
+        </div>
+      </div>
+
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+        <p class="text-gray-300 leading-relaxed text-xs">
+          The Apple //c Character Generator ROM stores a 7x8 dot matrix for 128 standard ASCII glyphs ($00–$7F). Each character requires 8 consecutive bytes, where each byte represents one horizontal row of 7 dots:
+        </p>
+
+        <div class="diagram-panel space-y-3 font-mono text-xs">
+          <span class="text-cyan-400 font-bold block">Example: Custom Space Invader Sprite Glyph (8 Bytes):</span>
+          <pre class="text-gray-300"><code>Row 0:  . X . . . X .  -> $24  (0010 0100)
+Row 1:  . . X . X . .  -> $14  (0001 0100)
+Row 2:  . X X X X X .  -> $3E  (0011 1110)
+Row 3:  X X . X . X X  -> $5B  (0101 1011)
+Row 4:  X X X X X X X  -> $7F  (0111 1111)
+Row 5:  X . X X X . X  -> $49  (0100 1001)
+Row 6:  X . X . X . X  -> $49  (0100 1001)
+Row 7:  . . X . X . .  -> $14  (0001 0100)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Toolchain & Build Pipeline -->
+    <section id="sec5" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold text-lg flex items-center justify-center border border-emerald-500/40">5</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Section 5: Modern Toolchain, Assembly & Flashing Pipeline</h3>
+          <span class="text-xs font-mono text-gray-400">Assembling with ca65 / vasm, linking 32KB binaries, and flashing EPROMs</span>
+        </div>
+      </div>
+
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+        <p class="text-gray-300 leading-relaxed text-xs">
+          To build and test custom ROMs on real hardware or inside the emulator:
+        </p>
+
+        <div class="bg-[#070a10] p-4 rounded-lg border border-[#21293a] font-mono text-xs space-y-2">
+          <span class="text-emerald-400 font-bold block">1. Assemble with ca65:</span>
+          <pre class="text-gray-300"><code>ca65 --cpu 65C02 -o custom_rom.o custom_rom.asm
+ld65 -C apple2c_rom.cfg -o custom_rom.bin custom_rom.o</code></pre>
+
+          <span class="text-emerald-400 font-bold block pt-2">2. Inject into Apple //c Web Workstation via JavaScript API:</span>
+          <pre class="text-gray-300"><code>// Load 32KB binary array directly into emulator ROM memory:
+window.emulator.rom.set(customRomUint8Array, 0x0000);
+window.emulator.reset();</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: Hands-On Guided Labs -->
+    <section id="sec6" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-pink-500/20 text-pink-400 font-mono font-bold text-lg flex items-center justify-center border border-pink-500/40">6</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Section 6: Hands-On Custom ROM Practicum</h3>
+          <span class="text-xs font-mono text-gray-400">Executable step-by-step firmware hacking tasks on the live emulator surface</span>
+        </div>
+      </div>
+
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+        <!-- Guided Task 1 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 1</span>
+            <span class="font-bold text-white text-xs">Probing the Active Cold Reset Vector ($FFFC–$FFFD)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Verify the active 16-bit cold reset vector in memory by executing this memory peek:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] ? PEEK(65532) + PEEK(65533) * 256
+63488   <-- ($F800: Authentic Apple //c Cold Boot Vector)</code></pre>
+        </div>
+
+        <!-- Guided Task 2 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 2</span>
+            <span class="font-bold text-white text-xs">Direct ROM Screen Clear Vector Call ($FC58)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Invoke the ROM screen clearing subroutine directly from immediate mode:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] CALL 64600    <-- Calls ROM $FC58 (HOME Screen Clear)
+] VTAB 10 : HTAB 8 : PRINT "CUSTOM ROM DIAGNOSTIC VERIFIED"</code></pre>
+        </div>
+
+        <!-- Guided Task 3 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 3</span>
+            <span class="font-bold text-white text-xs">Writing a Custom Power-On Banner into Row 0 VRAM ($0400)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Simulate custom firmware banner writing by directly poking high-bit ASCII characters into Row 0 Video RAM:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] POKE 1024 + 10, 193 : POKE 1024 + 11, 208 : POKE 1024 + 12, 208 : POKE 1024 + 13, 204 : POKE 1024 + 14, 197
+<-- Directly deposits 'APPLE' high-bit ASCII ($C1, $D0, $D0, $CC, $C5) into Row 0 VRAM!</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#10141d] border-t border-[#212836] py-8 px-6 text-center text-xs font-mono text-gray-500">
+    Apple //c Ultra Custom ROM & Firmware Engineering Guide • Zero Platform Lock-In • 1984–2026
+  </footer>
+
+</body>
+</html>
