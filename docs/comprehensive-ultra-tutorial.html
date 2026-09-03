@@ -26,6 +26,7 @@
       border-left: 4px solid #f58220;
       border-radius: 0 0.5rem 0.5rem 0;
       padding: 1.25rem;
+      margin-top: 1rem;
     }
     .diagram-panel {
       background: #0c1017;
@@ -102,7 +103,7 @@
         <span class="px-3 py-1 bg-amber-500/15 border border-amber-500/40 rounded-full text-amber-400 text-xs font-mono font-bold">
           VOLUME I: COMPLETE ARCHITECTURAL REFERENCE & PRACTICUM
         </span>
-        <span class="text-xs font-mono text-gray-400">Silicon Specification • Clock Timing • Graphics Math • Audio Synthesis</span>
+        <span class="text-xs font-mono text-gray-400">Silicon Specification • Clock Timing • Graphics Math • Audio Synthesis • ROM Engineering • AOT Lowering</span>
       </div>
 
       <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
@@ -116,27 +117,27 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-6 border-t border-[#252f42] font-mono text-xs">
         <a href="#ch1" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-[#21293a] rounded-lg transition flex items-center justify-between">
           <span class="text-amber-400 font-bold">1. CPU & Memory Banking</span>
-          <span class="text-gray-500">→</span>
+          <span class="text-gray-500">&rarr;</span>
         </a>
         <a href="#ch2" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-[#21293a] rounded-lg transition flex items-center justify-between">
           <span class="text-cyan-400 font-bold">2. Video & Scanline Math</span>
-          <span class="text-gray-500">→</span>
+          <span class="text-gray-500">&rarr;</span>
         </a>
         <a href="#ch3" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-[#21293a] rounded-lg transition flex items-center justify-between">
           <span class="text-purple-400 font-bold">3. Sound & Mockingboard</span>
-          <span class="text-gray-500">→</span>
+          <span class="text-gray-500">&rarr;</span>
         </a>
         <a href="#ch4" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-[#21293a] rounded-lg transition flex items-center justify-between">
           <span class="text-emerald-400 font-bold">4. Six Program Entry Pipelines</span>
-          <span class="text-gray-500">→</span>
+          <span class="text-gray-500">&rarr;</span>
         </a>
         <a href="#ch5" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-[#21293a] rounded-lg transition flex items-center justify-between">
           <span class="text-pink-400 font-bold">5. Custom ROM Creation</span>
-          <span class="text-gray-500">→</span>
+          <span class="text-gray-500">&rarr;</span>
         </a>
         <a href="#ch6" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-[#21293a] rounded-lg transition flex items-center justify-between">
           <span class="text-amber-400 font-bold">6. Modern C# & Java AOT</span>
-          <span class="text-gray-500">→</span>
+          <span class="text-gray-500">&rarr;</span>
         </a>
       </div>
     </div>
@@ -255,6 +256,20 @@
           <p class="text-[11px] text-gray-400">
             <strong>Verification:</strong> The speed indicator in the upper banner switches immediately to <code>50 MHz</code>, a speaker click sounds, and the keyboard data byte is returned.
           </p>
+        </div>
+
+        <!-- Guided Task 1.2 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 1.2</span>
+            <span class="font-bold text-white text-xs">Decimal Mode BCD Arithmetic vs Binary Operations</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Test how the 65C02 Decimal Mode flag (D) handles Binary Coded Decimal addition ($29 + $43 = $72):
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] ? 29 + 43
+72
+] ? PEEK(1024)     <-- Inspects VRAM Page 1 base ($0400)</code></pre>
         </div>
       </div>
     </section>
@@ -480,6 +495,21 @@
             <strong>Verification:</strong> The top 160 scanlines display the vector rectangle and diagonals in Hi-Res white, while the prompt remains responsive on rows 20–23.
           </p>
         </div>
+
+        <!-- Guided Task 2.2 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 2.2</span>
+            <span class="font-bold text-white text-xs">Palette Color Phase Shift Testing</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Draw lines in both Hi-Res color palettes to observe the $180^circ$ NTSC subcarrier delay:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] HCOLOR= 1 : HPLOT 20,20 TO 260,20   <-- Palette 0 (Green)
+] HCOLOR= 2 : HPLOT 20,40 TO 260,40   <-- Palette 0 (Purple)
+] HCOLOR= 5 : HPLOT 20,60 TO 260,60   <-- Palette 1 (Orange - Bit 7 high)
+] HCOLOR= 6 : HPLOT 20,80 TO 260,80   <-- Palette 1 (Blue - Bit 7 high)</code></pre>
+        </div>
       </div>
     </section>
 
@@ -542,6 +572,22 @@
 60 PRINT "LASER SWEEP COMPLETE!"
 RUN</code></pre>
         </div>
+
+        <!-- Guided Task 3.2 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-purple-500/20 text-purple-400 font-bold border border-purple-500/40">LAB EXERCISE 3.2</span>
+            <span class="font-bold text-white text-xs">Synthesizing Engine Rumble & Explosion SFX</span>
+          </div>
+          <p class="text-xs text-gray-300">Run this loop to generate low-frequency explosion rumble:</p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>10 HOME : PRINT "SYNTHESIZING EXPLOSION RUMBLE..."
+20 FOR E = 1 TO 60
+30   POKE 49200, 0
+40   FOR W = 1 TO (E * 2) : NEXT W
+50 NEXT E
+60 PRINT "EXPLOSION DECAYED."
+RUN</code></pre>
+        </div>
       </div>
     </section>
 
@@ -588,6 +634,18 @@ RUN</code></pre>
             <li>Observe warp travel loops rendered to the CRT in real time!</li>
           </ol>
         </div>
+
+        <!-- Guided Task 4.2 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">LAB EXERCISE 4.2</span>
+            <span class="font-bold text-white text-xs">Transcribing & Executing Compute! Apollo Lunar Lander</span>
+          </div>
+          <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
+            <li>Select <strong>Compute! Lunar Lander (1984)</strong> in the Type-In Studio.</li>
+            <li>Click <strong>⚡ Feed into Apple II & Run</strong> to run altitude calculations and score verification.</li>
+          </ol>
+        </div>
       </div>
     </section>
 
@@ -597,14 +655,14 @@ RUN</code></pre>
         <span class="w-9 h-9 rounded-lg bg-pink-500/20 text-pink-400 font-mono font-bold text-lg flex items-center justify-center border border-pink-500/40">5</span>
         <div>
           <h3 class="text-2xl font-black text-white tracking-tight">Chapter 5: Custom ROM Creation & Firmware Engineering</h3>
-          <span class="text-xs font-mono text-gray-400">Linking 65C02 hardware interrupt vectors ($FFFA–$FFFF) and writing custom bootloaders</span>
+          <span class="text-xs font-mono text-gray-400">Linking 65C02 hardware interrupt vectors ($FFFA–$FFFF), cold boot initialization, and custom kernel hacking</span>
         </div>
       </div>
 
-      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
         <h4 class="text-lg font-bold text-pink-400">5.1 32KB System ROM Vector Table Structure</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          When the 65C02 CPU powers on or resets, it fetches the 16-bit address stored at <code>$FFFC–$FFFD</code> and begins execution:
+          When the 65C02 CPU powers on or resets, it fetches the 16-bit address stored at <code>$FFFC–$FFFD</code> and begins execution. To build custom firmware, you must supply:
         </p>
 
         <div class="bg-[#070a10] p-4 rounded-lg border border-[#21293a] font-mono text-xs">
@@ -624,6 +682,45 @@ COLD_BOOT:
         JSR $FC58           ; HOME (Clear VRAM $0400-$07FF)
         JMP $2000           ; Jump to Custom Operating System!</code></pre>
         </div>
+
+        <!-- Guided Task 5.1 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 5.1</span>
+            <span class="font-bold text-white text-xs">Inspecting the System Reset Vector ($FFFC–$FFFD)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Probe the active reset vector in the emulator by peeking high memory addresses:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] ? PEEK(65532) + PEEK(65533) * 256
+63488   <-- ($F800: Authentic Apple //c Cold Boot Vector)</code></pre>
+        </div>
+
+        <!-- Guided Task 5.2 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 5.2</span>
+            <span class="font-bold text-white text-xs">Custom ROM Cold Reset Diagnostic Routine</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Verify the ROM screen clear routine by executing a direct machine language call to <code>$FC58</code>:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] CALL 64600    <-- Calls ROM $FC58 (HOME Clear Screen)
+] VTAB 10 : HTAB 8 : PRINT "CUSTOM ROM DIAGNOSTIC PASSED"</code></pre>
+        </div>
+
+        <!-- Guided Task 5.3 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 5.3</span>
+            <span class="font-bold text-white text-xs">Writing a Custom Power-On Banner into Video RAM</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Write directly to top-line Video RAM addresses ($0400–$0427) to forge a custom system banner:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] POKE 1024 + 10, 193 : POKE 1024 + 11, 208 : POKE 1024 + 12, 208 : POKE 1024 + 13, 204 : POKE 1024 + 14, 197
+<-- Directly deposits 'APPLE' high-bit ASCII ($C1, $D0, $D0, $CC, $C5) into Row 0 VRAM!</code></pre>
+        </div>
       </div>
     </section>
 
@@ -633,11 +730,11 @@ COLD_BOOT:
         <span class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-lg flex items-center justify-center border border-amber-500/40">6</span>
         <div>
           <h3 class="text-2xl font-black text-white tracking-tight">Chapter 6: Modern Languages on 65C02 Silicon: C# & Java AOT</h3>
-          <span class="text-xs font-mono text-gray-400">Zero-Page virtual register allocation ($80–$8F) and zero platform lock-in</span>
+          <span class="text-xs font-mono text-gray-400">Zero-Page virtual register allocation ($80–$8F), Sweet16 heritage, and zero platform lock-in</span>
         </div>
       </div>
 
-      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
         <h4 class="text-lg font-bold text-amber-400">6.1 High-Level Managed IL to 65C02 Assembly Lowering</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
           High-level languages use 32-bit stack frames. The AOT engine maps these to dedicated Zero Page virtual registers:
@@ -648,13 +745,39 @@ COLD_BOOT:
         <div class="task-card space-y-2">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 6.1</span>
-            <span class="font-bold text-white text-xs">Compiling & Executing C# .NET on the Apple IIc</span>
+            <span class="font-bold text-white text-xs">Compiling & Executing C# .NET Standard App</span>
           </div>
           <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
             <li>Click the <strong>Code Compiler (C# / Java)</strong> tab at the bottom of the workstation.</li>
             <li>Select <strong>C# (.NET Core)</strong> and inspect the standard library collections code.</li>
             <li>Click <strong>⚡ Compile & Run on Apple II</strong>.</li>
             <li>Watch the AOT compiler emit native 65C02 opcodes into RAM at <code>$2000</code> and execute at 50 MHz Turbo speed!</li>
+          </ol>
+        </div>
+
+        <!-- Guided Task 6.2 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 6.2</span>
+            <span class="font-bold text-white text-xs">Compiling C# Retro Breakout Game (Double Hi-Res & Chiptune SFX)</span>
+          </div>
+          <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
+            <li>In the Compiler tab, select <strong>C# Retro Breakout Arcade</strong>.</li>
+            <li>Observe calls to <code>AppleVideo.SetDoubleHiRes()</code> and <code>AppleSound.Beep()</code>.</li>
+            <li>Click <strong>⚡ Compile & Run on Apple II</strong> and verify game execution on the CRT!</li>
+          </ol>
+        </div>
+
+        <!-- Guided Task 6.3 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 6.3</span>
+            <span class="font-bold text-white text-xs">Compiling & Executing Java 17 OOP Classes</span>
+          </div>
+          <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
+            <li>In the Compiler tab, select <strong>Java 17 (OOP Demo)</strong>.</li>
+            <li>Inspect Java string output and looping structures.</li>
+            <li>Click <strong>⚡ Compile & Run on Apple II</strong> and verify JVM bytecode lowering to native 65C02 binary!</li>
           </ol>
         </div>
       </div>
