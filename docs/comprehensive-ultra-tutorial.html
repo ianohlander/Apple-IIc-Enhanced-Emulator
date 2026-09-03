@@ -6,15 +6,12 @@
   <title>Apple //c Ultra — Systems Architecture & Engineering Textbook</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
     body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }
     .font-mono-code { font-family: 'Space Mono', monospace; }
     .font-crt { font-family: 'VT323', monospace; }
     .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
-    pre code { font-family: 'Space Mono', monospace; font-size: 0.8rem; line-height: 1.4; }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.8rem; line-height: 1.45; }
     .crt-box {
       background: #061008;
       border: 2px solid #1a3820;
@@ -36,6 +33,13 @@
       border-radius: 0.75rem;
       padding: 1.5rem;
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .formula-card {
+      background: #06090e;
+      border: 1px solid #1f293d;
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      font-family: 'Space Mono', monospace;
     }
     .table-tech {
       width: 100%;
@@ -164,7 +168,7 @@
           </div>
           <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
             <span class="text-amber-400 font-bold block">Index Y (Y) [8-bit]</span>
-            <span class="text-gray-400">Indirect indexed pointer traversal ($($zp),Y) and multi-byte operations.</span>
+            <span class="text-gray-400">Indirect indexed pointer traversal ($(zp),Y) and multi-byte operations.</span>
           </div>
           <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
             <span class="text-emerald-400 font-bold block">Stack Pointer (SP) [8-bit]</span>
@@ -272,9 +276,9 @@
           <div class="flex flex-wrap items-center justify-between border-b border-[#252f42] pb-3 gap-2">
             <div>
               <span class="font-bold text-cyan-400 text-xs font-mono block">DIAGRAM 2.1: DUAL-PHASE CLOCK & ZERO-CONTENTION DRAM REFRESH SHARING</span>
-              <span class="text-[11px] text-gray-400">14.31818 MHz Master Oscillator $ightarrow$ 1.023 MHz Symmetrical Clock Cycles</span>
+              <span class="text-[11px] text-gray-400">14.31818 MHz Master Oscillator &rarr; 1.023 MHz Symmetrical Clock Cycles (978 ns Period)</span>
             </div>
-            <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded text-emerald-400 text-[10px] font-mono">
+            <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded text-emerald-400 text-[10px] font-mono font-bold">
               100% Contention-Free
             </span>
           </div>
@@ -326,12 +330,12 @@
             <rect x="420" y="105" width="400" height="90" fill="#111722" stroke="#2b374d" stroke-width="1.5" rx="6" />
             <text x="620" y="128" fill="#fdb827" font-family="'Space Mono', monospace" font-size="11" font-weight="bold" text-anchor="middle">Hardware Bus Multiplexer (74LS157 / IOU)</text>
             <text x="620" y="148" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10" text-anchor="middle">Switches 16-bit address lines every 489 ns between:</text>
-            <text x="620" y="166" fill="#38bdf8" font-family="'Space Mono', monospace" font-size="9" text-anchor="middle">Φ₀: Video Address Generator (V0-V7, H0-H5)</text>
-            <text x="620" y="182" fill="#4ade80" font-family="'Space Mono', monospace" font-size="9" text-anchor="middle">Φ₁: CPU Address Bus (A0-A15)</text>
+            <text x="620" y="166" fill="#38bdf8" font-family="'Space Mono', monospace" font-size="9" text-anchor="middle">Φ₀: Video Address Generator (V0–V7, H0–H5)</text>
+            <text x="620" y="182" fill="#4ade80" font-family="'Space Mono', monospace" font-size="9" text-anchor="middle">Φ₁: CPU Address Bus (A0–A15)</text>
           </svg>
 
           <p class="text-xs text-gray-300 leading-relaxed">
-            <strong>Theoretical Principle:</strong> 1970s Dynamic RAM (DRAM) relied on microscopic capacitor charges that decayed in under 2 milliseconds, requiring 128 rows to be continuously addressed to prevent data loss. By interleaving Video scanlines to cycle through the DRAM row counter during $Phi_0$ while the CPU executes during $Phi_1$, Steve Wozniak achieved 100% contention-free memory access and eliminated expensive external refresh ICs.
+            <strong>Theoretical Principle:</strong> 1970s Dynamic RAM (DRAM) relied on microscopic capacitor charges that decayed in under 2 milliseconds, requiring 128 rows to be continuously addressed to prevent data loss. By interleaving Video scanlines to cycle through the DRAM row counter during Phase 0 ($Phi_0$) while the CPU executes during Phase 1 ($Phi_1$), Steve Wozniak achieved 100% contention-free memory access and eliminated expensive external refresh ICs.
           </p>
         </div>
 
@@ -382,12 +386,19 @@
             </div>
           </div>
 
-          <!-- Mathematical Formula -->
-          <div class="bg-[#070a10] p-4 rounded-lg border border-[#21293a] font-mono text-xs space-y-1">
-            <span class="text-amber-400 font-bold block">General Hi-Res Scanline Base Address Formula:</span>
-            <div class="text-cyan-300">
-              $$	ext{Base}(Y) = $2000 + 1024 	imes (Y mod 8) + 128 	imes (lfloor Y / 64 floor) + 40 	imes (lfloor (Y mod 64) / 8 floor)$$
+          <!-- Mathematical Formula Box -->
+          <div class="formula-card space-y-2">
+            <span class="text-amber-400 font-bold block text-xs">Exact Hi-Res Scanline Base Address Formula:</span>
+            <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center font-mono text-sm md:text-base text-gray-200">
+              <span class="text-amber-400 font-bold">Base(Y)</span> = 
+              <span class="text-purple-400 font-bold">$2000</span> + 
+              <span class="text-cyan-400 font-bold">1024 &times; (Y mod 8)</span> + 
+              <span class="text-emerald-400 font-bold">128 &times; &lfloor;Y / 64&rfloor;</span> + 
+              <span class="text-pink-400 font-bold">40 &times; &lfloor;(Y mod 64) / 8&rfloor;</span>
             </div>
+            <p class="text-[11px] text-gray-400 pt-1">
+              Where <code class="text-amber-300">&lfloor;v&rfloor;</code> denotes integer floor division (<code>Math.floor(v)</code> in JavaScript or <code>INT(v)</code> in BASIC).
+            </p>
           </div>
         </div>
 
@@ -485,22 +496,33 @@
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
         <h4 class="text-lg font-bold text-purple-400">3.1 Hardware Sound Synthesis Foundations</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-          <div class="bg-[#090d14] p-4 rounded-lg border border-[#1f2736] space-y-2">
-            <span class="text-amber-400 font-bold block">1-Bit Speaker Cone ($C030 / 49200)</span>
+          <!-- 1-Bit Speaker -->
+          <div class="formula-card space-y-3">
+            <span class="text-amber-400 font-bold block text-xs">1-Bit Speaker Cone ($C030 / 49200)</span>
             <p class="text-gray-400 text-[11px] leading-relaxed">
               Every memory read or write to $C030 pulses the speaker cone. Frequency is dictated by cycle delays in CPU assembly loops:
             </p>
-            <div class="text-cyan-300 font-bold text-center py-2 bg-[#05080e] rounded">
-              $$f = rac{1,023,000}{2 	imes 	ext{Delay Cycles}}$$
+            <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] flex items-center justify-center gap-3 text-sm">
+              <span class="text-amber-400 font-bold">f</span> = 
+              <div class="inline-flex flex-col items-center">
+                <span class="border-b border-gray-400 px-2 text-cyan-300 font-bold">1,023,000 Hz</span>
+                <span class="text-emerald-400 font-bold">2 &times; Delay Cycles</span>
+              </div>
             </div>
           </div>
-          <div class="bg-[#090d14] p-4 rounded-lg border border-[#1f2736] space-y-2">
-            <span class="text-emerald-400 font-bold block">Dual AY-3-8910 Mockingboard PSG</span>
+
+          <!-- Mockingboard PSG -->
+          <div class="formula-card space-y-3">
+            <span class="text-emerald-400 font-bold block text-xs">Dual AY-3-8910 Mockingboard PSG</span>
             <p class="text-gray-400 text-[11px] leading-relaxed">
               6 independent hardware tone generators with 12-bit period registers ($R0–R5$), 5-bit white noise ($R6$), and 16-bit envelope generators:
             </p>
-            <div class="text-cyan-300 font-bold text-center py-2 bg-[#05080e] rounded">
-              $$f = rac{1,000,000}{16 	imes 	ext{Period Divisor}}$$
+            <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] flex items-center justify-center gap-3 text-sm">
+              <span class="text-amber-400 font-bold">f</span> = 
+              <div class="inline-flex flex-col items-center">
+                <span class="border-b border-gray-400 px-2 text-cyan-300 font-bold">1,000,000 Hz</span>
+                <span class="text-emerald-400 font-bold">16 &times; Period Divisor</span>
+              </div>
             </div>
           </div>
         </div>
