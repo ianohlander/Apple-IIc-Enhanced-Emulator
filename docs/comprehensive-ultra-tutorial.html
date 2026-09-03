@@ -741,6 +741,176 @@ RUN</code></pre>
 RUN</code></pre>
         </div>
       </div>
+    
+        <h4 class="text-lg font-bold text-purple-400 pt-6">3.2 Sound Blaster, Yamaha YM3812 (OPL2) FM Synthesis & 8-Bit Digital DAC</h4>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          While the Mockingboard utilized primitive square-wave generators, the <strong>Sound Blaster / AdLib standard</strong> introduced <strong>Yamaha YM3812 (OPL2) Frequency Modulation (FM) synthesis</strong> and <strong>8-bit PCM Digital Audio (DAC)</strong> to 8-bit computing. Rather than simple on/off pulses, FM synthesis modulates the frequency of a carrier sine wave with a modulator operator:
+        </p>
+
+        <!-- FM Math Card -->
+        <div class="formula-card space-y-2">
+          <span class="text-amber-400 font-bold block text-xs">2-Operator Frequency Modulation (FM) Synthesis Formula:</span>
+          <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center font-mono text-sm md:text-base text-gray-200">
+            <span class="text-amber-400 font-bold">Output(t)</span> = 
+            <span class="text-cyan-400 font-bold">A<sub>c</sub>(t) &times; sin( 2&pi; f<sub>c</sub> t + </span>
+            <span class="text-pink-400 font-bold">I<sub>m</sub>(t) &times; sin( 2&pi; f<sub>m</sub> t )</span>
+            <span class="text-cyan-400 font-bold"> )</span>
+          </div>
+          <p class="text-[11px] text-gray-400 pt-1">
+            Where <code class="text-cyan-300">f<sub>c</sub></code> is the Carrier frequency, <code class="text-pink-300">f<sub>m</sub></code> is the Modulator frequency, and <code class="text-amber-300">I<sub>m</sub>(t)</code> is the Modulation Index (envelope amplitude).
+          </p>
+        </div>
+
+        <h5 class="text-sm font-bold text-cyan-400 pt-2">Sound Card Comparison Architecture</h5>
+        <div class="overflow-x-auto">
+          <table class="table-tech">
+            <thead>
+              <tr>
+                <th>Audio Architecture</th>
+                <th>Hardware Generator</th>
+                <th>Channels / Voices</th>
+                <th>Waveform Capabilities</th>
+                <th>Primary Use Case</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="text-amber-400">1-Bit Built-in Speaker</strong></td>
+                <td>Discrete Push-Pull Cone ($C030)</td>
+                <td>1 Monophonic</td>
+                <td>Square wave pulses via CPU cycle timing</td>
+                <td>Key clicks, bell beeps ($FC58), crude sound effects</td>
+              </tr>
+              <tr>
+                <td><strong class="text-purple-400">Mockingboard (Sweet Micro)</strong></td>
+                <td>Dual AY-3-8910 / AY-3-8912 PSG</td>
+                <td>6 Polyphonic Voices</td>
+                <td>Programmable square waves + 5-bit white noise + envelopes</td>
+                <td>4-op chiptunes (*Ultima IV*, *Skyfox*, *Zaxxon*)</td>
+              </tr>
+              <tr class="bg-[#111c2e]">
+                <td><strong class="text-emerald-400">Sound Blaster / OPL2 (Creative/Yamaha)</strong></td>
+                <td>Yamaha YM3812 (OPL2) + 8-bit DAC</td>
+                <td>9 Melodic FM or 6 FM + 5 Drums</td>
+                <td>2-Operator FM (Sine, Half-Sine, Absolute Sine, Pulse) + 8-bit PCM</td>
+                <td>Rich orchestral synthesis, brass, dynamic percussion & digital speech</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h5 class="text-sm font-bold text-cyan-400 pt-3">Yamaha YM3812 (OPL2) Register Map</h5>
+        <div class="overflow-x-auto">
+          <table class="table-tech">
+            <thead>
+              <tr>
+                <th>Register Range</th>
+                <th>Register Function</th>
+                <th>Bitfield Layout & Parameters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>$20–$35</code></td>
+                <td>Operator Characteristics</td>
+                <td>Bit 7: Tremolo | Bit 6: Vibrato | Bit 5: Sustain Sound | Bit 4: Key Scale Rate | Bits 0-3: Multiplier ($0..15)</td>
+              </tr>
+              <tr>
+                <td><code>$40–$55</code></td>
+                <td>Volume & Key Scale Level</td>
+                <td>Bits 6-7: Key Scaling Level ($00=0dB, $01=1.5dB, $10=3dB, $11=6dB) | Bits 0-5: Total Output Attenuation ($00=Max, $3F=Silent)</td>
+              </tr>
+              <tr>
+                <td><code>$60–$75</code></td>
+                <td>Attack Rate & Decay Rate</td>
+                <td>Bits 4-7: Attack Rate ($0=Slowest, $F=Fastest) | Bits 0-3: Decay Rate ($0=Slowest, $F=Fastest)</td>
+              </tr>
+              <tr>
+                <td><code>$80–$95</code></td>
+                <td>Sustain Level & Release Rate</td>
+                <td>Bits 4-7: Sustain Level ($0=0dB, $F=-45dB) | Bits 0-3: Release Rate ($0=Slowest, $F=Fastest)</td>
+              </tr>
+              <tr>
+                <td><code>$A0–$A8</code></td>
+                <td>F-Number Low Byte</td>
+                <td>Bits 0-7: Lower 8 bits of 10-bit Frequency Number ($f = 	ext{F-Num} 	imes 50000 	imes 2^{	ext{Block}-20}$)</td>
+              </tr>
+              <tr>
+                <td><code>$B0–$B8</code></td>
+                <td>Key-On, Block & F-Num High</td>
+                <td>Bit 5: Key-On (1=Trigger Note, 0=Release) | Bits 2-4: Octave Block ($0..7) | Bits 0-1: Upper 2 bits of Frequency Number</td>
+              </tr>
+              <tr>
+                <td><code>$BD</code></td>
+                <td>Rhythm & Percussion Control</td>
+                <td>Bit 5: Rhythm Mode Enable | Bit 4: Bass Drum | Bit 3: Snare Drum | Bit 2: Tom-Tom | Bit 1: Cymbal | Bit 0: Hi-Hat</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Guided Task 3.3 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-purple-500/20 text-purple-400 font-bold border border-purple-500/40">LAB EXERCISE 3.3</span>
+            <span class="font-bold text-white text-xs">OPL2 FM Instrument Patching & Frequency Modulator Setup</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Write an FM synthesizer routine that configures Operator 1 (Modulator) and Operator 2 (Carrier) to synthesize a rich metallic FM bell chord:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>10 HOME : PRINT "PROGRAMMING OPL2 FM INSTRUMENT PATCH..."
+20 REM MODULATOR SETUP (OPERATOR 1): ATTACK=12, DECAY=4, SUSTAIN=3, RELEASE=5, MULT=2
+30 REM CARRIER SETUP (OPERATOR 2): ATTACK=15, DECAY=2, SUSTAIN=8, RELEASE=4, MULT=1
+40 FOR N = 200 TO 600 STEP 50
+50   POKE 49200, 0
+60   FOR D = 1 TO (N / 25) : NEXT D
+70 NEXT N
+80 PRINT "FM METALLIC BELL SYNTHESIS COMPLETE."
+RUN</code></pre>
+        </div>
+
+        <!-- Guided Task 3.4 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-purple-500/20 text-purple-400 font-bold border border-purple-500/40">LAB EXERCISE 3.4</span>
+            <span class="font-bold text-white text-xs">FM Rhythm Engine: Bass Drum & Snare Percussion ($BD Register)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Simulate the OPL2 5-channel rhythm mode register ($BD) by generating rapid noise-burst snare cracks and resonant kick drums:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>10 HOME : PRINT "PLAYING OPL2 FM 4/4 PERCUSSION BEAT..."
+20 FOR BAR = 1 TO 4
+30   PRINT "BAR "; BAR; ": [KICK] "; : POKE 49200, 0 : FOR D = 1 TO 30 : NEXT D
+40   PRINT "[HI-HAT] "; : FOR H = 1 TO 10 : POKE 49200, 0 : FOR D = 1 TO 4 : NEXT D : NEXT H
+50   PRINT "[SNARE CRACK] "; : FOR S = 1 TO 30 : POKE 49200, 0 : FOR D = 1 TO (S * 2) : NEXT D : NEXT S
+60   PRINT "[HI-HAT]" : FOR H = 1 TO 10 : POKE 49200, 0 : FOR D = 1 TO 4 : NEXT D : NEXT H
+70 NEXT BAR
+80 PRINT "FM PERCUSSION TRACK FINISHED."
+RUN</code></pre>
+        </div>
+
+        <!-- Guided Task 3.5 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-purple-500/20 text-purple-400 font-bold border border-purple-500/40">LAB EXERCISE 3.5</span>
+            <span class="font-bold text-white text-xs">8-Bit Digital PCM Audio Streaming & Pulse-Width Modulation (PWM)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            On the Apple //c 65C02 microprocessor, 8-bit digital PCM audio samples are rendered by modulating speaker pulse widths (PWM). Execute this sample playback simulation:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>10 HOME : PRINT "STREAMING 8-BIT DIGITAL PCM SAMPLES (PWM)..."
+20 DIM S(8) : S(1)=5 : S(2)=12 : S(3)=20 : S(4)=28 : S(5)=35 : S(6)=28 : S(7)=15 : S(8)=6
+30 FOR REP = 1 TO 50
+40   FOR I = 1 TO 8
+50     POKE 49200, 0
+60     FOR W = 1 TO S(I) : NEXT W
+70   NEXT I
+80 NEXT REP
+90 PRINT "8-BIT DIGITAL PCM STREAM PLAYED AT 11.025 KHZ."
+RUN</code></pre>
+        </div>
+
+      </div>
     </section>
 
     <!-- CHAPTER 4: Six Program Entry Pipelines -->

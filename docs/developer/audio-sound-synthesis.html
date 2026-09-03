@@ -131,6 +131,75 @@
       </div>
     </section>
 
+  
+    <!-- Section 3: Sound Blaster & Yamaha YM3812 (OPL2) FM Synthesis -->
+    <section class="space-y-4 pt-6 border-t border-[#252f42]">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">SECTION 3</span>
+        <h3 class="text-lg font-bold text-white">Sound Blaster / AdLib Standard: Yamaha YM3812 (OPL2) FM Synthesis & 8-Bit DAC</h3>
+      </div>
+      <p class="text-gray-300 text-xs leading-relaxed">
+        The Yamaha YM3812 (OPL2) sound chip revolutionized computer audio by implementing <strong>2-Operator Frequency Modulation (FM) Synthesis</strong> across 9 melodic polyphonic channels (or 6 FM channels + 5 rhythm percussion instruments: Bass Drum, Snare, Tom-Tom, Cymbal, Hi-Hat).
+      </p>
+
+      <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center font-mono text-sm text-gray-200">
+        <span class="text-amber-400 font-bold">Output(t)</span> = 
+        <span class="text-cyan-400 font-bold">A<sub>c</sub>(t) &times; sin( 2&pi; f<sub>c</sub> t + </span>
+        <span class="text-pink-400 font-bold">I<sub>m</sub>(t) &times; sin( 2&pi; f<sub>m</sub> t )</span>
+        <span class="text-cyan-400 font-bold"> )</span>
+      </div>
+
+      <h4 class="text-xs font-bold text-amber-400 uppercase font-mono">OPL2 9-Channel Register Architecture</h4>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono border-collapse">
+          <thead>
+            <tr class="bg-[#161f2e] text-amber-400 text-left border-b border-[#2d3748]">
+              <th class="p-2">Register</th>
+              <th class="p-2">Name & Description</th>
+              <th class="p-2">Bitfield Parameters</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300">
+            <tr class="border-b border-[#1a2230]">
+              <td class="p-2"><code>$20–$35</code></td>
+              <td class="p-2">Operator Control</td>
+              <td class="p-2">Tremolo (D7), Vibrato (D6), Sustain (D5), KSR (D4), Freq Multiplier (D0-D3)</td>
+            </tr>
+            <tr class="border-b border-[#1a2230]">
+              <td class="p-2"><code>$40–$55</code></td>
+              <td class="p-2">Level & Key Scale</td>
+              <td class="p-2">Key Scale Level (D6-D7: 0/1.5/3/6 dB/octave), Output Attenuation (D0-D5)</td>
+            </tr>
+            <tr class="border-b border-[#1a2230]">
+              <td class="p-2"><code>$60–$75</code></td>
+              <td class="p-2">Attack / Decay Rate</td>
+              <td class="p-2">Attack Rate (D4-D7: 0..15), Decay Rate (D0-D3: 0..15)</td>
+            </tr>
+            <tr class="border-b border-[#1a2230]">
+              <td class="p-2"><code>$80–$95</code></td>
+              <td class="p-2">Sustain / Release Rate</td>
+              <td class="p-2">Sustain Level (D4-D7: 0..15), Release Rate (D0-D3: 0..15)</td>
+            </tr>
+            <tr class="border-b border-[#1a2230]">
+              <td class="p-2"><code>$A0–$A8</code></td>
+              <td class="p-2">F-Number (Low)</td>
+              <td class="p-2">Lower 8 bits of 10-bit frequency divisor</td>
+            </tr>
+            <tr class="border-b border-[#1a2230]">
+              <td class="p-2"><code>$B0–$B8</code></td>
+              <td class="p-2">Key-On / Octave Block</td>
+              <td class="p-2">Key-On (D5), Octave Block (D2-D4: 0..7), Upper 2 bits of F-Num (D0-D1)</td>
+            </tr>
+            <tr class="border-b border-[#1a2230]">
+              <td class="p-2"><code>$BD</code></td>
+              <td class="p-2">Rhythm Percussion</td>
+              <td class="p-2">Rhythm Enable (D5), Bass Drum (D4), Snare (D3), Tom-Tom (D2), Cymbal (D1), Hi-Hat (D0)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
