@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
     body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }
     .font-mono-code { font-family: 'Space Mono', monospace; }
@@ -33,6 +33,12 @@
       background: rgba(34, 197, 94, 0.15);
       border: 1px solid rgba(34, 197, 94, 0.4);
       color: #4ade80;
+    }
+    .diagram-card {
+      background: #0e121a;
+      border: 1px solid #28303d;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
     }
   </style>
 </head>
@@ -81,7 +87,7 @@
         The Definitive Guide & Hands-On Engineering Practicum
       </h2>
       <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
-        This master tutorial does not merely explain features—it provides <strong>deep conceptual breakdowns and step-by-step interactive tasks</strong> for you to execute in the live emulator. You will master 65C02 memory banking, video scanline interleaving math, dual AY-3-8910 chiptune synthesis, custom ROM creation, 6 program ingestion methods, and high-level C#/.NET and Java AOT compilation.
+        This master tutorial does not merely explain features—it provides <strong>deep conceptual breakdowns, schematic diagrams, and step-by-step interactive tasks</strong> for you to execute in the live emulator. You will master 65C02 memory banking, video scanline interleaving math, dual AY-3-8910 chiptune synthesis, custom ROM creation, 6 program ingestion methods, and high-level C#/.NET and Java AOT compilation.
       </p>
 
       <!-- Table of Contents -->
@@ -163,8 +169,8 @@
             Open the emulator, type the following commands to change the CPU turbo clock and inspect the hardware memory registers:
           </p>
           <pre class="text-emerald-400 p-2 bg-[#061008] rounded border border-[#1a3820]"><code>] SPEED= 50
-] POKE 49200, 0    &lt;-- Toggles speaker ($C030 / 49200)
-] ? PEEK(49152)    &lt;-- Reads keyboard data latch ($C000)</code></pre>
+] POKE 49200, 0    <-- Toggles speaker ($C030 / 49200)
+] ? PEEK(49152)    <-- Reads keyboard data latch ($C000)</code></pre>
           <p class="text-[11px] text-gray-400">
             <strong>Expected Output:</strong> The emulator header updates dynamically to <code>50 MHz</code>, a speaker click sounds, and the keyboard register is read.
           </p>
@@ -266,24 +272,174 @@ APPLE (65C02 JSR $FDED COUT)</code></pre>
       <div class="flex items-center gap-3">
         <span class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 font-mono font-bold flex items-center justify-center border border-cyan-500/40">3</span>
         <div>
-          <h3 class="text-2xl font-extrabold text-white tracking-tight">The Video & Graphics Pipeline: Scanline Mathematics</h3>
+          <h3 class="text-2xl font-extrabold text-white tracking-tight">The Video & Graphics Pipeline: Visual Schematics & Scanline Math</h3>
           <span class="text-xs font-mono text-gray-400">Understanding DRAM refresh sharing, 3-tier address interleaving, and color phase shifting</span>
         </div>
       </div>
 
-      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h4 class="text-base font-bold text-cyan-300">Why Video Memory is Interleaved (The Woz Hardware Optimization)</h4>
-        <p class="text-gray-300 leading-relaxed text-xs">
-          In 1977, dynamic RAM (DRAM) required refresh pulses every 2ms across 128 rows. To eliminate dedicated refresh chips and save manufacturing costs, Steve Wozniak designed the Apple II video generator to cycle through DRAM row addresses while fetching video pixels.
-        </p>
-        <p class="text-gray-300 leading-relaxed text-xs">
-          Because DRAM address counters incremented linearly while scanning CRT raster lines, consecutive scanlines $Y=0, 1, 2dots$ do NOT sit contiguously in memory. Instead, memory is split into 3 vertical boxes of 64 scanlines, each containing 8 groups of 8 lines:
-        </p>
+      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-6">
 
-        <!-- Math Formula Box -->
-        <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] font-mono text-xs">
-          <span class="text-amber-400 font-bold block mb-2">Hi-Res Scanline Base Address Formula:</span>
-          $$\text{Base}(Y) = \$2000 + 1024 \times (Y \bmod 8) + 128 \times (\lfloor Y / 64 \rfloor) + 40 \times (\lfloor (Y \bmod 64) / 8 \rfloor)$$
+        <!-- Visual Diagram 1: Dual Phase Clock & DRAM Refresh Sharing -->
+        <div class="diagram-card space-y-3">
+          <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+            <span class="font-bold text-cyan-400 text-xs font-mono">DIAGRAM 1: DUAL-PHASE CLOCK & DRAM REFRESH SHARING</span>
+            <span class="text-[11px] font-mono text-gray-400">14.31818 MHz Master Oscillator</span>
+          </div>
+
+          <svg class="w-full h-48 bg-[#070a0e] rounded-lg p-2" viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Clock Signal Waveform -->
+            <path d="M 40 40 L 100 40 L 100 90 L 160 90 L 160 40 L 220 40 L 220 90 L 280 90 L 280 40 L 340 40" fill="none" stroke="#f58220" stroke-width="2.5" />
+            <text x="40" y="30" fill="#f58220" font-family="'Space Mono', monospace" font-size="11" font-weight="bold">Master Clock (1.023 MHz Cycle)</text>
+
+            <!-- Phase 0: Video Fetch -->
+            <rect x="100" y="50" width="60" height="70" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="4" />
+            <text x="130" y="80" fill="#009ddc" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">Phase 0 (Φ₀)</text>
+            <text x="130" y="95" fill="#a0c4ff" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Video Fetch</text>
+            <text x="130" y="108" fill="#a0c4ff" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">& DRAM Refresh</text>
+
+            <!-- Phase 1: CPU Fetch -->
+            <rect x="160" y="50" width="60" height="70" fill="#61bb46" fill-opacity="0.2" stroke="#61bb46" stroke-width="1.5" rx="4" />
+            <text x="190" y="80" fill="#61bb46" font-family="'Inter', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">Phase 1 (Φ₁)</text>
+            <text x="190" y="95" fill="#b7e4c7" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">65C02 CPU</text>
+            <text x="190" y="108" fill="#b7e4c7" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Memory Access</text>
+
+            <!-- Memory Bus Flow -->
+            <line x1="360" y1="65" x2="440" y2="65" stroke="#fdb827" stroke-width="2" marker-end="url(#arrow)" />
+            <rect x="440" y="35" width="230" height="110" fill="#161b22" stroke="#30363d" stroke-width="1.5" rx="6" />
+            <text x="555" y="55" fill="#fdb827" font-family="'Space Mono', monospace" font-size="11" font-weight="bold" text-anchor="middle">128KB Dynamic RAM</text>
+            <text x="555" y="75" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Φ₀: Video Address Counter Refreshes 128 Rows</text>
+            <text x="555" y="92" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle">Φ₁: CPU Executes Instructions with 0 Wait States</text>
+            <rect x="460" y="105" width="190" height="25" fill="#61bb46" fill-opacity="0.2" stroke="#61bb46" stroke-width="1" rx="3" />
+            <text x="555" y="121" fill="#4ade80" font-family="'Space Mono', monospace" font-size="9" font-weight="bold" text-anchor="middle">100% Contention-Free Architecture</text>
+          </svg>
+          <p class="text-xs text-gray-400">
+            <strong>Why Memory is Interleaved:</strong> 1977 DRAM required 128 refresh pulses every 2ms. By mapping video scanlines to cycle through the DRAM row counter during $Phi_0$, Steve Wozniak eliminated external refresh circuitry and reduced chip count, making the Apple II affordable and reliable.
+          </p>
+        </div>
+
+        <!-- Visual Diagram 2: 3-Tier Hi-Res Memory Interleaving Map -->
+        <div class="diagram-card space-y-3">
+          <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+            <span class="font-bold text-cyan-400 text-xs font-mono">DIAGRAM 2: HI-RES 3-TIER SCANLINE BOX STRUCTURE (192 SCANLINES)</span>
+            <span class="text-[11px] font-mono text-gray-400">8,192 Bytes ($2000–$3FFF)</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
+            <!-- Box 0 -->
+            <div class="bg-[#070a0e] p-3 rounded-lg border border-cyan-500/30 space-y-2">
+              <span class="text-cyan-400 font-bold block">Box 0: Scanlines Y = 0 to 63</span>
+              <div class="text-[11px] text-gray-400 space-y-1">
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 0</span><span class="text-amber-400">$2000</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 8</span><span class="text-amber-400">$2080 (+$80)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 16</span><span class="text-amber-400">$2100 (+$80)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 1</span><span class="text-emerald-400">$2400 (+$400)</span></div>
+                <div class="flex justify-between py-0.5"><span>Line 63</span><span class="text-purple-400">$3F80</span></div>
+              </div>
+            </div>
+
+            <!-- Box 1 -->
+            <div class="bg-[#070a0e] p-3 rounded-lg border border-emerald-500/30 space-y-2">
+              <span class="text-emerald-400 font-bold block">Box 1: Scanlines Y = 64 to 127</span>
+              <div class="text-[11px] text-gray-400 space-y-1">
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 64</span><span class="text-amber-400">$2028 (+$28)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 72</span><span class="text-amber-400">$20A8 (+$80)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 80</span><span class="text-amber-400">$2128 (+$80)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 65</span><span class="text-emerald-400">$2428 (+$400)</span></div>
+                <div class="flex justify-between py-0.5"><span>Line 127</span><span class="text-purple-400">$3FA8</span></div>
+              </div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="bg-[#070a0e] p-3 rounded-lg border border-purple-500/30 space-y-2">
+              <span class="text-purple-400 font-bold block">Box 2: Scanlines Y = 128 to 191</span>
+              <div class="text-[11px] text-gray-400 space-y-1">
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 128</span><span class="text-amber-400">$2050 (+$50)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 136</span><span class="text-amber-400">$20D0 (+$80)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 144</span><span class="text-amber-400">$2150 (+$80)</span></div>
+                <div class="flex justify-between border-b border-[#1f2937] py-0.5"><span>Line 129</span><span class="text-emerald-400">$2450 (+$400)</span></div>
+                <div class="flex justify-between py-0.5"><span>Line 191</span><span class="text-purple-400">$3FD0</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exact Base Address Formula -->
+          <div class="bg-[#070a0e] p-3 rounded-lg border border-[#30363d] font-mono text-xs text-center">
+            <span class="text-amber-400 font-bold block mb-1">Hi-Res Scanline Base Address Formula:</span>
+            <code class="text-cyan-300 text-xs">
+              Base(Y) = $2000 + 1024 * (Y mod 8) + 128 * floor(Y / 64) + 40 * floor((Y mod 64) / 8)
+            </code>
+          </div>
+        </div>
+
+        <!-- Visual Diagram 3: 8-Bit Pixel Byte & Color Subcarrier Phase Shift -->
+        <div class="diagram-card space-y-3">
+          <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+            <span class="font-bold text-cyan-400 text-xs font-mono">DIAGRAM 3: HI-RES 8-BIT BYTE & PALETTE PHASE SHIFT</span>
+            <span class="text-[11px] font-mono text-gray-400">7 Physical Dots per Byte</span>
+          </div>
+
+          <svg class="w-full h-36 bg-[#070a0e] rounded-lg p-2" viewBox="0 0 700 130" xmlns="http://www.w3.org/2000/svg">
+            <!-- Bit 7: Palette Shift -->
+            <rect x="30" y="30" width="80" height="50" fill="#963d97" fill-opacity="0.3" stroke="#963d97" stroke-width="2" rx="4" />
+            <text x="70" y="50" fill="#e0aaff" font-family="'Space Mono', monospace" font-size="11" font-weight="bold" text-anchor="middle">Bit 7</text>
+            <text x="70" y="68" fill="#e0aaff" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Palette Shift</text>
+
+            <!-- Bits 0-6: Pixels -->
+            <g transform="translate(130, 30)">
+              <rect x="0" y="0" width="70" height="50" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="3" />
+              <text x="35" y="22" fill="#009ddc" font-family="'Space Mono', monospace" font-size="10" font-weight="bold" text-anchor="middle">Bit 0</text>
+              <text x="35" y="40" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Dot 0</text>
+
+              <rect x="75" y="0" width="70" height="50" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="3" />
+              <text x="110" y="22" fill="#009ddc" font-family="'Space Mono', monospace" font-size="10" font-weight="bold" text-anchor="middle">Bit 1</text>
+              <text x="110" y="40" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Dot 1</text>
+
+              <rect x="150" y="0" width="70" height="50" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="3" />
+              <text x="185" y="22" fill="#009ddc" font-family="'Space Mono', monospace" font-size="10" font-weight="bold" text-anchor="middle">Bit 2</text>
+              <text x="185" y="40" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Dot 2</text>
+
+              <rect x="225" y="0" width="70" height="50" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="3" />
+              <text x="260" y="22" fill="#009ddc" font-family="'Space Mono', monospace" font-size="10" font-weight="bold" text-anchor="middle">Bit 3</text>
+              <text x="260" y="40" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Dot 3</text>
+
+              <rect x="300" y="0" width="70" height="50" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="3" />
+              <text x="335" y="22" fill="#009ddc" font-family="'Space Mono', monospace" font-size="10" font-weight="bold" text-anchor="middle">Bit 4</text>
+              <text x="335" y="40" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Dot 4</text>
+
+              <rect x="375" y="0" width="70" height="50" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="3" />
+              <text x="410" y="22" fill="#009ddc" font-family="'Space Mono', monospace" font-size="10" font-weight="bold" text-anchor="middle">Bit 5</text>
+              <text x="410" y="40" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Dot 5</text>
+
+              <rect x="450" y="0" width="70" height="50" fill="#009ddc" fill-opacity="0.2" stroke="#009ddc" stroke-width="1.5" rx="3" />
+              <text x="485" y="22" fill="#009ddc" font-family="'Space Mono', monospace" font-size="10" font-weight="bold" text-anchor="middle">Bit 6</text>
+              <text x="485" y="40" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle">Dot 6</text>
+            </g>
+
+            <!-- Output Palettes -->
+            <text x="70" y="105" fill="#a0c4ff" font-family="'Space Mono', monospace" font-size="9" text-anchor="middle">Bit 7 = 0: Green / Purple</text>
+            <text x="70" y="118" fill="#f58220" font-family="'Space Mono', monospace" font-size="9" text-anchor="middle">Bit 7 = 1: Orange / Blue (180° Delay)</text>
+          </svg>
+        </div>
+
+        <!-- Visual Diagram 4: Mixed Mode Split Screen -->
+        <div class="diagram-card space-y-3">
+          <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+            <span class="font-bold text-cyan-400 text-xs font-mono">DIAGRAM 4: MIXED-MODE SCREEN PARTITIONING</span>
+            <span class="text-[11px] font-mono text-gray-400">160 Graphics Scanlines + 4 Text Rows</span>
+          </div>
+
+          <div class="w-full bg-[#061008] border-2 border-[#1a3820] rounded-lg p-3 font-crt space-y-2 text-center text-emerald-400">
+            <div class="h-28 bg-[#040a05] border border-emerald-500/40 rounded flex flex-col items-center justify-center p-2">
+              <span class="text-lg">HI-RES GRAPHICS FRAMEBUFFER (Scanlines 0 to 159)</span>
+              <span class="text-xs text-gray-400">Plots vectors, sprites, and geometric curves via $2000–$37FF</span>
+            </div>
+            <div class="bg-[#0b1b0e] border border-amber-500/40 rounded p-2 text-left font-mono text-xs text-amber-300">
+              <div>Row 20: ] HCOLOR= 3 : HPLOT 0,0 TO 279,159</div>
+              <div>Row 21: ] ? 128 * 4</div>
+              <div>Row 22: 512</div>
+              <div>Row 23: ] █</div>
+            </div>
+          </div>
         </div>
 
         <h4 class="text-base font-bold text-cyan-300 pt-3">How 65C02 Machine Code Plots a Pixel</h4>
@@ -291,10 +447,10 @@ APPLE (65C02 JSR $FDED COUT)</code></pre>
           When executing <code>HPLOT X, Y</code>, the CPU calculates:
         </p>
         <ol class="text-xs font-mono text-gray-300 list-decimal list-inside space-y-1 bg-[#0d1117] p-3 rounded border border-[#30363d]">
-          <li><strong>Scanline Pointer</strong>: Computes $\text{Base}(Y)$ into Zero Page pointer <code>$26/$27</code>.</li>
+          <li><strong>Scanline Pointer</strong>: Computes Base(Y) into Zero Page pointer <code>$26/$27</code>.</li>
           <li><strong>Byte Offset</strong>: Divides horizontal coordinate $X$ by 7: <code>Y = X / 7</code>.</li>
           <li><strong>Pixel Bit Mask</strong>: Computes bit mask: <code>Mask = 1 &lt;&lt; (X % 7)</code> (bits 0–6).</li>
-          <li><strong>Palette Subcarrier Shift (Bit 7)</strong>: If bit 7 = 0, colors are <em>Green / Purple</em>. If bit 7 = 1, the color subcarrier is delayed $180^\circ$, producing <em>Orange / Blue</em>!</li>
+          <li><strong>Palette Subcarrier Shift (Bit 7)</strong>: If bit 7 = 0, colors are <em>Green / Purple</em>. If bit 7 = 1, the color subcarrier is delayed 180°, producing <em>Orange / Blue</em>!</li>
           <li><strong>Memory Write</strong>: Executes <code>STA ($26),Y</code> to store the pixel byte into VRAM!</li>
         </ol>
 
@@ -336,14 +492,14 @@ APPLE (65C02 JSR $FDED COUT)</code></pre>
             <p class="text-gray-400 text-[11px]">
               Every access to $C030 physically pulses the speaker cone. Frequency is determined by the CPU cycle delay between pulses:
             </p>
-            <div class="text-cyan-300">$$f = \frac{1\,023\,000}{2 \times \text{Delay Cycles}}$$</div>
+            <div class="text-cyan-300">f = 1,023,000 / (2 * Delay Cycles)</div>
           </div>
           <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] space-y-2">
             <span class="text-emerald-400 font-bold block">Dual AY-3-8910 Mockingboard PSG</span>
             <p class="text-gray-400 text-[11px]">
               6 independent hardware tone generators with 12-bit period registers ($R0–R5$), 5-bit white noise ($R6$), and 16-bit envelopes:
             </p>
-            <div class="text-cyan-300">$$f = \frac{1\,000\,000}{16 \times \text{Period Divisor}}$$</div>
+            <div class="text-cyan-300">f = 1,000,000 / (16 * Period Divisor)</div>
           </div>
         </div>
 
