@@ -185,7 +185,159 @@
           </div>
         </div>
 
-        <h4 class="text-lg font-bold text-amber-400 pt-2">1.2 Memory Management Unit (MMU) & Softswitch Architecture</h4>
+        
+        <h4 class="text-lg font-bold text-amber-400 pt-4">1.2 Complete 65C02 Addressing Modes & Memory Traversal</h4>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          The WDC 65C02 CMOS microprocessor features <strong>16 distinct addressing modes</strong> (13 inherited from the original NMOS 6502 plus 3 powerful CMOS architectural enhancements). Mastering addressing modes is essential for cycle-accurate machine language programming:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="table-tech">
+            <thead>
+              <tr>
+                <th>Addressing Mode</th>
+                <th>Assembly Syntax</th>
+                <th>Bytes</th>
+                <th>Cycles</th>
+                <th>Hardware Bus Operation & Internal Mechanics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="text-amber-400">1. Implied / Inherent</strong></td>
+                <td><code>CLC</code>, <code>DEX</code>, <code>RTS</code></td>
+                <td>1</td>
+                <td>2</td>
+                <td>Target register is hardwired into the opcode. No operand fetch required.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">2. Accumulator</strong></td>
+                <td><code>INC A</code>, <code>ASL A</code></td>
+                <td>1</td>
+                <td>2</td>
+                <td>Operates directly on the 8-bit Accumulator register. (<code>INC A</code>/<code>DEC A</code> added in 65C02).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">3. Immediate</strong></td>
+                <td><code>LDA #$42</code>, <code>LDX #$FF</code></td>
+                <td>2</td>
+                <td>2</td>
+                <td>Operand is a literal constant byte stored in the byte immediately following the opcode.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">4. Zero Page</strong></td>
+                <td><code>LDA $80</code>, <code>STZ $50</code></td>
+                <td>2</td>
+                <td>3</td>
+                <td>Fetches 8-bit address from operand; high address byte is hardwired to <code>$00</code> ($0000–$00FF).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">5. Zero Page,X</strong></td>
+                <td><code>LDA $80,X</code>, <code>STZ $20,X</code></td>
+                <td>2</td>
+                <td>4</td>
+                <td>Adds Index X to 8-bit Zero Page address with 8-bit wraparound (stays inside Zero Page).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">6. Zero Page,Y</strong></td>
+                <td><code>LDX $80,Y</code>, <code>STX $10,Y</code></td>
+                <td>2</td>
+                <td>4</td>
+                <td>Adds Index Y to Zero Page address with wraparound. Used specifically with <code>LDX</code> and <code>STX</code>.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">7. Absolute</strong></td>
+                <td><code>LDA $2000</code>, <code>STA $C030</code></td>
+                <td>3</td>
+                <td>4</td>
+                <td>Full 16-bit physical memory address specified in Little-Endian format (Low Byte, High Byte).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">8. Absolute,X</strong></td>
+                <td><code>LDA $0400,X</code>, <code>STA $2000,X</code></td>
+                <td>3</td>
+                <td>4–5</td>
+                <td>Adds Index X to full 16-bit address. Takes +1 cycle (5 total) if a 256-byte page boundary is crossed or on write.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">9. Absolute,Y</strong></td>
+                <td><code>LDA $0400,Y</code>, <code>STA $2000,Y</code></td>
+                <td>3</td>
+                <td>4–5</td>
+                <td>Adds Index Y to full 16-bit address. Takes +1 cycle (5 total) on page boundary crossing or write operations.</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">10. Relative (Branches)</strong></td>
+                <td><code>BNE -10</code>, <code>BRA +$06</code></td>
+                <td>2</td>
+                <td>2–4</td>
+                <td>Signed 8-bit two's complement displacement (-128 to +127 bytes from PC+2). (<code>BRA</code> added in 65C02).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">11. Absolute Indirect</strong></td>
+                <td><code>JMP ($FFFC)</code></td>
+                <td>3</td>
+                <td>5</td>
+                <td>Fetches effective target address from the 16-bit pointer stored at memory location. (6502 page-wrap bug fixed in 65C02!).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">12. Indexed Indirect (,X)</strong></td>
+                <td><code>LDA ($80,X)</code></td>
+                <td>2</td>
+                <td>6</td>
+                <td>Pre-indexed: Adds X to Zero Page address, then fetches the 16-bit target address from the table at $(ZP+X).</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">13. Indirect Indexed (),Y</strong></td>
+                <td><code>LDA ($26),Y</code>, <code>STA ($80),Y</code></td>
+                <td>2</td>
+                <td>5–6</td>
+                <td>Post-indexed: Fetches 16-bit base pointer from Zero Page, then adds Y. The foundation of graphics and array loops!</td>
+              </tr>
+              <tr class="bg-[#111c2e]">
+                <td><strong class="text-emerald-400">14. ZP Indirect [65C02]</strong></td>
+                <td><code>LDA ($80)</code>, <code>STA ($80)</code></td>
+                <td>2</td>
+                <td>5</td>
+                <td><strong>65C02 CMOS Addition:</strong> Directly dereferences a 16-bit pointer stored in Zero Page without needing Index Y = 0.</td>
+              </tr>
+              <tr class="bg-[#111c2e]">
+                <td><strong class="text-emerald-400">15. Abs Indexed Indirect [65C02]</strong></td>
+                <td><code>JMP ($1000,X)</code></td>
+                <td>3</td>
+                <td>6</td>
+                <td><strong>65C02 CMOS Addition:</strong> Indexed Jump Table Dispatch! Jumps directly to target pointer at $(Address + X*2).</td>
+              </tr>
+              <tr class="bg-[#111c2e]">
+                <td><strong class="text-emerald-400">16. Stack Push/Pull [65C02]</strong></td>
+                <td><code>PHX</code>, <code>PLX</code>, <code>PHY</code>, <code>PLY</code></td>
+                <td>1</td>
+                <td>3–4</td>
+                <td><strong>65C02 CMOS Addition:</strong> Direct single-byte stack pushing/pulling for Index Registers without altering Accumulator.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Guided Task 1.3 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 1.3</span>
+            <span class="font-bold text-white text-xs">Traversing Memory with Indirect Indexed ($zp),Y Addressing</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            In Applesoft BASIC and 65C02 assembly, the Indirect Indexed addressing mode <code>($26),Y</code> is how the video rasterizer walks across 40-byte scanline rows. Test this addressing logic:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] 10 POKE 38, 0 : POKE 39, 4   <-- Sets Zero Page pointer $26/$27 to $0400 (Row 0 VRAM)
+] 20 FOR Y = 0 TO 4 : POKE 1024 + Y, 193 + Y : NEXT Y  <-- Writes A, B, C, D, E using indexed offsets
+] 30 GOTO 30
+] RUN</code></pre>
+          <p class="text-[11px] text-gray-400">
+            <strong>Observation:</strong> The letters <code>A B C D E</code> appear directly at the top-left of the screen in Row 0 VRAM ($0400).
+          </p>
+        </div>
+
+        <h4 class="text-lg font-bold text-amber-400 pt-4">1.3 Memory Management Unit (MMU) & Softswitch Architecture</h4>
         <p class="text-gray-300 leading-relaxed">
           The Apple //c expands the physical address space beyond 64KB using bank-switched auxiliary memory. All banking is controlled by reading or writing dedicated I/O softswitches in page $C0:
         </p>
