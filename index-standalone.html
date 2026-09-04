@@ -187,10 +187,43 @@
 
       <!-- Tab Content 1: Magazine Type-In -->
       <div id="tab-typein" class="tab-pane bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
-        <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
+        <div class="flex flex-wrap justify-between items-center border-b border-[#2a3642] pb-3 gap-2">
           <div>
             <h3 class="text-sm font-bold text-amber-400">MAGAZINE TYPE-IN TRANSCRIBER</h3>
-            <p class="text-xs text-gray-400">Load listings from Compute!, inCider & Nibble or paste your own code.</p>
+            <p class="text-xs text-gray-400">Load listings from Compute!, inCider & Nibble or paste your own BASIC/ASM code.</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-xs">
+            <button onclick="loadSampleTypeIn('kaleidoscope')" class="px-2.5 py-1 bg-[#1c222b] hover:bg-[#252e3b] text-emerald-300 rounded border border-[#2a3642]">inCider Kaleidoscope (1984)</button>
+            <button onclick="loadSampleTypeIn('lander')" class="px-2.5 py-1 bg-[#1c222b] hover:bg-[#252e3b] text-emerald-300 rounded border border-[#2a3642]">Compute! Lunar Lander</button>
+            <button onclick="loadSampleTypeIn('starfield')" class="px-2.5 py-1 bg-[#1c222b] hover:bg-[#252e3b] text-emerald-300 rounded border border-[#2a3642]">Nibble 3D Starfield</button>
+            <button onclick="loadSampleTypeIn('assembly')" class="px-2.5 py-1 bg-[#1c222b] hover:bg-[#252e3b] text-emerald-300 rounded border border-[#2a3642]">65C02 Hex Dump ($300)</button>
+          </div>
+        </div>
+
+        <textarea id="typein-text" rows="7" class="w-full bg-[#0d1117] border border-[#2a3642] rounded p-3 text-xs text-emerald-400 font-mono focus:outline-none">10 REM *** INCIDER MAGAZINE DHGR KALEIDOSCOPE ***
+20 HGR : HCOLOR= 3
+30 FOR R = 10 TO 90 STEP 5
+40   FOR A = 0 TO 6.28 STEP 0.2
+50     HPLOT 140 + R * COS(A), 96 + R * SIN(A) TO 140 - R * COS(A), 96 - R * SIN(A)
+60   NEXT A
+70 NEXT R
+80 PRINT "ENJOY THE KALEIDOSCOPE"
+90 END</textarea>
+
+        <div class="flex justify-between items-center pt-2">
+          <span id="typein-status" class="text-xs text-gray-400">Ready to inject into Apple II.</span>
+          <button onclick="injectTypeIn()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded text-xs">
+            ▶ Feed into Apple II
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Modern Java & C# Code Studio -->
+      <div id="tab-code" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
+        <div class="flex flex-wrap justify-between items-center border-b border-[#2a3642] pb-3 gap-2">
+          <div>
+            <h3 class="text-sm font-bold text-cyan-400">JAVA & C# 65C02 AOT COMPILER & OOP CASE STUDIES</h3>
+            <p class="text-xs text-gray-400">Standard .NET, Java, ProDOS Storage, 3D Vector Math & Mockingboard PSG.</p>
           </div>
           <div class="flex items-center gap-2">
             <label class="text-gray-400 text-xs font-sans">OOP Case Study:</label>
@@ -220,7 +253,7 @@ namespace DotNetCoreStandardApp {
         public static void Main(string[] args) {
             Console.WriteLine("HELLO FROM STANDARD C# .NET CORE!");
             List<string> items = new List<string>();
-            items.Add("65C02 CMOS CORE (50 MHz)");
+            items.Add("65C02 CMOS CORE (50 MHz TURBO)");
             items.Add("128KB EXPANDED RAM");
             for (int i = 0; i < items.Count; i++) {
                 Console.WriteLine("ITEM " + (i + 1) + ": " + items[i]);
@@ -2761,7 +2794,10 @@ $2453: 60            RTS</pre>
         el.classList.remove('bg-amber-600', 'text-white');
         el.classList.add('text-stone-400');
       });
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) {
+        targetPane.classList.remove('hidden');
+      }
       const activeBtn = document.getElementById('tab-btn-' + tabId);
       if (activeBtn) {
         activeBtn.classList.add('bg-amber-600', 'text-white');

@@ -1068,6 +1068,17 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
     phosphor = 'green';
     assertEqual(phosphor, 'green', 'Display phosphor surface restored to P1 Green filter');
   });
+
+  runner.test('Under the Hood Workbench: 6-Tab Navigation & Surface Integrity', () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
+    const tabs = ['typein', 'code', 'debugger', 'storage', 'slots', 'rom'];
+    
+    for (const t of tabs) {
+      assertTrue(html.includes(`id="tab-${t}"`), `Tab pane 'tab-${t}' exists in DOM`);
+      assertTrue(html.includes(`id="tab-btn-${t}"`), `Tab button 'tab-btn-${t}' exists in DOM`);
+      assertTrue(html.includes(`switchTab('${t}')`), `Tab switchTab('${t}') click handler wired`);
+    }
+  });
 });
 
 const passed = runner.summarize();
