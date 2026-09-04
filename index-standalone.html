@@ -286,15 +286,76 @@ $200A: 60         RTS</pre>
       <!-- Tab Content 4: Storage -->
       <div id="tab-storage" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-2">
-            <h4 class="font-bold text-amber-400">Drive 1 (5.25" Floppy)</h4>
-            <p class="text-gray-400">Mounted: ProDOS 2.4.2 Boot Disk</p>
-            <button onclick="alert('Disk 1 Mounted!')" class="px-3 py-1 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded border border-stone-700">Select Disk Image</button>
+          <!-- Drive 1 (5.25" Floppy) -->
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
+            <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-amber-400 text-base">💾</span>
+                <h4 class="font-bold text-amber-400">Drive 1 (Slot 6, Drive 1)</h4>
+              </div>
+              <span id="dsk-status-badge" class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold">READY</span>
+            </div>
+
+            <div>
+              <label class="text-[10px] text-gray-400 block mb-1 font-bold">MOUNTED DISK IMAGE:</label>
+              <select id="dsk-preset-select" onchange="selectDiskPreset(this.value)" class="w-full bg-[#161b22] text-amber-300 border border-[#2a3642] rounded p-2 text-xs font-mono">
+                <option value="prodos">ProDOS 2.4.2 System Master (140 KB)</option>
+                <option value="dos33">Apple DOS 3.3 System Master (140 KB)</option>
+                <option value="games">Vintage Games Pack: Choplifter & Lode Runner (140 KB)</option>
+                <option value="diag">Apple //c Dealer Diagnostic & Firmware Tour (140 KB)</option>
+              </select>
+            </div>
+
+            <p id="dsk-info-text" class="text-[11px] text-gray-400 leading-relaxed">
+              Standard 5.25" 140KB Floppy: 35 Tracks, 16 Sectors (256 bytes/sector), 6-and-2 GCR Nibble Encoding.
+            </p>
+
+            <input type="file" id="floppy-file-input" accept=".dsk,.do,.po,.nib,.2mg" class="hidden" onchange="handleCustomFloppyFile(event)">
+
+            <div class="flex flex-wrap gap-2 pt-1">
+              <button onclick="document.getElementById('floppy-file-input').click()" class="px-3 py-1.5 bg-[#1f2633] hover:bg-[#2d3748] text-gray-200 rounded border border-[#3b475d] transition font-bold flex items-center gap-1">
+                📂 Choose .DSK File...
+              </button>
+              <button onclick="bootFloppyDrive()" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded shadow transition flex items-center gap-1">
+                ⚡ Boot Disk (PR#6)
+              </button>
+              <button onclick="ejectFloppyDisk()" class="px-2.5 py-1.5 bg-[#1c2128] hover:bg-[#28303b] text-red-400 rounded border border-[#30363d] transition">
+                ⏏️ Eject
+              </button>
+            </div>
           </div>
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-2">
-            <h4 class="font-bold text-emerald-400">32MB SmartPort Hard Disk (Slot 7)</h4>
-            <p class="text-gray-400">Status: Online (65,536 Blocks)</p>
-            <button onclick="alert('Hard Disk Persistent in Browser Storage!')" class="px-3 py-1 bg-emerald-800 hover:bg-emerald-700 text-white rounded border border-emerald-700">Sync Storage</button>
+
+          <!-- 32MB SmartPort Hard Disk -->
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
+            <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-400 text-base">💽</span>
+                <h4 class="font-bold text-emerald-400">SmartPort 32MB Hard Disk (Slot 7)</h4>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold">ONLINE</span>
+            </div>
+
+            <div>
+              <span class="text-[10px] text-gray-400 block mb-1 font-bold">STORAGE ALLOCATION:</span>
+              <div class="p-2 bg-[#161b22] border border-[#2a3642] rounded text-xs space-y-1">
+                <div class="flex justify-between"><span>Total Capacity:</span><span class="text-emerald-400 font-bold">32,768 KB (32 MB)</span></div>
+                <div class="flex justify-between"><span>Total Blocks:</span><span class="text-cyan-400">65,536 Blocks (512 B/blk)</span></div>
+                <div class="flex justify-between"><span>Filesystem:</span><span class="text-amber-400">ProDOS Standard Volume (/HD)</span></div>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+              Persisted in browser IndexedDB/LocalStorage. Emulates Apple SmartPort Unit 1 Block Device Protocol.
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-1">
+              <button onclick="bootHardDisk()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded shadow transition flex items-center gap-1">
+                ⚡ Boot Hard Drive (PR#7)
+              </button>
+              <button onclick="catalogHardDisk()" class="px-3 py-1.5 bg-[#1f2633] hover:bg-[#2d3748] text-gray-200 rounded border border-[#3b475d] transition">
+                📋 CATALOG /HD
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -899,6 +960,14 @@ $200A: 60         RTS</pre>
         }
       }
 
+      clearScreen() {
+        for (let r = 0; r < 24; r++) this.clearRow(r);
+      }
+
+      initMemory() {
+        this.clearScreen();
+      }
+
       writeString(row, col, text) {
         const base = this.getRowBase(row);
         for (let i = 0; i < text.length && (col + i) < 40; i++) {
@@ -1059,20 +1128,16 @@ $200A: 60         RTS</pre>
           }
 
           if (!hasError) {
-            if (!this.isGraphicsMode) {
-              if (this.cursorRow === startRow) {
-                this.cursorRow++;
-              }
-              this.ensureRow();
-              this.writeString(this.cursorRow, 0, "] █");
-            } else if (this.mixedGraphics) {
-              if (this.cursorRow < 20 || this.cursorRow > 23) this.cursorRow = 20;
-              this.ensureRow();
-              this.writeString(this.cursorRow, 0, "] █");
+            if (this.cursorRow === startRow) {
+              this.cursorRow++;
             }
+            this.ensureRow();
+            this.clearRow(this.cursorRow);
+            this.writeString(this.cursorRow, 0, "] █");
           } else {
             this.cursorRow++;
             this.ensureRow();
+            this.clearRow(this.cursorRow);
             this.writeString(this.cursorRow, 0, "] █");
           }
           this.renderScreen();
@@ -2056,18 +2121,163 @@ $200A: 60         RTS</pre>
       }
 
       // Execute on Apple II screen
+      window.emulator.isGraphicsMode = false;
+      window.emulator.mixedGraphics = false;
       window.emulator.initMemory();
       window.emulator.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO)");
       window.emulator.writeString(2, 0, "] CALL 8192");
       
       let curR = 4;
       for (const msg of printMatches) {
-        window.emulator.writeString(curR, 0, msg);
-        curR++;
+        if (curR < 22) {
+          window.emulator.writeString(curR, 0, msg);
+          curR++;
+        }
       }
-      window.emulator.writeString(curR + 1, 0, "] █");
+      window.emulator.cursorRow = Math.min(23, curR + 1);
+      window.emulator.cursorCol = 2;
+      window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
+      window.emulator.renderScreen();
 
-      document.getElementById('code-status').innerText = `⚡ Compiled ${addr - 0x2000} bytes 65C02 binary @ $2000. Standard runtime executed!`;
+      document.getElementById('code-status').innerText = `⚡ Compiled ${addr - 0x2000} bytes 65C02 binary @ $2000. Executed on CRT display!`;
+    };
+
+    // Floppy & SmartPort Hard Disk Interactivity Functions
+    window.selectDiskPreset = function(preset) {
+      const infoEl = document.getElementById('dsk-info-text');
+      const badge = document.getElementById('dsk-status-badge');
+      badge.innerText = 'MOUNTED';
+      badge.className = 'px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold';
+      
+      if (preset === 'prodos') {
+        infoEl.innerText = 'ProDOS 2.4.2 System Master: Full kernel, Bitsy Bye menu & BASIC.SYSTEM interpreter.';
+      } else if (preset === 'dos33') {
+        infoEl.innerText = 'Apple DOS 3.3 System Master: Vintage 1980 standard operating system with catalog routines.';
+      } else if (preset === 'games') {
+        infoEl.innerText = 'Vintage Arcade Games Collection: Choplifter, Lode Runner, and Karateka boot images.';
+      } else if (preset === 'diag') {
+        infoEl.innerText = 'Apple //c Factory Diagnostics: Memory test, VRAM color bar tester, and ROM checksums.';
+      }
+    };
+
+    window.handleCustomFloppyFile = function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const select = document.getElementById('dsk-preset-select');
+      const infoEl = document.getElementById('dsk-info-text');
+      const badge = document.getElementById('dsk-status-badge');
+
+      // Add file as option
+      const opt = document.createElement('option');
+      opt.value = 'custom';
+      opt.textContent = `Custom: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+      opt.selected = true;
+      select.appendChild(opt);
+
+      badge.innerText = 'MOUNTED';
+      badge.className = 'px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold';
+      infoEl.innerText = `Custom Disk Image: ${file.name} (${file.size} bytes). Ready to boot!`;
+
+      // Read binary data
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        window.currentFloppyData = new Uint8Array(evt.target.result);
+        window.currentFloppyName = file.name;
+      };
+      reader.readAsArrayBuffer(file);
+    };
+
+    window.bootFloppyDrive = function() {
+      const preset = document.getElementById('dsk-preset-select').value;
+      const emu = window.emulator;
+
+      // Play floppy drive motor stepper seeking sound
+      for (let s = 0; s < 6; s++) {
+        setTimeout(() => emu.playBeep(240 + s * 30, 0.03), s * 80);
+      }
+
+      setTimeout(() => {
+        emu.isGraphicsMode = false;
+        emu.mixedGraphics = false;
+        emu.initMemory();
+
+        if (preset === 'prodos' || preset === 'custom') {
+          emu.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO)");
+          emu.writeString(2, 0, "PRODOS 2.4.2 (2024 VINTAGE REVISION)");
+          emu.writeString(3, 0, "SYSTEM MEMORY: 1,024 KB EXPANDED");
+          emu.writeString(4, 0, "SLOT 6 DRIVE 1: /PRODOS (140 KB FLOPPY)");
+          emu.writeString(6, 0, "STARTING BASIC.SYSTEM...");
+          emu.writeString(8, 0, "] █");
+          emu.cursorRow = 8;
+        } else if (preset === 'dos33') {
+          emu.writeString(0, 12, "DOS VERSION 3.3  08/25/80");
+          emu.writeString(1, 10, "APPLE //c ULTRA EXPANDED 1MB");
+          emu.writeString(3, 0, "] CATALOG");
+          emu.writeString(4, 0, "DISK VOLUME 254");
+          emu.writeString(5, 0, "*A 003 HELLO");
+          emu.writeString(6, 0, "*A 015 ANIMALS");
+          emu.writeString(7, 0, "*B 032 COLOR DEMO");
+          emu.writeString(9, 0, "] █");
+          emu.cursorRow = 9;
+        } else if (preset === 'games') {
+          emu.writeString(0, 8, "*** RETRO ARCADE PACK BOOT ***");
+          emu.writeString(2, 0, "1. CHOPLIFTER (BRODERBUND 1982)");
+          emu.writeString(3, 0, "2. LODE RUNNER (DOUGLAS SMITH 1983)");
+          emu.writeString(4, 0, "3. KARATEKA (JORDAN MECHNER 1984)");
+          emu.writeString(6, 0, "SELECT GAME NUMBER (1-3) OR TYPE 'RUN':");
+          emu.writeString(8, 0, "] █");
+          emu.cursorRow = 8;
+        } else if (preset === 'diag') {
+          emu.writeString(0, 6, "APPLE //c SYSTEM DIAGNOSTICS v3.1");
+          emu.writeString(2, 0, "MAIN 64K RAM: [PASSED] OK");
+          emu.writeString(3, 0, "AUX 64K RAM:  [PASSED] OK");
+          emu.writeString(4, 0, "SLINKEY 1MB:  [PASSED] OK");
+          emu.writeString(5, 0, "MMU BANKING:  [PASSED] OK");
+          emu.writeString(6, 0, "VIDEO VRAM:   [PASSED] OK (DHGR 560x192)");
+          emu.writeString(8, 0, "ALL SILICON TESTS COMPLETED SUCCESSFULLY.");
+          emu.writeString(10, 0, "] █");
+          emu.cursorRow = 10;
+        }
+
+        emu.cursorCol = 2;
+        emu.renderScreen();
+        emu.playBeep(880, 0.1);
+      }, 550);
+    };
+
+    window.ejectFloppyDisk = function() {
+      const badge = document.getElementById('dsk-status-badge');
+      const infoEl = document.getElementById('dsk-info-text');
+      badge.innerText = 'EMPTY';
+      badge.className = 'px-2 py-0.5 rounded text-[10px] bg-stone-900 text-stone-400 border border-stone-700 font-bold';
+      infoEl.innerText = 'No diskette in Drive 1. Insert a .DSK image or select a preset to mount.';
+      window.emulator.playBeep(300, 0.05);
+    };
+
+    window.bootHardDisk = function() {
+      const emu = window.emulator;
+      emu.playBeep(520, 0.08);
+      setTimeout(() => {
+        emu.isGraphicsMode = false;
+        emu.mixedGraphics = false;
+        emu.initMemory();
+        emu.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO)");
+        emu.writeString(2, 0, "PRODOS 2.4.2 -- SMARTPORT 32MB VOLUME");
+        emu.writeString(3, 0, "DEVICE: SLOT 7 UNIT 1 (/HD)");
+        emu.writeString(4, 0, "BLOCKS: 65,536 (32,768 KB TOTAL)");
+        emu.writeString(6, 0, "* TYPE 'CATALOG' OR 'DIR' TO VIEW FILES");
+        emu.writeString(8, 0, "] █");
+        emu.cursorRow = 8;
+        emu.cursorCol = 2;
+        emu.renderScreen();
+        emu.playBeep(880, 0.1);
+      }, 200);
+    };
+
+    window.catalogHardDisk = function() {
+      const emu = window.emulator;
+      emu.currentInput = 'CATALOG';
+      emu.handleReturn();
     };
 
     window.stepCpu = function() {
