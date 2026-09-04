@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+  <meta name="author" content="Ian Ohlander">
+  <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
+  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apple //c Ultra — Enhanced 65C02 Web Computer</title>
@@ -812,6 +816,8 @@ $2453: 60            RTS</pre>
 
   <footer class="mt-12 text-stone-500 text-xs font-mono text-center max-w-4xl border-t border-stone-800 pt-4 w-full">
     Apple //c Ultra Standalone Web Workstation • 65C02 CMOS Emulation • Double Hi-Res NTSC Graphics • Web Audio Mockingboard
+  
+    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
 
   <!-- Complete Standalone Emulator Runtime JavaScript -->
@@ -1403,6 +1409,14 @@ $2453: 60            RTS</pre>
       }
 
       initMemory() {
+        // Hardware Memory & ROM Signature Watermark ($03F0 & $FFF0)
+        const wm = "COPYRIGHT (C) 2026 IAN OHLANDER. APPLE //C ULTRA ARCHITECTURE.";
+        for (let i = 0; i < wm.length && (0x03f0 + i) < 0x0400; i++) {
+          this.ram[0x03f0 + i] = wm.charCodeAt(i) | 0x80;
+        }
+        for (let i = 0; i < 16 && (0xfff0 + i) < 0x10000; i++) {
+          this.ram[0xfff0 + i] = wm.charCodeAt(i) & 0x7f;
+        }
         this.clearScreen();
       }
 

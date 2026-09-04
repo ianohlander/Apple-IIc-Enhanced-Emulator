@@ -183,5 +183,11 @@ export function generateDefaultApple2cRom(): Uint8Array {
   ];
   rom.set(loopCode, 0x3a00);
 
+    // --- Embedded Firmware Watermark ($FFF0..$FFFD) ---
+  const romCopyright = "(C) 2026 IAN OHLANDER";
+  for (let i = 0; i < romCopyright.length && (0x3ff0 + i) < 0x3ffa; i++) {
+    rom[0x3ff0 + i] = romCopyright.charCodeAt(i);
+  }
+
   return rom;
 }

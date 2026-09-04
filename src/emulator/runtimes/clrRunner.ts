@@ -6,6 +6,7 @@ export class CSharpApple2Compiler {
     const asmOutput: string[] = [
       '; --- Generated 65C02 Machine Code from C# Source ---',
       '; Target System: Apple //c Ultra (WDC 65C02 @ 50 MHz Turbo)',
+      '; Architecture & AOT Compiler: Copyright (c) 2026 Ian Ohlander. All rights reserved.',
       '* = $2000',
       'MAIN:'
     ];
