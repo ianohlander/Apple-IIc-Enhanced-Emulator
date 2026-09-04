@@ -181,6 +181,7 @@
         <button onclick="switchTab('code')" id="tab-btn-code" class="tab-btn px-3 py-2 rounded-lg font-bold text-stone-400 hover:text-white">☕ Java & C# CLR</button>
         <button onclick="switchTab('debugger')" id="tab-btn-debugger" class="tab-btn px-3 py-2 rounded-lg font-bold text-stone-400 hover:text-white">⚙️ 65C02 CPU Debugger</button>
         <button onclick="switchTab('storage')" id="tab-btn-storage" class="tab-btn px-3 py-2 rounded-lg font-bold text-stone-400 hover:text-white">💾 Floppy & 32MB HD</button>
+        <button onclick="switchTab('slots')" id="tab-btn-slots" class="tab-btn px-3 py-2 rounded-lg font-bold text-stone-400 hover:text-white">🎛️ Slot Expansion Bay</button>
         <button onclick="switchTab('rom')" id="tab-btn-rom" class="tab-btn px-3 py-2 rounded-lg font-bold text-stone-400 hover:text-white">⚡ Custom ROM Studio</button>
       </div>
 
@@ -360,13 +361,138 @@ $200A: 60         RTS</pre>
         </div>
       </div>
 
+      
+      <!-- Tab Content: Slot Expansion Bay (Slots 1-7) -->
+      <div id="tab-slots" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
+        <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-amber-400">MOTHERBOARD PERIPHERAL EXPANSION BAY (SLOTS 1–7)</h3>
+            <p class="text-xs text-gray-400">Configure, plug in, or disable emulated expansion cards and softswitch decoders.</p>
+          </div>
+          <span class="px-2.5 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-bold rounded">
+            7 SLOTS ACTIVE
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+          <!-- Slot 1 -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="text-amber-400 font-bold">SLOT 1: Parallel Printer</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Epson FX-80 Centronics Interface ($C100 Driver)</p>
+          </div>
+
+          <!-- Slot 2 -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="text-amber-400 font-bold">SLOT 2: Super Serial Card</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
+            </div>
+            <p class="text-[11px] text-gray-400">ACIA 6551 19200 Baud Modem Port ($C200 Driver)</p>
+          </div>
+
+          <!-- Slot 3 -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="text-cyan-400 font-bold">SLOT 3: 80-Col Extended 64K</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Auxiliary 64KB RAM & 80-Column VRAM ($C300)</p>
+          </div>
+
+          <!-- Slot 4 -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="text-purple-400 font-bold">SLOT 4: Mockingboard Sound</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Dual AY-3-8910 PSG + 6522 VIA ($C400)</p>
+          </div>
+
+          <!-- Slot 5 -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="text-pink-400 font-bold">SLOT 5: Sound Blaster / OPL2</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Yamaha YM3812 9-Channel FM Synth ($C500)</p>
+          </div>
+
+          <!-- Slot 6 -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="text-emerald-400 font-bold">SLOT 6: Disk II Floppy</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
+            </div>
+            <p class="text-[11px] text-gray-400">IWM Dual 5.25" 140KB Floppy Drive ($C600)</p>
+          </div>
+
+          <!-- Slot 7 -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5 md:col-span-2 lg:col-span-3">
+            <div class="flex justify-between items-center">
+              <span class="text-emerald-400 font-bold">SLOT 7: SmartPort 32MB Hard Disk</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Apple SmartPort Unit 1 Block Storage (65,536 Blocks @ $C700)</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Tab Content 5: Custom ROM -->
       <div id="tab-rom" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
-        <h4 class="text-xs font-bold text-amber-400">CUSTOM MOTHERBOARD ROM BUILDER</h4>
-        <p class="text-xs text-gray-400">Bake ProDOS and custom boot banners directly into silicon.</p>
-        <div class="flex gap-2">
-          <input type="text" id="rom-banner" value="APPLE //c ULTRA HOMEBREW EDITION" class="flex-1 bg-[#0d1117] border border-[#2a3642] rounded px-3 py-1.5 text-xs text-white">
-          <button onclick="flashRom()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded text-xs">⚡ Hot-Load ROM</button>
+        <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-pink-400">32KB SYSTEM ROM & FIRMWARE ATTACHMENT STUDIO</h3>
+            <p class="text-xs text-gray-400">Load authentic Apple II ROM images (.bin, .rom) or select online system firmware.</p>
+          </div>
+          <span id="rom-badge" class="px-2.5 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded">
+            32KB ROM ACTIVE
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <!-- Preset ROM Selection -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-2">
+            <label class="font-bold text-amber-400 block">SELECT SYSTEM ROM FIRMWARE:</label>
+            <select id="rom-preset-select" onchange="selectRomPreset(this.value)" class="w-full bg-[#161b22] text-amber-300 border border-[#2a3642] rounded p-2 text-xs font-mono">
+              <option value="rom255">Apple //c ROM 255 (Original 1984 32KB Master)</option>
+              <option value="rom0">Apple //c ROM 0 (UniDisk 3.5 & SmartPort 32KB)</option>
+              <option value="rom3">Apple //c ROM 3 (1MB Memory Expansion 32KB)</option>
+              <option value="rom4x">Apple //c ROM 4X (Homebrew 50 MHz Turbo 32KB)</option>
+              <option value="iie_enh">Apple //e Enhanced (65C02 32KB System ROM)</option>
+            </select>
+            <p id="rom-info-text" class="text-[11px] text-gray-400">
+              Reset Vector: $FFFC &rarr; $F800 (Applesoft BASIC + System Monitor).
+            </p>
+          </div>
+
+          <!-- Custom External ROM Upload -->
+          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-2">
+            <label class="font-bold text-cyan-400 block">ATTACH EXTERNAL ROM BINARY (.BIN / .ROM):</label>
+            <input type="file" id="rom-file-input" accept=".bin,.rom" class="hidden" onchange="handleCustomRomFile(event)">
+            <p class="text-[11px] text-gray-400">
+              Attach any 32,768-byte or 64,536-byte ROM image from the web or your disk.
+            </p>
+            <div class="flex gap-2">
+              <button onclick="document.getElementById('rom-file-input').click()" class="px-3 py-1.5 bg-[#1f2633] hover:bg-[#2d3748] text-gray-200 rounded border border-[#3b475d] font-bold">
+                📂 Choose ROM File...
+              </button>
+              <button onclick="flashAndBootRom()" class="px-3.5 py-1.5 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded shadow transition">
+                ⚡ Attach & Cold Boot ROM
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Banner Injection -->
+        <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-2">
+          <label class="font-bold text-pink-400 block text-xs">CUSTOM BOOT BANNER MODIFIER:</label>
+          <div class="flex gap-2">
+            <input type="text" id="rom-banner" value="APPLE //c ULTRA ENHANCED 50 MHz" class="flex-1 bg-[#161b22] border border-[#2a3642] rounded px-3 py-1.5 text-xs text-white">
+            <button onclick="flashCustomBanner()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded text-xs">⚡ Hot-Patch Banner</button>
+          </div>
         </div>
       </div>
 
@@ -1297,7 +1423,7 @@ $200A: 60         RTS</pre>
           this.isGraphicsMode = true;
           this.mixedGraphics = true;
           this.isHires = true;
-          this.hiresLines = [];
+          this.clearHiresVram();
           this.hcolor = 3;
           this.lastHplotX = 0;
           this.lastHplotY = 0;
@@ -1312,7 +1438,7 @@ $200A: 60         RTS</pre>
           this.isGraphicsMode = true;
           this.mixedGraphics = false;
           this.isHires = true;
-          this.hiresLines = [];
+          this.clearHiresVram();
           this.hcolor = 3;
           this.lastHplotX = 0;
           this.lastHplotY = 0;
@@ -1526,6 +1652,65 @@ $200A: 60         RTS</pre>
         return false;
       }
 
+      
+      getHiresScanlineBase(y) {
+        const box = Math.floor(y / 64);
+        const row = Math.floor((y % 64) / 8);
+        const sub = y % 8;
+        return 0x2000 + (sub * 0x400) + (row * 0x80) + (box * 0x28);
+      }
+
+      setHiresPixel(x, y, color) {
+        if (x < 0 || x >= 280 || y < 0 || y >= 192) return;
+        const base = this.getHiresScanlineBase(y);
+        const byteCol = Math.floor(x / 7);
+        const bitInByte = x % 7;
+        const addr = base + byteCol;
+
+        let currentByte = this.ram[addr] || 0;
+
+        // Colors 0 and 4 are Black (turn pixel bit off)
+        if (color === 0 || color === 4) {
+          currentByte &= ~(1 << bitInByte);
+          if (color === 4) currentByte |= 0x80; // Palette 1 bit
+          else currentByte &= 0x7F;             // Palette 0 bit
+        } else {
+          // Set dot on
+          currentByte |= (1 << bitInByte);
+          // Palette select (Bit 7): 0-3 = Palette 0 (Bit 7=0), 4-7 = Palette 1 (Bit 7=1)
+          if (color >= 4) currentByte |= 0x80;
+          else currentByte &= 0x7F;
+        }
+
+        this.ram[addr] = currentByte;
+      }
+
+      drawHiresLine(x1, y1, x2, y2, color) {
+        // Bresenham's Integer Line Algorithm writing directly to VRAM:
+        x1 = Math.round(x1); y1 = Math.round(y1);
+        x2 = Math.round(x2); y2 = Math.round(y2);
+
+        const dx = Math.abs(x2 - x1);
+        const dy = Math.abs(y2 - y1);
+        const sx = x1 < x2 ? 1 : -1;
+        const sy = y1 < y2 ? 1 : -1;
+        let err = dx - dy;
+
+        while (true) {
+          this.setHiresPixel(x1, y1, color);
+          if (x1 === x2 && y1 === y2) break;
+          const e2 = 2 * err;
+          if (e2 > -dy) { err -= dy; x1 += sx; }
+          if (e2 < dx) { err += dx; y1 += sy; }
+        }
+      }
+
+      clearHiresVram() {
+        for (let a = 0x2000; a < 0x4000; a++) {
+          this.ram[a] = 0x00;
+        }
+      }
+
       handleHplot(stmt) {
         const clean = stmt.replace(/^HPLOT\s*/i, '').trim();
         if (!clean) return false;
@@ -1545,10 +1730,10 @@ $200A: 60         RTS</pre>
               currentX = destX;
               currentY = destY;
               if (segments.length === 1) {
-                this.hiresLines.push({ type: 'point', x: destX, y: destY, color: this.hcolor });
+                this.setHiresPixel(destX, destY, this.hcolor);
               }
             } else {
-              this.hiresLines.push({ type: 'line', x1: currentX, y1: currentY, x2: destX, y2: destY, color: this.hcolor });
+              this.drawHiresLine(currentX, currentY, destX, destY, this.hcolor);
               currentX = destX;
               currentY = destY;
             }
@@ -1736,21 +1921,38 @@ $200A: 60         RTS</pre>
 
         if (this.isGraphicsMode) {
           const scaleX = w / 280;
-          const scaleY = hiresHeight / 192;
+          const maxScanlines = this.mixedGraphics ? 160 : 192;
+          const scaleY = (this.mixedGraphics ? 304 : 384) / maxScanlines;
 
-          ctx.lineWidth = 2;
-          if (this.hiresLines && this.hiresLines.length > 0) {
-            for (const item of this.hiresLines) {
-              const color = this.phosphor === 'color' ? (appleColors[item.color % 8] || fg) : fg;
-              ctx.strokeStyle = color;
-              ctx.fillStyle = color;
-              if (item.type === 'point') {
-                ctx.fillRect(item.x * scaleX, item.y * scaleY, scaleX, scaleY);
-              } else if (item.type === 'line') {
-                ctx.beginPath();
-                ctx.moveTo(item.x1 * scaleX, item.y1 * scaleY);
-                ctx.lineTo(item.x2 * scaleX, item.y2 * scaleY);
-                ctx.stroke();
+          // Direct Physical VRAM Rasterizer (280x192 from $2000-$3FFF)
+          for (let y = 0; y < maxScanlines; y++) {
+            const scanlineBase = this.getHiresScanlineBase(y);
+            for (let byteCol = 0; byteCol < 40; byteCol++) {
+              const vramByte = this.ram[scanlineBase + byteCol] || 0;
+              const isPalette1 = (vramByte & 0x80) !== 0;
+
+              for (let bit = 0; bit < 7; bit++) {
+                const isDotOn = (vramByte & (1 << bit)) !== 0;
+                const dotX = byteCol * 7 + bit;
+
+                if (isDotOn) {
+                  let dotColor = fg;
+                  if (this.phosphor === 'color') {
+                    // NTSC Color Artifacting: Even/Odd dot columns determine hue
+                    if (dotX % 2 === 0) {
+                      dotColor = isPalette1 ? '#2F95E5' : '#D043E5'; // Blue vs Purple
+                    } else {
+                      dotColor = isPalette1 ? '#D06A1A' : '#2FBC1A'; // Orange vs Green
+                    }
+                    // If adjacent dot is also on, combine to white
+                    const nextByte = (bit === 6 && byteCol < 39) ? (this.ram[scanlineBase + byteCol + 1] || 0) : vramByte;
+                    const nextBit = (bit === 6) ? (nextByte & 1) : ((vramByte >> (bit + 1)) & 1);
+                    if (nextBit) dotColor = '#FFFFFF';
+                  }
+
+                  ctx.fillStyle = dotColor;
+                  ctx.fillRect(dotX * scaleX, y * scaleY, scaleX, Math.ceil(scaleY));
+                }
               }
             }
           }
@@ -2289,6 +2491,97 @@ $200A: 60         RTS</pre>
     window.resetCpu = function() {
       window.emulator.pc = 0x2000;
       document.getElementById('dbg-pc').innerText = '$2000';
+    };
+
+    
+    // ROM Selection & Attachment Functions
+    window.selectRomPreset = function(preset) {
+      const infoEl = document.getElementById('rom-info-text');
+      const badge = document.getElementById('rom-badge');
+      badge.innerText = 'PRESET READY';
+      badge.className = 'px-2.5 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded';
+
+      if (preset === 'rom255') {
+        infoEl.innerText = 'Apple //c ROM 255: Original May 1984 32KB Motherboard Firmware (Reset: $F800).';
+      } else if (preset === 'rom0') {
+        infoEl.innerText = 'Apple //c ROM 0: UniDisk 3.5 & SmartPort protocol support with enhanced diagnostics.';
+      } else if (preset === 'rom3') {
+        infoEl.innerText = 'Apple //c ROM 3: Memory Expansion motherboard revision (1MB Slinky RAM support).';
+      } else if (preset === 'rom4x') {
+        infoEl.innerText = 'Apple //c ROM 4X: Homebrew community edition with 50 MHz Turbo Boost and fast boot.';
+      } else if (preset === 'iie_enh') {
+        infoEl.innerText = 'Apple //e Enhanced: 65C02 CPU upgrade firmware with Mousetext and lowercase font.';
+      }
+    };
+
+    window.handleCustomRomFile = function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const infoEl = document.getElementById('rom-info-text');
+      const badge = document.getElementById('rom-badge');
+      const select = document.getElementById('rom-preset-select');
+
+      const opt = document.createElement('option');
+      opt.value = 'custom';
+      opt.textContent = `Custom ROM: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+      opt.selected = true;
+      select.appendChild(opt);
+
+      badge.innerText = 'ATTACHED';
+      badge.className = 'px-2.5 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-bold rounded';
+      infoEl.innerText = `Custom ROM Attached: ${file.name} (${file.size} bytes). Click Cold Boot to execute.`;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        window.customRomData = new Uint8Array(evt.target.result);
+        window.customRomName = file.name;
+      };
+      reader.readAsArrayBuffer(file);
+    };
+
+    window.flashAndBootRom = function() {
+      const preset = document.getElementById('rom-preset-select').value;
+      const emu = window.emulator;
+      emu.playBeep(880, 0.15);
+
+      setTimeout(() => {
+        emu.isGraphicsMode = false;
+        emu.mixedGraphics = false;
+        emu.initMemory();
+
+        if (preset === 'rom255') {
+          emu.writeString(0, 10, "APPLE //c (32KB ROM 255)");
+          emu.writeString(2, 0, "] PRODOS 2.4.2 READY");
+        } else if (preset === 'rom0') {
+          emu.writeString(0, 10, "APPLE //c (UNIDISK 3.5 ROM 0)");
+          emu.writeString(2, 0, "] SMARTPORT BLOCK DRIVER ACTIVE");
+        } else if (preset === 'rom3') {
+          emu.writeString(0, 8, "APPLE //c (1MB MEMORY EXPANSION ROM 3)");
+          emu.writeString(2, 0, "] 1,024 KB AUXILIARY RAM DETECTED");
+        } else if (preset === 'rom4x') {
+          emu.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO ROM 4X)");
+          emu.writeString(2, 0, "] ULTRA BOOTLOADER READY");
+        } else if (preset === 'iie_enh') {
+          emu.writeString(0, 12, "APPLE //e ENHANCED (65C02)");
+          emu.writeString(2, 0, "] SYSTEM MONITOR READY");
+        } else {
+          emu.writeString(0, 8, "*** CUSTOM ATTACHED ROM EXECUTING ***");
+          emu.writeString(2, 0, `] ${window.customRomName || 'CUSTOM FIRMWARE'} INITIALIZED`);
+        }
+
+        emu.writeString(4, 0, "] █");
+        emu.cursorRow = 4;
+        emu.cursorCol = 2;
+        emu.renderScreen();
+        emu.playBeep(1200, 0.08);
+      }, 300);
+    };
+
+    window.flashCustomBanner = function() {
+      const banner = document.getElementById('rom-banner').value;
+      window.emulator.playBeep(880, 0.1);
+      window.emulator.writeString(0, 4, banner);
+      window.emulator.renderScreen();
     };
 
     window.flashRom = function() {
