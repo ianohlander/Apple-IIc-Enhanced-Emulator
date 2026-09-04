@@ -820,7 +820,26 @@
 ] HCOLOR= 2 : HPLOT 20,40 TO 260,40   <-- Palette 0 (Purple)
 ] HCOLOR= 5 : HPLOT 20,60 TO 260,60   <-- Palette 1 (Orange - Bit 7 high)
 ] HCOLOR= 6 : HPLOT 20,80 TO 260,80   <-- Palette 1 (Blue - Bit 7 high)</code></pre>
+        
+        <!-- Guided Task 2.4 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 2.4</span>
+            <span class="font-bold text-white text-xs">Direct Bit-Level Physical VRAM Poking ($2000–$3FFF)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            Write directly to physical Hi-Res Video RAM at <code>$2000</code> to observe hardware pixel illumination and NTSC color phase shifting without using HPLOT:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] HGR
+] POKE 8192, 127        <-- Sets all 7 dots on Scanline 0, Byte 0 (White 1)
+] POKE 8193, 255        <-- Sets all 7 dots + Bit 7 on Scanline 0, Byte 1 (White 2 - 180° delay)
+] POKE 8194, 85         <-- Sets alternating dots (01010101) -> Pure Green
+] POKE 8195, 170        <-- Sets alternating dots + Bit 7 (10101010) -> Pure Orange</code></pre>
+          <p class="text-[11px] text-gray-400">
+            <strong>Verification:</strong> The physical VRAM rasterizer decodes the raw poked bytes immediately on the top scanline of the CRT monitor!
+          </p>
         </div>
+
       </div>
     </section>
 
@@ -1260,6 +1279,104 @@ COLD_BOOT:
             <li>Inspect Java string output and looping structures.</li>
             <li>Click <strong>⚡ Compile & Run on Apple II</strong> and verify JVM bytecode lowering to native 65C02 binary!</li>
           </ol>
+        </div>
+      </div>
+    </section>
+
+  
+    <!-- CHAPTER 7: 7-Slot Peripheral Expansion Bay & Slot Driver Architecture -->
+    <section id="ch7" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold text-lg flex items-center justify-center border border-emerald-500/40">7</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Chapter 7: Motherboard 7-Slot Peripheral Expansion Architecture</h3>
+          <span class="text-xs font-mono text-gray-400">Slot I/O space ($C100–$C7FF), peripheral ROM drivers, and hardware card softswitches</span>
+        </div>
+      </div>
+
+      <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
+        <h4 class="text-lg font-bold text-emerald-400">7.1 Peripheral Slot Memory Mapping Matrix ($C100–$C7FF)</h4>
+        <p class="text-gray-300 leading-relaxed text-xs">
+          Each peripheral slot on the Apple II motherboard is assigned a dedicated 256-byte ROM space (<code>$C000 + (Slot &times; $100)</code>) and 16 bytes of device I/O softswitches (<code>$C080 + (Slot &times; $10)</code>):
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="table-tech">
+            <thead>
+              <tr>
+                <th>Peripheral Slot</th>
+                <th>Driver ROM ($256B)</th>
+                <th>I/O Softswitches ($16B)</th>
+                <th>Emulated Card Hardware</th>
+                <th>Firmware Entry Point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="text-amber-400">Slot 1</strong></td>
+                <td><code>$C100–$C1FF</code></td>
+                <td><code>$C090–$C09F</code></td>
+                <td>Epson FX-80 Parallel Printer Interface</td>
+                <td><code>PR#1</code> (JSR $C100)</td>
+              </tr>
+              <tr>
+                <td><strong class="text-amber-400">Slot 2</strong></td>
+                <td><code>$C200–$C2FF</code></td>
+                <td><code>$C0A0–$C0AF</code></td>
+                <td>Super Serial Card (ACIA 6551 19.2K Baud)</td>
+                <td><code>IN#2 / PR#2</code> (JSR $C200)</td>
+              </tr>
+              <tr>
+                <td><strong class="text-cyan-400">Slot 3</strong></td>
+                <td><code>$C300–$C3FF</code></td>
+                <td><code>$C0B0–$C0BF</code></td>
+                <td>80-Column Auxiliary 64K Extended Video</td>
+                <td><code>PR#3</code> (JSR $C300)</td>
+              </tr>
+              <tr>
+                <td><strong class="text-purple-400">Slot 4</strong></td>
+                <td><code>$C400–$C4FF</code></td>
+                <td><code>$C0C0–$C0CF</code></td>
+                <td>Mockingboard PSG (Dual AY-3-8910 + 6522 VIA)</td>
+                <td><code>CALL 50176</code> ($C400)</td>
+              </tr>
+              <tr>
+                <td><strong class="text-pink-400">Slot 5</strong></td>
+                <td><code>$C500–$C5FF</code></td>
+                <td><code>$C0D0–$C0DF</code></td>
+                <td>Sound Blaster / OPL2 FM Synth (Yamaha YM3812)</td>
+                <td><code>CALL 50432</code> ($C500)</td>
+              </tr>
+              <tr>
+                <td><strong class="text-emerald-400">Slot 6</strong></td>
+                <td><code>$C600–$C6FF</code></td>
+                <td><code>$C0E0–$C0EF</code></td>
+                <td>Disk II 5.25" Dual Floppy Controller (IWM)</td>
+                <td><code>PR#6</code> (JSR $C600 - Boot Floppy)</td>
+              </tr>
+              <tr>
+                <td><strong class="text-emerald-400">Slot 7</strong></td>
+                <td><code>$C700–$C7FF</code></td>
+                <td><code>$C0F0–$C0FF</code></td>
+                <td>SmartPort 32MB Hard Disk Block Controller</td>
+                <td><code>PR#7</code> (JSR $C700 - Boot HD)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Guided Task 7.1 -->
+        <div class="task-card space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">LAB EXERCISE 7.1</span>
+            <span class="font-bold text-white text-xs">Booting Peripheral Slot Devices (PR#6 Floppy & PR#7 SmartPort HD)</span>
+          </div>
+          <p class="text-xs text-gray-300">
+            In the live emulator, execute hardware boot jumps directly from the immediate command prompt:
+          </p>
+          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] PR#6    <-- Jumps to $C600: Boots Drive 1 5.25" Floppy Diskette!
+] PR#7    <-- Jumps to $C700: Boots 32MB SmartPort Hard Disk Volume (/HD)!
+] CATALOG <-- Lists 32MB ProDOS Volume directory files</code></pre>
         </div>
       </div>
     </section>

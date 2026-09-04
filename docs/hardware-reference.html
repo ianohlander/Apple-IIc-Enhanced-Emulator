@@ -126,6 +126,43 @@ LOOP: LDA BUFFER,X
       BNE LOOP</code></pre>
     </section>
 
+  
+    <!-- Section: 7-Slot Peripheral Expansion Architecture -->
+    <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <span class="text-amber-400">🎛️</span> Motherboard Peripheral Expansion Architecture (Slots 1–7)
+      </h3>
+      <p class="text-xs text-gray-400 leading-relaxed">
+        The Apple //c Ultra implements an extensible peripheral slot architecture mapping Slots 1–7 to standard 256-byte firmware driver spaces ($C100–$C7FF) and 16-byte softswitch decoders ($C090–$C0FF).
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs font-mono">
+        <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
+          <span class="text-amber-400 font-bold block">Slot 1 ($C100)</span>
+          <span class="text-gray-400">Epson FX-80 Parallel Printer Interface</span>
+        </div>
+        <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
+          <span class="text-amber-400 font-bold block">Slot 2 ($C200)</span>
+          <span class="text-gray-400">Super Serial Card (ACIA 6551)</span>
+        </div>
+        <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
+          <span class="text-cyan-400 font-bold block">Slot 3 ($C300)</span>
+          <span class="text-gray-400">80-Column Aux 64K Extended Video</span>
+        </div>
+        <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
+          <span class="text-purple-400 font-bold block">Slot 4 ($C400)</span>
+          <span class="text-gray-400">Mockingboard Dual AY-3-8910 Sound</span>
+        </div>
+        <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
+          <span class="text-pink-400 font-bold block">Slot 5 ($C500)</span>
+          <span class="text-gray-400">Sound Blaster / OPL2 FM Synthesis</span>
+        </div>
+        <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
+          <span class="text-emerald-400 font-bold block">Slot 6 ($C600)</span>
+          <span class="text-gray-400">Disk II Dual 5.25" Floppy Controller</span>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">

@@ -119,6 +119,25 @@
       </ul>
     </section>
 
+  
+    <!-- Section: Physical VRAM Bit-Level Framebuffering & Color Encoding -->
+    <section class="space-y-4 pt-6 border-t border-[#252f42]">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">VRAM BUFFER</span>
+        <h3 class="text-lg font-bold text-white">Physical 8KB Video RAM Bit-Level Framebuffering ($2000–$3FFF)</h3>
+      </div>
+      <p class="text-gray-300 text-xs leading-relaxed">
+        All Hi-Res graphics rendering in the Apple //c Ultra operates on physical byte arrays in VRAM. Every byte represents 7 horizontal screen dots (Bits 0–6) plus Bit 7 ($180^\circ$ NTSC color subcarrier delay):
+      </p>
+
+      <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-xs font-mono text-gray-300 space-y-1">
+        <div><strong class="text-amber-400">Byte Address:</strong> <code>Base(Y) + floor(X / 7)</code></div>
+        <div><strong class="text-cyan-400">Bit Mask:</strong> <code>1 &lt;&lt; (X % 7)</code></div>
+        <div><strong class="text-emerald-400">HCOLOR 0 / 4 (Black):</strong> Clears dot bit (turns electron beam OFF in all phosphors).</div>
+        <div><strong class="text-pink-400">HCOLOR 1 / 5 (Green / Orange):</strong> Sets dot bit (Bit 7 = 0 for Green, Bit 7 = 1 for Orange).</div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
