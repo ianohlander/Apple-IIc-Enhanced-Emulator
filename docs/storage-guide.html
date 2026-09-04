@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+  <meta name="author" content="Ian Ohlander">
+  <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
+  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra — Storage Architecture & SmartPort 32MB Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .font-crt { font-family: 'VT323', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    pre code { font-family: 'Space Mono', monospace; font-size: 0.8rem; line-height: 1.45; }
+    .task-card {
+      background: #0d121c;
+      border-left: 4px solid #10b981;
+      border-radius: 0 0.5rem 0.5rem 0;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+    .diagram-panel {
+      background: #0c1017;
+      border: 1px solid #252d3d;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .table-tech {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+    }
+    .table-tech th {
+      background: #161f2e;
+      color: #34d399;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 2px solid #2d3748;
+    }
+    .table-tech td {
+      padding: 0.55rem 0.8rem;
+      border-bottom: 1px solid #1a2230;
+      color: #cbd5e1;
+    }
+    .table-tech tr:hover {
+      background: #111827;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Main Nav Header -->
+  <header class="bg-[#10141d] border-b border-[#212836] px-6 py-4 flex flex-wrap items-center justify-between shadow-lg gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow text-black font-bold text-xl">
+        💾
+      </div>
+      <div>
+        <span class="text-[10px] font-mono text-emerald-400 font-bold tracking-widest uppercase">Storage Subsystem Reference</span>
+        <h1 class="text-base font-extrabold text-white">Apple //c Ultra Storage Architecture & SmartPort 32MB Guide</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded shadow transition">
+        ⚡ Launch Live Emulator
+      </a>
+      <a href="comprehensive-ultra-tutorial.html#ch8" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded transition font-bold">
+        📖 Chapter 8 Labs
+      </a>
+      <a href="developer/storage-floppy-and-smartport.html" class="px-3 py-1.5 bg-[#1b2230] hover:bg-[#252f42] text-cyan-400 rounded transition border border-[#2d384e]">
+        Developer Module 05
+      </a>
+      <a href="index.html" class="px-3 py-1.5 bg-[#1b2230] hover:bg-[#252f42] text-gray-300 rounded transition border border-[#2d384e]">
+        Docs Hub
+      </a>
+    </div>
+  </header>
+
+  <!-- Content Container -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 space-y-16 text-sm">
+
+    <!-- Hero Title Banner -->
+    <div class="bg-gradient-to-br from-[#0c1f17] via-[#10241c] to-[#162f25] border border-[#1b4e37] rounded-2xl p-8 md:p-10 shadow-2xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <span class="px-3 py-1 bg-emerald-500/15 border border-emerald-500/40 rounded-full text-emerald-400 text-xs font-mono font-bold">
+          OFFICIAL STORAGE ARCHITECTURE MANUAL
+        </span>
+        <span class="text-xs font-mono text-gray-400">Disk II 6-and-2 GCR • SmartPort 32MB HD (/HD) • Slinky 1MB RAM Disk • ProDOS MLI $C700</span>
+      </div>
+
+      <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+        Apple //c Ultra Storage Architecture & Guide
+      </h2>
+      <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
+        This definitive guide covers all physical and virtual storage tiers supported by the Apple //c Ultra: from Woz's legendary <strong>Disk II 140KB 5.25" Floppy Drive</strong> with 6-and-2 GCR nibblization, to the <strong>SmartPort 32 Megabyte virtual hard disk volume (/HD)</strong> with 65,536 logical blocks, the <strong>Slinky 1MB banked RAM disk</strong>, and modern managed file persistence in <strong>C# .NET</strong> and <strong>Java 17</strong>.
+      </p>
+
+      <!-- Quick Navigation Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-6 border-t border-[#1b4e37] font-mono text-xs">
+        <a href="#floppy-sec" class="p-3 bg-[#08150f] hover:bg-[#0d2218] border border-[#1b432a] rounded-lg transition text-amber-400 font-bold flex justify-between items-center">
+          <span>1. Disk II Floppy (GCR)</span>
+          <span>&rarr;</span>
+        </a>
+        <a href="#smartport-sec" class="p-3 bg-[#08150f] hover:bg-[#0d2218] border border-[#1b432a] rounded-lg transition text-cyan-400 font-bold flex justify-between items-center">
+          <span>2. SmartPort 32MB HD</span>
+          <span>&rarr;</span>
+        </a>
+        <a href="#slinky-sec" class="p-3 bg-[#08150f] hover:bg-[#0d2218] border border-[#1b432a] rounded-lg transition text-purple-400 font-bold flex justify-between items-center">
+          <span>3. Slinky 1MB RAM Disk</span>
+          <span>&rarr;</span>
+        </a>
+        <a href="#managed-sec" class="p-3 bg-[#08150f] hover:bg-[#0d2218] border border-[#1b432a] rounded-lg transition text-emerald-400 font-bold flex justify-between items-center">
+          <span>4. C# & Java File APIs</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- VISUAL DIAGRAM: Complete Storage Pipeline -->
+    <div class="diagram-panel space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#252d3d] pb-2">
+        <span class="font-bold text-emerald-400 text-sm">📐 Figure 1: Unified Apple //c Ultra Storage Pipeline</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Hardware & Protocol Architecture</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        Physical to logical storage hierarchy: High-Level Language APIs &rarr; ProDOS MLI ($BF00 / $C700) &rarr; Hardware Controllers &rarr; Persistent Storage:
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 880 200" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <!-- Top Row: High Level APIs -->
+          <rect x="25" y="20" width="830" height="40" rx="4" fill="#141e2e" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="440" y="45" fill="#bae6fd" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Managed Application Code: System.IO.File (C#) • java.io.File (Java) • AppleStorage</text>
+
+          <!-- Middle Row: ProDOS MLI -->
+          <rect x="25" y="80" width="830" height="40" rx="4" fill="#0f291e" stroke="#10b981" stroke-width="1.5" />
+          <text x="440" y="105" fill="#a7f3d0" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">ProDOS 2.4.2 MLI System Dispatcher ($BF00) &amp; Device Driver Vectors ($C600 / $C700 / $C400)</text>
+
+          <!-- Bottom Row: 3 Controllers -->
+          <rect x="25" y="140" width="260" height="45" rx="4" fill="#2d1c08" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="155" y="162" fill="#fde68a" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 6: 140KB Floppy (IWM)</text>
+          <text x="155" y="176" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">6-and-2 GCR • 35 Tracks x 16 Sectors</text>
+
+          <rect x="310" y="140" width="260" height="45" rx="4" fill="#082330" stroke="#06b6d4" stroke-width="1.5" />
+          <text x="440" y="162" fill="#a5f3fc" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 7: SmartPort 32MB HD (/HD)</text>
+          <text x="440" y="176" fill="#a5f3fc" font-size="7.5" text-anchor="middle" font-family="monospace">65,536 Blocks • IndexedDB Persistence</text>
+
+          <rect x="595" y="140" width="260" height="45" rx="4" fill="#231033" stroke="#c084fc" stroke-width="1.5" />
+          <text x="725" y="162" fill="#e9d5ff" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 4: Slinky 1MB RAM (/RAM)</text>
+          <text x="725" y="176" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">24-Bit Auto-Incrementing DMA ($C0CB)</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Section 1: Floppy 6-and-2 GCR -->
+    <section id="floppy-sec" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212836] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold flex items-center justify-center border border-amber-500/40">1</span>
+        <h3 class="text-2xl font-bold text-white">5.25" Disk II Floppy Subsystem & 6-and-2 GCR Nibblization</h3>
+      </div>
+
+      <p class="text-gray-300 leading-relaxed">
+        The Apple //c Ultra faithfully emulates Steve Wozniak's 1978 Disk II controller in Slot 6 ($C600). To prevent bit-slip errors on magnetic media without costly hardware PLL chips, Woz devised <strong>6-and-2 Group Code Recording (GCR)</strong>, converting 256 user data bytes into 342 6-bit disk nibbles ($96–$FF).
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+        <div class="p-4 bg-[#0d121c] rounded-lg border border-[#212836] space-y-2">
+          <span class="text-amber-400 font-bold block">Physical Sector Framing</span>
+          <ul class="text-gray-300 space-y-1 text-[11px]">
+            <li>• <strong>Address Prologue:</strong> <code>$D5 $AA $96</code></li>
+            <li>• <strong>Address Payload:</strong> Volume, Track (0–34), Sector (0–15), Checksum</li>
+            <li>• <strong>Address Epilogue:</strong> <code>$DE $AA $EB</code></li>
+            <li>• <strong>Data Prologue:</strong> <code>$D5 $AA $AD</code></li>
+            <li>• <strong>Data Payload:</strong> 342 GCR bytes + XOR Checksum</li>
+            <li>• <strong>Data Epilogue:</strong> <code>$DE $AA $EB</code></li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-[#0d121c] rounded-lg border border-[#212836] space-y-2">
+          <span class="text-amber-400 font-bold block">4-Phase Stepper Motor ($C0EC–$C0EF)</span>
+          <p class="text-gray-300 text-[11px] leading-relaxed">
+            The read/write head is positioned across 35 physical tracks (tracks 00–34) by cycling 4 phase softswitches:
+            <code class="text-emerald-400">Phase 0 ($C0E1) &rarr; Phase 1 ($C0E3) &rarr; Phase 2 ($C0E5) &rarr; Phase 3 ($C0E7)</code>.
+          </p>
+          <div class="pt-2 text-[10px] text-gray-400 border-t border-[#1b2230]">
+            Boot Floppy: Type <code class="text-amber-300">PR#6</code> in the interactive immediate prompt.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: SmartPort 32MB HD -->
+    <section id="smartport-sec" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212836] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 font-mono font-bold flex items-center justify-center border border-cyan-500/40">2</span>
+        <h3 class="text-2xl font-bold text-white">SmartPort 32MB Virtual Hard Disk (/HD)</h3>
+      </div>
+
+      <p class="text-gray-300 leading-relaxed">
+        The Apple //c Ultra implements the Apple SmartPort firmware protocol connected to an extended <strong>32 Megabyte virtual volume (/HD)</strong> in Slot 7 ($C700). The storage volume is partitioned into <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 	imes 512 = 33,554,432	ext{ bytes}$).
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="table-tech">
+          <thead>
+            <tr>
+              <th>Block Range</th>
+              <th>Volume Content</th>
+              <th>Structure / Significance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-cyan-400 font-bold">Blocks 0 &amp; 1</td>
+              <td>Bootloader</td>
+              <td>Stage-1 ProDOS bootloader executed on <code>PR#7</code>.</td>
+            </tr>
+            <tr>
+              <td class="text-emerald-400 font-bold">Blocks 2..5</td>
+              <td>Volume Directory Header</td>
+              <td>Key block 2 containing <code>/HD</code> name, timestamps, and bitmap pointers.</td>
+            </tr>
+            <tr>
+              <td class="text-purple-400 font-bold">Blocks 6..37</td>
+              <td>Volume Allocation Bitmaps</td>
+              <td>Bit allocation map: 1 bit per 512B block (65,536 bits = 32 blocks).</td>
+            </tr>
+            <tr>
+              <td class="text-yellow-400 font-bold">Blocks 38..65,535</td>
+              <td>User Files &amp; Subdirectories</td>
+              <td>Seedling (≤512B), Sapling (≤128KB), and Tree (&gt;128KB) files.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3: Slinky 1MB RAM Disk -->
+    <section id="slinky-sec" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212836] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 font-mono font-bold flex items-center justify-center border border-purple-500/40">3</span>
+        <h3 class="text-2xl font-bold text-white">Slinky 1MB Auxiliary RAM Disk (/RAM)</h3>
+      </div>
+
+      <p class="text-gray-300 leading-relaxed">
+        The Apple //c Memory Expansion Card ("Slinky") provides 1,048,576 bytes of fast banked memory accessed via 24-bit auto-incrementing registers at <code>$C0C8..$C0CB</code> (or $C071–$C075). Streaming 512 bytes of data requires zero bus wait-states, enabling instant audio and graphics texture paging.
+      </p>
+
+      <pre class="bg-[#0c0817] p-4 rounded-lg border border-[#2b1942] text-purple-300 font-mono text-xs"><code>; Stream 512 bytes from Slinky RAM Disk into Video VRAM ($2000)
+  LDA #$00 : STA $C0C8       ; Address Low = $00
+  LDA #$02 : STA $C0C9       ; Address Mid = $02
+  LDA #$00 : STA $C0CA       ; Address High = Bank 0
+  LDY #$00
+PAGING_LOOP:
+  LDA $C0CB                  ; Read byte (Hardware auto-increments address!)
+  STA $2000,Y                ; Store into video buffer
+  LDA $C0CB                  ; Read next byte
+  STA $2100,Y
+  INY
+  BNE PAGING_LOOP            ; Full 512-byte transfer completes in microseconds!</code></pre>
+    </section>
+
+    <!-- Section 4: Modern Language APIs -->
+    <section id="managed-sec" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212836] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center border border-emerald-500/40">4</span>
+        <h3 class="text-2xl font-bold text-white">Modern Managed Storage APIs (C# .NET & Java 17)</h3>
+      </div>
+
+      <p class="text-gray-300 leading-relaxed">
+        Write modern object-oriented code in C# and Java that compiles directly to 65C02 machine code targeting the ProDOS MLI block driver at <code>$C700</code>:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+        <div class="p-4 bg-[#08121a] rounded-lg border border-[#1b324d] space-y-2">
+          <span class="text-cyan-400 font-bold block border-b border-[#1b324d] pb-1">C# .NET Standard File & Block I/O</span>
+          <pre class="text-gray-300 overflow-x-auto"><code>using System.IO;
+using Apple2.Ultra;
+
+// 1. High-Level Text File Persistence
+File.WriteAllText("/HD/HISCORES.DAT", "WOZ:99990");
+string data = File.ReadAllText("/HD/HISCORES.DAT");
+
+// 2. Direct ProDOS MLI Block Driver ($C700)
+byte[] block = new byte[512];
+block[0] = 99; block[1] = 99;
+AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, block);</code></pre>
+        </div>
+
+        <div class="p-4 bg-[#081710] rounded-lg border border-[#1b432a] space-y-2">
+          <span class="text-emerald-400 font-bold block border-b border-[#1b432a] pb-1">Java 17 Standard File & Block I/O</span>
+          <pre class="text-gray-300 overflow-x-auto"><code>import java.io.File;
+import apple2.hardware.AppleStorage;
+
+// 1. High-Level File Persistence
+File log = new File("/HD/LOG.TXT");
+log.writeText("STATUS: OK");
+
+// 2. Direct ProDOS MLI Block Driver ($C700)
+byte[] buf = new byte[512];
+buf[0] = 1; buf[1] = 2;
+AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deep-Dive Cross References -->
+    <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 space-y-4">
+      <h4 class="text-base font-bold text-white flex items-center gap-2">
+        <span class="text-emerald-400">🔗</span> Deep-Dive Documentation & Practical Labs Index
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+        <a href="developer/storage-floppy-and-smartport.html" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#21262d] rounded transition block">
+          <span class="text-emerald-400 font-bold block mb-1">Developer Module 05 &rarr;</span>
+          <span class="text-gray-400 text-[11px]">Exhaustive bit-level GCR derivations, timing diagrams &amp; 5 labs.</span>
+        </a>
+        <a href="comprehensive-ultra-tutorial.html#ch8" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#21262d] rounded transition block">
+          <span class="text-cyan-400 font-bold block mb-1">Textbook Chapter 8 &rarr;</span>
+          <span class="text-gray-400 text-[11px]">Hands-on guided labs (Labs 8.1–8.5) with assembly traces.</span>
+        </a>
+        <a href="../manual.html#ch4" class="p-3 bg-[#0d1117] hover:bg-[#161b22] border border-[#21262d] rounded transition block">
+          <span class="text-amber-400 font-bold block mb-1">User Manual Chapter 4 &rarr;</span>
+          <span class="text-gray-400 text-[11px]">Operating instructions for mounting disk images &amp; hex editing.</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#10141d] border-t border-[#212836] py-8 px-6 text-center text-xs font-mono text-gray-500">
+    Apple //c Ultra Storage Architecture & Systems Engineering • Zero Platform Lock-In • 1984–2026
+    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>
