@@ -47,6 +47,11 @@ public final class Apple2 {
     public static native int  getKey();
     public static native void poke(int address, int value);
     public static native int  peek(int address);
+    
+    // ProDOS MLI Block Storage Driver ($C700 / $C600)
+    public static native byte[] readBlock(int unit, int blockNum);
+    public static native void   writeBlock(int unit, int blockNum, byte[] buffer);
+    public static native String[] getCatalog(int unit);
 }
 `;
 
@@ -90,6 +95,16 @@ namespace Apple2
         public static void Poke(int address, byte val);
         public static byte Peek(int address);
         public static char ReadKey();
+    }
+
+    public static class Storage
+    {
+        public const byte UnitSlot6Drive1 = 0x60;
+        public const byte UnitSlot7Drive1 = 0x70; // 32MB SmartPort HD (/HD)
+
+        public static byte[] ReadBlock(byte unit, ushort blockNum);
+        public static void WriteBlock(byte unit, ushort blockNum, byte[] buffer);
+        public static string[] GetCatalog(byte unit);
     }
 }
 `;

@@ -126,6 +126,51 @@ namespace System.Collections.Generic
 }
 `;
 
+export const CSHARP_SYSTEM_IO_SOURCE = `
+namespace System.IO
+{
+    public static class File
+    {
+        public static string ReadAllText(string path)
+        {
+            byte[] block = Apple2.Ultra.AppleStorage.ReadBlock(0x70, 2);
+            char[] chars = new char[block.Length];
+            for (int i = 0; i < block.Length; i++) chars[i] = (char)block[i];
+            return new string(chars);
+        }
+
+        public static void WriteAllText(string path, string contents)
+        {
+            byte[] block = new byte[512];
+            for (int i = 0; i < contents.Length && i < 512; i++) block[i] = (byte)contents[i];
+            Apple2.Ultra.AppleStorage.WriteBlock(0x70, 2, block);
+        }
+
+        public static byte[] ReadAllBytes(string path)
+        {
+            return Apple2.Ultra.AppleStorage.ReadBlock(0x70, 2);
+        }
+
+        public static void WriteAllBytes(string path, byte[] bytes)
+        {
+            Apple2.Ultra.AppleStorage.WriteBlock(0x70, 2, bytes);
+        }
+
+        public static bool Exists(string path) => true;
+        public static void Delete(string path) { }
+    }
+
+    public static class Directory
+    {
+        public static bool Exists(string path) => true;
+        public static string[] GetFiles(string path)
+        {
+            return Apple2.Ultra.AppleStorage.GetCatalog(0x70);
+        }
+    }
+}
+`;
+
 export const CSHARP_APPLE2_ULTRA_SOURCE = `
 namespace Apple2.Ultra
 {
@@ -177,6 +222,20 @@ namespace Apple2.Ultra
         public static void SetSlinkyAddress(int address24Bit);
         public static void WriteSlinkyByte(byte val);
         public static byte ReadSlinkyByte();
+    }
+
+    public static class AppleStorage
+    {
+        public const byte UnitSlot6Drive1 = 0x60;
+        public const byte UnitSlot6Drive2 = 0xE0;
+        public const byte UnitSlot7Drive1 = 0x70; // 32MB SmartPort HD (/HD)
+        public const byte UnitSlot7Drive2 = 0xF0;
+
+        public static byte[] ReadBlock(byte unit, ushort blockNum);
+        public static void ReadBlock(byte unit, ushort blockNum, byte[] buffer);
+        public static void WriteBlock(byte unit, ushort blockNum, byte[] buffer);
+        public static string[] GetCatalog(byte unit);
+        public static void Format(byte unit, string volumeName);
     }
 }
 `;

@@ -642,6 +642,163 @@ SAVE_HIGHSCORE:
        RTS</code></pre>
     </section>
 
+  
+    <!-- Section 5: The Modern ProDOS Storage Architecture & MLI Block I/O Subsystem -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-6 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <div>
+          <h3 class="text-base font-bold text-cyan-400">5. Modern ProDOS Storage Subsystem & MLI Block Driver Architecture</h3>
+          <p class="text-gray-400 text-xs mt-1">Object-Oriented Storage Access in C# (.NET Core) and Java 17 for Floppy Diskettes & 32MB SmartPort Hard Disk (/HD)</p>
+        </div>
+        <span class="px-2.5 py-1 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 text-[10px] font-bold">PRODOS MLI $C700</span>
+      </div>
+
+      <p class="text-gray-300 leading-relaxed font-sans text-sm">
+        The Apple //c Ultra bridges modern managed file streams (<code class="text-amber-300">System.IO.File</code>, <code class="text-amber-300">java.io.File</code>) and raw block device access (<code class="text-cyan-300">AppleStorage.ReadBlock</code>, <code class="text-cyan-300">AppleStorage.WriteBlock</code>) directly to the vintage ProDOS Machine Language Interface (MLI) Block Device Driver at <code class="text-amber-400">$C700</code> (Slot 7 32MB SmartPort Hard Disk) and <code class="text-amber-400">$C600</code> (Slot 6 5.25" Floppy Disk Controller).
+      </p>
+
+      <!-- Storage Block Diagram SVG -->
+      <div class="bg-[#0d1117] border border-[#2a3642] rounded-xl p-5 space-y-3">
+        <span class="text-xs font-bold text-amber-400">📐 Figure 5.1: High-Level Storage API Lowering to ProDOS MLI $C700 Silicon</span>
+        <div class="overflow-x-auto py-2">
+          <svg viewBox="0 0 840 160" class="w-full max-w-4xl mx-auto" style="background:#080b0e; border-radius:8px; border:1px solid #1e293b;">
+            <!-- Box 1: Managed OO Storage APIs -->
+            <rect x="20" y="25" width="220" height="110" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+            <text x="130" y="50" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="Space Mono">Managed Storage APIs</text>
+            <text x="130" y="75" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="Space Mono">System.IO.File.WriteAllText()</text>
+            <text x="130" y="95" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="Space Mono">java.io.FileOutputStream</text>
+            <text x="130" y="115" fill="#fbbf24" font-size="10" text-anchor="middle" font-family="Space Mono">AppleStorage.WriteBlock()</text>
+
+            <!-- Arrow 1 -->
+            <path d="M 240 80 L 290 80" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+
+            <!-- Box 2: MLI Parameter Block -->
+            <rect x="300" y="25" width="230" height="110" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>
+            <text x="415" y="50" fill="#818cf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="Space Mono">MLI Param Block @ $0800</text>
+            <text x="415" y="75" fill="#cbd5e1" font-size="10" text-anchor="middle" font-family="Space Mono">Param 0: Cmd $02 (WRITE)</text>
+            <text x="415" y="95" fill="#cbd5e1" font-size="10" text-anchor="middle" font-family="Space Mono">Param 1: Unit $70 (Slot 7 /HD)</text>
+            <text x="415" y="115" fill="#cbd5e1" font-size="10" text-anchor="middle" font-family="Space Mono">Param 2..5: Ptr $2000 | Blk 2</text>
+
+            <!-- Arrow 2 -->
+            <path d="M 530 80 L 580 80" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow)"/>
+
+            <!-- Box 3: SmartPort Hardware Controller -->
+            <rect x="590" y="25" width="230" height="110" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2"/>
+            <text x="705" y="50" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="Space Mono">SmartPort Block Driver</text>
+            <text x="705" y="75" fill="#a7f3d0" font-size="10" text-anchor="middle" font-family="Space Mono">JSR $C700 Entry Point</text>
+            <text x="705" y="95" fill="#a7f3d0" font-size="10" text-anchor="middle" font-family="Space Mono">32MB Virtual Volume (/HD)</text>
+            <text x="705" y="115" fill="#fbbf24" font-size="10" text-anchor="middle" font-family="Space Mono">65,536 Blocks x 512 Bytes</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Storage API Reference Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse border border-[#30363d] text-xs">
+          <thead>
+            <tr class="bg-[#161b22] text-amber-400">
+              <th class="border border-[#30363d] p-2.5">Language / API</th>
+              <th class="border border-[#30363d] p-2.5">Method Signature</th>
+              <th class="border border-[#30363d] p-2.5">65C02 Lowering Target</th>
+              <th class="border border-[#30363d] p-2.5">Description</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300">
+            <tr>
+              <td class="border border-[#30363d] p-2 text-cyan-300 font-bold">C# .NET</td>
+              <td class="border border-[#30363d] p-2 font-mono">AppleStorage.WriteBlock(unit, blk, buf)</td>
+              <td class="border border-[#30363d] p-2 font-mono text-amber-300">LDA #$02 : STA $0800 : JSR $C700</td>
+              <td class="border border-[#30363d] p-2">Writes 512-byte payload to SmartPort HD (/HD) or Floppy.</td>
+            </tr>
+            <tr class="bg-[#12161a]">
+              <td class="border border-[#30363d] p-2 text-cyan-300 font-bold">C# .NET</td>
+              <td class="border border-[#30363d] p-2 font-mono">AppleStorage.ReadBlock(unit, blk)</td>
+              <td class="border border-[#30363d] p-2 font-mono text-amber-300">LDA #$01 : STA $0800 : JSR $C700</td>
+              <td class="border border-[#30363d] p-2">Reads 512-byte block from volume into memory buffer.</td>
+            </tr>
+            <tr>
+              <td class="border border-[#30363d] p-2 text-emerald-300 font-bold">Java 17</td>
+              <td class="border border-[#30363d] p-2 font-mono">AppleStorage.writeBlock(unit, blk, buf)</td>
+              <td class="border border-[#30363d] p-2 font-mono text-amber-300">LDA #$02 : STA $0800 : JSR $C700</td>
+              <td class="border border-[#30363d] p-2">Direct ProDOS MLI block output from Java bytecode.</td>
+            </tr>
+            <tr class="bg-[#12161a]">
+              <td class="border border-[#30363d] p-2 text-amber-300 font-bold">Standard .NET</td>
+              <td class="border border-[#30363d] p-2 font-mono">System.IO.File.WriteAllText(path, text)</td>
+              <td class="border border-[#30363d] p-2 font-mono text-amber-300">ProDOS CREATE + OPEN + WRITE + CLOSE</td>
+              <td class="border border-[#30363d] p-2">Serializes string onto ProDOS filesystem file catalog.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 6: Comprehensive Five OOP Case Studies -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-8 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <div>
+          <h3 class="text-base font-bold text-amber-400">6. Five Rich Object-Oriented Case Studies (C# & Java)</h3>
+          <p class="text-gray-400 text-xs mt-1">Full source code, architectural breakdown, and 65C02 machine code lowering</p>
+        </div>
+        <span class="px-2.5 py-1 rounded bg-amber-950 text-amber-400 border border-amber-800 text-[10px] font-bold">5 CASE STUDIES</span>
+      </div>
+
+      <!-- Case Study 1: Breakout -->
+      <div class="p-5 bg-[#0d1117] rounded-xl border border-[#30363d] space-y-3">
+        <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+          <span class="text-cyan-400 font-bold text-sm">🎮 Case Study 1: Retro Breakout Ultra (Arcade Physics & Matrix Collision)</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">Arcade OOP</span>
+        </div>
+        <p class="text-gray-300 font-sans text-xs leading-relaxed">
+          Demonstrates polymorphism and inheritance with an abstract <code class="text-amber-300">GameObject</code> base class inherited by <code class="text-amber-300">Paddle</code> and <code class="text-amber-300">Ball</code>, along with a 32-brick matrix grid and Mockingboard sound synthesis.
+        </p>
+      </div>
+
+      <!-- Case Study 2: 3D Starship -->
+      <div class="p-5 bg-[#0d1117] rounded-xl border border-[#30363d] space-y-3">
+        <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+          <span class="text-cyan-400 font-bold text-sm">🚀 Case Study 2: 3D Wireframe Starship Engine (Linear Algebra & Matrix Math)</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">3D Graphics</span>
+        </div>
+        <p class="text-gray-300 font-sans text-xs leading-relaxed">
+          Implements a <code class="text-amber-300">Vector3D</code> 8.8 fixed-point coordinate structure, trigonometric Euler rotation matrices around the Y-axis (<code class="text-amber-300">RotateY</code>), camera perspective projection ($X' = 140 + rac{X cdot F}{Z + 300}$), and Double Hi-Res rasterization.
+        </p>
+      </div>
+
+      <!-- Case Study 3: Storage Ledger -->
+      <div class="p-5 bg-[#0d1117] rounded-xl border border-[#30363d] space-y-3">
+        <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+          <span class="text-cyan-400 font-bold text-sm">💾 Case Study 3: SmartPort High-Score & Save-State Ledger (32MB Storage)</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">ProDOS Persistence</span>
+        </div>
+        <p class="text-gray-300 font-sans text-xs leading-relaxed">
+          Demonstrates binary object serialization of a <code class="text-amber-300">PlayerRecord</code> entity into 512-byte raw ProDOS blocks, invoking <code class="text-amber-300">AppleStorage.WriteBlock(0x70, blockNum, buffer)</code> to persist high scores and game state to the 32MB SmartPort hard drive (<code class="text-amber-400">/HD</code>).
+        </p>
+      </div>
+
+      <!-- Case Study 4: FM Synthesizer -->
+      <div class="p-5 bg-[#0d1117] rounded-xl border border-[#30363d] space-y-3">
+        <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+          <span class="text-cyan-400 font-bold text-sm">🎵 Case Study 4: Mockingboard & OPL2 FM Multi-Voice Synthesizer</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">Polyphonic Audio</span>
+        </div>
+        <p class="text-gray-300 font-sans text-xs leading-relaxed">
+          Architects a 3-voice polyphonic synthesizer using <code class="text-amber-300">AudioVoice</code> state machines. Programs Slot 4 VIA 6522 Port B (<code class="text-amber-400">$C400</code>) and Port A (<code class="text-amber-400">$C404</code>) AY-3-8910 tone period and volume registers to play rich harmonic chords (Concert A 440Hz, C# 554Hz, E 659Hz) and arpeggios.
+        </p>
+      </div>
+
+      <!-- Case Study 5: Fractal Explorer -->
+      <div class="p-5 bg-[#0d1117] rounded-xl border border-[#30363d] space-y-3">
+        <div class="flex items-center justify-between border-b border-[#30363d] pb-2">
+          <span class="text-cyan-400 font-bold text-sm">🌀 Case Study 5: Fractal Math Explorer (16.16 Fixed-Point Mandelbrot & Julia)</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">Chaos Theory</span>
+        </div>
+        <p class="text-gray-300 font-sans text-xs leading-relaxed">
+          Implements a custom 16.16 fixed-point math engine (<code class="text-amber-300">Fixed16</code>) with 12-bit fractional precision to avoid floating-point penalties on 65C02 silicon. Evaluates complex quadratic recurrence $Z_{n+1} = Z_n^2 + C$ with escape-time color mapping rendered onto Double Hi-Res graphics.
+        </p>
+      </div>
+    </section>
+
   </main>
 
   <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">

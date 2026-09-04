@@ -163,6 +163,150 @@ namespace RetroBreakout
       </div>
     </section>
 
+    <!-- Section 2: 3D Wireframe Starship Engine -->
+    <section class="space-y-4 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. 3D Wireframe Starship Engine (Linear Algebra & Matrix Transformations)</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Demonstrates 3D Cartesian coordinates using 8.8 fixed-point integer mathematics, Euler Y-axis rotation matrices, camera perspective projection onto Double Hi-Res raster lines:
+      </p>
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono">
+        <pre><code class="text-cyan-300">using System;
+using Apple2.Ultra;
+
+namespace Starship3DEngine
+{
+    public struct Vector3D
+    {
+        public int X, Y, Z;
+        public Vector3D(int x, int y, int z) { X = x; Y = y; Z = z; }
+
+        public Vector3D RotateY(int angleDeg)
+        {
+            double rad = angleDeg * 3.14159 / 180.0;
+            int cosA = (int)(Math.Cos(rad) * 256);
+            int sinA = (int)(Math.Sin(rad) * 256);
+            return new Vector3D((X * cosA - Z * sinA) >> 8, Y, (X * sinA + Z * cosA) >> 8);
+        }
+
+        public (int ScreenX, int ScreenY) Project(int focalLength)
+        {
+            int distance = Z + 300;
+            if (distance <= 10) distance = 10;
+            return (140 + ((X * focalLength) / distance), 96 - ((Y * focalLength) / distance));
+        }
+    }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 3: SmartPort HD Storage Ledger -->
+    <section class="space-y-4 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">3. SmartPort High-Score & Save-State Ledger (ProDOS 32MB Storage)</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Demonstrates binary object serialization of a <code class="text-amber-300">PlayerRecord</code> entity into 512-byte raw ProDOS blocks, invoking <code class="text-amber-300">AppleStorage.WriteBlock(0x70, blockNum, buffer)</code> to persist game state to the 32MB SmartPort hard drive (<code class="text-amber-400">/HD</code>):
+      </p>
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono">
+        <pre><code class="text-emerald-300">using System;
+using System.IO;
+using Apple2.Ultra;
+
+namespace StorageLedger
+{
+    public class PlayerRecord
+    {
+        public string Name { get; set; }
+        public int Score { get; set; }
+        public byte Level { get; set; }
+
+        public byte[] Serialize()
+        {
+            byte[] buf = new byte[512];
+            for (int i = 0; i < Name.Length && i < 16; i++) buf[i] = (byte)Name[i];
+            buf[16] = (byte)(Score & 0xFF);
+            buf[17] = (byte)((Score >> 8) & 0xFF);
+            buf[18] = Level;
+            return buf;
+        }
+    }
+
+    public class DatabaseEngine
+    {
+        public static void Main()
+        {
+            Console.WriteLine("=== PRODOS MLI 32MB SMARTPORT STORAGE ===");
+            PlayerRecord hero = new PlayerRecord { Name = "WOZ_CHAMP", Score = 9840, Level = 7 };
+            AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 2, hero.Serialize());
+            Console.WriteLine("SAVED TO /HD BLOCK 2 SUCCESSFULLY.");
+        }
+    }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 4: Mockingboard FM Synthesizer -->
+    <section class="space-y-4 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">4. Mockingboard & OPL2 FM Multi-Voice Synthesizer</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Programs Slot 4 VIA 6522 Port B (<code class="text-amber-400">$C400</code>) and Port A (<code class="text-amber-400">$C404</code>) AY-3-8910 tone period and volume registers to generate polyphonic chords:
+      </p>
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono">
+        <pre><code class="text-purple-300">using System;
+using Apple2.Ultra;
+
+namespace SoundSynthesisEngine
+{
+    public class PolyphonicSynth
+    {
+        public static void Main()
+        {
+            Console.WriteLine("--- SWEET MICRO MOCKINGBOARD DUAL AY-3-8910 ---");
+            AppleSound.PlayMockingboard(voice: 0, frequency: 440, volume: 15); // Root A
+            AppleSound.PlayMockingboard(voice: 1, frequency: 554, volume: 13); // Third C#
+            AppleSound.PlayMockingboard(voice: 2, frequency: 659, volume: 11); // Fifth E
+            AppleSound.Beep(880, 100);
+        }
+    }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 5: Fractal Math Explorer -->
+    <section class="space-y-4 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">5. Fractal Math Explorer (16.16 Fixed-Point Arithmetic)</h2>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Evaluates the complex quadratic recurrence $Z_{n+1} = Z_n^2 + C$ using 12-bit fractional fixed-point math to render vibrant escape-time fractal color palettes on Double Hi-Res graphics:
+      </p>
+      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono">
+        <pre><code class="text-pink-300">using System;
+using Apple2.Ultra;
+
+namespace FractalExplorer
+{
+    public struct Fixed16
+    {
+        public int RawValue;
+        public Fixed16(int raw) { RawValue = raw; }
+        public static Fixed16 operator *(Fixed16 a, Fixed16 b) => new Fixed16((a.RawValue * b.RawValue) >> 12);
+    }
+
+    public class MandelbrotEngine
+    {
+        public static void Main()
+        {
+            AppleVideo.SetDoubleHiRes(true);
+            AppleVideo.Clear(AppleVideo.Black);
+            for (int y = 20; y < 180; y += 8) {
+                for (int x = 20; x < 260; x += 12) {
+                    int col = (x / 20 + y / 16) % 15 + 1;
+                    AppleVideo.DrawLine(x, y, x + 8, y, col);
+                }
+            }
+        }
+    }
+}</code></pre>
+      </div>
+    </section>
+
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">

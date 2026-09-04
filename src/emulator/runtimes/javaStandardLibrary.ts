@@ -220,6 +220,40 @@ public class PrintStream {
         println(Integer.toString(i));
     }
 }
+
+public class File {
+    private final String path;
+    public File(String pathname) { this.path = pathname; }
+    public String getPath() { return path; }
+    public String getName() { return path; }
+    public boolean exists() { return true; }
+    public long length() { return 512L; }
+    public String[] list() { return apple2.hardware.AppleStorage.getCatalog(0x70); }
+    public boolean delete() { return true; }
+}
+
+public class FileInputStream {
+    private final String path;
+    private int blockIndex = 2;
+    public FileInputStream(String pathname) { this.path = pathname; }
+    public FileInputStream(File file) { this.path = file.getPath(); }
+    public int read(byte[] b) {
+        apple2.hardware.AppleStorage.readBlock(0x70, blockIndex, b);
+        return b.length;
+    }
+    public void close() {}
+}
+
+public class FileOutputStream {
+    private final String path;
+    private int blockIndex = 2;
+    public FileOutputStream(String pathname) { this.path = pathname; }
+    public FileOutputStream(File file) { this.path = file.getPath(); }
+    public void write(byte[] b) {
+        apple2.hardware.AppleStorage.writeBlock(0x70, blockIndex, b);
+    }
+    public void close() {}
+}
 `;
 
 export const JAVA_APPLE2_HARDWARE_SOURCE = `
@@ -258,5 +292,18 @@ public final class AppleSlinky {
     public static native void setAddress(int address24Bit);
     public static native void writeByte(int b);
     public static native int  readByte();
+}
+
+public final class AppleStorage {
+    public static final int UNIT_SLOT6_DRIVE1 = 0x60;
+    public static final int UNIT_SLOT6_DRIVE2 = 0xE0;
+    public static final int UNIT_SLOT7_DRIVE1 = 0x70; // 32MB SmartPort HD (/HD)
+    public static final int UNIT_SLOT7_DRIVE2 = 0xF0;
+
+    public static native byte[] readBlock(int unit, int blockNum);
+    public static native void readBlock(int unit, int blockNum, byte[] buffer);
+    public static native void writeBlock(int unit, int blockNum, byte[] buffer);
+    public static native String[] getCatalog(int unit);
+    public static native void format(int unit, String volumeName);
 }
 `;

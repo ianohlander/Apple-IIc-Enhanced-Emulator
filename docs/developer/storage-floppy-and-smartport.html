@@ -147,6 +147,52 @@ struct SmartPortPacket {
       </div>
     </section>
 
+    <!-- Modern OO Storage APIs Reference -->
+    <section class="space-y-4 pt-6 border-t border-[#252f42]">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">MANAGED APIS</span>
+        <h3 class="text-lg font-bold text-white">Modern Language Storage APIs (C# .NET & Java 17)</h3>
+      </div>
+      <p class="text-gray-300 text-xs leading-relaxed">
+        Modern C# and Java applications running on the 65C02 silicon can access the 32MB SmartPort hard disk directly via high-level file APIs and block drivers:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+        <!-- C# Example -->
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+          <span class="text-cyan-400 font-bold block border-b border-[#21293a] pb-1">C# .NET Core Storage Access</span>
+          <pre class="text-gray-300 overflow-x-auto"><code>using System.IO;
+using Apple2.Ultra;
+
+// 1. High-Level File Persistence
+File.WriteAllText("/HD/SCORES.TXT", "PLAYER: WOZ 9999");
+string log = File.ReadAllText("/HD/SCORES.TXT");
+
+// 2. Low-Level ProDOS MLI Block Driver ($C700)
+byte[] blockData = new byte[512];
+AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 2, blockData);
+byte[] readBack = AppleStorage.ReadBlock(AppleStorage.UnitSlot7Drive1, 2);</code></pre>
+        </div>
+
+        <!-- Java Example -->
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+          <span class="text-emerald-400 font-bold block border-b border-[#21293a] pb-1">Java 17 Storage Access</span>
+          <pre class="text-gray-300 overflow-x-auto"><code>import java.io.*;
+import apple2.hardware.*;
+
+// 1. High-Level File Streams
+File file = new File("/HD/CONFIG.DAT");
+FileOutputStream out = new FileOutputStream(file);
+out.write(new byte[]{0x01, 0x02, 0x03});
+
+// 2. ProDOS MLI Block Driver ($C700)
+byte[] buffer = new byte[512];
+AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 2, buffer);
+AppleStorage.readBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 2, buffer);</code></pre>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">

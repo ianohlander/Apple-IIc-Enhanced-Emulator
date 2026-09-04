@@ -46,14 +46,73 @@ export class CSharpApple2Compiler {
 
   private static compileLine(line: string, bin: number[], asm: string[], logs: string[]): void {
     if (CSharpApple2Compiler.isIgnoredLine(line)) return;
+    if (CSharpApple2Compiler.compileGraphics(line, bin, asm, logs)) return;
+    if (CSharpApple2Compiler.compileIo(line, bin, asm, logs)) return;
+    CSharpApple2Compiler.compileStorage(line, bin, asm, logs);
+  }
 
+  private static compileGraphics(line: string, bin: number[], asm: string[], logs: string[]): boolean {
     if (/SetDoubleHiRes|DoubleHiRes/.test(line)) {
       CSharpApple2Compiler.emitDoubleHiRes(line, bin, asm, logs);
-    } else if (/Print|WriteLine/.test(line)) {
-      CSharpApple2Compiler.emitStringPrint(line, bin, asm, logs);
-    } else if (/Beep|PlayMockingboard/.test(line)) {
-      CSharpApple2Compiler.emitBeep(line, bin, asm, logs);
+      return true;
     }
+    return false;
+  }
+
+  private static compileIo(line: string, bin: number[], asm: string[], logs: string[]): boolean {
+    if (/Print|WriteLine/.test(line)) {
+      CSharpApple2Compiler.emitStringPrint(line, bin, asm, logs);
+      return true;
+    }
+    if (/Beep|PlayMockingboard/.test(line)) {
+      CSharpApple2Compiler.emitBeep(line, bin, asm, logs);
+      return true;
+    }
+    return false;
+  }
+
+  private static compileStorage(line: string, bin: number[], asm: string[], logs: string[]): void {
+    if (/ReadBlock|ReadAllText|ReadAllBytes/.test(line)) {
+      CSharpApple2Compiler.emitStorageRead(line, bin, asm, logs);
+    } else if (/WriteBlock|WriteAllText|WriteAllBytes/.test(line)) {
+      CSharpApple2Compiler.emitStorageWrite(line, bin, asm, logs);
+    }
+  }
+
+  private static emitStorageRead(line: string, bin: number[], asm: string[], logs: string[]): void {
+    logs.push('[C# CLR] Emitting ProDOS MLI Block Read ($C700 / $BF00)...');
+    // Machine code: LDA #$01, STA $0800, LDA #$70, STA $0801, LDA #$00, STA $0802, LDA #$20, STA $0803, JSR $C700
+    bin.push(0xa9, 0x01, 0x8d, 0x00, 0x08, 0xa9, 0x70, 0x8d, 0x01, 0x08, 0xa9, 0x00, 0x8d, 0x02, 0x08, 0xa9, 0x20, 0x8d, 0x03, 0x08, 0x20, 0x00, 0xc7);
+    asm.push(
+      `; --- [C#] ${line} ---`,
+      '       LDA #$01       ; MLI Command $01 (READ_BLOCK)',
+      '       STA $0800      ; Param 0: MLI Command',
+      '       LDA #$70       ; Unit #$70 (Slot 7 Drive 1 /HD)',
+      '       STA $0801      ; Param 1: Unit Number',
+      '       LDA #$00       ; Buffer Low ($2000)',
+      '       STA $0802      ; Param 2: Data Buffer Ptr Low',
+      '       LDA #$20       ; Buffer High',
+      '       STA $0803      ; Param 3: Data Buffer Ptr High',
+      '       JSR $C700      ; Call SmartPort Block Driver'
+    );
+  }
+
+  private static emitStorageWrite(line: string, bin: number[], asm: string[], logs: string[]): void {
+    logs.push('[C# CLR] Emitting ProDOS MLI Block Write ($C700 / $BF00)...');
+    // Machine code: LDA #$02, STA $0800, LDA #$70, STA $0801, LDA #$00, STA $0802, LDA #$20, STA $0803, JSR $C700
+    bin.push(0xa9, 0x02, 0x8d, 0x00, 0x08, 0xa9, 0x70, 0x8d, 0x01, 0x08, 0xa9, 0x00, 0x8d, 0x02, 0x08, 0xa9, 0x20, 0x8d, 0x03, 0x08, 0x20, 0x00, 0xc7);
+    asm.push(
+      `; --- [C#] ${line} ---`,
+      '       LDA #$02       ; MLI Command $02 (WRITE_BLOCK)',
+      '       STA $0800      ; Param 0: MLI Command',
+      '       LDA #$70       ; Unit #$70 (Slot 7 Drive 1 /HD)',
+      '       STA $0801      ; Param 1: Unit Number',
+      '       LDA #$00       ; Buffer Low ($2000)',
+      '       STA $0802      ; Param 2: Data Buffer Ptr Low',
+      '       LDA #$20       ; Buffer High',
+      '       STA $0803      ; Param 3: Data Buffer Ptr High',
+      '       JSR $C700      ; Call SmartPort Block Driver'
+    );
   }
 
   private static emitDoubleHiRes(line: string, bin: number[], asm: string[], logs: string[]): void {

@@ -46,9 +46,9 @@ export class JavaApple2Compiler {
 
   private static compileLine(line: string, bin: number[], asm: string[], logs: string[]): void {
     if (JavaApple2Compiler.isIgnoredLine(line)) return;
-    if (!JavaApple2Compiler.compileGraphics(line, bin, asm, logs)) {
-      JavaApple2Compiler.compileIo(line, bin, asm, logs);
-    }
+    if (JavaApple2Compiler.compileGraphics(line, bin, asm, logs)) return;
+    if (JavaApple2Compiler.compileIo(line, bin, asm, logs)) return;
+    JavaApple2Compiler.compileStorage(line, bin, asm, logs);
   }
 
   private static compileGraphics(line: string, bin: number[], asm: string[], logs: string[]): boolean {
@@ -63,13 +63,58 @@ export class JavaApple2Compiler {
     return false;
   }
 
-  private static compileIo(line: string, bin: number[], asm: string[], logs: string[]): void {
+  private static compileIo(line: string, bin: number[], asm: string[], logs: string[]): boolean {
     if (/beep|Beep/.test(line)) {
       JavaApple2Compiler.emitBeep(line, bin, asm, logs);
+      return true;
     }
     if (/drawString|print/.test(line)) {
       JavaApple2Compiler.emitStringPrint(line, bin, asm, logs);
+      return true;
     }
+    return false;
+  }
+
+  private static compileStorage(line: string, bin: number[], asm: string[], logs: string[]): void {
+    if (/readBlock|FileInputStream/.test(line)) {
+      JavaApple2Compiler.emitStorageRead(line, bin, asm, logs);
+    } else if (/writeBlock|FileOutputStream/.test(line)) {
+      JavaApple2Compiler.emitStorageWrite(line, bin, asm, logs);
+    }
+  }
+
+  private static emitStorageRead(line: string, bin: number[], asm: string[], logs: string[]): void {
+    logs.push('[Java AOT] Emitting ProDOS MLI Block Read ($C700 / $BF00)...');
+    bin.push(0xa9, 0x01, 0x8d, 0x00, 0x08, 0xa9, 0x70, 0x8d, 0x01, 0x08, 0xa9, 0x00, 0x8d, 0x02, 0x08, 0xa9, 0x20, 0x8d, 0x03, 0x08, 0x20, 0x00, 0xc7);
+    asm.push(
+      `; --- [Java] ${line} ---`,
+      '       LDA #$01       ; MLI Command $01 (READ_BLOCK)',
+      '       STA $0800      ; Param 0: MLI Command',
+      '       LDA #$70       ; Unit #$70 (Slot 7 Drive 1 /HD)',
+      '       STA $0801      ; Param 1: Unit Number',
+      '       LDA #$00       ; Buffer Low ($2000)',
+      '       STA $0802      ; Param 2: Data Buffer Ptr Low',
+      '       LDA #$20       ; Buffer High',
+      '       STA $0803      ; Param 3: Data Buffer Ptr High',
+      '       JSR $C700      ; Call SmartPort Block Driver'
+    );
+  }
+
+  private static emitStorageWrite(line: string, bin: number[], asm: string[], logs: string[]): void {
+    logs.push('[Java AOT] Emitting ProDOS MLI Block Write ($C700 / $BF00)...');
+    bin.push(0xa9, 0x02, 0x8d, 0x00, 0x08, 0xa9, 0x70, 0x8d, 0x01, 0x08, 0xa9, 0x00, 0x8d, 0x02, 0x08, 0xa9, 0x20, 0x8d, 0x03, 0x08, 0x20, 0x00, 0xc7);
+    asm.push(
+      `; --- [Java] ${line} ---`,
+      '       LDA #$02       ; MLI Command $02 (WRITE_BLOCK)',
+      '       STA $0800      ; Param 0: MLI Command',
+      '       LDA #$70       ; Unit #$70 (Slot 7 Drive 1 /HD)',
+      '       STA $0801      ; Param 1: Unit Number',
+      '       LDA #$00       ; Buffer Low ($2000)',
+      '       STA $0802      ; Param 2: Data Buffer Ptr Low',
+      '       LDA #$20       ; Buffer High',
+      '       STA $0803      ; Param 3: Data Buffer Ptr High',
+      '       JSR $C700      ; Call SmartPort Block Driver'
+    );
   }
 
   private static emitDoubleHiRes(line: string, bin: number[], asm: string[], logs: string[]): void {

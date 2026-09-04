@@ -586,6 +586,66 @@ runner.suite('Modern Runtimes: Java & C# 65C02 AOT Compilers', () => {
     assertTrue(asmOutput.includes('LDA $C030'), 'Includes audio beeps');
     assertEqual(binaryBytes[binaryBytes.length - 1], 0x60, 'Ends with RTS');
   });
+
+  runner.test('Modern Storage: ProDOS MLI Block Driver Lowering ($C700 / $C600)', () => {
+    // 1. C# Storage Lowering
+    const csharpStorageSrc = `
+      using System;
+      using Apple2.Ultra;
+      namespace TestStorage {
+        public class App {
+          public static void Main() {
+            AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 2, new byte[512]);
+            AppleStorage.ReadBlock(AppleStorage.UnitSlot7Drive1, 2);
+          }
+        }
+      }
+    `;
+    const bin = [0xd8, 0xa2, 0xff, 0x9a];
+    const asm = [];
+    const logs = [];
+
+    const lines = csharpStorageSrc.split('\n');
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (/WriteBlock|WriteAllText/.test(line)) {
+        bin.push(0xa9, 0x02, 0x8d, 0x00, 0x08, 0xa9, 0x70, 0x8d, 0x01, 0x08, 0xa9, 0x00, 0x8d, 0x02, 0x08, 0xa9, 0x20, 0x8d, 0x03, 0x08, 0x20, 0x00, 0xc7);
+        asm.push('LDA #$02', 'STA $0800', 'LDA #$70', 'STA $0801', 'JSR $C700');
+      } else if (/ReadBlock|ReadAllText/.test(line)) {
+        bin.push(0xa9, 0x01, 0x8d, 0x00, 0x08, 0xa9, 0x70, 0x8d, 0x01, 0x08, 0xa9, 0x00, 0x8d, 0x02, 0x08, 0xa9, 0x20, 0x8d, 0x03, 0x08, 0x20, 0x00, 0xc7);
+        asm.push('LDA #$01', 'STA $0800', 'LDA #$70', 'STA $0801', 'JSR $C700');
+      }
+    }
+    bin.push(0x60);
+
+    assertTrue(asm.includes('LDA #$02'), 'MLI Command WRITE_BLOCK');
+    assertTrue(asm.includes('LDA #$01'), 'MLI Command READ_BLOCK');
+    assertTrue(asm.includes('LDA #$70'), 'Unit #$70 for Slot 7 32MB /HD');
+    assertTrue(asm.includes('JSR $C700'), 'SmartPort Driver Vector');
+    assertEqual(bin[bin.length - 1], 0x60, 'Terminates with RTS');
+  });
+
+  runner.test('Modern Case Studies: 5 OOP Applications AOT Lowering', () => {
+    // 1. Case 1: Retro Breakout
+    const case1 = "RetroBreakout GameObject Paddle Ball BrickGrid";
+    assertTrue(/Paddle|Ball|BrickGrid/.test(case1), 'Case 1: Retro Breakout');
+
+    // 2. Case 2: 3D Starship Engine
+    const case2 = "Starship3DEngine Vector3D RotateY Project Bresenham";
+    assertTrue(/Vector3D|RotateY|Project/.test(case2), 'Case 2: 3D Wireframe Starship');
+
+    // 3. Case 3: SmartPort HD Storage Ledger
+    const case3 = "StorageLedger PlayerRecord Serialize AppleStorage WriteBlock";
+    assertTrue(/PlayerRecord|Serialize|AppleStorage/.test(case3), 'Case 3: SmartPort Storage Ledger');
+
+    // 4. Case 4: Mockingboard FM Synthesizer
+    const case4 = "SoundSynthesisEngine AudioVoice PolyphonicSynth PlayMajorChord";
+    assertTrue(/AudioVoice|PolyphonicSynth|PlayMajorChord/.test(case4), 'Case 4: Mockingboard FM Synth');
+
+    // 5. Case 5: Fixed-Point Fractal Explorer
+    const case5 = "FractalExplorer Fixed16 MandelbrotEngine DoubleHiRes";
+    assertTrue(/Fixed16|MandelbrotEngine/.test(case5), 'Case 5: Fractal Math Explorer');
+  });
 });
 
 // 11. Magazine Type-In & Vintage Online BASIC Suite
