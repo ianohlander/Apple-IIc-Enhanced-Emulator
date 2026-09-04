@@ -19,6 +19,7 @@
     .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
     pre code { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
     .section-title { border-left: 4px solid #61bb46; padding-left: 0.75rem; }
+    .callout-box { background: rgba(19, 23, 31, 0.9); border: 1px solid #2d333b; border-radius: 0.75rem; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
@@ -31,11 +32,12 @@
       <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow text-stone-900 font-bold text-lg"></a>
       <div>
         <span class="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">Developer Module 05 — Exhaustive Technical Reference</span>
-        <h1 class="text-base font-extrabold text-white">Storage Subsystem: Floppy GCR & SmartPort 32MB Hard Disk Block I/O</h1>
+        <h1 class="text-base font-extrabold text-white">Storage Subsystem: Floppy GCR, SmartPort 32MB Hard Disk & Slinky RAM Disk</h1>
       </div>
     </div>
     <div class="flex items-center space-x-3 text-xs font-mono">
       <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Modules Index</a>
+      <a href="../comprehensive-ultra-tutorial.html#chapter-8" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded transition">📚 Storage Guided Labs</a>
       <a href="../../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">⚡ Launch Emulator</a>
     </div>
   </header>
@@ -43,156 +45,522 @@
   <!-- Content -->
   <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
 
-      <!-- VISUAL DIAGRAM: Disk II Floppy & SmartPort HD Architecture -->
-      <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
-        <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
-          <span class="font-bold text-cyan-400 text-sm">📐 Figure S.1: Storage Architecture (Disk II 140KB Floppy + SmartPort 32MB Hard Disk)</span>
-          <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Storage Controller Schematic</span>
-        </div>
-        <p class="text-gray-400 text-xs">
-          IWM (Integrated Woz Machine) 6-and-2 GCR nibblizing state sequencer alongside SmartPort 32MB ProDOS block transaction driver:
-        </p>
-        <div class="overflow-x-auto py-2">
-          <svg viewBox="0 0 880 180" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
-            <!-- Floppy Drive Controller -->
-            <rect x="25" y="25" width="395" height="130" rx="6" fill="#141a21" stroke="#f59e0b" stroke-width="1.5" />
-            <text x="222" y="48" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 6: Disk II 5.25" Floppy Controller ($C600)</text>
-            <rect x="35" y="65" width="180" height="75" rx="3" fill="#2d1e08" stroke="#d97706" stroke-width="1" />
-            <text x="125" y="82" fill="#fde68a" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">IWM 6-and-2 GCR Engine</text>
-            <text x="125" y="96" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">256-Byte Sector $	o$ 342 GCR Bytes</text>
-            <text x="125" y="108" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Address Prologue: $D5 $AA $96</text>
-            <text x="125" y="120" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Data Prologue: $D5 $AA $AD</text>
-            <rect x="225" y="65" width="185" height="75" rx="3" fill="#2d1e08" stroke="#d97706" stroke-width="1" />
-            <text x="317" y="82" fill="#fde68a" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">4-Phase Stepper Motor</text>
-            <text x="317" y="96" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Phases: PHASE0..PHASE3 ($C0EC-$C0EF)</text>
-            <text x="317" y="108" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">35 Tracks (00–34) x 16 Sectors</text>
-            <text x="317" y="120" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Total Capacity: 143,360 Bytes</text>
+    <!-- Executive Overview Banner -->
+    <div class="bg-gradient-to-r from-emerald-950/40 via-[#13171f] to-cyan-950/40 border border-[#2a3642] rounded-2xl p-6 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#2a3642] pb-3">
+        <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">Architectural Deep-Dive & Hardware Specifications</span>
+        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Tier-1 Storage Engine</span>
+      </div>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra features a unified, multi-tier storage architecture bridging vintage physical media with high-capacity mass storage: from Steve Wozniak's revolutionary <strong>6-and-2 Group Code Recording (GCR)</strong> 5.25" floppy controller, through the <strong>Apple SmartPort 32MB virtual hard disk</strong> partition protocol ($65,536$ contiguous 512-byte blocks), to the ultra-fast <strong>Slinky 1MB Auxiliary RAM Disk</strong> and managed object-oriented file persistence in <strong>C# .NET</strong> and <strong>Java 17</strong>.
+      </p>
+    </div>
 
-            <!-- SmartPort Hard Disk Controller -->
-            <rect x="455" y="25" width="395" height="130" rx="6" fill="#141a21" stroke="#00e5ff" stroke-width="1.5" />
-            <text x="652" y="48" fill="#00e5ff" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 7: SmartPort 32MB Hard Disk Controller ($C700)</text>
-            <rect x="465" y="65" width="180" height="75" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
-            <text x="555" y="82" fill="#bae6fd" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">ProDOS Block Protocol</text>
-            <text x="555" y="96" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">512 Bytes / Logical Block</text>
-            <text x="555" y="108" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Total Blocks: 65,536</text>
-            <text x="555" y="120" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Volume: /HD (32,768 KB)</text>
-            <rect x="655" y="65" width="185" height="75" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
-            <text x="747" y="82" fill="#bae6fd" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Direct DMA Block Transfer</text>
-            <text x="747" y="96" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Command Packet: READ / WRITE</text>
-            <text x="747" y="108" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Zero-Latency Turbo Seek</text>
-            <text x="747" y="120" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Instant File Catalog &amp; Execution</text>
+    <!-- VISUAL DIAGRAM: Storage Architecture -->
+    <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+      <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+        <span class="font-bold text-cyan-400 text-sm">📐 Figure S.1: Unified Storage Subsystem Architecture</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Complete Hardware & Software Stack</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        Data flow from High-Level Managed Languages down through the ProDOS MLI ($BF00 / $C700), SmartPort Dispatcher, IWM Floppy Controller, and Slinky Banked RAM:
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 920 320" class="w-full max-w-5xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <!-- Top Layer: Managed OOP APIs -->
+          <rect x="30" y="20" width="860" height="50" rx="6" fill="#161e2e" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="460" y="42" fill="#93c5fd" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">High-Level Application Layer: C# .NET Core &amp; Java 17 Runtimes</text>
+          <text x="460" y="58" fill="#cbd5e1" font-size="9" text-anchor="middle" font-family="monospace">System.IO.File.ReadAllText() • java.io.File • Apple2.Ultra.AppleStorage.WriteBlock() • apple2.hardware.AppleStorage</text>
+
+          <!-- Middle Layer: ProDOS MLI & Dispatcher -->
+          <rect x="30" y="90" width="860" height="55" rx="6" fill="#14231b" stroke="#10b981" stroke-width="1.5" />
+          <text x="460" y="112" fill="#6ee7b7" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">ProDOS 2.4.2 Machine Language Interface (MLI) &amp; Device Driver Dispatcher</text>
+          <text x="460" y="130" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Global System Vector ($BF00) • Slot 6 Floppy Driver ($C600) • Slot 7 SmartPort Driver ($C700) • Slot 4 RAM Disk ($C400)</text>
+
+          <!-- Bottom Tier: 3 Physical/Virtual Storage Controllers -->
+          <!-- 1. Disk II Floppy -->
+          <rect x="30" y="170" width="270" height="130" rx="6" fill="#1f1608" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="165" y="192" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 6: Disk II 5.25" Floppy ($C600)</text>
+          <rect x="40" y="205" width="250" height="85" rx="3" fill="#2e210d" stroke="#d97706" stroke-width="1" />
+          <text x="165" y="222" fill="#fde68a" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">IWM 6-and-2 GCR Controller</text>
+          <text x="165" y="238" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">140 KB Capacity • 35 Tracks x 16 Sectors</text>
+          <text x="165" y="252" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">4-Phase Stepper Motor ($C0EC-$C0EF)</text>
+          <text x="165" y="266" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">Sync: $D5 $AA $96 / $D5 $AA $AD</text>
+          <text x="165" y="280" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">Formats: .DSK, .DO, .PO, .NIB</text>
+
+          <!-- 2. SmartPort 32MB HD -->
+          <rect x="325" y="170" width="270" height="130" rx="6" fill="#081e28" stroke="#06b6d4" stroke-width="1.5" />
+          <text x="460" y="192" fill="#06b6d4" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 7: SmartPort 32MB HD ($C700)</text>
+          <rect x="335" y="205" width="250" height="85" rx="3" fill="#0d2e3d" stroke="#0891b2" stroke-width="1" />
+          <text x="460" y="222" fill="#a5f3fc" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">ProDOS 32MB Block Storage</text>
+          <text x="460" y="238" fill="#a5f3fc" font-size="7.5" text-anchor="middle" font-family="monospace">65,536 Contiguous 512-Byte Blocks</text>
+          <text x="460" y="252" fill="#a5f3fc" font-size="7.5" text-anchor="middle" font-family="monospace">Zero-Latency DMA Block Transfers</text>
+          <text x="460" y="266" fill="#a5f3fc" font-size="7.5" text-anchor="middle" font-family="monospace">Volume Tree: Seedling / Sapling / Tree</text>
+          <text x="460" y="280" fill="#a5f3fc" font-size="7.5" text-anchor="middle" font-family="monospace">Formats: .HDV, .2MG, .PO</text>
+
+          <!-- 3. Slinky 1MB RAM Disk -->
+          <rect x="620" y="170" width="270" height="130" rx="6" fill="#1b0e26" stroke="#c084fc" stroke-width="1.5" />
+          <text x="755" y="192" fill="#c084fc" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 4: Slinky 1MB RAM Disk ($C0C8)</text>
+          <rect x="630" y="205" width="250" height="85" rx="3" fill="#2d1740" stroke="#9333ea" stroke-width="1" />
+          <text x="755" y="222" fill="#e9d5ff" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">24-Bit Auto-Incrementing RAM</text>
+          <text x="755" y="238" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">1,048,576 Bytes Aux Expansion RAM</text>
+          <text x="755" y="252" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">Registers: $C0C8-$C0CA (Addr), $C0CB (Data)</text>
+          <text x="755" y="266" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">Zero-Cycle Paging &amp; High-Speed Buffer</text>
+          <text x="755" y="280" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">ProDOS Volume: /RAM (2,048 Blocks)</text>
+
+          <!-- Connectors -->
+          <line x1="460" y1="70" x2="460" y2="90" stroke="#475569" stroke-width="2" stroke-dasharray="3,3" />
+          <line x1="165" y1="145" x2="165" y2="170" stroke="#f59e0b" stroke-width="2" />
+          <line x1="460" y1="145" x2="460" y2="170" stroke="#06b6d4" stroke-width="2" />
+          <line x1="755" y1="145" x2="755" y2="170" stroke="#c084fc" stroke-width="2" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Section 1: Disk II Floppy & GCR -->
+    <section class="space-y-6">
+      <h2 class="text-2xl font-extrabold text-white section-title">1. Wozniak 6-and-2 Group Code Recording (GCR) &amp; Disk II Mechanics</h2>
+      
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Standard magnetic floppy drives record data as magnetic flux reversals. When more than two consecutive zero bits occur on the spinning oxide surface, the read head amplifier loses its self-clocking synchronization pulse, resulting in a <em>bit-slip</em> error. While rival systems (such as the Commodore 1541 or IBM PC) relied on complex, expensive hardware phase-locked loops (PLLs) and Western Digital controller chips, Steve Wozniak solved this entirely in software and simple TTL logic using <strong>6-and-2 Group Code Recording (GCR)</strong>.
+      </p>
+
+      <!-- GCR Mathematical Breakdown -->
+      <div class="callout-box p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#2d333b] pb-2">
+          <h3 class="text-emerald-400 font-bold font-mono text-sm">📐 The Mathematical Nibblization Algorithm (256 Bytes $	o$ 342 Disk Bytes)</h3>
+          <span class="text-[11px] font-mono text-gray-400">Ratio: 1 user byte = 1.3359 disk bytes</span>
+        </div>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          Because 6 bits can represent (2^6 = 64) discrete values, Wozniak created a 64-entry lookup table mapping every 6-bit nybble into an 8-bit disk byte whose most significant bit is always 1 and has no more than one pair of consecutive zeros:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-amber-400 font-bold block border-b border-[#21293a] pb-1">1. Buffer Splitting (256 User Bytes)</span>
+            <p class="text-gray-300 text-[11px]">
+              - <strong>Primary Array</strong>: 256 bytes holding the upper 6 bits ((b_7 b_6 b_5 b_4 b_3 b_2)) of each byte.<br>
+              - <strong>Secondary Array</strong>: 86 bytes holding the lower 2 bits ((b_1 b_0)) of three distinct bytes packed into a single 6-bit value ((86 	imes 3 = 258 ge 256)).
+            </p>
+          </div>
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-cyan-400 font-bold block border-b border-[#21293a] pb-1">2. 64-Entry GCR Translation Table</span>
+            <p class="text-gray-300 text-[11px]">
+              Every 6-bit index ($00..$3F) is translated to a valid 8-bit GCR byte ($96..$FF). When reading, a reverse lookup table of 256 bytes decodes valid GCR bytes back to 6-bit values ($00..$3F).
+            </p>
+          </div>
+        </div>
+
+        <!-- 64-Entry GCR Table Display -->
+        <div class="bg-[#0d1117] p-4 rounded-lg border border-[#21293a] space-y-2">
+          <span class="text-xs font-bold text-gray-300 font-mono">Complete 64-Entry 6-and-2 GCR Translation Table:</span>
+          <pre class="text-emerald-400 text-[11px] overflow-x-auto"><code>// 6-Bit Index -> 8-Bit Disk GCR Byte Translation Table
+const uint8_t GCR_ENCODE_TABLE[64] = {
+  0x96, 0x97, 0x9A, 0x9B, 0x9D, 0x9E, 0x9F, 0xA6, 0xA7, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB2, 0xB3,
+  0xB4, 0xB5, 0xB6, 0xB7, 0xB9, 0xBA, 0xBC, 0xBD, 0xBE, 0xBF, 0xCB, 0xCD, 0xCE, 0xCF, 0xD3, 0xD6,
+  0xD7, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF, 0xE5, 0xE6, 0xE7, 0xE9, 0xEA, 0xEB, 0xEC, 0xED,
+  0xEE, 0xEF, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF, 0xAA
+};</code></pre>
+        </div>
+      </div>
+
+      <!-- Sector Anatomy & Prologues -->
+      <div class="space-y-3">
+        <h3 class="text-lg font-bold text-white">Physical Sector Format: Address Field &amp; Data Field Anatomy</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          On physical media, each of the 16 sectors per track consists of an <strong>Address Field</strong> (which identifies the volume, track, sector, and checksum using 4-and-4 odd-even encoding) followed by a <strong>Data Field</strong> (which holds the 342 GCR-encoded user data bytes):
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono border-collapse border border-[#2d333b]">
+            <thead>
+              <tr class="bg-[#161b22] text-gray-300">
+                <th class="p-2 border border-[#2d333b]">Field Component</th>
+                <th class="p-2 border border-[#2d333b]">Byte Sequence</th>
+                <th class="p-2 border border-[#2d333b]">Purpose / Significance</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#2d333b] text-gray-300">
+              <tr class="bg-[#0d1117]">
+                <td class="p-2 text-amber-400 font-bold">Address Prologue</td>
+                <td class="p-2 text-emerald-400">$D5 $AA $96</td>
+                <td class="p-2">Unique 3-byte synchronization marker signaling the start of a sector header.</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-cyan-400 font-bold">Address Payload</td>
+                <td class="p-2">8 bytes (4-and-4)</td>
+                <td class="p-2">Volume, Track Number ($00..$22), Sector Number ($00..$0F), and Header Checksum.</td>
+              </tr>
+              <tr class="bg-[#0d1117]">
+                <td class="p-2 text-amber-400 font-bold">Address Epilogue</td>
+                <td class="p-2 text-emerald-400">$DE $AA $EB</td>
+                <td class="p-2">Confirms valid header framing and read-head alignment.</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-pink-400 font-bold">Data Prologue</td>
+                <td class="p-2 text-emerald-400">$D5 $AA $AD</td>
+                <td class="p-2">Unique 3-byte synchronization marker signaling the start of user sector data.</td>
+              </tr>
+              <tr class="bg-[#0d1117]">
+                <td class="p-2 text-cyan-400 font-bold">Data Payload</td>
+                <td class="p-2">342 GCR bytes</td>
+                <td class="p-2">86 bytes secondary array + 256 bytes primary array XOR-checksummed on the fly.</td>
+              </tr>
+              <tr>
+                <td class="p-2 text-yellow-400 font-bold">Data Checksum</td>
+                <td class="p-2">1 GCR byte</td>
+                <td class="p-2">Cumulative XOR value across all 342 nibbles to verify zero transmission errors.</td>
+              </tr>
+              <tr class="bg-[#0d1117]">
+                <td class="p-2 text-pink-400 font-bold">Data Epilogue</td>
+                <td class="p-2 text-emerald-400">$DE $AA $EB</td>
+                <td class="p-2">Trailing framing bytes verifying end-of-sector data capture.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4-Phase Stepper Motor Head Stepping -->
+      <div class="space-y-3">
+        <h3 class="text-lg font-bold text-white">4-Phase Stepper Motor Head Positioning Logic ($C0EC..$C0EF)</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          The read/write head is actuated by a 4-phase unipolar stepper motor. The Apple //c motherboard addresses the motor phases via softswitches located at <code>$C0E0..$C0E7</code> (or Slot 6 standard <code>$C0EC..$C0EF</code>):
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs font-mono">
+          <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+            <span class="text-amber-400 font-bold block">PHASE 0</span>
+            <span class="text-gray-300 text-[11px]">$C0E0 OFF / $C0E1 ON</span>
+            <span class="text-gray-500 text-[10px] block mt-1">Track 0, 4, 8, 12, ...</span>
+          </div>
+          <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+            <span class="text-emerald-400 font-bold block">PHASE 1</span>
+            <span class="text-gray-300 text-[11px]">$C0E2 OFF / $C0E3 ON</span>
+            <span class="text-gray-500 text-[10px] block mt-1">Track 1, 5, 9, 13, ...</span>
+          </div>
+          <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+            <span class="text-cyan-400 font-bold block">PHASE 2</span>
+            <span class="text-gray-300 text-[11px]">$C0E4 OFF / $C0E5 ON</span>
+            <span class="text-gray-500 text-[10px] block mt-1">Track 2, 6, 10, 14, ...</span>
+          </div>
+          <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+            <span class="text-purple-400 font-bold block">PHASE 3</span>
+            <span class="text-gray-300 text-[11px]">$C0E6 OFF / $C0E7 ON</span>
+            <span class="text-gray-500 text-[10px] block mt-1">Track 3, 7, 11, 15, ...</span>
+          </div>
+        </div>
+
+        <p class="text-gray-400 text-xs italic">
+          To step inward by one full track: Energize next phase $	o$ wait 2.5ms settle delay $	o$ de-energize previous phase. Quarter and half-stepping can be achieved by energizing adjacent phases simultaneously.
+        </p>
+      </div>
+
+      <!-- Sector Interleave / Skew Tables -->
+      <div class="space-y-3">
+        <h3 class="text-lg font-bold text-white">Sector Interleaving: DOS 3.3 Skew vs. ProDOS 512-Byte Block Mapping</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          Because the 65C02 CPU requires processing cycles between reading adjacent sectors, sectors are interleaved (skewed) on the track surface to maximize rotational throughput:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-amber-400 font-bold block border-b border-[#21293a] pb-1">DOS 3.3 Physical-to-Logical Skew Table</span>
+            <p class="text-gray-300 text-[11px]">
+              Physical sectors $00..$0F map to DOS 3.3 logical sectors in the order:<br>
+              <code>[0, 7, 14, 6, 13, 5, 12, 4, 11, 3, 10, 2, 9, 1, 8, 15]</code>
+            </p>
+          </div>
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-emerald-400 font-bold block border-b border-[#21293a] pb-1">ProDOS 512-Byte Block Skew Table (2 Sectors/Block)</span>
+            <p class="text-gray-300 text-[11px]">
+              ProDOS groups two 256-byte sectors into one 512-byte block with interleaved physical pairs:<br>
+              <code>[0, 8, 1, 9, 2, 10, 3, 11, 4, 12, 5, 13, 6, 14, 7, 15]</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: SmartPort 32MB Virtual Hard Disk -->
+    <section class="space-y-6 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">2. SmartPort 32MB Virtual Hard Disk &amp; ProDOS File Allocation</h2>
+      
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra implements the extended Apple SmartPort firmware interface connected to a massive <strong>32 Megabyte virtual hard disk volume (/HD)</strong> in Slot 7. The volume contains <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 	imes 512 = 33,554,432	ext{ bytes}$).
+      </p>
+
+      <!-- ProDOS Volume Structure Diagram -->
+      <div class="callout-box p-6 space-y-4 font-mono text-xs">
+        <span class="text-cyan-400 font-bold block text-sm">🗂️ ProDOS 32MB Hard Disk Block Map Layout</span>
+        <div class="overflow-x-auto py-2">
+          <svg viewBox="0 0 860 140" class="w-full max-w-4xl mx-auto drop-shadow-md" style="background: #080b0e; border-radius: 6px; border: 1px solid #1f2937;">
+            <!-- Block 0 & 1: Boot Loader -->
+            <rect x="20" y="20" width="120" height="90" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="1" />
+            <text x="80" y="45" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle">Blocks 0 &amp; 1</text>
+            <text x="80" y="65" fill="#94a3b8" font-size="7.5" text-anchor="middle">Bootloader</text>
+            <text x="80" y="80" fill="#94a3b8" font-size="7" text-anchor="middle">PRODOS loader</text>
+
+            <!-- Block 2..5: Key Volume Directory -->
+            <rect x="150" y="20" width="160" height="90" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1" />
+            <text x="230" y="45" fill="#a7f3d0" font-size="9" font-weight="bold" text-anchor="middle">Blocks 2 &amp; 3..5</text>
+            <text x="230" y="65" fill="#6ee7b7" font-size="7.5" text-anchor="middle">Volume Directory Header</text>
+            <text x="230" y="80" fill="#6ee7b7" font-size="7" text-anchor="middle">/HD Volume Root</text>
+            <text x="230" y="95" fill="#6ee7b7" font-size="7" text-anchor="middle">Prev/Next Block Links</text>
+
+            <!-- Block 6..37: Volume Bitmaps -->
+            <rect x="320" y="20" width="170" height="90" rx="4" fill="#1e1b4b" stroke="#818cf8" stroke-width="1" />
+            <text x="405" y="45" fill="#e0e7ff" font-size="9" font-weight="bold" text-anchor="middle">Blocks 6 .. 37</text>
+            <text x="405" y="65" fill="#c7d2fe" font-size="7.5" text-anchor="middle">Volume Bitmaps</text>
+            <text x="405" y="80" fill="#c7d2fe" font-size="7" text-anchor="middle">65,536 Bit Allocation Map</text>
+            <text x="405" y="95" fill="#c7d2fe" font-size="7" text-anchor="middle">1 bit = 1 block (512B)</text>
+
+            <!-- Block 38..65535: Data Blocks & Subdirectories -->
+            <rect x="500" y="20" width="340" height="90" rx="4" fill="#142c38" stroke="#06b6d4" stroke-width="1" />
+            <text x="670" y="45" fill="#cffafe" font-size="9" font-weight="bold" text-anchor="middle">Blocks 38 .. 65,535</text>
+            <text x="670" y="65" fill="#67e8f9" font-size="7.5" text-anchor="middle">User Data Blocks, Subdirectories &amp; Index Blocks</text>
+            <text x="670" y="80" fill="#67e8f9" font-size="7" text-anchor="middle">Seedling (≤512B) • Sapling (≤128KB) • Tree (&gt;128KB)</text>
+            <text x="670" y="95" fill="#67e8f9" font-size="7" text-anchor="middle">Total Available: 32,748 KB User Storage</text>
           </svg>
         </div>
       </div>
-    
 
-    <!-- Section 1 -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-extrabold text-white section-title">1. Wozniak 6-and-2 Group Code Recording (GCR)</h2>
-      <p class="text-gray-300 text-sm leading-relaxed">
-        Standard 5.25-inch floppy drives use magnetic flux transitions to represent binary ones and zeros. If more than two consecutive zero bits occur on the physical media, the drive read-head loses clock synchronization, causing a "bit-slip" error. Steve Wozniak solved this by designing the <strong>6-and-2 GCR</strong> encoding scheme:
-      </p>
-
-      <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h3 class="text-emerald-400 font-bold font-mono text-sm">Nibblization: Converting 256 User Bytes into 342 Disk Bytes</h3>
-        <ol class="list-decimal list-inside text-xs font-mono text-gray-300 space-y-2 leading-relaxed">
-          <li>A 256-byte sector is split into two arrays: a 256-byte primary array holding the upper 6 bits of each byte, and an 86-byte secondary array holding the lower 2 bits of three distinct bytes packed together (\(86 \times 3 = 258 \ge 256\)).</li>
-          <li>Each 6-bit value is translated through a 64-entry lookup table into an 8-bit GCR disk byte where the most significant bit (bit 7) is always 1 and no more than two adjacent zeros exist.</li>
-          <li>Before each sector data field, the controller writes a unique 3-byte synchronization header: <code>$D5 $AA $96</code> (for address field) and <code>$D5 $AA $AD</code> (for data field).</li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- Section 2 -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-extrabold text-white section-title">2. 4-Phase Stepper Motor Head Positioning Logic</h2>
-      <p class="text-gray-300 text-sm leading-relaxed">
-        The 5.25-inch floppy read/write head is positioned using a 4-phase stepper motor controlled by softswitches <code>$C0E0..$C0E7</code>. Energizing Phase 0, 1, 2, or 3 moves the head inward or outward by 1/2 track increments. Full-tracking requires cycling through phases in sequence: \(\text{Phase 0} \to \text{Phase 1} \to \text{Phase 2} \to \text{Phase 3}\).
-      </p>
-    </section>
-
-    <!-- Section 3 -->
-    <section class="space-y-4">
-      <h2 class="text-2xl font-extrabold text-white section-title">3. SmartPort 32MB Hard Disk Block I/O Engine</h2>
-      <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra implements the Apple SmartPort firmware protocol configured with an extended 32 Megabyte virtual hard disk ($/HD$). The storage volume is partitioned into 65,536 contiguous 512-byte blocks. ProDOS 2.4.2 communicates directly with the driver using standard block read/write commands:
-      </p>
-
-      <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-4 text-xs font-mono">
-        <pre><code class="text-emerald-300">// SmartPort Block Transfer Packet Layout
-struct SmartPortPacket {
-    byte command;       // 0x01 = Status, 0x02 = Read Block, 0x03 = Write Block, 0x04 = Format
-    byte unitNumber;    // 0x01 = First SmartPort Device ($/HD)
-    word bufferPointer; // Pointer in RAM to 512-byte payload buffer
-    word blockNumber;   // 16-bit Block Number (0..65535)
-};</code></pre>
-      </div>
-    </section>
-
-  
-    <!-- Section: Floppy & SmartPort Storage Subsystem Manager -->
-    <section class="space-y-4 pt-6 border-t border-[#252f42]">
-      <div class="flex items-center gap-2">
-        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">STORAGE ENGINE</span>
-        <h3 class="text-lg font-bold text-white">Interactive Floppy & SmartPort 32MB Subsystem Manager</h3>
-      </div>
-      <p class="text-gray-300 text-xs leading-relaxed">
-        The workstation supports mounting standard 140KB 5.25" floppy disk images (.dsk, .do, .po, .nib, .2mg) and 32MB SmartPort hard disk volumes (/HD).
-      </p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
-        <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-          <span class="text-amber-400 font-bold block">Drive 1 Floppy (Slot 6)</span>
-          <span class="text-gray-400">PR#6 boots ProDOS 2.4.2, DOS 3.3, Games, or Custom .DSK</span>
-        </div>
-        <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-          <span class="text-emerald-400 font-bold block">SmartPort 32MB HD (Slot 7)</span>
-          <span class="text-gray-400">PR#7 boots 65,536-block persistent ProDOS volume</span>
+      <!-- File Storage Allocation Categories -->
+      <div class="space-y-3">
+        <h3 class="text-lg font-bold text-white">ProDOS File Storage Topologies: Seedling, Sapling &amp; Tree Files</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          ProDOS automatically selects one of three physical allocation topologies based on file length:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-emerald-400 font-bold block border-b border-[#21293a] pb-1">🌱 Seedling File ($le 512$ Bytes)</span>
+            <p class="text-gray-300 text-[11px]">
+              Takes exactly 1 block. The directory entry's <code>KEY_POINTER</code> points directly to the data block itself.
+            </p>
+          </div>
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-cyan-400 font-bold block border-b border-[#21293a] pb-1">🌿 Sapling File ($513	ext{B} .. 128	ext{KB}$)</span>
+            <p class="text-gray-300 text-[11px]">
+              Uses 1 <strong>Index Block</strong> containing up to 256 two-byte block pointers ($256 	imes 512	ext{B} = 128	ext{KB}$). The directory key pointer references the index block.
+            </p>
+          </div>
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-purple-400 font-bold block border-b border-[#21293a] pb-1">🌳 Tree File ($128	ext{KB} .. 16	ext{MB}$)</span>
+            <p class="text-gray-300 text-[11px]">
+              Uses a <strong>Master Index Block</strong> holding up to 128 index block pointers. Each sub-index block points to 256 data blocks, enabling files up to 16MB.
+            </p>
+          </div>
         </div>
       </div>
+
+      <!-- ProDOS MLI Specification & Error Codes -->
+      <div class="space-y-3">
+        <h3 class="text-lg font-bold text-white">ProDOS Machine Language Interface (MLI) Specification</h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          Applications invoke ProDOS storage functions via direct driver calls at <code>JSR $C700</code> (or global system call <code>JSR $BF00</code>):
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-amber-400 font-bold block border-b border-[#21293a] pb-1">Low-Level Block Driver ($C700 / $C600)</span>
+            <pre class="text-emerald-300 text-[11px]"><code>; Direct Block I/O Calling Convention
+; Accumulator = Unit Number ($70 = S7,D1; $60 = S6,D1)
+; X-Reg = Parameter List Pointer Low ($00-$FF)
+; Y-Reg = Parameter List Pointer High ($00-$FF)
+; Carry Flag: Clear = Success, Set = Error
+
+LDA #$70        ; Unit: Slot 7, Drive 1
+LDX #<PARAM_BLK ; Pointer Low
+LDY #>PARAM_BLK ; Pointer High
+JSR $C700       ; Call SmartPort Block Driver
+BCS I_O_ERROR   ; Branch if Carry set (Error in A)</code></pre>
+          </div>
+
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
+            <span class="text-cyan-400 font-bold block border-b border-[#21293a] pb-1">MLI Command Parameter Block Structure</span>
+            <pre class="text-cyan-300 text-[11px]"><code>PARAM_BLK:
+  .BYTE $03     ; Parameter Count (3)
+  .BYTE $70     ; Unit Number (Slot 7, Drive 1)
+  .WORD $2000   ; 512-Byte Data Buffer Pointer in RAM
+  .WORD $0002   ; 16-Bit Block Number (e.g. Block 2)
+
+; MLI Error Return Codes (Returned in Accumulator):
+; $00 = No Error (Success)
+; $27 = I/O Error (Read/Write Failure)
+; $28 = No Device Connected
+; $2B = Disk Write-Protected
+; $40 = Invalid Pathname Syntax
+; $46 = File Not Found
+; $4E = File Access / Permission Error</code></pre>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Modern OO Storage APIs Reference -->
-    <section class="space-y-4 pt-6 border-t border-[#252f42]">
-      <div class="flex items-center gap-2">
-        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">MANAGED APIS</span>
-        <h3 class="text-lg font-bold text-white">Modern Language Storage APIs (C# .NET & Java 17)</h3>
+    <!-- Section 3: Slinky 1MB Auxiliary RAM Disk -->
+    <section class="space-y-6 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">3. Slinky 1MB Auxiliary RAM Disk Architecture</h2>
+      
+      <p class="text-gray-300 text-sm leading-relaxed">
+        The Apple //c Ultra incorporates the famous <strong>Apple //c Memory Expansion Card ("Slinky")</strong> providing 1,048,576 bytes of fast banked memory. The hardware operates through 24-bit auto-incrementing address registers mapped at <code>$C0C8..$C0CB</code>:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs font-mono">
+        <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+          <span class="text-purple-400 font-bold block">$C0C8 (Addr LSB)</span>
+          <span class="text-gray-300 text-[11px]">Bits $A_0..A_7$</span>
+        </div>
+        <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+          <span class="text-purple-400 font-bold block">$C0C9 (Addr MID)</span>
+          <span class="text-gray-300 text-[11px]">Bits $A_8..A_{15}$</span>
+        </div>
+        <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+          <span class="text-purple-400 font-bold block">$C0CA (Addr MSB)</span>
+          <span class="text-gray-300 text-[11px]">Bits $A_{16}..A_{19}$</span>
+        </div>
+        <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-center">
+          <span class="text-emerald-400 font-bold block">$C0CB (Data Port)</span>
+          <span class="text-gray-300 text-[11px]">Auto-Increment R/W</span>
+        </div>
       </div>
-      <p class="text-gray-300 text-xs leading-relaxed">
-        Modern C# and Java applications running on the 65C02 silicon can access the 32MB SmartPort hard disk directly via high-level file APIs and block drivers:
+
+      <div class="bg-[#0d1117] p-4 rounded-lg border border-[#21293a] text-xs font-mono">
+        <span class="text-purple-300 font-bold block mb-2">High-Speed Zero-Cycle DMA Paging Loop in 65C02 Assembly:</span>
+        <pre class="text-gray-300"><code>; Stream 512 bytes from Slinky RAM Disk into Main RAM $4000
+  LDA #$00 : STA $C0C8       ; Address Low = $00
+  LDA #$02 : STA $C0C9       ; Address Mid = $02 (Offset $0200 = 512 bytes)
+  LDA #$00 : STA $C0CA       ; Address High = Bank 0
+  LDY #$00
+PAGE_LOOP:
+  LDA $C0CB                  ; Read byte from Slinky (Hardware auto-increments address!)
+  STA $4000,Y                ; Store in target RAM
+  LDA $C0CB                  ; Read next byte
+  STA $4100,Y                ; Store in next 256-byte page
+  INY
+  BNE PAGE_LOOP              ; Fast 256-iteration loop transfers all 512 bytes</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 4: Modern Managed Storage APIs -->
+    <section class="space-y-6 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">4. Modern Managed Storage APIs (C# .NET &amp; Java 17) &amp; AOT Lowering</h2>
+      
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Modern object-oriented programs compiled through the Apple //c Ultra AOT compiler can persist state and stream assets seamlessly using standard high-level file APIs and hardware block drivers:
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
         <!-- C# Example -->
-        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
-          <span class="text-cyan-400 font-bold block border-b border-[#21293a] pb-1">C# .NET Core Storage Access</span>
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-3">
+          <span class="text-cyan-400 font-bold block border-b border-[#21293a] pb-1">C# .NET Standard Storage Interface</span>
           <pre class="text-gray-300 overflow-x-auto"><code>using System.IO;
 using Apple2.Ultra;
 
-// 1. High-Level File Persistence
-File.WriteAllText("/HD/SCORES.TXT", "PLAYER: WOZ 9999");
-string log = File.ReadAllText("/HD/SCORES.TXT");
+public class GameStateManager {
+    public static void SaveHighScores(int score) {
+        // High-Level Text Persistence
+        File.WriteAllText("/HD/HISCORES.DAT", "SCORE:" + score);
 
-// 2. Low-Level ProDOS MLI Block Driver ($C700)
-byte[] blockData = new byte[512];
-AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 2, blockData);
-byte[] readBack = AppleStorage.ReadBlock(AppleStorage.UnitSlot7Drive1, 2);</code></pre>
+        // Low-Level Direct Block Persistence (Slot 7 Block 100)
+        byte[] buffer = new byte[512];
+        buffer[0] = (byte)(score & 0xFF);
+        buffer[1] = (byte)((score >> 8) & 0xFF);
+        AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, buffer);
+    }
+}</code></pre>
         </div>
 
         <!-- Java Example -->
-        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-2">
-          <span class="text-emerald-400 font-bold block border-b border-[#21293a] pb-1">Java 17 Storage Access</span>
-          <pre class="text-gray-300 overflow-x-auto"><code>import java.io.*;
-import apple2.hardware.*;
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-3">
+          <span class="text-emerald-400 font-bold block border-b border-[#21293a] pb-1">Java 17 Standard Storage Interface</span>
+          <pre class="text-gray-300 overflow-x-auto"><code>import java.io.File;
+import apple2.hardware.AppleStorage;
 
-// 1. High-Level File Streams
-File file = new File("/HD/CONFIG.DAT");
-FileOutputStream out = new FileOutputStream(file);
-out.write(new byte[]{0x01, 0x02, 0x03});
+public class TelemetryLogger {
+    public static void recordSample(int temp, int pressure) {
+        // High-Level File Persistence
+        File file = new File("/HD/LOG.TXT");
+        file.writeText("TEMP=" + temp + ",PRESS=" + pressure);
 
-// 2. ProDOS MLI Block Driver ($C700)
-byte[] buffer = new byte[512];
-AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 2, buffer);
-AppleStorage.readBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 2, buffer);</code></pre>
+        // Low-Level Block Stream (Slot 7 Block 200)
+        byte[] block = new byte[512];
+        block[0] = (byte)temp;
+        block[1] = (byte)pressure;
+        AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 200, block);
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Hands-On Storage Labs & Exercises -->
+    <section class="space-y-6 pt-6 border-t border-[#252f42]">
+      <h2 class="text-2xl font-extrabold text-white section-title">5. Guided Developer Labs &amp; Storage Exercises</h2>
+      
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Test your storage mastery with these 5 interactive, hands-on developer exercises:
+      </p>
+
+      <div class="space-y-4">
+        <!-- Lab 1 -->
+        <div class="callout-box p-5 space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between border-b border-[#2d333b] pb-2">
+            <span class="text-amber-400 font-bold text-sm">🧪 Exercise 5.1: Floppy 6-and-2 GCR Nibble Encoding &amp; Decoding</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Assembly / Logic</span>
+          </div>
+          <p class="text-gray-300 text-xs">
+            <strong>Goal:</strong> Implement a software routine that takes 3 bytes (<code>$A5, $5A, $FF</code>), extracts their 2-bit lowest pairs into a packed secondary byte, and verifies the GCR translation value against the lookup table.
+          </p>
+          <pre class="text-emerald-400 text-[11px] bg-[#0a0e17] p-3 rounded border border-[#21293a]"><code>; Extract lower 2 bits of 3 bytes into 1 packed 6-bit value
+; Byte 1 = $A5 (10100101 -> low bits 01)
+; Byte 2 = $5A (01011010 -> low bits 10)
+; Byte 3 = $FF (11111111 -> low bits 11)
+; Packed value: (01 << 4) | (10 << 2) | (11) = $0001_1011 = $1B
+; GCR_ENCODE_TABLE[$1B] = $CD</code></pre>
+        </div>
+
+        <!-- Lab 2 -->
+        <div class="callout-box p-5 space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between border-b border-[#2d333b] pb-2">
+            <span class="text-emerald-400 font-bold text-sm">🧪 Exercise 5.2: ProDOS Volume Bitmap Inspection &amp; Free Block Calculation</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Filesystem Forensics</span>
+          </div>
+          <p class="text-gray-300 text-xs">
+            <strong>Goal:</strong> Inspect Blocks 6..37 of the 32MB volume. Count the number of set bits (1 = free block, 0 = allocated block) to verify that exactly 65,500 blocks are available for user storage.
+          </p>
+        </div>
+
+        <!-- Lab 3 -->
+        <div class="callout-box p-5 space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between border-b border-[#2d333b] pb-2">
+            <span class="text-cyan-400 font-bold text-sm">🧪 Exercise 5.3: Direct Assembly MLI Driver Call at $C700</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Driver Programming</span>
+          </div>
+          <p class="text-gray-300 text-xs">
+            <strong>Goal:</strong> Write an assembly routine that initializes a 512-byte payload at <code>$2000</code> with an ASCII signature, writes it to Block 150 on Slot 7 Drive 1, clears RAM, reads Block 150 back into <code>$2000</code>, and asserts that the signature is intact.
+          </p>
+        </div>
+
+        <!-- Lab 4 -->
+        <div class="callout-box p-5 space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between border-b border-[#2d333b] pb-2">
+            <span class="text-pink-400 font-bold text-sm">🧪 Exercise 5.4: Object-Oriented Game Persistence in C#</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-pink-950 text-pink-300 border border-pink-800">C# .NET &amp; AOT</span>
+          </div>
+          <p class="text-gray-300 text-xs">
+            <strong>Goal:</strong> Write a C# class with a static method that serializes player coordinates and health into a 512-byte block using <code>AppleStorage.WriteBlock</code> and compiles to native 65C02 assembly.
+          </p>
+        </div>
+
+        <!-- Lab 5 -->
+        <div class="callout-box p-5 space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between border-b border-[#2d333b] pb-2">
+            <span class="text-purple-400 font-bold text-sm">🧪 Exercise 5.5: High-Speed Slinky 1MB RAM Disk Data Streaming in Java</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-purple-950 text-purple-300 border border-purple-800">High-Throughput I/O</span>
+          </div>
+          <p class="text-gray-300 text-xs">
+            <strong>Goal:</strong> Utilize the auto-incrementing registers of the Slinky card to stream 64KB of audio sample data into main RAM in under 5,000 CPU cycles.
+          </p>
         </div>
       </div>
     </section>
@@ -201,7 +569,6 @@ AppleStorage.readBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 2, buffer);</code></pre>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
     <a href="index.html" class="text-emerald-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
-  
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
 

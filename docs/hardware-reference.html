@@ -225,10 +225,70 @@ LOOP: LDA BUFFER,X
         </div>
         <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
           <span class="text-emerald-400 font-bold block">Slot 6 ($C600)</span>
-          <span class="text-gray-400">Disk II Dual 5.25" Floppy Controller</span>
+          <span class="text-gray-400">Disk II Dual 5.25" Floppy Controller (IWM)</span>
+        </div>
+        <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
+          <span class="text-emerald-400 font-bold block">Slot 7 ($C700)</span>
+          <span class="text-gray-400">SmartPort 32MB Hard Disk Block Controller</span>
         </div>
       </div>
     </div>
+
+  
+    <!-- Storage Subsystem Hardware Register Specifications -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-6 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <h3 class="text-base font-bold text-amber-400">Disk II Floppy & SmartPort Hard Disk Hardware Register Reference</h3>
+        <span class="text-gray-500 text-[11px]">$C0E0–$C0FF / $C600–$C7FF</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Disk II Softswitches -->
+        <div class="space-y-3">
+          <span class="text-amber-300 font-bold block border-b border-[#212836] pb-1">Slot 6: IWM / Disk II Floppy Controller ($C0E0–$C0EF)</span>
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="text-gray-400 border-b border-[#212836]">
+                <th class="py-1">Address</th>
+                <th class="py-1">Name</th>
+                <th class="py-1">Function</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-300 divide-y divide-[#1b2230]">
+              <tr><td><code>$C0E0 / $C0E1</code></td><td class="text-amber-400">PH0_OFF / PH0_ON</td><td>Stepper Motor Phase 0 (Tracks 0, 4, 8...)</td></tr>
+              <tr><td><code>$C0E2 / $C0E3</code></td><td class="text-amber-400">PH1_OFF / PH1_ON</td><td>Stepper Motor Phase 1 (Tracks 1, 5, 9...)</td></tr>
+              <tr><td><code>$C0E4 / $C0E5</code></td><td class="text-amber-400">PH2_OFF / PH2_ON</td><td>Stepper Motor Phase 2 (Tracks 2, 6, 10...)</td></tr>
+              <tr><td><code>$C0E6 / $C0E7</code></td><td class="text-amber-400">PH3_OFF / PH3_ON</td><td>Stepper Motor Phase 3 (Tracks 3, 7, 11...)</td></tr>
+              <tr><td><code>$C0E8 / $C0E9</code></td><td class="text-amber-400">MOTOR_OFF / ON</td><td>Turn spindle drive motor Off / On</td></tr>
+              <tr><td><code>$C0EA / $C0EB</code></td><td class="text-amber-400">DRV0EN / DRV1EN</td><td>Select Floppy Drive 1 / Drive 2</td></tr>
+              <tr><td><code>$C0EC / $C0ED</code></td><td class="text-amber-400">Q6L / Q6H</td><td>Read Data Register / Sense Write Protect</td></tr>
+              <tr><td><code>$C0EE / $C0EF</code></td><td class="text-amber-400">Q7L / Q7H</td><td>Read Mode / Write Mode Sequencer</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- SmartPort HD Specifications -->
+        <div class="space-y-3">
+          <span class="text-cyan-300 font-bold block border-b border-[#212836] pb-1">Slot 7: SmartPort 32MB Virtual Hard Disk ($C700–$C7FF)</span>
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="text-gray-400 border-b border-[#212836]">
+                <th class="py-1">Parameter</th>
+                <th class="py-1">Value</th>
+                <th class="py-1">Description</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-300 divide-y divide-[#1b2230]">
+              <tr><td class="text-cyan-400">Driver Entry</td><td><code>$C700</code></td><td>Direct SmartPort Block Driver Jump Vector</td></tr>
+              <tr><td class="text-cyan-400">Unit Number</td><td><code>$70</code></td><td>Slot 7, Drive 1 (ProDOS Volume <code>/HD</code>)</td></tr>
+              <tr><td class="text-cyan-400">Logical Blocks</td><td>65,536</td><td>Contiguous 512-byte blocks (32,768 KB)</td></tr>
+              <tr><td class="text-cyan-400">Commands</td><td>$01 / $02 / $00</td><td>Read Block / Write Block / Status</td></tr>
+              <tr><td class="text-cyan-400">Persistence</td><td>IndexedDB / OPFS</td><td>Auto-syncing browser storage container</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
   </main>
 

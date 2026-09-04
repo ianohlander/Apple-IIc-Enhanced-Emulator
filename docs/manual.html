@@ -322,39 +322,105 @@
         </div>
       </section>
 
-      <!-- Chapter 4: Floppy & 32MB Hard Disk Management -->
-      <section id="ch4" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4">
+      <!-- Chapter 4: Floppy, 32MB Hard Disk & RAM Disk Management -->
+      <section id="ch4" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-6">
         <div class="flex items-center gap-3 border-b border-[#30363d] pb-3">
           <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">CHAPTER 4</span>
-          <h2 class="text-xl font-bold text-white">Storage Architecture: Floppy Disks & 32MB Hard Disk</h2>
+          <h2 class="text-xl font-bold text-white">Storage Subsystem Architecture: Floppy Disks, 32MB Hard Disk & Slinky RAM Disk</h2>
         </div>
 
-        <p class="text-gray-300 text-sm">
-          Understanding the Apple II storage architecture reveals why Woz's 1978 Disk II controller remains a masterpiece of engineering:
+        <p class="text-gray-300 text-sm leading-relaxed">
+          The Apple //c Ultra provides a complete, unified storage architecture combining authentic vintage physical diskette emulation with high-speed virtual hard disks and banked RAM disks:
         </p>
 
-        <div class="space-y-4 font-mono text-xs">
-          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
-            <h4 class="text-sm font-bold text-amber-400">How Floppy 6-and-2 GCR Encoding Works</h4>
-            <p class="text-gray-300">
-              A standard 5.25" floppy track contains 16 sectors of 256 bytes (4,096 user data bytes). To prevent shift-register clock drift, Woz devised <strong>6-and-2 Group Code Recording (GCR)</strong>, converting 256 8-bit bytes into 342 6-bit disk nibbles, each guaranteed to have no more than two consecutive zero bits and high bit 7 always set (<code class="text-emerald-400">$96–$FF</code>).
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
+          <!-- 1. Floppy Drive 1 & 2 -->
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-3">
+            <h4 class="text-sm font-bold text-amber-400">1. Dual 5.25" Floppy Drives (Slot 6)</h4>
+            <p class="text-gray-300 text-[11px] leading-relaxed">
+              <strong>Capacity:</strong> 140 KB (35 tracks, 16 sectors/track, 256 bytes/sector).<br>
+              <strong>Encoding:</strong> Authentic 6-and-2 Group Code Recording (GCR) nibblization ($96–$FF).<br>
+              <strong>Stepping:</strong> 4-phase stepper motor ($C0E0–$C0E7) with authentic audio stepping chitters.<br>
+              <strong>Boot Command:</strong> <code class="text-amber-400">PR#6</code>
             </p>
-            <p class="text-gray-400">
-              The Apple //c Ultra faithfully simulates the 4-phase stepper motor phases (<code class="text-amber-400">$C0E0–$C0E7</code>), track quarter-stepping, and generates authentic stepping sounds through Web Audio.
-            </p>
+            <div class="pt-2 border-t border-[#212836] text-[10px] text-gray-400">
+              <strong>Supported Formats:</strong> .DSK, .DO (DOS 3.3 order), .PO (ProDOS order), .NIB (raw nibbles), .2MG.
+            </div>
           </div>
 
-          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
-            <h4 class="text-sm font-bold text-emerald-400">The 32 Megabyte SmartPort Hard Disk (Slot 7)</h4>
-            <p class="text-gray-300">
-              In 1984, the Apple SmartPort protocol allowed intelligent block devices to attach to Slot 7. The Apple //c Ultra implements a full 32MB virtual volume (65,536 blocks of 512 bytes):
+          <!-- 2. SmartPort 32MB Hard Disk -->
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-3">
+            <h4 class="text-sm font-bold text-emerald-400">2. SmartPort 32MB Virtual HD (Slot 7)</h4>
+            <p class="text-gray-300 text-[11px] leading-relaxed">
+              <strong>Capacity:</strong> 32 Megabytes (32,768 KB).<br>
+              <strong>Geometry:</strong> 65,536 contiguous 512-byte logical blocks.<br>
+              <strong>Volume Name:</strong> <code class="text-emerald-400">/HD</code><br>
+              <strong>Filesystem:</strong> ProDOS 2.4.2 volume hierarchy (Seedling, Sapling, Tree files).<br>
+              <strong>Boot Command:</strong> <code class="text-emerald-400">PR#7</code>
             </p>
-            <ul class="list-disc list-inside text-gray-400 pl-2 space-y-1">
-              <li><strong>Block 0:</strong> ProDOS Boot Loader.</li>
-              <li><strong>Block 2:</strong> Volume Directory Header (<code class="text-white">/HD</code>).</li>
-              <li><strong>Blocks 3–5:</strong> Volume Bit Map (tracking all 65,536 allocation blocks).</li>
-              <li><strong>Persistence:</strong> Automatic background synchronization to browser IndexedDB storage.</li>
-            </ul>
+            <div class="pt-2 border-t border-[#212836] text-[10px] text-gray-400">
+              <strong>Persistence:</strong> Automatic background synchronization to browser IndexedDB storage.
+            </div>
+          </div>
+
+          <!-- 3. Slinky 1MB RAM Disk -->
+          <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-3">
+            <h4 class="text-sm font-bold text-purple-400">3. Slinky 1MB RAM Disk (Slot 4)</h4>
+            <p class="text-gray-300 text-[11px] leading-relaxed">
+              <strong>Capacity:</strong> 1,048,576 Bytes (1,024 KB).<br>
+              <strong>Hardware:</strong> 24-bit auto-incrementing registers ($C0C8–$C0CB).<br>
+              <strong>Volume:</strong> <code class="text-purple-400">/RAM</code> (2,048 ProDOS Blocks).<br>
+              <strong>Throughput:</strong> Zero-latency DMA transfer for audio & texture streaming.
+            </p>
+            <div class="pt-2 border-t border-[#212836] text-[10px] text-gray-400">
+              <strong>Lowering:</strong> Fast 256-iteration assembly loops transferring 512B in microseconds.
+            </div>
+          </div>
+        </div>
+
+        <!-- Operational Guide: Workbench Storage Tab -->
+        <div class="p-5 bg-[#0d1117] rounded-xl border border-[#30363d] space-y-4 font-mono text-xs">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2">
+            <span class="text-amber-400">💾</span> How to Use the Under the Hood Storage Manager Tab
+          </h4>
+          <ol class="list-decimal list-inside text-gray-300 space-y-2 leading-relaxed">
+            <li><strong>Mounting Images:</strong> In the Storage tab, click <em>Mount Floppy Image</em> or <em>Mount Hard Disk Image</em> and select any local <code>.dsk</code>, <code>.po</code>, or <code>.2mg</code> file.</li>
+            <li><strong>Inspecting Sectors:</strong> Select Floppy Drive 1 or Drive 2, enter Track (00–34) and Sector (00–15), and click <em>Inspect Sector</em> to view the raw 256-byte hexadecimal and ASCII matrix.</li>
+            <li><strong>Raw Block Hex Editor:</strong> Under the SmartPort 32MB section, enter any Block Number (0–65535) and click <em>Read Block</em>. You can modify hex bytes directly and click <em>Commit Block Write</em> to save immediately to persistent storage!</li>
+            <li><strong>Ejecting & Creating Disks:</strong> Click <em>Eject</em> to unload media safely, or <em>Format New 32MB /HD Volume</em> to initialize a clean ProDOS filesystem.</li>
+          </ol>
+        </div>
+
+        <!-- Managed Language Storage Reference -->
+        <div class="space-y-3 font-mono text-xs">
+          <h4 class="text-sm font-bold text-cyan-400">Modern Language Storage Code Examples (C# & Java)</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-3 bg-[#081018] rounded border border-[#1b324d]">
+              <span class="text-cyan-300 font-bold block mb-1">C# .NET Storage Access</span>
+              <pre class="text-gray-300 text-[11px] overflow-x-auto"><code>using System.IO;
+using Apple2.Ultra;
+
+// High-level File Read/Write
+File.WriteAllText("/HD/SAVEGAME.DAT", "HERO:LVL10");
+string state = File.ReadAllText("/HD/SAVEGAME.DAT");
+
+// Low-level MLI Block I/O ($C700)
+byte[] block = new byte[512];
+AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, block);</code></pre>
+            </div>
+            <div class="p-3 bg-[#081510] rounded border border-[#1b432a]">
+              <span class="text-emerald-300 font-bold block mb-1">Java 17 Storage Access</span>
+              <pre class="text-gray-300 text-[11px] overflow-x-auto"><code>import java.io.File;
+import apple2.hardware.AppleStorage;
+
+// High-level File Streams
+File file = new File("/HD/CONFIG.CFG");
+file.writeText("SPEED=FAST;AUDIO=ON");
+
+// Low-level MLI Block I/O ($C700)
+byte[] buf = new byte[512];
+AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
+            </div>
           </div>
         </div>
       </section>

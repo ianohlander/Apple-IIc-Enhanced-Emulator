@@ -1081,6 +1081,53 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
   });
 });
 
+
+// 15. Documentation & Storage Subsystem Architecture Audit Suite
+runner.suite('Documentation & Storage Subsystem Architecture: 9-Chapter Practicum & Multi-Tier Storage Audit', () => {
+  runner.test('Storage Developer Guide: Exhaustive GCR, SmartPort 32MB, Slinky RAM & 5 Labs', () => {
+    const storageDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'developer', 'storage-floppy-and-smartport.html'), 'utf8');
+    assertTrue(storageDoc.includes('GCR_ENCODE_TABLE'), 'GCR 64-entry lookup table documented');
+    assertTrue(storageDoc.includes('$D5 $AA $96'), 'Address Prologue $D5 $AA $96 documented');
+    assertTrue(storageDoc.includes('$D5 $AA $AD'), 'Data Prologue $D5 $AA $AD documented');
+    assertTrue(storageDoc.includes('65,536 Contiguous 512-Byte Blocks'), 'SmartPort 32MB block geometry documented');
+    assertTrue(storageDoc.includes('$C0C8'), 'Slinky 24-bit auto-incrementing registers documented');
+    assertTrue(storageDoc.includes('Exercise 5.1: Floppy 6-and-2 GCR'), 'Exercise 5.1 present');
+    assertTrue(storageDoc.includes('Exercise 5.2: ProDOS Volume Bitmap'), 'Exercise 5.2 present');
+    assertTrue(storageDoc.includes('Exercise 5.3: Direct Assembly MLI'), 'Exercise 5.3 present');
+    assertTrue(storageDoc.includes('Exercise 5.4: Object-Oriented Game Persistence in C#'), 'Exercise 5.4 present');
+    assertTrue(storageDoc.includes('Exercise 5.5: High-Speed Slinky 1MB RAM Disk'), 'Exercise 5.5 present');
+  });
+
+  runner.test('Master Textbook: 9 Chapters & Storage Guided Practicum Labs 8.1 - 8.5', () => {
+    const tutorialDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'comprehensive-ultra-tutorial.html'), 'utf8');
+    assertTrue(tutorialDoc.includes('Chapter 8: Storage Architecture, ProDOS 32MB Block Storage & File Persistence'), 'Chapter 8 present');
+    assertTrue(tutorialDoc.includes('Chapter 9: Under the Hood Workbench & System Tools Mastery'), 'Chapter 9 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 8.1'), 'Lab 8.1 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 8.2'), 'Lab 8.2 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 8.3'), 'Lab 8.3 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 8.4'), 'Lab 8.4 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 8.5'), 'Lab 8.5 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 9.1'), 'Lab 9.1 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 9.2'), 'Lab 9.2 present');
+    assertTrue(tutorialDoc.includes('LAB EXERCISE 9.3'), 'Lab 9.3 present');
+  });
+
+  runner.test('User Reference Manuals: Dual Floppy, 32MB SmartPort HD & Slinky RAM Disk', () => {
+    const manualDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'manual.html'), 'utf8');
+    const rootManual = fs.readFileSync(path.join(__dirname, '..', 'manual.html'), 'utf8');
+    assertTrue(manualDoc.includes('Storage Subsystem Architecture: Floppy Disks, 32MB Hard Disk & Slinky RAM Disk'), 'docs/manual.html expanded storage section');
+    assertTrue(rootManual.includes('Storage Subsystem Architecture: Floppy Disks, 32MB Hard Disk & Slinky RAM Disk'), 'manual.html expanded storage section');
+  });
+
+  runner.test('Hardware Reference: 7-Slot Peripheral Matrix & Storage Register Encyclopedia', () => {
+    const hwDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'hardware-reference.html'), 'utf8');
+    assertTrue(hwDoc.includes('Slot 7 ($C700)'), 'Slot 7 SmartPort HD present in slot grid');
+    assertTrue(hwDoc.includes('Disk II Floppy & SmartPort Hard Disk Hardware Register Reference'), 'Storage register encyclopedia present');
+    assertTrue(hwDoc.includes('$C0E0 / $C0E1'), 'Disk II phase softswitches documented');
+    assertTrue(hwDoc.includes('$C700'), 'SmartPort $C700 entry vector documented');
+  });
+});
+
 const passed = runner.summarize();
 process.exit(passed ? 0 : 1);
 
