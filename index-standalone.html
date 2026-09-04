@@ -1312,7 +1312,7 @@ $200A: 60         RTS</pre>
           { color: 5, pts: 40 }, // Orange
           { color: 2, pts: 30 }, // Violet
           { color: 1, pts: 20 }, // Green
-          { color: 3, pts: 10 }  // White
+          { color: 6, pts: 10 }  // Blue
         ];
 
         for (let r = 0; r < 4; r++) {
@@ -1832,16 +1832,26 @@ $200A: 60         RTS</pre>
 
         let currentByte = this.ram[addr] || 0;
 
-        // Colors 0 and 4 are Black (turn pixel bit off)
+        // Apple II Hi-Res Colors:
+        // Palette 0: 0=Black1, 1=Green, 2=Violet, 3=White1
+        // Palette 1: 4=Black2, 5=Orange, 6=Blue, 7=White2
         if (color === 0 || color === 4) {
           currentByte &= ~(1 << bitInByte);
           if (color === 4) currentByte |= 0x80; // Palette 1 bit
           else currentByte &= 0x7F;             // Palette 0 bit
-        } else {
-          // Set dot on
+        } else if (color === 3 || color === 7) {
           currentByte |= (1 << bitInByte);
-          // Palette select (Bit 7): 0-3 = Palette 0 (Bit 7=0), 4-7 = Palette 1 (Bit 7=1)
-          if (color >= 4) currentByte |= 0x80;
+          if (color === 7) currentByte |= 0x80;
+          else currentByte &= 0x7F;
+        } else if (color === 1 || color === 5) {
+          if (x % 2 !== 0) currentByte |= (1 << bitInByte);
+          else currentByte &= ~(1 << bitInByte);
+          if (color === 5) currentByte |= 0x80;
+          else currentByte &= 0x7F;
+        } else if (color === 2 || color === 6) {
+          if (x % 2 === 0) currentByte |= (1 << bitInByte);
+          else currentByte &= ~(1 << bitInByte);
+          if (color === 6) currentByte |= 0x80;
           else currentByte &= 0x7F;
         }
 
@@ -2088,34 +2098,73 @@ $200A: 60         RTS</pre>
           const scaleY = (this.mixedGraphics ? 304 : 384) / maxScanlines;
 
           // Direct Physical VRAM Rasterizer (280x192 from $2000-$3FFF)
+          const PAL = {
+            BLACK: '#000000',
+            GREEN: '#2FBC1A',
+            VIOLET: '#D043E5',
+            ORANGE: '#D06A1A',
+            BLUE: '#2F95E5',
+            WHITE: '#FFFFFF'
+          };
+
+          const bits = new Uint8Array(280);
+          const pal1 = new Uint8Array(280);
+
           for (let y = 0; y < maxScanlines; y++) {
             const scanlineBase = this.getHiresScanlineBase(y);
             for (let byteCol = 0; byteCol < 40; byteCol++) {
               const vramByte = this.ram[scanlineBase + byteCol] || 0;
-              const isPalette1 = (vramByte & 0x80) !== 0;
+              const isPal1 = (vramByte & 0x80) !== 0 ? 1 : 0;
 
               for (let bit = 0; bit < 7; bit++) {
-                const isDotOn = (vramByte & (1 << bit)) !== 0;
                 const dotX = byteCol * 7 + bit;
+                bits[dotX] = (vramByte & (1 << bit)) !== 0 ? 1 : 0;
+                pal1[dotX] = isPal1;
+              }
+            }
 
+            for (let x = 0; x < 280; x++) {
+              const isDotOn = bits[x] === 1;
+              const isPal1 = pal1[x] === 1;
+              const prevOn = x > 0 && bits[x - 1] === 1;
+              const nextOn = x < 279 && bits[x + 1] === 1;
+              const prevPrevOn = x > 1 && bits[x - 2] === 1;
+              const nextNextOn = x < 278 && bits[x + 2] === 1;
+
+              let dotColor = bg;
+
+              if (this.phosphor !== 'color') {
                 if (isDotOn) {
-                  let dotColor = fg;
-                  if (this.phosphor === 'color') {
-                    // NTSC Color Artifacting: Even/Odd dot columns determine hue
-                    if (dotX % 2 === 0) {
-                      dotColor = isPalette1 ? '#2F95E5' : '#D043E5'; // Blue vs Purple
-                    } else {
-                      dotColor = isPalette1 ? '#D06A1A' : '#2FBC1A'; // Orange vs Green
-                    }
-                    // If adjacent dot is also on, combine to white
-                    const nextByte = (bit === 6 && byteCol < 39) ? (this.ram[scanlineBase + byteCol + 1] || 0) : vramByte;
-                    const nextBit = (bit === 6) ? (nextByte & 1) : ((vramByte >> (bit + 1)) & 1);
-                    if (nextBit) dotColor = '#FFFFFF';
-                  }
-
-                  ctx.fillStyle = dotColor;
-                  ctx.fillRect(dotX * scaleX, y * scaleY, scaleX, Math.ceil(scaleY));
+                  dotColor = fg;
                 }
+              } else {
+                if (isDotOn) {
+                  if (prevOn || nextOn) {
+                    dotColor = PAL.WHITE;
+                  } else {
+                    if (x % 2 !== 0) {
+                      dotColor = isPal1 ? PAL.ORANGE : PAL.GREEN;
+                    } else {
+                      dotColor = isPal1 ? PAL.BLUE : PAL.VIOLET;
+                    }
+                  }
+                } else {
+                  // Composite Chroma Subcarrier Pulse Extension across color clock
+                  if (prevOn && !prevPrevOn) {
+                    const prevX = x - 1;
+                    const prevPal1 = pal1[prevX] === 1;
+                    dotColor = (prevX % 2 !== 0) ? (prevPal1 ? PAL.ORANGE : PAL.GREEN) : (prevPal1 ? PAL.BLUE : PAL.VIOLET);
+                  } else if (nextOn && !nextNextOn) {
+                    const nextX = x + 1;
+                    const nextPal1 = pal1[nextX] === 1;
+                    dotColor = (nextX % 2 !== 0) ? (nextPal1 ? PAL.ORANGE : PAL.GREEN) : (nextPal1 ? PAL.BLUE : PAL.VIOLET);
+                  }
+                }
+              }
+
+              if (dotColor !== bg) {
+                ctx.fillStyle = dotColor;
+                ctx.fillRect(x * scaleX, y * scaleY, scaleX, Math.ceil(scaleY));
               }
             }
           }
