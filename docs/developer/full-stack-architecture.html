@@ -95,36 +95,196 @@
         The Apple //c Ultra is an enhanced 8-bit workstation uniting authentic 1984 WDC 65C02 CMOS silicon emulation with modern high-speed extensions: 50 MHz turbo clocks, 16MB Slinky memory expansion, 32MB SmartPort hard disk block I/O, Dual AY-3-8910 Mockingboard sound synthesis, and native Ahead-Of-Time (AOT) compilers for <strong>Java</strong> and <strong>C# .NET</strong>.
       </p>
 
-      <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 font-mono text-xs text-gray-300 space-y-4">
-        <h3 class="text-amber-400 font-bold text-sm">Full-Stack Architectural Layer Diagram</h3>
-        <pre><code class="text-cyan-300">┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. USER APPLICATION LAYER                                                              │
-│    • C# .NET Core Source (.cs)      • Java 17 OOP Source (.java)   • 65C02 Assembly    │
-│    • Applesoft BASIC Programs       • Magazine Type-Ins (Compute!, inCider, Nibble)    │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. STANDARD RUNTIME CLASS LIBRARIES & APIS                                             │
-│    • System.*, Collections.Generic, System.IO, Apple2.Ultra.* (C# Core Framework)      │
-│    • java.lang, java.util, java.io, apple2.hardware.* (Java Standard Library)          │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 3. AHEAD-OF-TIME (AOT) COMPILER & LOWERING ENGINE                                      │
-│    • Lexer & AST Tokenizer         • Type Checker & Struct Layout Flattener            │
-│    • Zero Page Virtual Register Allocator (R0-R7: $80-$8F in Auxiliary RAM)            │
-│    • Native 65C02 Code Generator (Emits Binary at $2000-$BFFF with RTS termination)    │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 4. EMULATION SILICON CORE (TypeScript / ES2022, Strict OOP, SOLID, CC ≤ 7)             │
-│    • CPU65C02: 1-50 MHz Turbo, Cycle Counter, Binary/BCD ALU, CMOS Opcodes, Interrupts │
-│    • Apple2cMMU: 128KB Aux RAM, ALTZP, 80STORE, Language Card 16KB, Slinky 16MB Port  │
-│    • Apple2cVideo: Text 40/80, Lo-Res, Hi-Res, DHGR 560x192 16-Color, NTSC Artifacting  │
-│    • Mockingboard: Dual AY-3-8910 (6 Tone Channels, 2 Noise, 2 Envelopes) + 6522 VIAs  │
-│    • DiskII & SmartPort: Wozniak 6-and-2 GCR Nibble Engine, 32MB Hard Disk Block I/O   │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 5. HOST PLATFORM RUNTIME (Modern Web Browser / Node.js Host)                           │
-│    • HTML5 Canvas 2D Rendering Pipeline (Scanline shaders, P1/P3/P4 CRT phosphors)     │
-│    • Web Audio API AudioContext (Pulse-width modulated square waves & PSG synthesis)   │
-│    • IndexedDB Origin Private File System (OPFS) Persistent Storage (32MB Block Vol)   │
-│    • Host Keyboard & Mouse Pointer Tracking (Mapped to $C000 Keyboard & $C064 Paddles)│
-└────────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
+      
+      <!-- VISUAL FULL-STACK ARCHITECTURAL LAYER DIAGRAM -->
+      <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-4 font-mono text-xs my-6">
+        <div class="flex items-center justify-between border-b border-[#2a3642] pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400 font-bold text-sm">📐 Figure 1.1: Full-Stack Architectural Layer Diagram</span>
+          </div>
+          <span class="px-2.5 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">Full-Stack Architecture</span>
+        </div>
+        <p class="text-gray-400 text-xs">
+          Comprehensive multi-tier architectural hierarchy: Modern User Applications $\to$ Standard Libraries $\to$ AOT Lowering Engine $\to$ Emulation Silicon Core $\to$ Host Browser/Node.js Runtime:
+        </p>
+
+        <div class="overflow-x-auto py-2">
+          <svg viewBox="0 0 900 660" class="w-full max-w-5xl mx-auto drop-shadow-2xl" style="background: #080b0e; border-radius: 10px; border: 1px solid #1a222c;">
+            <defs>
+              <marker id="flow-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#00e5ff" />
+              </marker>
+              <linearGradient id="grad-l1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#0c2d38" />
+                <stop offset="100%" stop-color="#143e4d" />
+              </linearGradient>
+              <linearGradient id="grad-l2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#0e2a1e" />
+                <stop offset="100%" stop-color="#144130" />
+              </linearGradient>
+              <linearGradient id="grad-l3" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#2d1e08" />
+                <stop offset="100%" stop-color="#422c0d" />
+              </linearGradient>
+              <linearGradient id="grad-l4" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#2d0e38" />
+                <stop offset="100%" stop-color="#421652" />
+              </linearGradient>
+              <linearGradient id="grad-l5" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#082f38" />
+                <stop offset="100%" stop-color="#0d4654" />
+              </linearGradient>
+            </defs>
+
+            <!-- ================= LAYER 1 ================= -->
+            <g id="layer-1">
+              <rect x="25" y="20" width="850" height="95" rx="8" fill="url(#grad-l1)" stroke="#38bdf8" stroke-width="1.5" />
+              <!-- Title Badge -->
+              <rect x="40" y="32" width="260" height="24" rx="4" fill="#0284c7" />
+              <text x="50" y="48" fill="#ffffff" font-size="11" font-weight="bold" font-family="monospace">1. USER APPLICATION LAYER</text>
+              
+              <!-- Cards in Layer 1 -->
+              <rect x="40" y="65" width="190" height="38" rx="4" fill="#082029" stroke="#0284c7" stroke-width="1" />
+              <text x="50" y="80" fill="#38bdf8" font-size="9" font-weight="bold" font-family="monospace">C# .NET Core (.cs)</text>
+              <text x="50" y="94" fill="#94a3b8" font-size="8" font-family="monospace">RetroBreakout, OOP Vectors</text>
+
+              <rect x="245" y="65" width="190" height="38" rx="4" fill="#082029" stroke="#0284c7" stroke-width="1" />
+              <text x="255" y="80" fill="#38bdf8" font-size="9" font-weight="bold" font-family="monospace">Java 17 OOP (.java)</text>
+              <text x="255" y="94" fill="#94a3b8" font-size="8" font-family="monospace">JDK 17 Classes, Math, Collections</text>
+
+              <rect x="450" y="65" width="200" height="38" rx="4" fill="#082029" stroke="#0284c7" stroke-width="1" />
+              <text x="460" y="80" fill="#38bdf8" font-size="9" font-weight="bold" font-family="monospace">65C02 Native Assembly</text>
+              <text x="460" y="94" fill="#94a3b8" font-size="8" font-family="monospace">Direct Monitor Hex Dumps ($0300)</text>
+
+              <rect x="665" y="65" width="195" height="38" rx="4" fill="#082029" stroke="#0284c7" stroke-width="1" />
+              <text x="675" y="80" fill="#38bdf8" font-size="9" font-weight="bold" font-family="monospace">Vintage Magazine Type-Ins</text>
+              <text x="675" y="94" fill="#94a3b8" font-size="8" font-family="monospace">Compute!, inCider, Nibble Listings</text>
+            </g>
+
+            <!-- Connector Arrow L1 -> L2 -->
+            <line x1="450" y1="115" x2="450" y2="135" stroke="#00e5ff" stroke-width="2" marker-end="url(#flow-arrow)" />
+
+            <!-- ================= LAYER 2 ================= -->
+            <g id="layer-2">
+              <rect x="25" y="135" width="850" height="95" rx="8" fill="url(#grad-l2)" stroke="#34d399" stroke-width="1.5" />
+              <!-- Title Badge -->
+              <rect x="40" y="147" width="340" height="24" rx="4" fill="#059669" />
+              <text x="50" y="163" fill="#ffffff" font-size="11" font-weight="bold" font-family="monospace">2. STANDARD RUNTIME CLASS LIBRARIES &amp; APIS</text>
+
+              <!-- Cards in Layer 2 -->
+              <rect x="40" y="180" width="395" height="38" rx="4" fill="#071d15" stroke="#059669" stroke-width="1" />
+              <text x="50" y="195" fill="#34d399" font-size="9" font-weight="bold" font-family="monospace">.NET Framework: System, Collections.Generic, System.IO</text>
+              <text x="50" y="209" fill="#a7f3d0" font-size="8" font-family="monospace">Hardware APIs: Apple2.Ultra.AppleVideo, AppleSound, AppleInput</text>
+
+              <rect x="450" y="180" width="410" height="38" rx="4" fill="#071d15" stroke="#059669" stroke-width="1" />
+              <text x="460" y="195" fill="#34d399" font-size="9" font-weight="bold" font-family="monospace">Java Standard Library: java.lang, java.util, java.io</text>
+              <text x="460" y="209" fill="#a7f3d0" font-size="8" font-family="monospace">Hardware APIs: apple2.hardware.AppleGraphics, AppleAudio, AppleSystem</text>
+            </g>
+
+            <!-- Connector Arrow L2 -> L3 -->
+            <line x1="450" y1="230" x2="450" y2="250" stroke="#00e5ff" stroke-width="2" marker-end="url(#flow-arrow)" />
+
+            <!-- ================= LAYER 3 ================= -->
+            <g id="layer-3">
+              <rect x="25" y="250" width="850" height="105" rx="8" fill="url(#grad-l3)" stroke="#fbbf24" stroke-width="1.5" />
+              <!-- Title Badge -->
+              <rect x="40" y="262" width="380" height="24" rx="4" fill="#d97706" />
+              <text x="50" y="278" fill="#ffffff" font-size="11" font-weight="bold" font-family="monospace">3. AHEAD-OF-TIME (AOT) COMPILER &amp; LOWERING ENGINE</text>
+
+              <!-- Cards in Layer 3 -->
+              <rect x="40" y="295" width="190" height="48" rx="4" fill="#1f1405" stroke="#d97706" stroke-width="1" />
+              <text x="50" y="310" fill="#fbbf24" font-size="9" font-weight="bold" font-family="monospace">Lexer &amp; AST Tokenizer</text>
+              <text x="50" y="324" fill="#fde68a" font-size="8" font-family="monospace">Sweet16 Bytecode Virtual Stack</text>
+              <text x="50" y="336" fill="#fde68a" font-size="8" font-family="monospace">Expression &amp; Loop Parser</text>
+
+              <rect x="245" y="295" width="190" height="48" rx="4" fill="#1f1405" stroke="#d97706" stroke-width="1" />
+              <text x="255" y="310" fill="#fbbf24" font-size="9" font-weight="bold" font-family="monospace">Type Checker &amp; Struct Flattener</text>
+              <text x="255" y="324" fill="#fde68a" font-size="8" font-family="monospace">Direct Field Offset Layout</text>
+              <text x="255" y="336" fill="#fde68a" font-size="8" font-family="monospace">Stack Frame Elimination</text>
+
+              <rect x="450" y="295" width="200" height="48" rx="4" fill="#1f1405" stroke="#d97706" stroke-width="1" />
+              <text x="460" y="310" fill="#fbbf24" font-size="9" font-weight="bold" font-family="monospace">Zero Page Virtual Registers</text>
+              <text x="460" y="324" fill="#fde68a" font-size="8" font-family="monospace">R0–R7 ($80–$8F in Aux RAM)</text>
+              <text x="460" y="336" fill="#fde68a" font-size="8" font-family="monospace">Single-Cycle Pointer Access</text>
+
+              <rect x="665" y="295" width="195" height="48" rx="4" fill="#1f1405" stroke="#d97706" stroke-width="1" />
+              <text x="675" y="310" fill="#fbbf24" font-size="9" font-weight="bold" font-family="monospace">Native 65C02 Codegen</text>
+              <text x="675" y="324" fill="#fde68a" font-size="8" font-family="monospace">Emits Machine Code @ $2000</text>
+              <text x="675" y="336" fill="#fde68a" font-size="8" font-family="monospace">JSR $FDED COUT &amp; RTS End</text>
+            </g>
+
+            <!-- Connector Arrow L3 -> L4 -->
+            <line x1="450" y1="355" x2="450" y2="375" stroke="#00e5ff" stroke-width="2" marker-end="url(#flow-arrow)" />
+
+            <!-- ================= LAYER 4 ================= -->
+            <g id="layer-4">
+              <rect x="25" y="375" width="850" height="135" rx="8" fill="url(#grad-l4)" stroke="#e879f9" stroke-width="1.5" />
+              <!-- Title Badge -->
+              <rect x="40" y="387" width="460" height="24" rx="4" fill="#a21caf" />
+              <text x="50" y="403" fill="#ffffff" font-size="11" font-weight="bold" font-family="monospace">4. EMULATION SILICON CORE (TypeScript / ES2022, Strict OOP, SOLID, CC &le; 7)</text>
+
+              <!-- Cards in Layer 4 (Row 1) -->
+              <rect x="40" y="420" width="260" height="40" rx="4" fill="#200a28" stroke="#a21caf" stroke-width="1" />
+              <text x="50" y="435" fill="#f5d0fe" font-size="9" font-weight="bold" font-family="monospace">CPU65C02 Core (50 MHz Turbo)</text>
+              <text x="50" y="449" fill="#e879f9" font-size="8" font-family="monospace">Binary/BCD ALU, CMOS Opcodes, Cycle Acc</text>
+
+              <rect x="315" y="420" width="265" height="40" rx="4" fill="#200a28" stroke="#a21caf" stroke-width="1" />
+              <text x="325" y="435" fill="#f5d0fe" font-size="9" font-weight="bold" font-family="monospace">Apple2cMMU (128KB + 16MB Slinky)</text>
+              <text x="325" y="449" fill="#e879f9" font-size="8" font-family="monospace">Aux RAM, ALTZP, 80STORE, Lang Card 16KB</text>
+
+              <rect x="595" y="420" width="265" height="40" rx="4" fill="#200a28" stroke="#a21caf" stroke-width="1" />
+              <text x="605" y="435" fill="#f5d0fe" font-size="9" font-weight="bold" font-family="monospace">Apple2cVideo (Physical 8KB VRAM)</text>
+              <text x="605" y="449" fill="#e879f9" font-size="8" font-family="monospace">DHGR 560x192 16-Col, NTSC Phase Modulator</text>
+
+              <!-- Cards in Layer 4 (Row 2) -->
+              <rect x="40" y="465" width="260" height="38" rx="4" fill="#200a28" stroke="#a21caf" stroke-width="1" />
+              <text x="50" y="480" fill="#f5d0fe" font-size="9" font-weight="bold" font-family="monospace">Mockingboard &amp; Sound Blaster</text>
+              <text x="50" y="493" fill="#e879f9" font-size="8" font-family="monospace">Dual AY-3-8910 (6 Tones) + OPL2 9-Ch FM</text>
+
+              <rect x="315" y="465" width="265" height="38" rx="4" fill="#200a28" stroke="#a21caf" stroke-width="1" />
+              <text x="325" y="480" fill="#f5d0fe" font-size="9" font-weight="bold" font-family="monospace">DiskII &amp; SmartPort Storage</text>
+              <text x="325" y="493" fill="#e879f9" font-size="8" font-family="monospace">Woz 6-and-2 GCR Nibble + 32MB HD Block I/O</text>
+
+              <rect x="595" y="465" width="265" height="38" rx="4" fill="#200a28" stroke="#a21caf" stroke-width="1" />
+              <text x="605" y="480" fill="#f5d0fe" font-size="9" font-weight="bold" font-family="monospace">7-Slot Motherboard Expansion Bay</text>
+              <text x="605" y="493" fill="#e879f9" font-size="8" font-family="monospace">50-Pin Bus ($C100-$C7FF), Hot-Plug Cards</text>
+            </g>
+
+            <!-- Connector Arrow L4 -> L5 -->
+            <line x1="450" y1="510" x2="450" y2="530" stroke="#00e5ff" stroke-width="2" marker-end="url(#flow-arrow)" />
+
+            <!-- ================= LAYER 5 ================= -->
+            <g id="layer-5">
+              <rect x="25" y="530" width="850" height="110" rx="8" fill="url(#grad-l5)" stroke="#00e5ff" stroke-width="1.5" />
+              <!-- Title Badge -->
+              <rect x="40" y="542" width="370" height="24" rx="4" fill="#0284c7" />
+              <text x="50" y="558" fill="#ffffff" font-size="11" font-weight="bold" font-family="monospace">5. HOST PLATFORM RUNTIME (Web Browser / Node.js Host)</text>
+
+              <!-- Cards in Layer 5 -->
+              <rect x="40" y="575" width="190" height="52" rx="4" fill="#061c24" stroke="#00e5ff" stroke-width="1" />
+              <text x="50" y="590" fill="#00e5ff" font-size="9" font-weight="bold" font-family="monospace">HTML5 Canvas 2D Renderer</text>
+              <text x="50" y="604" fill="#bae6fd" font-size="8" font-family="monospace">Scanline Shaders &amp; Phosphors</text>
+              <text x="50" y="616" fill="#bae6fd" font-size="8" font-family="monospace">560x384 Hi-DPI Pixel Buffer</text>
+
+              <rect x="245" y="575" width="190" height="52" rx="4" fill="#061c24" stroke="#00e5ff" stroke-width="1" />
+              <text x="255" y="590" fill="#00e5ff" font-size="9" font-weight="bold" font-family="monospace">Web Audio API AudioContext</text>
+              <text x="255" y="604" fill="#bae6fd" font-size="8" font-family="monospace">OscillatorNode Pulse Width Mod</text>
+              <text x="255" y="616" fill="#bae6fd" font-size="8" font-family="monospace">Stereo PSG Mixer &amp; DAC</text>
+
+              <rect x="450" y="575" width="200" height="52" rx="4" fill="#061c24" stroke="#00e5ff" stroke-width="1" />
+              <text x="460" y="590" fill="#00e5ff" font-size="9" font-weight="bold" font-family="monospace">Persistent Storage (OPFS)</text>
+              <text x="460" y="604" fill="#bae6fd" font-size="8" font-family="monospace">IndexedDB &amp; LocalStorage</text>
+              <text x="460" y="616" fill="#bae6fd" font-size="8" font-family="monospace">32MB Hard Disk Block Volumes</text>
+
+              <rect x="665" y="575" width="195" height="52" rx="4" fill="#061c24" stroke="#00e5ff" stroke-width="1" />
+              <text x="675" y="590" fill="#00e5ff" font-size="9" font-weight="bold" font-family="monospace">Host Input Dispatcher</text>
+              <text x="675" y="604" fill="#bae6fd" font-size="8" font-family="monospace">Keyboard $	o$ $C000 Strobe</text>
+              <text x="675" y="616" fill="#bae6fd" font-size="8" font-family="monospace">Mouse Pointer $	o$ $C064 Paddles</text>
+            </g>
+          </svg>
+        </div>
       </div>
+
     </section>
 
     <!-- Section 2: 65C02 CPU Silicon Deep Dive -->
