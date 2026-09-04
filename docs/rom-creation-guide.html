@@ -128,6 +128,61 @@
 
     <!-- SECTION 1: 32KB Physical ROM Architecture -->
     <section id="sec1" class="space-y-6">
+
+    <!-- VISUAL DIAGRAM 1: ROM Address Space & Bank Switching Architecture -->
+    <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+      <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+        <span class="font-bold text-amber-400 text-sm">📐 Figure 1.1: Apple //c 32KB/64KB ROM Memory Map & Banking Architecture</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">ROM Memory Map</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        High memory architecture from $C000 to $FFFF showing firmware ROM sockets, Language Card RAM overlay banks, and Hardware Vector routing:
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 880 200" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <!-- $C000-$CFFF: Hardware I/O & Slot ROMs -->
+          <rect x="30" y="30" width="180" height="145" rx="6" fill="#141a21" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="120" y="52" fill="#f59e0b" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">$C000–$CFFF (4KB)</text>
+          <rect x="40" y="65" width="160" height="26" rx="3" fill="#2d1e08" stroke="#d97706" stroke-width="1" />
+          <text x="120" y="82" fill="#fde68a" font-size="9" text-anchor="middle" font-family="monospace">$C000–$C0FF: Softswitches</text>
+          <rect x="40" y="98" width="160" height="60" rx="3" fill="#2d1e08" stroke="#d97706" stroke-width="1" />
+          <text x="120" y="116" fill="#fde68a" font-size="9" text-anchor="middle" font-family="monospace">$C100–$C7FF: Slot Expansion</text>
+          <text x="120" y="132" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">$C800–$CFFF: Shared Expansion</text>
+
+          <!-- $D000-$DFFF: Banked Region -->
+          <rect x="230" y="30" width="200" height="145" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="330" y="52" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">$D000–$DFFF (4KB Banked)</text>
+          <rect x="240" y="65" width="180" height="42" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+          <text x="330" y="82" fill="#bae6fd" font-size="9" text-anchor="middle" font-family="monospace">ROM Firmware Bank</text>
+          <text x="330" y="96" fill="#7dd3fc" font-size="8" text-anchor="middle" font-family="monospace">Applesoft BASIC High Subroutines</text>
+          <rect x="240" y="115" width="180" height="45" rx="3" fill="#1e1b4b" stroke="#6366f1" stroke-width="1" />
+          <text x="330" y="132" fill="#c7d2fe" font-size="9" text-anchor="middle" font-family="monospace">Language Card RAM</text>
+          <text x="330" y="146" fill="#a5b4fc" font-size="8" text-anchor="middle" font-family="monospace">Bank 1 (4K) / Bank 2 (4K) via $C08x</text>
+
+          <!-- $E000-$FFFF: Fixed System ROM & Vectors -->
+          <rect x="450" y="30" width="210" height="145" rx="6" fill="#141a21" stroke="#34d399" stroke-width="1.5" />
+          <text x="555" y="52" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">$E000–$FFFF (8KB Fixed)</text>
+          <rect x="460" y="65" width="190" height="35" rx="3" fill="#0e2a1e" stroke="#059669" stroke-width="1" />
+          <text x="555" y="80" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Applesoft Core ($E000–$F7FF)</text>
+          <text x="555" y="93" fill="#6ee7b7" font-size="8" text-anchor="middle" font-family="monospace">Floating Point &amp; Math Engine</text>
+          <rect x="460" y="106" width="190" height="55" rx="3" fill="#0e2a1e" stroke="#059669" stroke-width="1" />
+          <text x="555" y="122" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">System Monitor ($F800–$FFFF)</text>
+          <text x="555" y="136" fill="#6ee7b7" font-size="8" text-anchor="middle" font-family="monospace">COUT ($FDED) &amp; KEYIN ($FD1B)</text>
+          <text x="555" y="150" fill="#facc15" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Vectors: $FFFA, $FFFC, $FFFE</text>
+
+          <!-- Hardware Vectors Legend -->
+          <rect x="680" y="30" width="170" height="145" rx="6" fill="#141a21" stroke="#e879f9" stroke-width="1.5" />
+          <text x="765" y="52" fill="#e879f9" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Hardware Vectors</text>
+          <rect x="690" y="65" width="150" height="26" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+          <text x="765" y="82" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">$FFFC: RESET ($FA62)</text>
+          <rect x="690" y="98" width="150" height="26" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+          <text x="765" y="115" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">$FFFE: IRQ/BRK ($FA40)</text>
+          <rect x="690" y="131" width="150" height="26" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+          <text x="765" y="148" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">$FFFA: NMI ($FB40)</text>
+        </svg>
+      </div>
+    </div>
+  
       <div class="flex items-center gap-3">
         <span class="w-9 h-9 rounded-lg bg-pink-500/20 text-pink-400 font-mono font-bold text-lg flex items-center justify-center border border-pink-500/40">1</span>
         <div>
@@ -345,6 +400,70 @@ Row 7:  . . X . X . .  -> $14  (0001 0100)</code></pre>
 
     <!-- SECTION 5: Toolchain & Build Pipeline -->
     <section id="sec5" class="space-y-6">
+
+    <!-- VISUAL DIAGRAM 2: ROM Build & Patch Pipeline -->
+    <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+      <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+        <span class="font-bold text-cyan-400 text-sm">📐 Figure 5.1: Custom ROM Build, Patch & Online Flashing Pipeline</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Toolchain Workflow</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        Step-by-step firmware engineering workflow from 65C02 assembly source through linker script, binary checksumming, and browser flashing:
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 880 140" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <defs>
+            <marker id="arrow-cyan-rom" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#00e5ff" />
+            </marker>
+          </defs>
+
+          <!-- Stage 1 -->
+          <rect x="25" y="25" width="140" height="90" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="95" y="48" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">1. 65C02 Assembly</text>
+          <text x="95" y="68" fill="#94a3b8" font-size="8" text-anchor="middle" font-family="monospace">custom_rom.s</text>
+          <text x="95" y="85" fill="#94a3b8" font-size="8" text-anchor="middle" font-family="monospace">Patch Title Banner</text>
+          <text x="95" y="100" fill="#38bdf8" font-size="8" text-anchor="middle" font-family="monospace">Set Reset Vector</text>
+
+          <line x1="165" y1="70" x2="200" y2="70" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow-cyan-rom)" />
+
+          <!-- Stage 2 -->
+          <rect x="200" y="25" width="140" height="90" rx="6" fill="#141a21" stroke="#34d399" stroke-width="1.5" />
+          <text x="270" y="48" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">2. Assembler (ca65)</text>
+          <text x="270" y="68" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">Compile to Opcodes</text>
+          <text x="270" y="85" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">Resolve Symbols</text>
+          <text x="270" y="100" fill="#34d399" font-size="8" text-anchor="middle" font-family="monospace">Output: custom.o</text>
+
+          <line x1="340" y1="70" x2="375" y2="70" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow-cyan-rom)" />
+
+          <!-- Stage 3 -->
+          <rect x="375" y="25" width="140" height="90" rx="6" fill="#141a21" stroke="#fbbf24" stroke-width="1.5" />
+          <text x="445" y="48" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">3. Linker (ld65)</text>
+          <text x="445" y="68" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">Target: $D000–$FFFF</text>
+          <text x="445" y="85" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">Pad to exact 32KB</text>
+          <text x="445" y="100" fill="#fbbf24" font-size="8" text-anchor="middle" font-family="monospace">Output: custom_rom.bin</text>
+
+          <line x1="515" y1="70" x2="550" y2="70" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow-cyan-rom)" />
+
+          <!-- Stage 4 -->
+          <rect x="550" y="25" width="140" height="90" rx="6" fill="#141a21" stroke="#e879f9" stroke-width="1.5" />
+          <text x="620" y="48" fill="#e879f9" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">4. Checksum Verify</text>
+          <text x="620" y="68" fill="#f5d0fe" font-size="8" text-anchor="middle" font-family="monospace">Verify $FFFC Reset</text>
+          <text x="620" y="85" fill="#f5d0fe" font-size="8" text-anchor="middle" font-family="monospace">Compute CRC32 / Sum</text>
+          <text x="620" y="100" fill="#e879f9" font-size="8" text-anchor="middle" font-family="monospace">Integrity Passed OK</text>
+
+          <line x1="690" y1="70" x2="725" y2="70" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow-cyan-rom)" />
+
+          <!-- Stage 5 -->
+          <rect x="725" y="25" width="130" height="90" rx="6" fill="#0c2d38" stroke="#00e5ff" stroke-width="1.5" />
+          <text x="790" y="48" fill="#00e5ff" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">5. Online Flasher</text>
+          <text x="790" y="68" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">Attach in UI Tab</text>
+          <text x="790" y="85" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">Flash into Silicon</text>
+          <text x="790" y="100" fill="#00e5ff" font-size="8" text-anchor="middle" font-family="monospace">Trigger Cold Boot</text>
+        </svg>
+      </div>
+    </div>
+  
       <div class="flex items-center gap-3">
         <span class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold text-lg flex items-center justify-center border border-emerald-500/40">5</span>
         <div>

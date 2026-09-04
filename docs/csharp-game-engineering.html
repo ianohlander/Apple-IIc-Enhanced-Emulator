@@ -69,7 +69,97 @@
     </div>
 
     <!-- Section 1: The Complete C# Video Game Source -->
-    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+    
+    <!-- VISUAL DIAGRAM 1: Full-Stack C# to 65C02 Compilation Pipeline -->
+    <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+        <span class="font-bold text-cyan-400 text-sm">📐 Figure 1.1: Full-Stack C# to 65C02 Compilation & Execution Pipeline</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Architecture Pipeline</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        From high-level C# object-oriented semantics (classes, fields, vectors, methods) down to native 65C02 machine instructions and Double Hi-Res silicon:
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 880 180" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <!-- Defs for arrow markers & gradients -->
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#00e5ff" />
+            </marker>
+            <linearGradient id="grad-csharp" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1e293b" />
+              <stop offset="100%" stop-color="#0f172a" />
+            </linearGradient>
+            <linearGradient id="grad-ast" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#143126" />
+              <stop offset="100%" stop-color="#091b14" />
+            </linearGradient>
+            <linearGradient id="grad-zp" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#3d2810" />
+              <stop offset="100%" stop-color="#241608" />
+            </linearGradient>
+            <linearGradient id="grad-6502" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#31133d" />
+              <stop offset="100%" stop-color="#1c0924" />
+            </linearGradient>
+            <linearGradient id="grad-silicon" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0c2d38" />
+              <stop offset="100%" stop-color="#06181f" />
+            </linearGradient>
+          </defs>
+
+          <!-- Stage 1: C# Source Code -->
+          <rect x="20" y="35" width="140" height="110" rx="6" fill="url(#grad-csharp)" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="90" y="60" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">1. C# 10 OOP</text>
+          <text x="90" y="80" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="monospace">class Paddle : GameObject</text>
+          <text x="90" y="98" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="monospace">void MoveLeft() { X-=4; }</text>
+          <text x="90" y="120" fill="#38bdf8" font-size="8" text-anchor="middle" font-family="monospace">Encapsulation & Vectors</text>
+
+          <!-- Arrow 1 -> 2 -->
+          <line x1="160" y1="90" x2="195" y2="90" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow)" />
+
+          <!-- Stage 2: AST Semantic Lowering -->
+          <rect x="195" y="35" width="140" height="110" rx="6" fill="url(#grad-ast)" stroke="#34d399" stroke-width="1.5" />
+          <text x="265" y="60" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">2. AST Lowering</text>
+          <text x="265" y="80" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Type Flattening</text>
+          <text x="265" y="98" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Direct Field Offsets</text>
+          <text x="265" y="120" fill="#34d399" font-size="8" text-anchor="middle" font-family="monospace">Stack Elimination</text>
+
+          <!-- Arrow 2 -> 3 -->
+          <line x1="335" y1="90" x2="370" y2="90" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow)" />
+
+          <!-- Stage 3: Zero Page Allocator -->
+          <rect x="370" y="35" width="140" height="110" rx="6" fill="url(#grad-zp)" stroke="#fbbf24" stroke-width="1.5" />
+          <text x="440" y="60" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">3. Zero Page Map</text>
+          <text x="440" y="80" fill="#fde68a" font-size="9" text-anchor="middle" font-family="monospace">$0010: Paddle_X</text>
+          <text x="440" y="98" fill="#fde68a" font-size="9" text-anchor="middle" font-family="monospace">$0012: Ball_Vector</text>
+          <text x="440" y="120" fill="#fbbf24" font-size="8" text-anchor="middle" font-family="monospace">Single-Cycle Access</text>
+
+          <!-- Arrow 3 -> 4 -->
+          <line x1="510" y1="90" x2="545" y2="90" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow)" />
+
+          <!-- Stage 4: 65C02 Codegen -->
+          <rect x="545" y="35" width="140" height="110" rx="6" fill="url(#grad-6502)" stroke="#e879f9" stroke-width="1.5" />
+          <text x="615" y="60" fill="#e879f9" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">4. 65C02 Codegen</text>
+          <text x="615" y="80" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">SEC : SBC #$04</text>
+          <text x="615" y="98" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">STA $10 [Paddle_X]</text>
+          <text x="615" y="120" fill="#e879f9" font-size="8" text-anchor="middle" font-family="monospace">Binary Stream @ $2000</text>
+
+          <!-- Arrow 4 -> 5 -->
+          <line x1="685" y1="90" x2="720" y2="90" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow)" />
+
+          <!-- Stage 5: Silicon & Video VRAM -->
+          <rect x="720" y="35" width="140" height="110" rx="6" fill="url(#grad-silicon)" stroke="#00e5ff" stroke-width="1.5" />
+          <text x="790" y="60" fill="#00e5ff" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">5. Apple //c Silicon</text>
+          <text x="790" y="80" fill="#bae6fd" font-size="9" text-anchor="middle" font-family="monospace">50 MHz WDC 65C02</text>
+          <text x="790" y="98" fill="#bae6fd" font-size="9" text-anchor="middle" font-family="monospace">DHGR 560x192 VRAM</text>
+          <text x="790" y="120" fill="#00e5ff" font-size="8" text-anchor="middle" font-family="monospace">Mockingboard Audio</text>
+        </svg>
+      </div>
+    </div>
+
+
+<section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
       <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
         <h3 class="text-base font-bold text-amber-400">1. The High-Level C# Source: "RetroBreakout"</h3>
         <span class="text-[11px] text-gray-500">Object-Oriented Design</span>
@@ -214,7 +304,67 @@ namespace RetroBreakout
 }</code></pre>
     </section>
 
-    <!-- Section 2: Memory Layout & Object Allocation -->
+    
+    <!-- VISUAL DIAGRAM 2: Memory Layout & Zero Page Structs -->
+    <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+        <span class="font-bold text-amber-400 text-sm">📐 Figure 2.1: RetroBreakout Ultra Memory Architecture & Zero Page Mapping</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Memory Map</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        High-speed single-cycle Zero Page register bank ($0000–$00FF), 32-brick matrix buffer ($0800–$081F), and physical Double Hi-Res framebuffers ($2000–$3FFF):
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 880 200" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <!-- Memory regions -->
+          <!-- Zero Page -->
+          <rect x="25" y="30" width="190" height="145" rx="6" fill="#141a21" stroke="#fbbf24" stroke-width="1.5" />
+          <text x="120" y="52" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Zero Page ($0000-$00FF)</text>
+          <rect x="35" y="65" width="170" height="22" rx="3" fill="#2d2109" stroke="#d97706" stroke-width="1" />
+          <text x="120" y="80" fill="#fde68a" font-size="9" text-anchor="middle" font-family="monospace">$0010-$0011: Paddle (X, Y)</text>
+          <rect x="35" y="93" width="170" height="22" rx="3" fill="#2d2109" stroke="#d97706" stroke-width="1" />
+          <text x="120" y="108" fill="#fde68a" font-size="9" text-anchor="middle" font-family="monospace">$0012-$0015: Ball (X, Y, Vx, Vy)</text>
+          <rect x="35" y="121" width="170" height="22" rx="3" fill="#2d2109" stroke="#d97706" stroke-width="1" />
+          <text x="120" y="136" fill="#fde68a" font-size="9" text-anchor="middle" font-family="monospace">$0016-$0018: Score (2B), Lives (1B)</text>
+          <text x="120" y="162" fill="#9ca3af" font-size="8" text-anchor="middle" font-family="monospace">Direct 1-Cycle Zero Page Access</text>
+
+          <!-- Brick Matrix Buffer -->
+          <rect x="240" y="30" width="190" height="145" rx="6" fill="#141a21" stroke="#34d399" stroke-width="1.5" />
+          <text x="335" y="52" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Brick Grid ($0800-$081F)</text>
+          <rect x="250" y="65" width="170" height="78" rx="3" fill="#0e2a1e" stroke="#059669" stroke-width="1" />
+          <text x="335" y="82" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Row 0 (Orange): Bricks 00-07</text>
+          <text x="335" y="98" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Row 1 (Violet): Bricks 08-15</text>
+          <text x="335" y="114" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Row 2 (Green):  Bricks 16-23</text>
+          <text x="335" y="130" fill="#a7f3d0" font-size="9" text-anchor="middle" font-family="monospace">Row 3 (White):  Bricks 24-31</text>
+          <text x="335" y="162" fill="#9ca3af" font-size="8" text-anchor="middle" font-family="monospace">32 Bytes Flat Memory Array</text>
+
+          <!-- 65C02 Code Space -->
+          <rect x="455" y="30" width="190" height="145" rx="6" fill="#141a21" stroke="#e879f9" stroke-width="1.5" />
+          <text x="550" y="52" fill="#e879f9" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Compiled Binary ($2000+)</text>
+          <rect x="465" y="65" width="170" height="22" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+          <text x="550" y="80" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">$2000: Game Init & Softswitches</text>
+          <rect x="465" y="93" width="170" height="22" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+          <text x="550" y="108" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">$2020: 60Hz Physics & Input Loop</text>
+          <rect x="465" y="121" width="170" height="22" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+          <text x="550" y="136" fill="#f5d0fe" font-size="9" text-anchor="middle" font-family="monospace">$2050: Sound & VRAM Render Sub</text>
+          <text x="550" y="162" fill="#9ca3af" font-size="8" text-anchor="middle" font-family="monospace">Native 65C02 Machine Code</text>
+
+          <!-- Double Hi-Res VRAM -->
+          <rect x="670" y="30" width="185" height="145" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="762" y="52" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">VRAM Dual 8KB Buffers</text>
+          <rect x="680" y="65" width="165" height="35" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+          <text x="762" y="80" fill="#bae6fd" font-size="9" text-anchor="middle" font-family="monospace">Main VRAM ($2000-$3FFF)</text>
+          <text x="762" y="94" fill="#7dd3fc" font-size="8" text-anchor="middle" font-family="monospace">Even Dot Columns (280x192)</text>
+          <rect x="680" y="108" width="165" height="35" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+          <text x="762" y="123" fill="#bae6fd" font-size="9" text-anchor="middle" font-family="monospace">Aux VRAM ($2000-$3FFF)</text>
+          <text x="762" y="137" fill="#7dd3fc" font-size="8" text-anchor="middle" font-family="monospace">Odd Dot Columns (280x192)</text>
+          <text x="762" y="162" fill="#9ca3af" font-size="8" text-anchor="middle" font-family="monospace">Total: 560x192 16-Color DHGR</text>
+        </svg>
+      </div>
+    </div>
+
+
+<!-- Section 2: Memory Layout & Object Allocation -->
     <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
       <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
         <h3 class="text-base font-bold text-emerald-400">2. How C# Objects & Fields Live in Apple II Memory</h3>
@@ -264,6 +414,70 @@ namespace RetroBreakout
     <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
       <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
         <h3 class="text-base font-bold text-cyan-400">3. Line-by-Line C# to 65C02 Assembly Translation</h3>
+
+    <!-- VISUAL DIAGRAM 3: Physics, Collision & Sound Feedback Loop -->
+    <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+      <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+        <span class="font-bold text-emerald-400 text-sm">📐 Figure 3.1: 60 FPS Real-Time Physics & Collision Feedback Loop</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Hardware Feedback Loop</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        State machine showing the closed-loop cycle of keyboard/paddle input reading, vector position updates, bounding box collision checks, sound synthesis trigger, and scanline rendering:
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 880 200" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <defs>
+            <marker id="arrow-green-3" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+            </marker>
+          </defs>
+
+          <!-- Block 1: Input -->
+          <rect x="30" y="70" width="135" height="60" rx="6" fill="#142e20" stroke="#34d399" stroke-width="1.5" />
+          <text x="97" y="95" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">1. Input Sampling</text>
+          <text x="97" y="112" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">$C000 Keyboard / $C064 Paddle</text>
+
+          <!-- Flow 1 -> 2 -->
+          <line x1="165" y1="100" x2="200" y2="100" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green-3)" />
+
+          <!-- Block 2: Physics -->
+          <rect x="200" y="70" width="135" height="60" rx="6" fill="#142e20" stroke="#34d399" stroke-width="1.5" />
+          <text x="267" y="95" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">2. Vector Physics</text>
+          <text x="267" y="112" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">X += Vx : Y += Vy</text>
+
+          <!-- Flow 2 -> 3 -->
+          <line x1="335" y1="100" x2="370" y2="100" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green-3)" />
+
+          <!-- Block 3: Collision Engine -->
+          <rect x="370" y="70" width="140" height="60" rx="6" fill="#2d1e08" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="440" y="93" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">3. Collision Engine</text>
+          <text x="440" y="108" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">Paddle Angle &amp; Brick Grid</text>
+          <text x="440" y="120" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">Idx = (Y-22)/10*8 + X/31</text>
+
+          <!-- Branch to Sound & Score -->
+          <line x1="510" y1="100" x2="545" y2="100" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green-3)" />
+
+          <!-- Block 4: Sound & Score -->
+          <rect x="545" y="70" width="140" height="60" rx="6" fill="#260f33" stroke="#d946ef" stroke-width="1.5" />
+          <text x="615" y="93" fill="#d946ef" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">4. Audio &amp; State</text>
+          <text x="615" y="108" fill="#f5d0fe" font-size="8" text-anchor="middle" font-family="monospace">Mockingboard AY-3-8910</text>
+          <text x="615" y="120" fill="#f5d0fe" font-size="8" text-anchor="middle" font-family="monospace">Score += 10 : Bricks--</text>
+
+          <!-- Flow 4 -> 5 -->
+          <line x1="685" y1="100" x2="720" y2="100" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green-3)" />
+
+          <!-- Block 5: VRAM Rasterize -->
+          <rect x="720" y="70" width="130" height="60" rx="6" fill="#0c2d38" stroke="#00e5ff" stroke-width="1.5" />
+          <text x="785" y="95" fill="#00e5ff" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">5. VRAM Render</text>
+          <text x="785" y="112" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">Draw Paddle, Ball, Bricks</text>
+
+          <!-- Feedback loop bottom line from 5 back to 1 -->
+          <path d="M 785 130 L 785 170 L 97 170 L 97 130" fill="none" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow-green-3)" />
+          <text x="440" y="164" fill="#34d399" font-size="9" text-anchor="middle" font-family="monospace">60 Hz Vertical Blank Synchronization (VBL IRQ)</text>
+        </svg>
+      </div>
+    </div>
+  
         <span class="text-[11px] text-gray-500">Source Mapping Links</span>
       </div>
 

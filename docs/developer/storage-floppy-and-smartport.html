@@ -39,6 +39,49 @@
   <!-- Content -->
   <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
 
+      <!-- VISUAL DIAGRAM: Disk II Floppy & SmartPort HD Architecture -->
+      <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+        <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+          <span class="font-bold text-cyan-400 text-sm">📐 Figure S.1: Storage Architecture (Disk II 140KB Floppy + SmartPort 32MB Hard Disk)</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Storage Controller Schematic</span>
+        </div>
+        <p class="text-gray-400 text-xs">
+          IWM (Integrated Woz Machine) 6-and-2 GCR nibblizing state sequencer alongside SmartPort 32MB ProDOS block transaction driver:
+        </p>
+        <div class="overflow-x-auto py-2">
+          <svg viewBox="0 0 880 180" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+            <!-- Floppy Drive Controller -->
+            <rect x="25" y="25" width="395" height="130" rx="6" fill="#141a21" stroke="#f59e0b" stroke-width="1.5" />
+            <text x="222" y="48" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 6: Disk II 5.25" Floppy Controller ($C600)</text>
+            <rect x="35" y="65" width="180" height="75" rx="3" fill="#2d1e08" stroke="#d97706" stroke-width="1" />
+            <text x="125" y="82" fill="#fde68a" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">IWM 6-and-2 GCR Engine</text>
+            <text x="125" y="96" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">256-Byte Sector $	o$ 342 GCR Bytes</text>
+            <text x="125" y="108" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Address Prologue: $D5 $AA $96</text>
+            <text x="125" y="120" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Data Prologue: $D5 $AA $AD</text>
+            <rect x="225" y="65" width="185" height="75" rx="3" fill="#2d1e08" stroke="#d97706" stroke-width="1" />
+            <text x="317" y="82" fill="#fde68a" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">4-Phase Stepper Motor</text>
+            <text x="317" y="96" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Phases: PHASE0..PHASE3 ($C0EC-$C0EF)</text>
+            <text x="317" y="108" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">35 Tracks (00–34) x 16 Sectors</text>
+            <text x="317" y="120" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Total Capacity: 143,360 Bytes</text>
+
+            <!-- SmartPort Hard Disk Controller -->
+            <rect x="455" y="25" width="395" height="130" rx="6" fill="#141a21" stroke="#00e5ff" stroke-width="1.5" />
+            <text x="652" y="48" fill="#00e5ff" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 7: SmartPort 32MB Hard Disk Controller ($C700)</text>
+            <rect x="465" y="65" width="180" height="75" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+            <text x="555" y="82" fill="#bae6fd" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">ProDOS Block Protocol</text>
+            <text x="555" y="96" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">512 Bytes / Logical Block</text>
+            <text x="555" y="108" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Total Blocks: 65,536</text>
+            <text x="555" y="120" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Volume: /HD (32,768 KB)</text>
+            <rect x="655" y="65" width="185" height="75" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+            <text x="747" y="82" fill="#bae6fd" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Direct DMA Block Transfer</text>
+            <text x="747" y="96" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Command Packet: READ / WRITE</text>
+            <text x="747" y="108" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Zero-Latency Turbo Seek</text>
+            <text x="747" y="120" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">Instant File Catalog &amp; Execution</text>
+          </svg>
+        </div>
+      </div>
+    
+
     <!-- Section 1 -->
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">1. Wozniak 6-and-2 Group Code Recording (GCR)</h2>

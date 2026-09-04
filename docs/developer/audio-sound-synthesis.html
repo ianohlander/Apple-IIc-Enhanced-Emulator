@@ -39,6 +39,59 @@
   <!-- Content -->
   <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12">
 
+      <!-- VISUAL DIAGRAM: Mockingboard Dual AY-3-8910 & Sound Blaster OPL2 FM Synth -->
+      <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+        <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+          <span class="font-bold text-amber-400 text-sm">📐 Figure A.1: Sound Subsystem Architecture (Mockingboard + 1-Bit Speaker + OPL2 FM)</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Audio Hardware Schematic</span>
+        </div>
+        <p class="text-gray-400 text-xs">
+          Audio signal pathways showing the 1-bit speaker toggle RC filter, Mockingboard 6-channel programmable sound generators, and Sound Blaster OPL2 9-channel FM synth operator:
+        </p>
+        <div class="overflow-x-auto py-2">
+          <svg viewBox="0 0 880 190" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+            <!-- 1-Bit Speaker -->
+            <rect x="25" y="25" width="185" height="140" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
+            <text x="117" y="48" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">1-Bit Cassette/Speaker</text>
+            <rect x="35" y="65" width="165" height="35" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+            <text x="117" y="80" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">Softswitch $C030 Toggle</text>
+            <text x="117" y="94" fill="#7dd3fc" font-size="8" text-anchor="middle" font-family="monospace">Square Wave Pulse Stream</text>
+            <rect x="35" y="108" width="165" height="42" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+            <text x="117" y="124" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">RC Low-Pass Filter</text>
+            <text x="117" y="138" fill="#7dd3fc" font-size="8" text-anchor="middle" font-family="monospace">Speaker Cone Displacement</text>
+
+            <!-- Mockingboard Slot 4 -->
+            <rect x="240" y="25" width="280" height="140" rx="6" fill="#141a21" stroke="#d946ef" stroke-width="1.5" />
+            <text x="380" y="48" fill="#d946ef" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Mockingboard PSG (Slot 4: $C400)</text>
+            <rect x="250" y="65" width="125" height="85" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+            <text x="312" y="82" fill="#f5d0fe" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">AY-3-8910 (A)</text>
+            <text x="312" y="98" fill="#e879f9" font-size="7" text-anchor="middle" font-family="monospace">Voice A, B, C (3 Tones)</text>
+            <text x="312" y="112" fill="#e879f9" font-size="7" text-anchor="middle" font-family="monospace">Noise Generator</text>
+            <text x="312" y="126" fill="#e879f9" font-size="7" text-anchor="middle" font-family="monospace">6522 VIA Timer IRQ</text>
+            <rect x="385" y="65" width="125" height="85" rx="3" fill="#2d0e38" stroke="#a21caf" stroke-width="1" />
+            <text x="447" y="82" fill="#f5d0fe" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">AY-3-8910 (B)</text>
+            <text x="447" y="98" fill="#e879f9" font-size="7" text-anchor="middle" font-family="monospace">Voice D, E, F (3 Tones)</text>
+            <text x="447" y="112" fill="#e879f9" font-size="7" text-anchor="middle" font-family="monospace">Envelope Generator</text>
+            <text x="447" y="126" fill="#e879f9" font-size="7" text-anchor="middle" font-family="monospace">Stereo Pan Output</text>
+
+            <!-- OPL2 FM Synth Slot 5 -->
+            <rect x="550" y="25" width="300" height="140" rx="6" fill="#141a21" stroke="#34d399" stroke-width="1.5" />
+            <text x="700" y="48" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Sound Blaster / OPL2 (Slot 5: $C500)</text>
+            <rect x="560" y="65" width="135" height="85" rx="3" fill="#0e2a1e" stroke="#059669" stroke-width="1" />
+            <text x="627" y="82" fill="#a7f3d0" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Modulator Cell</text>
+            <text x="627" y="98" fill="#6ee7b7" font-size="7" text-anchor="middle" font-family="monospace">Feedback Loop (0-7)</text>
+            <text x="627" y="112" fill="#6ee7b7" font-size="7" text-anchor="middle" font-family="monospace">Attack/Decay (ADSR)</text>
+            <text x="627" y="126" fill="#6ee7b7" font-size="7" text-anchor="middle" font-family="monospace">Multiple / Vibrato</text>
+            <rect x="705" y="65" width="135" height="85" rx="3" fill="#0e2a1e" stroke="#059669" stroke-width="1" />
+            <text x="772" y="82" fill="#a7f3d0" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Carrier Cell</text>
+            <text x="772" y="98" fill="#6ee7b7" font-size="7" text-anchor="middle" font-family="monospace">Frequency Modulation</text>
+            <text x="772" y="112" fill="#6ee7b7" font-size="7" text-anchor="middle" font-family="monospace">9 Polyphonic Channels</text>
+            <text x="772" y="126" fill="#6ee7b7" font-size="7" text-anchor="middle" font-family="monospace">DAC Audio Output</text>
+          </svg>
+        </div>
+      </div>
+    
+
     <!-- Section 1 -->
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">1. 1-Bit Speaker Pulse Physics & Frequency Math</h2>

@@ -49,6 +49,69 @@
   </header>
 
   <main class="flex-1 max-w-5xl w-full mx-auto p-6 md:p-10 space-y-10 text-sm">
+    <!-- VISUAL DIAGRAM: 50-Pin Motherboard Peripheral Bus Interconnect -->
+    <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+        <span class="font-bold text-amber-400 text-sm">📐 Figure H.1: Apple //c Motherboard 50-Pin Bus & 7-Slot Peripheral Routing</span>
+        <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Motherboard Bus Architecture</span>
+      </div>
+      <p class="text-gray-400 text-xs">
+        50-pin system motherboard bus interconnect showing address decoding, data lines, clock distribution, and slot selection signals:
+      </p>
+      <div class="overflow-x-auto py-2">
+        <svg viewBox="0 0 880 200" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+          <!-- CPU Core Block -->
+          <rect x="30" y="30" width="150" height="140" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="105" y="55" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">WDC 65C02 CPU</text>
+          <text x="105" y="75" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="monospace">50 MHz Turbo Core</text>
+          <rect x="40" y="90" width="130" height="20" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+          <text x="105" y="104" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">16-Bit Address: A0–A15</text>
+          <rect x="40" y="115" width="130" height="20" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+          <text x="105" y="129" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">8-Bit Data: D0–D7</text>
+          <rect x="40" y="140" width="130" height="20" rx="3" fill="#0c2d38" stroke="#0284c7" stroke-width="1" />
+          <text x="105" y="154" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">Control: R/W, PHI2, IRQ</text>
+
+          <!-- System Bus Lines -->
+          <line x1="180" y1="65" x2="850" y2="65" stroke="#fbbf24" stroke-width="3" />
+          <text x="515" y="60" fill="#fbbf24" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">ADDRESS BUS (A0–A15) [$C100–$C7FF DECODE]</text>
+
+          <line x1="180" y1="105" x2="850" y2="105" stroke="#34d399" stroke-width="3" />
+          <text x="515" y="100" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">DATA BUS (D0–D7) [8-BIT BIDIRECTIONAL]</text>
+
+          <line x1="180" y1="145" x2="850" y2="145" stroke="#e879f9" stroke-width="2" />
+          <text x="515" y="140" fill="#e879f9" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">CONTROL BUS (PHI2 Clock, R/W, /IOSEL, /DEVSEL, /IRQ)</text>
+
+          <!-- Drop Lines to Slots -->
+          <!-- Slot 1 -->
+          <line x1="240" y1="65" x2="240" y2="175" stroke="#fbbf24" stroke-width="1.5" />
+          <circle cx="240" cy="175" r="4" fill="#fbbf24" />
+          <text x="240" y="192" fill="#fbbf24" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 1 (Printer)</text>
+
+          <!-- Slot 3 -->
+          <line x1="390" y1="65" x2="390" y2="175" stroke="#38bdf8" stroke-width="1.5" />
+          <circle cx="390" cy="175" r="4" fill="#38bdf8" />
+          <text x="390" y="192" fill="#38bdf8" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 3 (80-Col)</text>
+
+          <!-- Slot 4 -->
+          <line x1="530" y1="65" x2="530" y2="175" stroke="#d946ef" stroke-width="1.5" />
+          <circle cx="530" cy="175" r="4" fill="#d946ef" />
+          <text x="530" y="192" fill="#d946ef" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 4 (Mockingboard)</text>
+
+          <!-- Slot 6 -->
+          <line x1="670" y1="65" x2="670" y2="175" stroke="#34d399" stroke-width="1.5" />
+          <circle cx="670" cy="175" r="4" fill="#34d399" />
+          <text x="670" y="192" fill="#34d399" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 6 (Floppy)</text>
+
+          <!-- Slot 7 -->
+          <line x1="810" y1="65" x2="810" y2="175" stroke="#00e5ff" stroke-width="1.5" />
+          <circle cx="810" cy="175" r="4" fill="#00e5ff" />
+          <text x="810" y="192" fill="#00e5ff" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">Slot 7 (32MB HD)</text>
+        </svg>
+      </div>
+    </div>
+
+
+
 
     <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-8 shadow-2xl space-y-3">
       <h2 class="text-3xl font-black text-white">The Definitive Hardware & Softswitch Reference</h2>

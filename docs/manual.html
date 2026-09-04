@@ -100,6 +100,70 @@
     <!-- Main Content -->
     <main class="flex-1 min-w-0 space-y-12 leading-relaxed">
 
+      <!-- VISUAL DIAGRAM: User Operation Flowchart -->
+      <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+        <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+          <span class="font-bold text-amber-400 text-sm">📐 User Operations & Workflow Flowchart</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Operational Guide</span>
+        </div>
+        <p class="text-gray-400 text-xs">
+          Comprehensive user workflow: Power On, Floppy &amp; Hard Disk Booting, CRT Controls, Slot Expansion Bay, Magazine Type-In Studio, and C#/Java AOT Compilers:
+        </p>
+        <div class="overflow-x-auto py-2">
+          <svg viewBox="0 0 880 150" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+            <defs>
+              <marker id="arrow-man" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24" />
+              </marker>
+            </defs>
+
+            <!-- Node 1 -->
+            <rect x="20" y="30" width="145" height="90" rx="6" fill="#141a21" stroke="#fbbf24" stroke-width="1.5" />
+            <text x="92" y="55" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">1. Power / Reset</text>
+            <text x="92" y="75" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">Cold Boot Sequence</text>
+            <text x="92" y="90" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">50 MHz Turbo PLL</text>
+            <text x="92" y="105" fill="#fbbf24" font-size="8" text-anchor="middle" font-family="monospace">Applesoft ] Prompt</text>
+
+            <line x1="165" y1="75" x2="195" y2="75" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-man)" />
+
+            <!-- Node 2 -->
+            <rect x="195" y="30" width="145" height="90" rx="6" fill="#141a21" stroke="#34d399" stroke-width="1.5" />
+            <text x="267" y="55" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">2. Disk &amp; Media</text>
+            <text x="267" y="75" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">Mount .DSK Floppy (S6)</text>
+            <text x="267" y="90" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">SmartPort 32MB HD (S7)</text>
+            <text x="267" y="105" fill="#34d399" font-size="8" text-anchor="middle" font-family="monospace">PR#6 / PR#7 Boot</text>
+
+            <line x1="340" y1="75" x2="370" y2="75" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-man)" />
+
+            <!-- Node 3 -->
+            <rect x="370" y="30" width="145" height="90" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
+            <text x="442" y="55" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">3. CRT &amp; Slots</text>
+            <text x="442" y="75" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">P1 Green/Amber/Color</text>
+            <text x="442" y="90" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">Scanline FX Filter</text>
+            <text x="442" y="105" fill="#38bdf8" font-size="8" text-anchor="middle" font-family="monospace">Plug/Unplug Slots 1-7</text>
+
+            <line x1="515" y1="75" x2="545" y2="75" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-man)" />
+
+            <!-- Node 4 -->
+            <rect x="545" y="30" width="145" height="90" rx="6" fill="#141a21" stroke="#d946ef" stroke-width="1.5" />
+            <text x="617" y="55" fill="#d946ef" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">4. Type-In Studio</text>
+            <text x="617" y="75" fill="#f5d0fe" font-size="8" text-anchor="middle" font-family="monospace">inCider Kaleidoscope</text>
+            <text x="617" y="90" fill="#f5d0fe" font-size="8" text-anchor="middle" font-family="monospace">Compute! Lunar Lander</text>
+            <text x="617" y="105" fill="#d946ef" font-size="8" text-anchor="middle" font-family="monospace">Hex Dump $0300 Inj</text>
+
+            <line x1="690" y1="75" x2="720" y2="75" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-man)" />
+
+            <!-- Node 5 -->
+            <rect x="720" y="30" width="140" height="90" rx="6" fill="#0c2d38" stroke="#00e5ff" stroke-width="1.5" />
+            <text x="790" y="55" fill="#00e5ff" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">5. C#/Java AOT</text>
+            <text x="790" y="75" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">RetroBreakout C# 10</text>
+            <text x="790" y="90" fill="#bae6fd" font-size="8" text-anchor="middle" font-family="monospace">Standard Java 17 OOP</text>
+            <text x="790" y="105" fill="#00e5ff" font-size="8" text-anchor="middle" font-family="monospace">Native 65C02 Silicon</text>
+          </svg>
+        </div>
+      </div>
+    
+
       <!-- Hero Banner -->
       <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-8 lg:p-10 shadow-2xl relative overflow-hidden space-y-4">
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-mono">

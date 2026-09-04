@@ -47,6 +47,33 @@
 
   <main class="flex-1 max-w-4xl w-full mx-auto p-6 md:p-10 space-y-8 text-sm">
 
+      <!-- VISUAL DIAGRAM: QA Test Architecture -->
+      <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
+        <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
+          <span class="font-bold text-emerald-400 text-sm">📐 Automated QA Verification &amp; Code Quality Test Pyramid</span>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Quality Architecture</span>
+        </div>
+        <p class="text-gray-400 text-xs">
+          Multi-tiered test runner verifying 34 unit/integration test suites across 65C02 arithmetic, MMU memory banking, GCR storage, VRAM rasterization, and AOT compilation:
+        </p>
+        <div class="overflow-x-auto py-2">
+          <svg viewBox="0 0 880 140" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+            <!-- Tier 1 -->
+            <polygon points="440,20 330,60 550,60" fill="#142e20" stroke="#34d399" stroke-width="1.5" />
+            <text x="440" y="48" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">End-to-End Surface &amp; CRT UI Tests</text>
+
+            <!-- Tier 2 -->
+            <polygon points="320,65 560,65 620,95 260,95" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
+            <text x="440" y="83" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">Subsystem Integration (IWM GCR, Slinky 1MB, Mockingboard, AOT)</text>
+
+            <!-- Tier 3 -->
+            <polygon points="250,100 630,100 690,130 190,130" fill="#2d1e08" stroke="#fbbf24" stroke-width="1.5" />
+            <text x="440" y="118" fill="#fbbf24" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">65C02 Microcode Unit Tests &amp; Static Cyclomatic Complexity (CC &le; 7)</text>
+          </svg>
+        </div>
+      </div>
+    
+
     <div class="bg-gradient-to-br from-[#161b22] to-[#1c222b] border border-[#30363d] rounded-2xl p-6 shadow-2xl">
       <h2 class="text-2xl font-black text-white mb-2">Architectural Principles & Code QA</h2>
       <p class="text-gray-400 text-xs leading-relaxed">
