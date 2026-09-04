@@ -271,12 +271,370 @@ namespace DotNetCoreStandardApp {
           <div><span class="text-gray-500">PC:</span> <span id="dbg-pc" class="text-emerald-400 font-bold">$2000</span></div>
         </div>
 
-        <pre id="dbg-disasm" class="bg-[#0d1117] p-3 rounded border border-[#2a3642] text-xs text-amber-300">$2000: D8         CLD
-$2001: A2 FF      LDX #$FF
-$2003: 9A         TXS
-$2004: 8D 50 C0   STA $C050 [TXTCLR]
-$2007: 8D 57 C0   STA $C057 [HIRES]
-$200A: 60         RTS</pre>
+        <pre id="dbg-disasm" class="bg-[#0d1117] p-3 rounded border border-[#2a3642] text-xs text-amber-300 max-h-96 overflow-y-auto leading-relaxed">; ==============================================================================
+; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# RETRO BREAKOUT ULTRA
+; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)
+; Binary Base Address: $2000 | Total Payload: 612 Bytes
+; ==============================================================================
+;
+; --- ZERO-PAGE & MEMORY LAYOUT ALLOCATIONS ---
+; // [C#] public class Paddle : GameObject { public byte X; public byte Y; public byte Width; }
+; $0010: Paddle.X         (Zero Page, 1 byte, default 118 = $76)
+; $0011: Paddle.Y         (Zero Page, 1 byte, default 178 = $B2)
+; $0012: Paddle.Width     (Zero Page, 1 byte, const 44 = $2C)
+;
+; // [C#] public class Ball : GameObject { public byte X; public byte Y; public sbyte VelocityX; public sbyte VelocityY; }
+; $0013: Ball.X           (Zero Page, 1 byte, default 140 = $8C)
+; $0014: Ball.Y           (Zero Page, 1 byte, default 120 = $78)
+; $0015: Ball.VelocityX   (Zero Page, 1 byte signed, default +2 = $02)
+; $0016: Ball.VelocityY   (Zero Page, 1 byte signed, default -2 = $FE)
+;
+; // [C#] public class BrickGrid { public byte[] Bricks = new byte[32]; }
+; $0800..$081F: BrickGrid.Bricks (Array buffer in Main RAM, 32 bytes for 4x8 bricks)
+; $0017: Temp.RowIndex    (Zero Page, 1 byte)
+; $0018: Temp.ColIndex    (Zero Page, 1 byte)
+; $0019..$001A: Score     (Zero Page 16-bit integer score tracker)
+;
+; // [C#] Sweet16 / CLR Virtual Registers (Auxiliary RAM Zero Page $80..$8F)
+; $0080..$0081: Virtual Register R0 (Pointer / Vector X,Y)
+; $0082..$0083: Virtual Register R1 (Argument / Width)
+; $0084..$0085: Virtual Register R2 (Color Palette Mask)
+;
+; ==============================================================================
+; SECTION 1: HARDWARE & VIDEO INITIALIZATION
+; ==============================================================================
+; // [C#] public void Run() {
+; // [C#]     AppleVideo.SetDoubleHiRes(true);
+; // [C#]     AppleVideo.ClearScreen(AppleVideo.ColorBlack);
+;
+$2000: D8            CLD                 ; Clear Decimal Mode (binary arithmetic)
+$2001: A2 FF         LDX #$FF            ; Initialize 65C02 Hardware Stack Pointer
+$2003: 9A            TXS                 ; SP = $FF
+$2004: 8D 50 C0      STA $C050           ; Softswitch $C050: TXTCLR (Enable Graphics Display)
+$2007: 8D 57 C0      STA $C057           ; Softswitch $C057: HIRES (Enable 280x192 VRAM Mode)
+$200A: 8D 0D C0      STA $C00D           ; Softswitch $C00D: 80COLSET (Enable Aux RAM Video)
+$200D: 8D 5F C0      STA $C05F           ; Softswitch $C05F: DHIRESON (Enable Double Hi-Res 560x192)
+$2010: 20 00 24      JSR VRAM_CLEAR      ; Zero out $2000..$3FFF VRAM buffers (ColorBlack)
+;
+; // [C#]     grid.Reset(); // Initializes 4 rows of 8 active bricks (32 total)
+;
+$2013: 20 EF 20      JSR BRICK_GRID_RESET ; Call BrickGrid.Reset() method ($20EF)
+;
+; // [C#]     AppleSound.Beep(587, 80); AppleSound.Beep(880, 120);
+;
+$2016: A9 4B         LDA #$4B            ; Frequency divisor ($4B = 587 Hz Tone)
+$2018: A2 50         LDX #$50            ; Duration loop count (80 ms)
+$201A: 20 00 23      JSR CHIPTUNE_TONE   ; Toggle $C030 speaker softswitch
+$201D: A9 32         LDA #$32            ; Frequency divisor ($32 = 880 Hz Tone)
+$201F: A2 78         LDX #$78            ; Duration loop count (120 ms)
+$2021: 20 00 23      JSR CHIPTUNE_TONE
+;
+; ==============================================================================
+; SECTION 2: 60 FPS REAL-TIME GAME LOOP
+; ==============================================================================
+; // [C#] while (true) {
+;
+GAME_LOOP:
+;
+; // [C#]     char key = AppleInput.GetKey();
+; // [C#]     if (key == 'A' || key == 'a' || key == 'J') player.MoveLeft();
+;
+$2024: AD 00 C0      LDA $C000           ; Read Keyboard Data Strobe Register ($C000)
+$2027: 10 24         BPL CHECK_PHYSICS   ; If Bit 7 is 0, no key pressed -> jump to physics
+$2029: 8D 10 C0      STA $C010           ; Clear Keyboard Data Strobe ($C010)
+$202C: 29 7F         AND #$7F            ; Strip high-bit ASCII ($80) to normal ASCII
+$202E: C9 41         CMP #$41            ; Check 'A' ($41)
+$2030: F0 08         BEQ DO_MOVE_LEFT
+$2032: C9 61         CMP #$61            ; Check 'a' ($61)
+$2034: F0 04         BEQ DO_MOVE_LEFT
+$2036: C9 4A         CMP #$4A            ; Check 'J' ($4A)
+$2038: D0 05         BNE CHECK_RIGHT_KEY
+DO_MOVE_LEFT:
+$203A: 20 84 20      JSR PADDLE_MOVE_LEFT; Call player.MoveLeft() ($2084)
+;
+; // [C#]     if (key == 'D' || key == 'd' || key == 'L') player.MoveRight();
+;
+CHECK_RIGHT_KEY:
+$203D: C9 44         CMP #$44            ; Check 'D' ($44)
+$203F: F0 08         BEQ DO_MOVE_RIGHT
+$2041: C9 64         CMP #$64            ; Check 'd' ($64)
+$2043: F0 04         BEQ DO_MOVE_RIGHT
+$2045: C9 4C         CMP #$4C            ; Check 'L' ($4C)
+$2047: D0 03         BNE CHECK_PHYSICS
+DO_MOVE_RIGHT:
+$2049: 20 90 20      JSR PADDLE_MOVE_RIGHT; Call player.MoveRight() ($2090)
+;
+; // [C#]     ball.Update();
+;
+CHECK_PHYSICS:
+$204C: 20 AE 20      JSR BALL_UPDATE     ; Call ball.Update() physics engine ($20AE)
+;
+; // [C#]     if (ball.Y >= player.Y - 2 && ball.X >= player.X && ball.X <= player.X + player.Width) {
+; // [C#]         ball.VelocityY = -2;
+; // [C#]         AppleSound.Beep(523, 30);
+; // [C#]     }
+;
+$204F: A5 14         LDA $14             ; Load Ball.Y ($0014)
+$2051: C5 11         CMP $11             ; Compare with Paddle.Y ($0011)
+$2053: 90 14         BCC CHK_BRICK_COLLISION ; If Ball.Y < Paddle.Y, skip paddle hit
+$2055: A5 13         LDA $13             ; Load Ball.X ($0013)
+$2057: C5 10         CMP $10             ; Compare with Paddle.X ($0010)
+$2059: 90 0E         BCC CHK_BRICK_COLLISION ; If Ball.X < Paddle.X, miss left!
+$205B: 18            CLC
+$205C: A5 10         LDA $10             ; Load Paddle.X
+$205E: 65 12         ADC $12             ; Add Paddle.Width (44)
+$2060: C5 13         CMP $13             ; Compare Paddle.X + Width with Ball.X
+$2062: 90 05         BCC CHK_BRICK_COLLISION ; If Ball.X > Paddle right edge, miss right!
+;
+; --- Paddle Hit Confirmed: Deflect Ball Upwards ---
+$2064: A9 FE         LDA #$FE            ; Value -2 in two's complement ($FE)
+$2066: 85 16         STA $16             ; Store to Ball.VelocityY ($0016)
+$2068: 20 60 23      JSR PADDLE_HIT_CHIME; Play 523 Hz paddle bounce chime ($2360)
+;
+; // [C#]     if (grid.CheckCollision(ball.X, ball.Y)) {
+; // [C#]         ball.VelocityY = 2;
+; // [C#]         score += 10;
+; // [C#]     }
+;
+CHK_BRICK_COLLISION:
+$206B: 20 FA 20      JSR BRICK_CHECK_COLLISION ; Call grid.CheckCollision(ball.X, ball.Y) ($20FA)
+$206E: F0 0B         BEQ RENDER_ENTITIES ; Return false (0) -> No collision
+$2070: A9 02         LDA #$02            ; Value +2 (ball deflects downwards)
+$2072: 85 16         STA $16             ; Ball.VelocityY = +2
+$2074: 18            CLC                 ; score += 10
+$2075: A5 19         LDA $19             ; Score low byte
+$2077: 69 0A         ADC #$0A            ; Add 10 points
+$2079: 85 19         STA $19
+;
+; // [C#]     player.Draw();
+; // [C#]     ball.Draw();
+; // [C#] } // end while
+;
+RENDER_ENTITIES:
+$207B: 20 9C 20      JSR PADDLE_DRAW     ; Call player.Draw() (VRAM Horizontal Line) ($209C)
+$207E: 20 E1 20      JSR BALL_DRAW       ; Call ball.Draw() (VRAM 2x2 Cluster) ($20E1)
+$2081: 4C 24 20      JMP GAME_LOOP       ; Jump to $2024 for next 60 FPS frame!
+;
+; ==============================================================================
+; SECTION 3: ENTITY OBJECT-ORIENTED METHODS (PADDLE, BALL, BRICKGRID)
+; ==============================================================================
+;
+; // [C#] public class Paddle : GameObject {
+; // [C#]     public void MoveLeft() { if (X > 10) X -= 8; }
+;
+PADDLE_MOVE_LEFT:
+$2084: A5 10         LDA $10             ; Load Paddle.X ($0010)
+$2086: C9 0A         CMP #$0A            ; Compare with left wall limit (10)
+$2088: 90 06         BCC PADDLE_L_EXIT   ; If X <= 10, skip decrement
+$208A: 38            SEC                 ; Set carry for subtraction
+$208B: E9 08         SBC #$08            ; X = X - 8
+$208D: 85 10         STA $10             ; Store back to Paddle.X
+PADDLE_L_EXIT:
+$208F: 60            RTS
+;
+; // [C#]     public void MoveRight() { if (X < 230) X += 8; }
+;
+PADDLE_MOVE_RIGHT:
+$2090: A5 10         LDA $10             ; Load Paddle.X ($0010)
+$2092: C9 E6         CMP #$E6            ; Compare with right wall limit (230 = $E6)
+$2094: B0 06         BCS PADDLE_R_EXIT   ; If X >= 230, skip increment
+$2096: 18            CLC                 ; Clear carry for addition
+$2097: 69 08         ADC #$08            ; X = X + 8
+$2099: 85 10         STA $10             ; Store back to Paddle.X
+PADDLE_R_EXIT:
+$209B: 60            RTS
+;
+; // [C#]     public override void Draw() {
+; // [C#]         AppleVideo.DrawHLine(X, Y, Width, AppleVideo.ColorWhite);
+; // [C#]     }
+;
+PADDLE_DRAW:
+$209C: A5 10         LDA $10             ; Parameter 1: Paddle.X ($0010)
+$209E: 85 80         STA $80             ; Virtual Register R0.L
+$20A0: A5 11         LDA $11             ; Parameter 2: Paddle.Y ($0011)
+$20A2: 85 81         STA $81             ; Virtual Register R0.H
+$20A4: A5 12         LDA $12             ; Parameter 3: Paddle.Width (44)
+$20A6: 85 82         STA $82             ; Virtual Register R1.L
+$20A8: A9 03         LDA #$03            ; Parameter 4: ColorWhite (Palette 3)
+$20AA: 20 20 24      JSR BLIT_HLINE_VRAM ; Call Hardware Line Blitter ($2420)
+$20AD: 60            RTS
+;
+; // [C#] public class Ball : GameObject {
+; // [C#]     public void Update() {
+; // [C#]         X = (byte)(X + VelocityX);
+; // [C#]         Y = (byte)(Y + VelocityY);
+;
+BALL_UPDATE:
+$20AE: 18            CLC                 ; X = X + VelocityX
+$20AF: A5 13         LDA $13             ; Load Ball.X ($0013)
+$20B1: 65 15         ADC $15             ; Add Ball.VelocityX ($0015)
+$20B3: 85 13         STA $13             ; Store to Ball.X
+$20B5: 18            CLC                 ; Y = Y + VelocityY
+$20B6: A5 14         LDA $14             ; Load Ball.Y ($0014)
+$20B8: 65 16         ADC $16             ; Add Ball.VelocityY ($0016)
+$20BA: 85 14         STA $14             ; Store to Ball.Y
+;
+; // [C#]         if (X <= 6 || X >= 272) { VelocityX = -VelocityX; AppleSound.Beep(880, 20); }
+;
+$20BC: A5 13         LDA $13             ; Check Left Wall Limit (X <= 6)
+$20BE: C9 06         CMP #$06
+$20C0: 90 06         BCC NEGATE_VEL_X
+$20C2: C9 F8         CMP #$F8            ; Check Right Wall Limit (X >= 248)
+$20C4: 90 0C         BCC CHECK_BALL_TOP_WALL
+NEGATE_VEL_X:
+$20C6: 38            SEC                 ; VelocityX = 0 - VelocityX
+$20C7: A9 00         LDA #$00
+$20C9: E5 15         SBC $15
+$20CB: 85 15         STA $15             ; Store negated VelocityX
+$20CD: 20 80 23      JSR WALL_HIT_CHIME  ; 880 Hz Wall Chime ($2380)
+;
+; // [C#]         if (Y <= 16) { VelocityY = -VelocityY; AppleSound.Beep(880, 20); }
+;
+CHECK_BALL_TOP_WALL:
+$20D0: A5 14         LDA $14             ; Check Top Ceiling Wall (Y <= 16)
+$20D2: C9 10         CMP #$10
+$20D4: B0 0B         BCS BALL_UPDATE_DONE
+$20D6: 38            SEC                 ; VelocityY = 0 - VelocityY
+$20D7: A9 00         LDA #$00
+$20D9: E5 16         SBC $16
+$20DB: 85 16         STA $16             ; Store negated VelocityY
+$20DD: 20 80 23      JSR WALL_HIT_CHIME
+BALL_UPDATE_DONE:
+$20E0: 60            RTS
+;
+; // [C#]     public override void Draw() {
+; // [C#]         AppleVideo.DrawPixel(X, Y, AppleVideo.ColorWhite);
+; // [C#]     }
+;
+BALL_DRAW:
+$20E1: A5 13         LDA $13             ; Parameter 1: Ball.X ($0013)
+$20E3: 85 80         STA $80             ; Virtual Register R0.L
+$20E5: A5 14         LDA $14             ; Parameter 2: Ball.Y ($0014)
+$20E7: 85 81         STA $81             ; Virtual Register R0.H
+$20E9: A9 03         LDA #$03            ; Parameter 3: ColorWhite (3)
+$20EB: 20 50 24      JSR BLIT_PIXEL_VRAM ; Call Hardware Pixel Blitter ($2450)
+$20EE: 60            RTS
+;
+; // [C#] public class BrickGrid {
+; // [C#]     public void Reset() { for (byte i = 0; i < 32; i++) Bricks[i] = 1; }
+;
+BRICK_GRID_RESET:
+$20EF: A2 1F         LDX #$1F            ; 32 bricks (Array indices 31 down to 0)
+$20F1: A9 01         LDA #$01            ; 1 = Active Brick state
+RESET_ARRAY_LOOP:
+$20F3: 9D 00 08      STA $0800,X         ; Set BrickGrid.Bricks[X] in $0800 RAM buffer
+$20F6: CA            DEX                 ; X--
+$20F7: 10 FA         BPL RESET_ARRAY_LOOP; Loop while X >= 0
+$20F9: 60            RTS
+;
+; // [C#]     public bool CheckCollision(byte bx, byte by) {
+; // [C#]         if (by < 22 || by > 62) return false;
+;
+BRICK_CHECK_COLLISION:
+$20FA: A5 14         LDA $14             ; Load Ball.Y ($0014)
+$20FC: C9 16         CMP #$16            ; by < 22 ($16)?
+$20FE: 90 2D         BCC COLLISION_FALSE ; Above bricks -> return false
+$2100: C9 3E         CMP #$3E            ; by > 62 ($3E)?
+$2102: B0 29         BCS COLLISION_FALSE ; Below bricks -> return false
+;
+; // [C#]         byte row = (byte)((by - 22) / 10);
+;
+$2104: 38            SEC                 ; Subtract brick top offset (22 = $16)
+$2105: E9 16         SBC #$16
+$2107: 4A            LSR A               ; Divide by 8 (approximates /10 with 3 shifts)
+$2108: 4A            LSR A
+$2109: 4A            LSR A
+$210A: 85 17         STA $17             ; Store computed Row Index (0..3) in $0017
+;
+; // [C#]         byte col = (byte)((bx - 16) / 31);
+;
+$210C: A5 13         LDA $13             ; Load Ball.X ($0013)
+$210E: 38            SEC                 ; Subtract brick left offset (16 = $10)
+$210F: E9 10         SBC #$10
+$2111: 4A            LSR A               ; Divide by 32 (5 shifts)
+$2112: 4A            LSR A
+$2113: 4A            LSR A
+$2114: 4A            LSR A
+$2115: 4A            LSR A
+$2116: 85 18         STA $18             ; Store computed Column Index (0..7) in $0018
+;
+; // [C#]         byte idx = (byte)(row * 8 + col);
+;
+$2118: A5 17         LDA $17             ; Row Index
+$211A: 0A            ASL A               ; row * 8 (3 left shifts)
+$211B: 0A            ASL A
+$211C: 0A            ASL A
+$211D: 18            CLC
+$211E: 65 18         ADC $18             ; + Column Index
+$2120: AA            TAX                 ; X = Flattened 1D Array Offset (0..31)
+;
+; // [C#]         if (idx < 32 && Bricks[idx] == 1) {
+; // [C#]             Bricks[idx] = 0;
+; // [C#]             AppleSound.PlayMockingboard(voice: 1, freq: 440 + row * 100, vol: 15);
+; // [C#]             return true;
+; // [C#]         }
+;
+$2121: BD 00 08      LDA $0800,X         ; Read BrickGrid.Bricks[X] from $0800 buffer
+$2124: F0 0B         BEQ COLLISION_FALSE ; If 0 (Already broken), return false
+$2126: A9 00         LDA #$00            ; Value 0 = Destroyed Brick
+$2128: 9D 00 08      STA $0800,X         ; Destroy brick: Bricks[idx] = 0
+$212B: 20 A0 23      JSR MOCKINGBOARD_CHIME ; Play Dual AY-3-8910 FM Chime ($23A0)
+$212E: A9 01         LDA #$01            ; Return true (1) in Accumulator
+$2130: 60            RTS
+COLLISION_FALSE:
+$2131: A9 00         LDA #$00            ; Return false (0) in Accumulator
+$2133: 60            RTS
+;
+; ==============================================================================
+; SECTION 4: HARDWARE DRIVERS (SPEAKER, PSG & HI-RES VRAM BLITTER)
+; ==============================================================================
+;
+; --- 1-Bit Speaker Toggle Subroutine ($C030) ---
+CHIPTUNE_TONE:
+$2300: 8D 30 C0      STA $C030           ; Softswitch $C030: Toggle Speaker Cone
+$2303: A8            TAY                 ; Frequency Divisor Delay Loop
+DELAY_Y:
+$2304: 88            DEY
+$2305: D0 FD         BNE DELAY_Y
+$2307: CA            DEX                 ; Duration Counter Loop
+$2308: D0 F6         BNE CHIPTUNE_TONE
+$230A: 60            RTS
+;
+WALL_HIT_CHIME:
+$2380: A9 20         LDA #$20            ; Divisor $20 (High-Pitch 880 Hz Wall Bounce)
+$2382: A2 14         LDX #$14            ; Duration 20 ms
+$2384: 4C 00 23      JMP CHIPTUNE_TONE
+;
+PADDLE_HIT_CHIME:
+$2360: A9 36         LDA #$36            ; Divisor $36 (Medium 523 Hz Paddle Bounce)
+$2362: A2 1E         LDX #$1E            ; Duration 30 ms
+$2364: 4C 00 23      JMP CHIPTUNE_TONE
+;
+; --- Slot 4 Sweet Micro Mockingboard Dual AY-3-8910 PSG ---
+MOCKINGBOARD_CHIME:
+$23A0: 8D 00 C4      STA $C400           ; Select AY-3-8910 Tone Register (VIA Port B)
+$23A3: 8D 04 C4      STA $C404           ; Latch Tone Period Data (VIA Port A)
+$23A6: 60            RTS
+;
+; --- Hi-Res 280x192 Physical VRAM Rasterizers ($2000..$3FFF) ---
+VRAM_CLEAR:
+$2400: A0 00         LDY #$00            ; Clear Page 1 VRAM ($2000-$3FFF)
+$2402: A9 00         LDA #$00
+$2404: 99 00 20      STA $2000,Y
+$2407: 99 00 24      STA $2400,Y
+$240A: 99 00 28      STA $2800,Y
+$240D: 99 00 3C      STA $3C00,Y
+$2410: C8            INY
+$2411: D0 F1         BNE $2404
+$2413: 60            RTS
+;
+BLIT_HLINE_VRAM:
+$2420: 8D 57 C0      STA $C057           ; Ensure HIRES Softswitch is Latched
+$2423: 60            RTS
+;
+BLIT_PIXEL_VRAM:
+$2450: 8D 57 C0      STA $C057           ; Ensure HIRES Softswitch is Latched
+$2453: 60            RTS</pre>
 
         <div class="flex gap-2">
           <button onclick="stepCpu()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded text-xs">Step (F10)</button>
@@ -2503,25 +2861,370 @@ $200A: 60         RTS</pre>
       // 1. Interactive Breakout Arcade Game Engine
       if (isBreakout) {
         const asmList = [
-          '; --- 65C02 Native Binary: Retro Breakout Ultra ---',
-          '; Target Architecture: Apple //c Ultra (WDC 65C02 @ 50 MHz)',
-          '; Zero Page Allocation: $0010-$001B (Paddle & Ball Vector Structs)',
-          '$2000: D8         CLD',
-          '$2001: A2 FF      LDX #$FF',
-          '$2003: 9A         TXS',
-          '$2004: 8D 50 C0   STA $C050 [TXTCLR - Graphics Mode]',
-          '$2007: 8D 57 C0   STA $C057 [HIRES - 280x192 Display]',
-          '$200A: 8D 0D C0   STA $C00D [80COLSET - Aux RAM Active]',
-          '$200D: 8D 5F C0   STA $C05F [DHIRESON - 560x192 Double Hi-Res]',
-          '$2010: 20 50 20   JSR INIT_BRICK_MATRIX ($0800..$081F)',
-          '$2013: 20 80 20   JSR PLAY_TITLE_CHIME ($C030 / Mockingboard)',
-          '; --- Game Loop ---',
-          '$2016: 20 A0 20   JSR READ_PADDLE ($C064)',
-          '$2019: 20 C0 20   JSR UPDATE_BALL_PHYSICS',
-          '$201C: 20 E0 20   JSR CHECK_COLLISIONS',
-          '$201F: 20 10 21   JSR RENDER_FRAME ($2000..$3FFF VRAM)',
-          '$2022: 4C 16 20   JMP $2016 [GAME_LOOP]',
-          '$2025: 60         RTS'
+          '; ============================================================================== ',
+          '; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# RETRO BREAKOUT ULTRA',
+          '; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)',
+          '; Binary Base Address: $2000 | Total Payload: 612 Bytes',
+          '; ==============================================================================',
+          ';',
+          '; --- ZERO-PAGE & MEMORY LAYOUT ALLOCATIONS ---',
+          '; // [C#] public class Paddle : GameObject { public byte X; public byte Y; public byte Width; }',
+          '; $0010: Paddle.X         (Zero Page, 1 byte, default 118 = $76)',
+          '; $0011: Paddle.Y         (Zero Page, 1 byte, default 178 = $B2)',
+          '; $0012: Paddle.Width     (Zero Page, 1 byte, const 44 = $2C)',
+          ';',
+          '; // [C#] public class Ball : GameObject { public byte X; public byte Y; public sbyte VelocityX; public sbyte VelocityY; }',
+          '; $0013: Ball.X           (Zero Page, 1 byte, default 140 = $8C)',
+          '; $0014: Ball.Y           (Zero Page, 1 byte, default 120 = $78)',
+          '; $0015: Ball.VelocityX   (Zero Page, 1 byte signed, default +2 = $02)',
+          '; $0016: Ball.VelocityY   (Zero Page, 1 byte signed, default -2 = $FE)',
+          ';',
+          '; // [C#] public class BrickGrid { public byte[] Bricks = new byte[32]; }',
+          '; $0800..$081F: BrickGrid.Bricks (Array buffer in Main RAM, 32 bytes for 4x8 bricks)',
+          '; $0017: Temp.RowIndex    (Zero Page, 1 byte)',
+          '; $0018: Temp.ColIndex    (Zero Page, 1 byte)',
+          '; $0019..$001A: Score     (Zero Page 16-bit integer score tracker)',
+          ';',
+          '; // [C#] Sweet16 / CLR Virtual Registers (Auxiliary RAM Zero Page $80..$8F)',
+          '; $0080..$0081: Virtual Register R0 (Pointer / Vector X,Y)',
+          '; $0082..$0083: Virtual Register R1 (Argument / Width)',
+          '; $0084..$0085: Virtual Register R2 (Color Palette Mask)',
+          ';',
+          '; ==============================================================================',
+          '; SECTION 1: HARDWARE & VIDEO INITIALIZATION',
+          '; ==============================================================================',
+          '; // [C#] public void Run() {',
+          '; // [C#]     AppleVideo.SetDoubleHiRes(true);',
+          '; // [C#]     AppleVideo.ClearScreen(AppleVideo.ColorBlack);',
+          ';',
+          '$2000: D8            CLD                 ; Clear Decimal Mode (binary arithmetic)',
+          '$2001: A2 FF         LDX #$FF            ; Initialize 65C02 Hardware Stack Pointer',
+          '$2003: 9A            TXS                 ; SP = $FF',
+          '$2004: 8D 50 C0      STA $C050           ; Softswitch $C050: TXTCLR (Enable Graphics Display)',
+          '$2007: 8D 57 C0      STA $C057           ; Softswitch $C057: HIRES (Enable 280x192 VRAM Mode)',
+          '$200A: 8D 0D C0      STA $C00D           ; Softswitch $C00D: 80COLSET (Enable Aux RAM Video)',
+          '$200D: 8D 5F C0      STA $C05F           ; Softswitch $C05F: DHIRESON (Enable Double Hi-Res 560x192)',
+          '$2010: 20 00 24      JSR VRAM_CLEAR      ; Zero out $2000..$3FFF VRAM buffers (ColorBlack)',
+          ';',
+          '; // [C#]     grid.Reset(); // Initializes 4 rows of 8 active bricks (32 total)',
+          ';',
+          '$2013: 20 EF 20      JSR BRICK_GRID_RESET ; Call BrickGrid.Reset() method ($20EF)',
+          ';',
+          '; // [C#]     AppleSound.Beep(587, 80); AppleSound.Beep(880, 120);',
+          ';',
+          '$2016: A9 4B         LDA #$4B            ; Frequency divisor ($4B = 587 Hz Tone)',
+          '$2018: A2 50         LDX #$50            ; Duration loop count (80 ms)',
+          '$201A: 20 00 23      JSR CHIPTUNE_TONE   ; Toggle $C030 speaker softswitch',
+          '$201D: A9 32         LDA #$32            ; Frequency divisor ($32 = 880 Hz Tone)',
+          '$201F: A2 78         LDX #$78            ; Duration loop count (120 ms)',
+          '$2021: 20 00 23      JSR CHIPTUNE_TONE',
+          ';',
+          '; ==============================================================================',
+          '; SECTION 2: 60 FPS REAL-TIME GAME LOOP',
+          '; ==============================================================================',
+          '; // [C#] while (true) {',
+          ';',
+          'GAME_LOOP:',
+          ';',
+          '; // [C#]     char key = AppleInput.GetKey();',
+          '; // [C#]     if (key == \'A\' || key == \'a\' || key == \'J\') player.MoveLeft();',
+          ';',
+          '$2024: AD 00 C0      LDA $C000           ; Read Keyboard Data Strobe Register ($C000)',
+          '$2027: 10 24         BPL CHECK_PHYSICS   ; If Bit 7 is 0, no key pressed -> jump to physics',
+          '$2029: 8D 10 C0      STA $C010           ; Clear Keyboard Data Strobe ($C010)',
+          '$202C: 29 7F         AND #$7F            ; Strip high-bit ASCII ($80) to normal ASCII',
+          '$202E: C9 41         CMP #$41            ; Check \'A\' ($41)',
+          '$2030: F0 08         BEQ DO_MOVE_LEFT',
+          '$2032: C9 61         CMP #$61            ; Check \'a\' ($61)',
+          '$2034: F0 04         BEQ DO_MOVE_LEFT',
+          '$2036: C9 4A         CMP #$4A            ; Check \'J\' ($4A)',
+          '$2038: D0 05         BNE CHECK_RIGHT_KEY',
+          'DO_MOVE_LEFT:',
+          '$203A: 20 84 20      JSR PADDLE_MOVE_LEFT; Call player.MoveLeft() ($2084)',
+          ';',
+          '; // [C#]     if (key == \'D\' || key == \'d\' || key == \'L\') player.MoveRight();',
+          ';',
+          'CHECK_RIGHT_KEY:',
+          '$203D: C9 44         CMP #$44            ; Check \'D\' ($44)',
+          '$203F: F0 08         BEQ DO_MOVE_RIGHT',
+          '$2041: C9 64         CMP #$64            ; Check \'d\' ($64)',
+          '$2043: F0 04         BEQ DO_MOVE_RIGHT',
+          '$2045: C9 4C         CMP #$4C            ; Check \'L\' ($4C)',
+          '$2047: D0 03         BNE CHECK_PHYSICS',
+          'DO_MOVE_RIGHT:',
+          '$2049: 20 90 20      JSR PADDLE_MOVE_RIGHT; Call player.MoveRight() ($2090)',
+          ';',
+          '; // [C#]     ball.Update();',
+          ';',
+          'CHECK_PHYSICS:',
+          '$204C: 20 AE 20      JSR BALL_UPDATE     ; Call ball.Update() physics engine ($20AE)',
+          ';',
+          '; // [C#]     if (ball.Y >= player.Y - 2 && ball.X >= player.X && ball.X <= player.X + player.Width) {',
+          '; // [C#]         ball.VelocityY = -2;',
+          '; // [C#]         AppleSound.Beep(523, 30);',
+          '; // [C#]     }',
+          ';',
+          '$204F: A5 14         LDA $14             ; Load Ball.Y ($0014)',
+          '$2051: C5 11         CMP $11             ; Compare with Paddle.Y ($0011)',
+          '$2053: 90 14         BCC CHK_BRICK_COLLISION ; If Ball.Y < Paddle.Y, skip paddle hit',
+          '$2055: A5 13         LDA $13             ; Load Ball.X ($0013)',
+          '$2057: C5 10         CMP $10             ; Compare with Paddle.X ($0010)',
+          '$2059: 90 0E         BCC CHK_BRICK_COLLISION ; If Ball.X < Paddle.X, miss left!',
+          '$205B: 18            CLC',
+          '$205C: A5 10         LDA $10             ; Load Paddle.X',
+          '$205E: 65 12         ADC $12             ; Add Paddle.Width (44)',
+          '$2060: C5 13         CMP $13             ; Compare Paddle.X + Width with Ball.X',
+          '$2062: 90 05         BCC CHK_BRICK_COLLISION ; If Ball.X > Paddle right edge, miss right!',
+          ';',
+          '; --- Paddle Hit Confirmed: Deflect Ball Upwards ---',
+          '$2064: A9 FE         LDA #$FE            ; Value -2 in two\'s complement ($FE)',
+          '$2066: 85 16         STA $16             ; Store to Ball.VelocityY ($0016)',
+          '$2068: 20 60 23      JSR PADDLE_HIT_CHIME; Play 523 Hz paddle bounce chime ($2360)',
+          ';',
+          '; // [C#]     if (grid.CheckCollision(ball.X, ball.Y)) {',
+          '; // [C#]         ball.VelocityY = 2;',
+          '; // [C#]         score += 10;',
+          '; // [C#]     }',
+          ';',
+          'CHK_BRICK_COLLISION:',
+          '$206B: 20 FA 20      JSR BRICK_CHECK_COLLISION ; Call grid.CheckCollision(ball.X, ball.Y) ($20FA)',
+          '$206E: F0 0B         BEQ RENDER_ENTITIES ; Return false (0) -> No collision',
+          '$2070: A9 02         LDA #$02            ; Value +2 (ball deflects downwards)',
+          '$2072: 85 16         STA $16             ; Ball.VelocityY = +2',
+          '$2074: 18            CLC                 ; score += 10',
+          '$2075: A5 19         LDA $19             ; Score low byte',
+          '$2077: 69 0A         ADC #$0A            ; Add 10 points',
+          '$2079: 85 19         STA $19',
+          ';',
+          '; // [C#]     player.Draw();',
+          '; // [C#]     ball.Draw();',
+          '; // [C#] } // end while',
+          ';',
+          'RENDER_ENTITIES:',
+          '$207B: 20 9C 20      JSR PADDLE_DRAW     ; Call player.Draw() (VRAM Horizontal Line) ($209C)',
+          '$207E: 20 E1 20      JSR BALL_DRAW       ; Call ball.Draw() (VRAM 2x2 Cluster) ($20E1)',
+          '$2081: 4C 24 20      JMP GAME_LOOP       ; Jump to $2024 for next 60 FPS frame!',
+          ';',
+          '; ==============================================================================',
+          '; SECTION 3: ENTITY OBJECT-ORIENTED METHODS (PADDLE, BALL, BRICKGRID)',
+          '; ==============================================================================',
+          ';',
+          '; // [C#] public class Paddle : GameObject {',
+          '; // [C#]     public void MoveLeft() { if (X > 10) X -= 8; }',
+          ';',
+          'PADDLE_MOVE_LEFT:',
+          '$2084: A5 10         LDA $10             ; Load Paddle.X ($0010)',
+          '$2086: C9 0A         CMP #$0A            ; Compare with left wall limit (10)',
+          '$2088: 90 06         BCC PADDLE_L_EXIT   ; If X <= 10, skip decrement',
+          '$208A: 38            SEC                 ; Set carry for subtraction',
+          '$208B: E9 08         SBC #$08            ; X = X - 8',
+          '$208D: 85 10         STA $10             ; Store back to Paddle.X',
+          'PADDLE_L_EXIT:',
+          '$208F: 60            RTS',
+          ';',
+          '; // [C#]     public void MoveRight() { if (X < 230) X += 8; }',
+          ';',
+          'PADDLE_MOVE_RIGHT:',
+          '$2090: A5 10         LDA $10             ; Load Paddle.X ($0010)',
+          '$2092: C9 E6         CMP #$E6            ; Compare with right wall limit (230 = $E6)',
+          '$2094: B0 06         BCS PADDLE_R_EXIT   ; If X >= 230, skip increment',
+          '$2096: 18            CLC                 ; Clear carry for addition',
+          '$2097: 69 08         ADC #$08            ; X = X + 8',
+          '$2099: 85 10         STA $10             ; Store back to Paddle.X',
+          'PADDLE_R_EXIT:',
+          '$209B: 60            RTS',
+          ';',
+          '; // [C#]     public override void Draw() {',
+          '; // [C#]         AppleVideo.DrawHLine(X, Y, Width, AppleVideo.ColorWhite);',
+          '; // [C#]     }',
+          ';',
+          'PADDLE_DRAW:',
+          '$209C: A5 10         LDA $10             ; Parameter 1: Paddle.X ($0010)',
+          '$209E: 85 80         STA $80             ; Virtual Register R0.L',
+          '$20A0: A5 11         LDA $11             ; Parameter 2: Paddle.Y ($0011)',
+          '$20A2: 85 81         STA $81             ; Virtual Register R0.H',
+          '$20A4: A5 12         LDA $12             ; Parameter 3: Paddle.Width (44)',
+          '$20A6: 85 82         STA $82             ; Virtual Register R1.L',
+          '$20A8: A9 03         LDA #$03            ; Parameter 4: ColorWhite (Palette 3)',
+          '$20AA: 20 20 24      JSR BLIT_HLINE_VRAM ; Call Hardware Line Blitter ($2420)',
+          '$20AD: 60            RTS',
+          ';',
+          '; // [C#] public class Ball : GameObject {',
+          '; // [C#]     public void Update() {',
+          '; // [C#]         X = (byte)(X + VelocityX);',
+          '; // [C#]         Y = (byte)(Y + VelocityY);',
+          ';',
+          'BALL_UPDATE:',
+          '$20AE: 18            CLC                 ; X = X + VelocityX',
+          '$20AF: A5 13         LDA $13             ; Load Ball.X ($0013)',
+          '$20B1: 65 15         ADC $15             ; Add Ball.VelocityX ($0015)',
+          '$20B3: 85 13         STA $13             ; Store to Ball.X',
+          '$20B5: 18            CLC                 ; Y = Y + VelocityY',
+          '$20B6: A5 14         LDA $14             ; Load Ball.Y ($0014)',
+          '$20B8: 65 16         ADC $16             ; Add Ball.VelocityY ($0016)',
+          '$20BA: 85 14         STA $14             ; Store to Ball.Y',
+          ';',
+          '; // [C#]         if (X <= 6 || X >= 272) { VelocityX = -VelocityX; AppleSound.Beep(880, 20); }',
+          ';',
+          '$20BC: A5 13         LDA $13             ; Check Left Wall Limit (X <= 6)',
+          '$20BE: C9 06         CMP #$06',
+          '$20C0: 90 06         BCC NEGATE_VEL_X',
+          '$20C2: C9 F8         CMP #$F8            ; Check Right Wall Limit (X >= 248)',
+          '$20C4: 90 0C         BCC CHECK_BALL_TOP_WALL',
+          'NEGATE_VEL_X:',
+          '$20C6: 38            SEC                 ; VelocityX = 0 - VelocityX',
+          '$20C7: A9 00         LDA #$00',
+          '$20C9: E5 15         SBC $15',
+          '$20CB: 85 15         STA $15             ; Store negated VelocityX',
+          '$20CD: 20 80 23      JSR WALL_HIT_CHIME  ; 880 Hz Wall Chime ($2380)',
+          ';',
+          '; // [C#]         if (Y <= 16) { VelocityY = -VelocityY; AppleSound.Beep(880, 20); }',
+          ';',
+          'CHECK_BALL_TOP_WALL:',
+          '$20D0: A5 14         LDA $14             ; Check Top Ceiling Wall (Y <= 16)',
+          '$20D2: C9 10         CMP #$10',
+          '$20D4: B0 0B         BCS BALL_UPDATE_DONE',
+          '$20D6: 38            SEC                 ; VelocityY = 0 - VelocityY',
+          '$20D7: A9 00         LDA #$00',
+          '$20D9: E5 16         SBC $16',
+          '$20DB: 85 16         STA $16             ; Store negated VelocityY',
+          '$20DD: 20 80 23      JSR WALL_HIT_CHIME',
+          'BALL_UPDATE_DONE:',
+          '$20E0: 60            RTS',
+          ';',
+          '; // [C#]     public override void Draw() {',
+          '; // [C#]         AppleVideo.DrawPixel(X, Y, AppleVideo.ColorWhite);',
+          '; // [C#]     }',
+          ';',
+          'BALL_DRAW:',
+          '$20E1: A5 13         LDA $13             ; Parameter 1: Ball.X ($0013)',
+          '$20E3: 85 80         STA $80             ; Virtual Register R0.L',
+          '$20E5: A5 14         LDA $14             ; Parameter 2: Ball.Y ($0014)',
+          '$20E7: 85 81         STA $81             ; Virtual Register R0.H',
+          '$20E9: A9 03         LDA #$03            ; Parameter 3: ColorWhite (3)',
+          '$20EB: 20 50 24      JSR BLIT_PIXEL_VRAM ; Call Hardware Pixel Blitter ($2450)',
+          '$20EE: 60            RTS',
+          ';',
+          '; // [C#] public class BrickGrid {',
+          '; // [C#]     public void Reset() { for (byte i = 0; i < 32; i++) Bricks[i] = 1; }',
+          ';',
+          'BRICK_GRID_RESET:',
+          '$20EF: A2 1F         LDX #$1F            ; 32 bricks (Array indices 31 down to 0)',
+          '$20F1: A9 01         LDA #$01            ; 1 = Active Brick state',
+          'RESET_ARRAY_LOOP:',
+          '$20F3: 9D 00 08      STA $0800,X         ; Set BrickGrid.Bricks[X] in $0800 RAM buffer',
+          '$20F6: CA            DEX                 ; X--',
+          '$20F7: 10 FA         BPL RESET_ARRAY_LOOP; Loop while X >= 0',
+          '$20F9: 60            RTS',
+          ';',
+          '; // [C#]     public bool CheckCollision(byte bx, byte by) {',
+          '; // [C#]         if (by < 22 || by > 62) return false;',
+          ';',
+          'BRICK_CHECK_COLLISION:',
+          '$20FA: A5 14         LDA $14             ; Load Ball.Y ($0014)',
+          '$20FC: C9 16         CMP #$16            ; by < 22 ($16)?',
+          '$20FE: 90 2D         BCC COLLISION_FALSE ; Above bricks -> return false',
+          '$2100: C9 3E         CMP #$3E            ; by > 62 ($3E)?',
+          '$2102: B0 29         BCS COLLISION_FALSE ; Below bricks -> return false',
+          ';',
+          '; // [C#]         byte row = (byte)((by - 22) / 10);',
+          ';',
+          '$2104: 38            SEC                 ; Subtract brick top offset (22 = $16)',
+          '$2105: E9 16         SBC #$16',
+          '$2107: 4A            LSR A               ; Divide by 8 (approximates /10 with 3 shifts)',
+          '$2108: 4A            LSR A',
+          '$2109: 4A            LSR A',
+          '$210A: 85 17         STA $17             ; Store computed Row Index (0..3) in $0017',
+          ';',
+          '; // [C#]         byte col = (byte)((bx - 16) / 31);',
+          ';',
+          '$210C: A5 13         LDA $13             ; Load Ball.X ($0013)',
+          '$210E: 38            SEC                 ; Subtract brick left offset (16 = $10)',
+          '$210F: E9 10         SBC #$10',
+          '$2111: 4A            LSR A               ; Divide by 32 (5 shifts)',
+          '$2112: 4A            LSR A',
+          '$2113: 4A            LSR A',
+          '$2114: 4A            LSR A',
+          '$2115: 4A            LSR A',
+          '$2116: 85 18         STA $18             ; Store computed Column Index (0..7) in $0018',
+          ';',
+          '; // [C#]         byte idx = (byte)(row * 8 + col);',
+          ';',
+          '$2118: A5 17         LDA $17             ; Row Index',
+          '$211A: 0A            ASL A               ; row * 8 (3 left shifts)',
+          '$211B: 0A            ASL A',
+          '$211C: 0A            ASL A',
+          '$211D: 18            CLC',
+          '$211E: 65 18         ADC $18             ; + Column Index',
+          '$2120: AA            TAX                 ; X = Flattened 1D Array Offset (0..31)',
+          ';',
+          '; // [C#]         if (idx < 32 && Bricks[idx] == 1) {',
+          '; // [C#]             Bricks[idx] = 0;',
+          '; // [C#]             AppleSound.PlayMockingboard(voice: 1, freq: 440 + row * 100, vol: 15);',
+          '; // [C#]             return true;',
+          '; // [C#]         }',
+          ';',
+          '$2121: BD 00 08      LDA $0800,X         ; Read BrickGrid.Bricks[X] from $0800 buffer',
+          '$2124: F0 0B         BEQ COLLISION_FALSE ; If 0 (Already broken), return false',
+          '$2126: A9 00         LDA #$00            ; Value 0 = Destroyed Brick',
+          '$2128: 9D 00 08      STA $0800,X         ; Destroy brick: Bricks[idx] = 0',
+          '$212B: 20 A0 23      JSR MOCKINGBOARD_CHIME ; Play Dual AY-3-8910 FM Chime ($23A0)',
+          '$212E: A9 01         LDA #$01            ; Return true (1) in Accumulator',
+          '$2130: 60            RTS',
+          'COLLISION_FALSE:',
+          '$2131: A9 00         LDA #$00            ; Return false (0) in Accumulator',
+          '$2133: 60            RTS',
+          ';',
+          '; ==============================================================================',
+          '; SECTION 4: HARDWARE DRIVERS (SPEAKER, PSG & HI-RES VRAM BLITTER)',
+          '; ==============================================================================',
+          ';',
+          '; --- 1-Bit Speaker Toggle Subroutine ($C030) ---',
+          'CHIPTUNE_TONE:',
+          '$2300: 8D 30 C0      STA $C030           ; Softswitch $C030: Toggle Speaker Cone',
+          '$2303: A8            TAY                 ; Frequency Divisor Delay Loop',
+          'DELAY_Y:',
+          '$2304: 88            DEY',
+          '$2305: D0 FD         BNE DELAY_Y',
+          '$2307: CA            DEX                 ; Duration Counter Loop',
+          '$2308: D0 F6         BNE CHIPTUNE_TONE',
+          '$230A: 60            RTS',
+          ';',
+          'WALL_HIT_CHIME:',
+          '$2380: A9 20         LDA #$20            ; Divisor $20 (High-Pitch 880 Hz Wall Bounce)',
+          '$2382: A2 14         LDX #$14            ; Duration 20 ms',
+          '$2384: 4C 00 23      JMP CHIPTUNE_TONE',
+          ';',
+          'PADDLE_HIT_CHIME:',
+          '$2360: A9 36         LDA #$36            ; Divisor $36 (Medium 523 Hz Paddle Bounce)',
+          '$2362: A2 1E         LDX #$1E            ; Duration 30 ms',
+          '$2364: 4C 00 23      JMP CHIPTUNE_TONE',
+          ';',
+          '; --- Slot 4 Sweet Micro Mockingboard Dual AY-3-8910 PSG ---',
+          'MOCKINGBOARD_CHIME:',
+          '$23A0: 8D 00 C4      STA $C400           ; Select AY-3-8910 Tone Register (VIA Port B)',
+          '$23A3: 8D 04 C4      STA $C404           ; Latch Tone Period Data (VIA Port A)',
+          '$23A6: 60            RTS',
+          ';',
+          '; --- Hi-Res 280x192 Physical VRAM Rasterizers ($2000..$3FFF) ---',
+          'VRAM_CLEAR:',
+          '$2400: A0 00         LDY #$00            ; Clear Page 1 VRAM ($2000-$3FFF)',
+          '$2402: A9 00         LDA #$00',
+          '$2404: 99 00 20      STA $2000,Y',
+          '$2407: 99 00 24      STA $2400,Y',
+          '$240A: 99 00 28      STA $2800,Y',
+          '$240D: 99 00 3C      STA $3C00,Y',
+          '$2410: C8            INY',
+          '$2411: D0 F1         BNE $2404',
+          '$2413: 60            RTS',
+          ';',
+          'BLIT_HLINE_VRAM:',
+          '$2420: 8D 57 C0      STA $C057           ; Ensure HIRES Softswitch is Latched',
+          '$2423: 60            RTS',
+          ';',
+          'BLIT_PIXEL_VRAM:',
+          '$2450: 8D 57 C0      STA $C057           ; Ensure HIRES Softswitch is Latched',
+          '$2453: 60            RTS'
         ];
 
         document.getElementById('dbg-disasm').innerText = asmList.join('\n');
