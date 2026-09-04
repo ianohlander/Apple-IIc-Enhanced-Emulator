@@ -364,79 +364,20 @@ $200A: 60         RTS</pre>
       
       <!-- Tab Content: Slot Expansion Bay (Slots 1-7) -->
       <div id="tab-slots" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
-        <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
+        <div class="flex flex-wrap justify-between items-center border-b border-[#2a3642] pb-3 gap-2">
           <div>
             <h3 class="text-sm font-bold text-amber-400">MOTHERBOARD PERIPHERAL EXPANSION BAY (SLOTS 1–7)</h3>
-            <p class="text-xs text-gray-400">Configure, plug in, or disable emulated expansion cards and softswitch decoders.</p>
+            <p class="text-xs text-gray-400">Plug in, unplug, or swap hardware expansion cards on the 50-pin Apple bus.</p>
           </div>
-          <span class="px-2.5 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-bold rounded">
-            7 SLOTS ACTIVE
-          </span>
+          <div class="flex flex-wrap gap-1.5 text-xs">
+            <button onclick="applySlotPreset('all')" class="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded">⚡ Plug All Cards</button>
+            <button onclick="applySlotPreset('gaming')" class="px-2.5 py-1 bg-[#1f2633] hover:bg-[#2d3748] text-amber-300 rounded border border-[#2a3642]">🎮 Gaming Setup</button>
+            <button onclick="applySlotPreset('bare')" class="px-2.5 py-1 bg-[#1f2633] hover:bg-[#2d3748] text-gray-300 rounded border border-[#2a3642]">🧹 Unplug All</button>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-          <!-- Slot 1 -->
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="text-amber-400 font-bold">SLOT 1: Parallel Printer</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
-            </div>
-            <p class="text-[11px] text-gray-400">Epson FX-80 Centronics Interface ($C100 Driver)</p>
-          </div>
-
-          <!-- Slot 2 -->
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="text-amber-400 font-bold">SLOT 2: Super Serial Card</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
-            </div>
-            <p class="text-[11px] text-gray-400">ACIA 6551 19200 Baud Modem Port ($C200 Driver)</p>
-          </div>
-
-          <!-- Slot 3 -->
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="text-cyan-400 font-bold">SLOT 3: 80-Col Extended 64K</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
-            </div>
-            <p class="text-[11px] text-gray-400">Auxiliary 64KB RAM & 80-Column VRAM ($C300)</p>
-          </div>
-
-          <!-- Slot 4 -->
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="text-purple-400 font-bold">SLOT 4: Mockingboard Sound</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
-            </div>
-            <p class="text-[11px] text-gray-400">Dual AY-3-8910 PSG + 6522 VIA ($C400)</p>
-          </div>
-
-          <!-- Slot 5 -->
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="text-pink-400 font-bold">SLOT 5: Sound Blaster / OPL2</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
-            </div>
-            <p class="text-[11px] text-gray-400">Yamaha YM3812 9-Channel FM Synth ($C500)</p>
-          </div>
-
-          <!-- Slot 6 -->
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="text-emerald-400 font-bold">SLOT 6: Disk II Floppy</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
-            </div>
-            <p class="text-[11px] text-gray-400">IWM Dual 5.25" 140KB Floppy Drive ($C600)</p>
-          </div>
-
-          <!-- Slot 7 -->
-          <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-1.5 md:col-span-2 lg:col-span-3">
-            <div class="flex justify-between items-center">
-              <span class="text-emerald-400 font-bold">SLOT 7: SmartPort 32MB Hard Disk</span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900 text-emerald-300 font-bold">PLUGGED</span>
-            </div>
-            <p class="text-[11px] text-gray-400">Apple SmartPort Unit 1 Block Storage (65,536 Blocks @ $C700)</p>
-          </div>
+        <div id="slots-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+          <!-- Dynamically populated by renderSlotBay() -->
         </div>
       </div>
 
@@ -1511,6 +1452,35 @@ $200A: 60         RTS</pre>
           return true;
         }
 
+        if (upper.startsWith('PR#') || upper.startsWith('PR #')) {
+          const slotNum = parseInt(upper.replace(/^PR\s*#?\s*/i, ''));
+          if (slotNum >= 1 && slotNum <= 7) {
+            if (window.slots && window.slots[slotNum] && !window.slots[slotNum].plugged) {
+              this.cursorRow++;
+              this.ensureRow();
+              this.writeString(this.cursorRow, 0, `?NO CARD IN SLOT ${slotNum} (I/O ERROR)`);
+              this.cursorRow++;
+              this.playBeep(220, 0.15);
+              this.advanceBasic();
+              return true;
+            }
+            if (slotNum === 6) {
+              window.bootFloppyDrive();
+              return true;
+            } else if (slotNum === 7) {
+              window.bootHardDisk();
+              return true;
+            } else if (slotNum === 3) {
+              this.cursorRow++;
+              this.ensureRow();
+              this.writeString(this.cursorRow, 0, "[80-COLUMN AUX VIDEO ACTIVE]");
+              this.cursorRow++;
+              this.advanceBasic();
+              return true;
+            }
+          }
+        }
+
         if (upper.startsWith('CALL')) {
           const addr = parseInt(stmt.replace(/^CALL\s*/i, '').trim());
           if (addr === 768) {
@@ -2390,6 +2360,20 @@ $200A: 60         RTS</pre>
     };
 
     window.bootFloppyDrive = function() {
+      if (window.slots && window.slots[6] && !window.slots[6].plugged) {
+        if (typeof alert === 'function') {
+          alert('⚠️ Cannot Boot Floppy: No Disk II card is plugged into Slot 6! Open the Slot Expansion Bay tab to plug it in.');
+        }
+        window.emulator.cursorRow++;
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "?NO CARD IN SLOT 6 (I/O ERROR)");
+        window.emulator.cursorRow++;
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
+        window.emulator.renderScreen();
+        window.emulator.playBeep(220, 0.15);
+        return;
+      }
       const preset = document.getElementById('dsk-preset-select').value;
       const emu = window.emulator;
 
@@ -2457,6 +2441,20 @@ $200A: 60         RTS</pre>
     };
 
     window.bootHardDisk = function() {
+      if (window.slots && window.slots[7] && !window.slots[7].plugged) {
+        if (typeof alert === 'function') {
+          alert('⚠️ Cannot Boot Hard Disk: No SmartPort card is plugged into Slot 7! Open the Slot Expansion Bay tab to plug it in.');
+        }
+        window.emulator.cursorRow++;
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "?NO CARD IN SLOT 7 (I/O ERROR)");
+        window.emulator.cursorRow++;
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
+        window.emulator.renderScreen();
+        window.emulator.playBeep(220, 0.15);
+        return;
+      }
       const emu = window.emulator;
       emu.playBeep(520, 0.08);
       setTimeout(() => {
@@ -2495,6 +2493,96 @@ $200A: 60         RTS</pre>
 
     
     // ROM Selection & Attachment Functions
+    
+    // ------------------------------------------------------------------------
+    // 7-Slot Motherboard Peripheral Expansion Card Architecture
+    // ------------------------------------------------------------------------
+    window.slots = {
+      1: { name: 'Epson FX-80 Parallel Printer', type: 'printer', plugged: true, addr: '$C100', icon: '🖨️', desc: 'Centronics Parallel Interface' },
+      2: { name: 'Super Serial Card (ACIA 6551)', type: 'serial', plugged: true, addr: '$C200', icon: '🌐', desc: '19200 Baud Modem / Terminal' },
+      3: { name: '80-Column Auxiliary 64K RAM', type: 'video80', plugged: true, addr: '$C300', icon: '🖥️', desc: 'Extended 64KB RAM & 80-Col Firmware' },
+      4: { name: 'Sweet Micro Mockingboard PSG', type: 'mockingboard', plugged: true, addr: '$C400', icon: '🔊', desc: 'Dual AY-3-8910 + 6522 VIA' },
+      5: { name: 'Sound Blaster / OPL2 FM Synth', type: 'opl2', plugged: true, addr: '$C500', icon: '🎵', desc: 'Yamaha YM3812 9-Channel FM' },
+      6: { name: 'Disk II 5.25" Floppy Controller', type: 'floppy', plugged: true, addr: '$C600', icon: '💾', desc: 'IWM Stepper Dual Drive Controller' },
+      7: { name: 'SmartPort 32MB Hard Disk Controller', type: 'harddisk', plugged: true, addr: '$C700', icon: '💽', desc: 'ProDOS Block Storage (65,536 Blks)' }
+    };
+
+    window.toggleSlot = function(slotNum) {
+      const slot = window.slots[slotNum];
+      if (!slot) return;
+      slot.plugged = !slot.plugged;
+      
+      // Sound effect for plugging/unplugging hardware card
+      if (slot.plugged) {
+        window.emulator.playBeep(980, 0.04);
+        setTimeout(() => window.emulator.playBeep(1318, 0.06), 40);
+      } else {
+        window.emulator.playBeep(440, 0.05);
+        setTimeout(() => window.emulator.playBeep(220, 0.08), 50);
+      }
+
+      window.renderSlotBay();
+    };
+
+    window.applySlotPreset = function(preset) {
+      if (preset === 'all') {
+        for (let s = 1; s <= 7; s++) window.slots[s].plugged = true;
+      } else if (preset === 'gaming') {
+        window.slots[1].plugged = false;
+        window.slots[2].plugged = false;
+        window.slots[3].plugged = true;
+        window.slots[4].plugged = true;
+        window.slots[5].plugged = true;
+        window.slots[6].plugged = true;
+        window.slots[7].plugged = true;
+      } else if (preset === 'bare') {
+        for (let s = 1; s <= 7; s++) window.slots[s].plugged = false;
+      }
+      window.emulator.playBeep(880, 0.1);
+      window.renderSlotBay();
+    };
+
+    window.renderSlotBay = function() {
+      const grid = document.getElementById('slots-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      for (let s = 1; s <= 7; s++) {
+        const slot = window.slots[s];
+        const cardDiv = document.createElement('div');
+        cardDiv.className = `p-3.5 rounded-lg border ${slot.plugged ? 'bg-[#0d1117] border-[#2a3642]' : 'bg-[#080b0e] border-[#1a222c] opacity-60'} space-y-2.5 transition`;
+
+        cardDiv.innerHTML = `
+          <div class="flex justify-between items-center border-b ${slot.plugged ? 'border-[#2a3642]' : 'border-[#1a222c]'} pb-1.5">
+            <div class="flex items-center gap-1.5 font-bold ${slot.plugged ? 'text-amber-400' : 'text-gray-500'}">
+              <span>${slot.icon}</span>
+              <span>SLOT ${s}: ${slot.addr}</span>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${slot.plugged ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-stone-900 text-stone-500 border border-stone-800'}">
+              ${slot.plugged ? 'PLUGGED' : 'EMPTY'}
+            </span>
+          </div>
+
+          <div>
+            <div class="font-bold ${slot.plugged ? 'text-white' : 'text-gray-500'} text-xs">${slot.name}</div>
+            <div class="text-[11px] text-gray-400">${slot.desc}</div>
+          </div>
+
+          <div class="flex justify-between items-center pt-1">
+            <span class="text-[10px] font-mono ${slot.plugged ? 'text-emerald-400' : 'text-stone-600'}">
+              ${slot.plugged ? '● Bus Connected' : '○ High-Z Float'}
+            </span>
+            <button onclick="toggleSlot(${s})" class="px-2.5 py-1 rounded text-xs font-bold transition ${slot.plugged ? 'bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800' : 'bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-700'}">
+              ${slot.plugged ? '⏏️ Unplug Card' : '🔌 Plug In Card'}
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(cardDiv);
+      }
+    };
+    window.renderSlotBay();
+
     window.selectRomPreset = function(preset) {
       const infoEl = document.getElementById('rom-info-text');
       const badge = document.getElementById('rom-badge');
