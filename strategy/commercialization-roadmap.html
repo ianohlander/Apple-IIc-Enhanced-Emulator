@@ -41,36 +41,105 @@
   <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12 text-sm">
 
     <!-- Monetization Models -->
-    <div class="space-y-4">
-      <h2 class="text-xl font-bold text-white uppercase tracking-wider font-mono text-purple-400">4 Sustainable Revenue Streams</h2>
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-[#212c3d] pb-3">
+        <div>
+          <h2 class="text-xl font-bold text-white uppercase tracking-wider font-mono text-purple-400">5 High-Margin Revenue Streams</h2>
+          <p class="text-gray-400 text-xs">Diversified commercial engine targeting educators, indie game developers, retro enthusiasts, and desktop power users.</p>
+        </div>
+        <span class="px-3 py-1 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800">Commercial Architecture</span>
+      </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-        <div class="card-box p-5 space-y-2">
-          <span class="text-amber-400 font-bold block text-sm">1. Academic Courseware Licensing ($499 / dept)</span>
-          <p class="text-gray-300 text-[11px] leading-relaxed">
-            Sell institutional lab packs to University Computer Science departments. Pack includes automated autograding harnesses, instructor solution manuals, slide decks, and exam test banks.
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-mono">
+        <!-- Stream 1: Desktop Workstation -->
+        <div class="card-box p-5 space-y-2 border-purple-500/40 bg-[#121124]">
+          <div class="flex items-center justify-between">
+            <span class="text-purple-300 font-bold block text-sm">1. Downloadable Desktop Pro Workstation ($29.99 – $49.00)</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-purple-900/60 text-purple-200 border border-purple-700">Highest B2C Revenue</span>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            Packaged native application (Windows <code>.exe</code>, macOS <code>.dmg</code> Universal, Linux <code>.AppImage</code>) distributed via <strong>Lemon Squeezy</strong>, <strong>itch.io</strong>, and <strong>Steam</strong>. Provides 100% offline execution, automatic persistent disk/ROM mounting from local folders, persistent custom card script libraries, and unconstrained USB Serial/MIDI device access without browser security prompts.
           </p>
+          <div class="p-2 bg-[#0a0a14] rounded border border-[#231e3d] text-[10px] text-purple-300">
+            <strong>Key Selling Point:</strong> Users own their configurations forever with local file persistence, batch ProDOS disk exporter, and zero latency.
+          </div>
         </div>
 
+        <!-- Stream 2: Academic Courseware -->
         <div class="card-box p-5 space-y-2">
-          <span class="text-cyan-400 font-bold block text-sm">2. Digital / Print Companion Textbook ($39.99)</span>
-          <p class="text-gray-300 text-[11px] leading-relaxed">
-            Publish <em>"From C# and Java to Silicon: 65C02 Compiler Engineering"</em> on Leanpub and Amazon KDP. Target self-taught engineers and retro enthusiasts worldwide.
+          <span class="text-amber-400 font-bold block text-sm">2. Academic Courseware Licensing ($499 / dept)</span>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            Sell institutional lab packs to University Computer Science departments. Pack includes automated autograding harnesses, instructor solution manuals, slide decks, and exam test banks for <em>CS 301: Compiler Engineering</em>.
           </p>
+          <div class="p-2 bg-[#080d14] rounded border border-[#1b2533] text-[10px] text-amber-300">
+            <strong>Target:</strong> 10–25 university CS departments annually.
+          </div>
         </div>
 
+        <!-- Stream 3: Companion Textbook -->
         <div class="card-box p-5 space-y-2">
-          <span class="text-emerald-400 font-bold block text-sm">3. VS Code Marketplace Extension &amp; Pro SDK</span>
-          <p class="text-gray-300 text-[11px] leading-relaxed">
+          <span class="text-cyan-400 font-bold block text-sm">3. Digital / Print Companion Textbook ($39.99)</span>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            Publish <em>"From C# and Java to Silicon: 65C02 Compiler Engineering"</em> on Leanpub, Amazon KDP, and Gumroad. Target self-taught engineers, retro developers, and embedded programmers worldwide.
+          </p>
+          <div class="p-2 bg-[#080d14] rounded border border-[#1b2533] text-[10px] text-cyan-300">
+            <strong>Formats:</strong> DRM-free PDF, ePub, and hardcover print on demand.
+          </div>
+        </div>
+
+        <!-- Stream 4: VS Code Extension -->
+        <div class="card-box p-5 space-y-2">
+          <span class="text-emerald-400 font-bold block text-sm">4. VS Code Marketplace Extension &amp; Pro SDK</span>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
             Free core extension for building Apple II C#/Java apps with a Pro tier offering advanced profiling, cycle heatmaps, and zero-page collision analyzers ($10/month or $99 lifetime).
           </p>
+          <div class="p-2 bg-[#080d14] rounded border border-[#1b2533] text-[10px] text-emerald-300">
+            <strong>Distribution:</strong> Visual Studio Marketplace + Lemon Squeezy license key.
+          </div>
         </div>
 
+        <!-- Stream 5: Creator Sponsorship -->
         <div class="card-box p-5 space-y-2">
-          <span class="text-pink-400 font-bold block text-sm">4. Retro Creator Sponsorship (GitHub Sponsors / Patreon)</span>
-          <p class="text-gray-300 text-[11px] leading-relaxed">
-            Monthly tier for retro computing enthusiasts ($5–$25/mo) with perks: early access to new virtual expansion cards (MIDI, Uthernet, Mouse Card) and voting on next case studies.
+          <span class="text-pink-400 font-bold block text-sm">5. Retro Creator Sponsorship (GitHub Sponsors / Patreon)</span>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            Monthly recurring patronage ($5–$25/mo) with perks: early access to new virtual expansion cards (MIDI, Uthernet, Mouse Card), custom ROM studio toolsets, and community voting on upcoming case studies.
           </p>
+          <div class="p-2 bg-[#080d14] rounded border border-[#1b2533] text-[10px] text-pink-300">
+            <strong>Community Engine:</strong> Fosters grassroots loyalty and continuous tester feedback.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Downloadable Desktop Strategy Deep-Dive -->
+    <div class="card-box p-6 space-y-4 font-mono text-xs border-purple-500/30 bg-[#0e111a]">
+      <div class="flex items-center justify-between border-b border-[#212c3d] pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🖥️</span>
+          <span class="text-purple-400 font-bold text-sm uppercase tracking-wider">The "Freemium Web + Desktop Pro" Commercial Strategy</span>
+        </div>
+        <span class="px-2 py-0.5 rounded text-[9px] bg-purple-950 text-purple-300 border border-purple-800">Growth Flywheel</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-sans text-xs">
+        <div class="p-4 bg-[#080b12] rounded-lg border border-[#1c2436] space-y-2">
+          <span class="text-amber-400 font-bold font-mono text-xs block">🌐 Free Web Edition (Marketing &amp; Top of Funnel)</span>
+          <ul class="list-disc list-inside space-y-1 text-gray-300 text-[11px]">
+            <li><strong>Zero Friction:</strong> Instant 1-click boot in any modern browser without installation.</li>
+            <li><strong>Viral Sharing:</strong> Perfect for Hacker News Show HN, Reddit posts, and social media embedding.</li>
+            <li><strong>Feature Scope:</strong> Full standard 65C02 emulation, BASIC/C#/Java AOT demo, and preset expansion cards.</li>
+            <li><strong>Conversion Trigger:</strong> Displays a sleek "Upgrade to Desktop Pro Workstation" banner highlighting offline persistence and direct folder syncing.</li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-[#0d0f1c] rounded-lg border border-[#2b274c] space-y-2">
+          <span class="text-purple-300 font-bold font-mono text-xs block">💻 Desktop Pro Workstation ($29–$49 Paid Product)</span>
+          <ul class="list-disc list-inside space-y-1 text-gray-300 text-[11px]">
+            <li><strong>Local Folder Persistence:</strong> Automatically mounts local disk directories (<code>~/Apple2Disks/</code>), saves custom <code>.card.js</code> peripherals, and preserves configurations across sessions.</li>
+            <li><strong>Zero Browser Permissions:</strong> Seamless USB Serial (Arduino), MIDI DAWs, and local networking without browser permission popups.</li>
+            <li><strong>Batch Exporter:</strong> 1-click batch generation of ProDOS floppy (.DSK) and hard disk (.2MG) images for physical Floppy Emu and CFFA3000 devices.</li>
+            <li><strong>IP Security:</strong> Core emulator and AOT compilers packaged as compiled, encrypted binaries using <strong>Tauri (Rust)</strong> and <strong>WebAssembly</strong>, shielding your proprietary source code from extraction.</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -111,14 +180,16 @@
       <!-- 90 Days -->
       <div class="card-box p-6 space-y-3 font-mono text-xs">
         <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
-          <span class="text-emerald-400 font-bold text-sm">🗓️ Phase 3: Days 61–90 (Monetization &amp; Institutional Sales)</span>
+          <span class="text-emerald-400 font-bold text-sm">🗓️ Phase 3: Days 61–90 (Monetization, Desktop Release &amp; Institutional Sales)</span>
           <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Revenue</span>
         </div>
         <ul class="list-disc list-inside text-gray-300 space-y-1.5 text-[11px]">
-          <li><strong>Day 65:</strong> Publish the digital companion book on Leanpub and Amazon KDP.</li>
-          <li><strong>Day 70:</strong> Launch the University Courseware Pack ($499) for academic department licensing.</li>
+          <li><strong>Day 65:</strong> Publish the digital companion book on Leanpub and Amazon KDP ($39.99).</li>
+          <li><strong>Day 70:</strong> Launch <strong>Apple //c Ultra Workstation Pro Desktop Edition ($29.99–$49.00)</strong> on Lemon Squeezy and itch.io with offline local storage and custom card manager.</li>
+          <li><strong>Day 75:</strong> Launch the University Courseware Pack ($499) for academic department licensing.</li>
           <li><strong>Day 80:</strong> Release the first preview build of the VS Code "Apple //c Ultra Developer Studio" extension.</li>
-          <li><strong>Day 90:</strong> Review initial courseware pilot adoptions and plan Version 2.0 features!</li>
+          <li><strong>Day 85:</strong> Submit Apple //c Ultra Workstation to <strong>Steam Direct</strong> (Software &gt; Utilities / Game Development).</li>
+          <li><strong>Day 90:</strong> Review initial courseware pilot adoptions, desktop sales revenue, and plan Version 2.0 features!</li>
         </ul>
       </div>
     </div>

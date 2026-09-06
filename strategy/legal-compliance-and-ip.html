@@ -346,7 +346,141 @@
 
       </div>
 
-      <!-- Step-by-Step Actionable Checklist -->
+      <!-- ========================================================================= -->
+    <!-- DOWNLOADABLE DESKTOP ANTI-TAMPER & TECHNICAL IP PROTECTION BLUEPRINT -->
+    <!-- ========================================================================= -->
+    <div class="space-y-6 font-mono text-xs border border-purple-500/30 rounded-2xl p-6 bg-[#0c0f18]" id="desktop-anti-tamper-blueprint">
+      <div class="flex items-center justify-between border-b border-[#212d3d] pb-3">
+        <div class="flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center border border-purple-500/40 text-base">💻</span>
+          <div>
+            <h4 class="text-base font-bold text-purple-300">Downloadable Desktop Edition: Technical Anti-Tamper &amp; IP Protection Blueprint</h4>
+            <p class="text-gray-400 text-[11px]">How to Package, License &amp; Distribute "Apple //c Ultra Workstation Pro" Without Exposing Proprietary Code</p>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded text-[10px] bg-purple-950 text-purple-300 border border-purple-800">5-Tier Technical Defense</span>
+      </div>
+
+      <p class="text-gray-300 leading-relaxed font-sans text-xs">
+        When transitioning from a web-hosted application to a downloadable desktop binary, developers often worry: <em>"If I give users a downloadable build so they can save configurations and custom cards locally, how do I prevent someone from copying my source code or pirating my application?"</em> Follow this 5-tier technical and architectural defense blueprint to ensure the downloadable desktop product remains completely secure, tamper-resistant, and legally protected.
+      </p>
+
+      <!-- 5-Tier Defense Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Tier 1: Tauri Native Binary Packaging -->
+        <div class="card-box p-4 space-y-2.5 border-purple-500/30 bg-[#090b12]">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-1.5">
+            <span class="text-purple-300 font-bold text-xs">1. Tauri (Rust) Native Packaging</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-purple-900/60 text-purple-200">Anti-Extraction</span>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            <strong>Avoid Standard Electron:</strong> Standard Electron packages source files into an unencrypted <code>app.asar</code> archive that anyone can decompress with a single command (<code>npx asar extract</code>).
+          </p>
+          <div class="p-2.5 bg-[#05070c] rounded border border-[#1b2230] text-[10px] text-gray-400 space-y-1">
+            <span class="text-purple-300 font-bold block">The Tauri Advantage:</span>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li>Web assets and scripts are embedded directly into compiled native C/Rust machine code (<code>.exe</code>, <code>.dylib</code>, <code>.AppImage</code>).</li>
+              <li>10MB binary size (vs 150MB+ Electron bloat).</li>
+              <li>No loose JavaScript source files on the user's hard disk.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tier 2: Wasm Bytecode Obfuscation -->
+        <div class="card-box p-4 space-y-2.5 border-cyan-500/30 bg-[#090b12]">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-1.5">
+            <span class="text-cyan-300 font-bold text-xs">2. WebAssembly (Wasm) Compilation</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-cyan-900/60 text-cyan-200">Bytecode Obfuscation</span>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            <strong>Core Engine Compilation:</strong> Lower the 65C02 CPU cycle execution core, MMU memory banking switches, and C#/Java AOT AST compiler lowering engines to compiled <strong>WebAssembly (<code>.wasm</code>)</strong> modules.
+          </p>
+          <div class="p-2.5 bg-[#05070c] rounded border border-[#1b2230] text-[10px] text-gray-400 space-y-1">
+            <span class="text-cyan-300 font-bold block">Security Benefits:</span>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li>Variable names, AST node schemas, and control structures are stripped down to raw binary stack instructions.</li>
+              <li>Reverse engineering requires arduous assembly disassembly, giving you industrial-grade IP protection.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tier 3: Asymmetric Cryptographic Licensing -->
+        <div class="card-box p-4 space-y-2.5 border-amber-500/30 bg-[#090b12]">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-1.5">
+            <span class="text-amber-300 font-bold text-xs">3. Offline Ed25519 Digital Licensing</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-amber-900/60 text-amber-200">Zero-Friction DRM</span>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            <strong>User-Friendly Offline License Keys:</strong> Retro users despise always-online DRM. Instead, utilize asymmetric digital signatures (Ed25519) for desktop license validation.
+          </p>
+          <div class="p-2.5 bg-[#05070c] rounded border border-[#1b2230] text-[10px] text-gray-400 space-y-1">
+            <span class="text-amber-300 font-bold block">How It Operates:</span>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li>Upon purchase on Lemon Squeezy/Gumroad, an encrypted license string <code>[UserEmail + Expiry + Signature]</code> is issued.</li>
+              <li>The desktop app verifies the signature offline with your embedded public key—impossible to crack or keygen without your private key.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tier 4: Clean Decoupled User Workspaces -->
+        <div class="card-box p-4 space-y-2.5 border-emerald-500/30 bg-[#090b12]">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-1.5">
+            <span class="text-emerald-300 font-bold text-xs">4. Decoupled User Config &amp; Card Storage</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-emerald-900/60 text-emerald-200">Safe Extensibility</span>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            <strong>Empower Users Without Giving Away Core IP:</strong> Store user configurations, floppy disks, and custom virtual peripheral card scripts in an external sandboxed directory (e.g. <code>~/Documents/Apple2Ultra/</code>).
+          </p>
+          <div class="p-2.5 bg-[#05070c] rounded border border-[#1b2230] text-[10px] text-gray-400 space-y-1">
+            <span class="text-emerald-300 font-bold block">Architecture:</span>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li>Users write and share their own <code>.card.js</code> peripheral scripts using your public SDK API.</li>
+              <li>The core 65C02 engine and AOT compiler remain private, compiled, and untouched inside the secure application binary.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tier 5: Digital Storefronts & Automatic Tax -->
+        <div class="card-box p-4 space-y-2.5 border-pink-500/30 bg-[#090b12]">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-1.5">
+            <span class="text-pink-300 font-bold text-xs">5. Merchant of Record Distribution</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-pink-900/60 text-pink-200">Global Compliance</span>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            <strong>Lemon Squeezy, itch.io &amp; Steam:</strong> Distribute the desktop edition through platforms acting as "Merchant of Record" (MoR).
+          </p>
+          <div class="p-2.5 bg-[#05070c] rounded border border-[#1b2230] text-[10px] text-gray-400 space-y-1">
+            <span class="text-pink-300 font-bold block">Commercial Safeguards:</span>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li>Automatically handles global sales tax, VAT, chargeback protection, and invoicing.</li>
+              <li>Steam Direct ($100 app fee) provides instant access to millions of PC/Mac retro gaming and software enthusiasts with built-in Steam client anti-tamper.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tier 6: Legal & Forensic Watermarks -->
+        <div class="card-box p-4 space-y-2.5 border-yellow-500/30 bg-[#090b12]">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-1.5">
+            <span class="text-yellow-300 font-bold text-xs">6. Registered Copyright &amp; Watermarks</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-yellow-900/60 text-yellow-200">Legal Recourse</span>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed font-sans">
+            <strong>Statutory Legal Armor:</strong> Register Form TX with the US Copyright Office within 3 months of desktop release.
+          </p>
+          <div class="p-2.5 bg-[#05070c] rounded border border-[#1b2230] text-[10px] text-gray-400 space-y-1">
+            <span class="text-yellow-300 font-bold block">Protections:</span>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li>Entitles you to up to $150,000 per willful infringement without proving actual damages.</li>
+              <li>Embedded steganographic author strings prove forensic provenance if anyone redistributes modified builds.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Step-by-Step Actionable Checklist -->
       <div class="space-y-4">
         <h4 class="text-sm font-bold text-white uppercase tracking-wider text-pink-400">Actionable 6-Step Checklist for Ian Ohlander</h4>
 
