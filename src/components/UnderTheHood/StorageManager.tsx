@@ -1,3 +1,4 @@
+import { ProdosDiskExporter } from '../../emulator/storage/diskExporter';
 import React, { useRef } from 'react';
 import { Apple2cUltra } from '../../emulator/apple2c';
 import { FloppyDisk } from '../../emulator/storage/diskII';
@@ -70,6 +71,27 @@ export const StorageManager: React.FC<StorageManagerProps> = ({ emulator, onRefr
     a.download = disk.name;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  
+  const handleExportProdosFloppy = (is2mg: boolean) => {
+    const d1 = emulator.diskController.drive1;
+    let data = d1.rawData;
+    const name = (d1.name.replace(/\.[^/.]+$/, '') || 'FloppyEmu_Disk') + (is2mg ? '.2mg' : '.dsk');
+    if (is2mg) {
+      data = ProdosDiskExporter.wrapIn2MG(data, d1.name);
+    }
+    ProdosDiskExporter.triggerDownload(data, name);
+  };
+
+  const handleExportProdosHardDrive = (is2mg: boolean) => {
+    const hd = emulator.smartPort.hardDrive1;
+    let data = hd.blocks;
+    const name = (hd.name.replace(/\.[^/.]+$/, '') || 'CFFA3000_HD') + (is2mg ? '.2mg' : '.hdv');
+    if (is2mg) {
+      data = ProdosDiskExporter.wrapIn2MG(data, hd.name);
+    }
+    ProdosDiskExporter.triggerDownload(data, name);
   };
 
   const handleExportHardDrive = () => {
@@ -243,6 +265,54 @@ export const StorageManager: React.FC<StorageManagerProps> = ({ emulator, onRefr
           </div>
         </div>
       </div>
+    
+      {/* 1-Click Physical Hardware Exporter Banner */}
+      <div className="p-4 bg-[#0a141d] rounded-xl border border-[#1b3d54] space-y-3 font-mono text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1b3d54] pb-2">
+          <div className="flex items-center gap-2">
+            <span className="text-base">⚡</span>
+            <span className="font-bold text-cyan-400">1-CLICK PHYSICAL HARDWARE EXPORTER (FLOPPY EMU / CFFA3000)</span>
+          </div>
+          <a
+            href="docs/developer/physical-hardware-export.html"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[10px] text-cyan-400 underline hover:text-cyan-300"
+          >
+            Hardware Transfer Guide ↗
+          </a>
+        </div>
+        <p className="text-[11px] text-gray-300 leading-relaxed font-sans">
+          Export bootable disk images formatted specifically for physical Apple II hardware emulators (BMOW Floppy Emu, CFFA3000, wDrive, BOOTI, and FujiNet). Copy the downloaded file directly to your SD card or USB drive!
+        </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <button
+            onClick={() => handleExportProdosFloppy(false)}
+            className="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow transition flex items-center gap-1.5"
+          >
+            💾 Export Drive 1 Floppy (.DSK / .PO)
+          </button>
+          <button
+            onClick={() => handleExportProdosFloppy(true)}
+            className="px-3 py-1.5 bg-[#1c222b] hover:bg-[#283240] text-cyan-300 rounded border border-[#2a3642] transition flex items-center gap-1.5"
+          >
+            📦 Export Drive 1 as Universal 2MG (.2MG)
+          </button>
+          <button
+            onClick={() => handleExportProdosHardDrive(false)}
+            className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded shadow transition flex items-center gap-1.5"
+          >
+            💽 Export 32MB HD for CFFA3000 (.HDV / .PO)
+          </button>
+          <button
+            onClick={() => handleExportProdosHardDrive(true)}
+            className="px-3 py-1.5 bg-[#1c222b] hover:bg-[#283240] text-purple-300 rounded border border-[#2a3642] transition flex items-center gap-1.5"
+          >
+            📦 Export 32MB HD as 2MG (.2MG)
+          </button>
+        </div>
+      </div>
+
     </div>
   );
 };

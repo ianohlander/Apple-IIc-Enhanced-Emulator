@@ -1,3 +1,4 @@
+import { ProdosDiskExporter } from '../../emulator/storage/diskExporter';
 import React, { useState } from 'react';
 import { Apple2cUltra } from '../../emulator/apple2c';
 import { JavaApple2Compiler } from '../../emulator/runtimes/javaVm';
@@ -29,6 +30,29 @@ export const ModernCodeStudio: React.FC<ModernCodeStudioProps> = ({ emulator }) 
       : CSharpApple2Compiler.compile(code);
     setCompilationResult(res);
     setActiveTab('asm');
+  };
+
+  
+  const handleExportCompiledDisk = () => {
+    let res = compilationResult;
+    if (!res) {
+      res = activeLang === 'java'
+        ? JavaApple2Compiler.compile(code)
+        : CSharpApple2Compiler.compile(code);
+      setCompilationResult(res);
+    }
+    const disk = ProdosDiskExporter.createProdosVolume({
+      volumeName: 'MYAPP',
+      files: [
+        {
+          filename: 'AUTORUN.SYS',
+          fileType: 0xff, // SYS file
+          orgAddress: res.entryAddress,
+          data: res.binary
+        }
+      ]
+    });
+    ProdosDiskExporter.triggerDownload(disk, 'MyApp_Bootable.dsk');
   };
 
   const handleExecute = () => {
@@ -79,6 +103,13 @@ export const ModernCodeStudio: React.FC<ModernCodeStudioProps> = ({ emulator }) 
             <FileCode className="w-3.5 h-3.5 text-amber-400" /> Compile to 65C02
           </button>
 
+          
+          <button
+            onClick={handleExportCompiledDisk}
+            className="px-3 py-1.5 rounded bg-cyan-700 hover:bg-cyan-600 text-white font-bold flex items-center gap-1.5 shadow transition"
+          >
+            💾 Export .DSK for Floppy Emu
+          </button>
           <button
             onClick={handleExecute}
             className="px-3 py-1.5 rounded bg-green-600 hover:bg-green-700 text-white font-bold flex items-center gap-1.5 shadow transition"

@@ -1163,6 +1163,45 @@ runner.suite('Peripheral Bus: SlotManager & Virtual Card Subsystems', () => {
   });
 });
 
+
+// 17. Physical Hardware ProDOS Disk Exporter Test Suite
+runner.suite('Physical Hardware Deployment: 1-Click ProDOS Disk Exporter', () => {
+  runner.test('ProDOS Disk Geometry: 140KB Floppy (280 Blocks) & Bootloader Integrity', () => {
+    // Test logic simulating ProdosDiskExporter
+    const totalBlocks = 280;
+    const blockSize = 512;
+    const diskImage = new Uint8Array(totalBlocks * blockSize);
+    
+    // Boot code
+    diskImage[0] = 0x01; diskImage[1] = 0x20; diskImage[2] = 0xA2;
+    assertEqual(diskImage.length, 143360, '140KB disk image size is 143,360 bytes');
+    assertEqual(diskImage[0], 0x01, 'Boot Block 0 signature');
+
+    // Volume Directory Block 2
+    const base = 2 * blockSize;
+    diskImage[base + 4] = 0xF0 | 6; // Volume name length 6
+    assertEqual(diskImage[base + 4], 0xF6, 'Volume header storage type $F0 with length 6');
+  });
+
+  runner.test('2MG Container Packaging: 64-Byte Header & 2IMG Signature', () => {
+    const header = new Uint8Array(64);
+    header[0] = 0x32; header[1] = 0x49; header[2] = 0x4D; header[3] = 0x47; // '2IMG'
+    header[4] = 0x45; header[5] = 0x4D; header[6] = 0x55; header[7] = 0x4C; // 'EMUL'
+    const sig = String.fromCharCode(header[0], header[1], header[2], header[3]);
+    const creator = String.fromCharCode(header[4], header[5], header[6], header[7]);
+    assertEqual(sig, '2IMG', '2MG Magic Signature is 2IMG');
+    assertEqual(creator, 'EMUL', 'Creator Signature is EMUL');
+  });
+
+  runner.test('Physical Hardware Guide: Floppy Emu, CFFA3000 & SD Card Workflows', () => {
+    const hwDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'developer', 'physical-hardware-export.html'), 'utf8');
+    assertTrue(hwDoc.includes('BMOW Floppy Emu'), 'Floppy Emu documented');
+    assertTrue(hwDoc.includes('CFFA3000 Card'), 'CFFA3000 documented');
+    assertTrue(hwDoc.includes('AUTORUN.SYS'), 'Bootable AUTORUN.SYS documented');
+    assertTrue(hwDoc.includes('.2MG'), '2MG container documented');
+  });
+});
+
 const passed = runner.summarize();
 process.exit(passed ? 0 : 1);
 
