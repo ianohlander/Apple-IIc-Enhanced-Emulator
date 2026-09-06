@@ -1216,6 +1216,11 @@ runner.suite('Desktop Workstation Pro: Offline Licensing, Tauri Scaffolding & DN
     const dnsDoc = fs.readFileSync(path.join(__dirname, '..', 'deploy', 'dns-setup-instructions.html'), 'utf8');
     assertTrue(dnsDoc.includes('Hostinger hPanel'), 'Hostinger DNS guide documented');
     assertTrue(dnsDoc.includes('GitHub Pages'), 'GitHub Pages CNAME guide documented');
+
+    const domainDoc = fs.readFileSync(path.join(__dirname, '..', 'strategy', 'domain-and-branding-strategy.html'), 'utf8');
+    assertTrue(domainDoc.includes('apple2.ianohlander.com'), 'Subdomain strategy documented');
+    assertTrue(domainDoc.includes('ultra6502.com'), 'Dedicated domain alternative documented');
+    assertTrue(domainDoc.includes('Apple Trademark'), 'Trademark safety analysis documented');
   });
 
   runner.test('Tauri 2.0 Native Configuration: Cargo.toml, tauri.conf.json & Rust Core', () => {
