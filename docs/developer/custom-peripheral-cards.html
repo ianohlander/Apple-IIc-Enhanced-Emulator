@@ -86,9 +86,10 @@
       </div>
 
       <!-- Quick Jump Navigation -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4 border-t border-[#2a3642] font-mono text-[11px]">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-2 pt-4 border-t border-[#2a3642] font-mono text-[11px]">
         <a href="#ui-guide" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-amber-400 font-bold text-center">📍 Application UI Map</a>
         <a href="#domain-framework" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-cyan-400 font-bold text-center">📐 3-Domain Framework</a>
+        <a href="#security-permissions" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-red-400 font-bold text-center">🛡️ Security &amp; Permissions</a>
         <a href="#stepper-motor-case-study" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-emerald-400 font-bold text-center">⚙️ Stepper Motor Study</a>
         <a href="#weather-case-study" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-pink-400 font-bold text-center">🌤️ Weather Station Study</a>
       </div>
@@ -241,6 +242,120 @@
             <li><code class="text-cyan-300">new WebSocket('ws://localhost:8080')</code>: Stream bidirectional packets to/from local Python/Node daemons to execute shell commands or read local hardware.</li>
             <li><code class="text-cyan-300">navigator.requestMIDIAccess()</code>: Send and receive notes to/from physical USB synthesizers and DAWs.</li>
           </ul>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ========================================================================= -->
+    <!-- SECTION: BROWSER SECURITY, PRIVACY SANDBOXING & PERMISSION MODEL -->
+    <!-- ========================================================================= -->
+    <section id="security-permissions" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
+        <span class="step-pill bg-red-500/20 text-red-400 border border-red-500/40">🛡️</span>
+        <div>
+          <h3 class="text-base font-bold text-red-400 font-mono uppercase">Browser Security, Privacy Sandboxing &amp; User Permission Model</h3>
+          <p class="text-gray-400 text-xs">How the browser protects users from unauthorized local device access or silent process execution</p>
+        </div>
+      </div>
+
+      <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
+        
+        <div class="p-4 bg-[#0d1219] rounded-xl border border-red-500/30 space-y-2">
+          <span class="text-red-400 font-bold font-mono text-sm block">🔒 Core Security Guarantee: Zero Silent or Unauthorized Access</span>
+          <p class="text-gray-300 font-sans">
+            A common concern when running web-hosted emulators is: <em>"Can a website secretly access my USB devices, scan my home network, or execute programs on my computer?"</em>
+          </p>
+          <p class="text-gray-300 font-sans">
+            <strong>The answer is NO, ABSOLUTELY NOT.</strong> Modern web browsers (Chrome, Edge, Firefox, Safari) enforce an impenetrable multi-layered security sandbox. A web-hosted application has <strong>zero ability</strong> to touch your local operating system or hardware without explicit user initiation and native OS permission dialogs.
+          </p>
+        </div>
+
+        <!-- Breakdown by Feature -->
+        <div class="space-y-4 font-mono text-xs">
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider font-mono">How Permissions Work for Each Feature:</h4>
+
+          <!-- 1. Physical USB Hardware -->
+          <div class="p-4 bg-[#080d14] rounded-lg border border-[#16202e] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-amber-400 font-bold">1. Physical USB Serial Ports (Web Serial API &mdash; Arduinos / ESP32s)</span>
+              <span class="api-badge bg-amber-950 text-amber-300 border border-amber-800">Native Browser Prompt</span>
+            </div>
+            <p class="text-gray-300 font-sans text-[11px]">
+              <strong>How It Works:</strong> The browser will <strong>NEVER</strong> automatically connect to a USB device. The user must explicitly click a button (e.g. "Connect USB Port").
+            </p>
+            <p class="text-gray-300 font-sans text-[11px]">
+              When clicked, the browser renders an unforgeable native security modal: <em>"apple2ultra.app wants to connect to a serial port"</em> with a dropdown of plugged-in USB COM ports. The user must manually select their device (e.g. "Arduino Uno (COM3)") and click <strong>"Connect"</strong>.
+            </p>
+            <p class="text-emerald-400 font-sans text-[11px]">
+              &check; <strong>Security Boundary:</strong> The website only receives access to that single approved port. It cannot scan the hard drive, read other USB ports, or access any other hardware.
+            </p>
+          </div>
+
+          <!-- 2. Local Host Processes -->
+          <div class="p-4 bg-[#080d14] rounded-lg border border-[#16202e] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-cyan-400 font-bold">2. Local Host Processes &amp; Shell Commands (Local Daemon &mdash; Case Study 3)</span>
+              <span class="api-badge bg-cyan-950 text-cyan-300 border border-cyan-800">User-Run Bridge Only</span>
+            </div>
+            <p class="text-gray-300 font-sans text-[11px]">
+              <strong>Can a website execute local terminal commands on its own?</strong> Absolutely not. Web browsers completely prohibit web pages from spawning OS processes or executing binaries (<code class="text-cyan-300">calc.exe</code>, shell scripts, etc.).
+            </p>
+            <p class="text-gray-300 font-sans text-[11px]">
+              <strong>How Case Study 3 Actually Works:</strong> It is designed for advanced hobbyists who <em>intentionally choose</em> to run their own local companion daemon (e.g. a 10-line Python script or Electron sidecar) on <code class="text-cyan-300">localhost:8080</code>. The web emulator merely sends WebSocket messages to the user's own local script.
+            </p>
+            <p class="text-emerald-400 font-sans text-[11px]">
+              &check; <strong>Security Boundary:</strong> If the user does not run the local Python daemon, the WebSocket simply refuses connection, and zero external interaction occurs.
+            </p>
+          </div>
+
+          <!-- 3. Web MIDI Devices -->
+          <div class="p-4 bg-[#080d14] rounded-lg border border-[#16202e] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-pink-400 font-bold">3. Musical MIDI Keyboards &amp; Synthesizers (Web MIDI API)</span>
+              <span class="api-badge bg-pink-950 text-pink-300 border border-pink-800">Permission Modal</span>
+            </div>
+            <p class="text-gray-300 font-sans text-[11px]">
+              Modern browsers prompt the user with a permission banner: <em>"Allow apple2ultra.app to use your MIDI devices?"</em>. The user can block or allow access at any time.
+            </p>
+          </div>
+
+          <!-- 4. Default Emulator Mode -->
+          <div class="p-4 bg-[#080d14] rounded-lg border border-[#16202e] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-emerald-400 font-bold">4. Default Emulator Usage (Games, BASIC, C# AOT, Disks, Audio)</span>
+              <span class="api-badge bg-emerald-950 text-emerald-300 border border-emerald-800">0 Permissions Needed</span>
+            </div>
+            <p class="text-gray-300 font-sans text-[11px]">
+              For 99% of normal emulator operations (playing games, writing BASIC, compiling C# and Java, editing disks, flashing custom ROMs, and listening to Mockingboard chiptunes), <strong>ZERO browser permissions are ever requested</strong>.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- 4 Trust Pillars for Users -->
+        <div class="p-4 bg-[#0a0e17] rounded-xl border border-[#212d3d] space-y-3 font-mono text-xs">
+          <span class="text-amber-400 font-bold uppercase tracking-wider block">Why Users Can Trust the Apple //c Ultra:</span>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] font-sans text-gray-300">
+            <div class="p-3 bg-[#0d1219] rounded border border-[#1a2332] space-y-1">
+              <strong class="text-white font-mono block">1. 100% Offline Single-File Option:</strong>
+              The entire emulator is distributed as a single standalone HTML file (<code class="text-amber-300">index-standalone.html</code>) that users can save to their desktop and run completely offline with zero internet access!
+            </div>
+            <div class="p-3 bg-[#0d1219] rounded border border-[#1a2332] space-y-1">
+              <strong class="text-white font-mono block">2. Strictly Opt-In Permissions:</strong>
+              No permission modals are ever triggered unless the user explicitly navigates to the Slot Studio and clicks "Connect USB Device".
+            </div>
+            <div class="p-3 bg-[#0d1219] rounded border border-[#1a2332] space-y-1">
+              <strong class="text-white font-mono block">3. Open-Source Transparency:</strong>
+              All emulator source code, slot managers, and compilers are fully open, auditable, and contain zero tracking or telemetry beacons.
+            </div>
+            <div class="p-3 bg-[#0d1219] rounded border border-[#1a2332] space-y-1">
+              <strong class="text-white font-mono block">4. Native Desktop Wrapper Ready:</strong>
+              For environments where browser prompts are undesirable, the emulator can be run inside a native <strong>Tauri / Electron desktop container</strong>.
+            </div>
+          </div>
         </div>
 
       </div>
