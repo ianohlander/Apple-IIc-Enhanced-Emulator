@@ -10,41 +10,128 @@ import { CustomScriptableCard } from '../../emulator/slots/cards/CustomScriptabl
 import {
   Layers,
   Printer,
-  Radio,
   Clock,
-  Music,
-  Globe,
-  HardDrive,
-  Disc,
   Play,
-  RotateCcw,
   Copy,
   Download,
   Trash2,
-  Code
+  Code,
+  Sparkles
 } from 'lucide-react';
 
 interface SlotStudioProps {
   emulator: Apple2cUltra;
 }
 
+const PRESET_SCRIPTS: Record<string, { name: string; code: string }> = {
+  weather: {
+    name: '🌤️ IoT Weather Station (Temp, Humidity, Pressure, Wind)',
+    code: `// Preset: IoT Weather Station (Slot 3 @ $C0B0)
+// Simulates live telemetry from environmental sensors
+card.temperature = 74; // deg F
+card.humidity = 48;    // % RH
+card.pressure = 1013;  // hPa (Sea-level standard)
+card.windSpeed = 12;   // mph
+card.rainGauge = 5;    // hundredths of an inch (0.05 in)
+
+// Simulate fluctuating sensor readings
+setInterval(() => {
+  card.temperature = 70 + Math.floor(Math.random() * 8);
+  card.humidity = 45 + Math.floor(Math.random() * 10);
+  card.windSpeed = 10 + Math.floor(Math.random() * 6);
+}, 5000);
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.temperature & 0xFF;        // $C0B0: Temp
+  if (offset === 0x01) return card.humidity & 0xFF;           // $C0B1: Humidity
+  if (offset === 0x02) return (card.pressure * 10) & 0xFF;    // $C0B2: Press Low
+  if (offset === 0x03) return ((card.pressure * 10) >> 8) & 0xFF; // $C0B3: Press High
+  if (offset === 0x04) return card.windSpeed & 0xFF;          // $C0B4: Wind Speed
+  if (offset === 0x05) return card.rainGauge & 0xFF;          // $C0B5: Rain Gauge
+  if (offset === 0x07) return 0x80; // $C0B7: Status (Bit 7 = Data Ready)
+  return 0x00;
+};`
+  },
+  serial: {
+    name: '🔌 Web Serial Arduino / ESP32 Hardware Sensor Bridge',
+    code: `// Preset: Web Serial Physical Hardware Bridge (Slot 3 @ $C0B0)
+// Connects real USB microcontrollers (Arduino / ESP32)
+card.sensorValue = 72;
+
+card.connectSerial = async () => {
+  try {
+    if ('serial' in navigator) {
+      const port = await (navigator as any).serial.requestPort();
+      await port.open({ baudRate: 9600 });
+      const reader = port.readable.getReader();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        if (value && value.length > 0) card.sensorValue = value[0];
+      }
+    }
+  } catch (err) {
+    console.warn('Serial connection canceled or unavailable', err);
+  }
+};
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.sensorValue;
+  return 0;
+};`
+  },
+  crypto: {
+    name: '📈 Live Bitcoin / Crypto Price Ticker (REST API)',
+    code: `// Preset: Live Bitcoin / Crypto Price Ticker (Slot 3 @ $C0B0)
+card.bitcoinPrice = 95000;
+
+setInterval(async () => {
+  try {
+    const res = await fetch('https://api.coindesk.com/v1/bpi/currentprice.json');
+    const data = await res.json();
+    card.bitcoinPrice = Math.floor(data.bpi.USD.rate_float);
+  } catch (e) {}
+}, 30000);
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.bitcoinPrice & 0xFF;
+  if (offset === 0x01) return (card.bitcoinPrice >> 8) & 0xFF;
+  if (offset === 0x02) return (card.bitcoinPrice >> 16) & 0xFF;
+  return 0x00;
+};`
+  },
+  math: {
+    name: '🧮 32-Bit Math Hardware Co-Processor (Fast Multiply & Divide)',
+    code: `// Preset: 32-Bit Math Hardware Co-Processor (Slot 3 @ $C0B0)
+card.opA = 0; card.opB = 0; card.result = 0;
+
+card.onWriteHandler = (offset, val) => {
+  if (offset === 0x00) card.opA = (card.opA & 0xFF00) | val;
+  if (offset === 0x01) card.opA = (card.opA & 0x00FF) | (val << 8);
+  if (offset === 0x02) card.opB = (card.opB & 0xFF00) | val;
+  if (offset === 0x03) {
+    card.opB = (card.opB & 0x00FF) | (val << 8);
+    card.result = card.opA * card.opB;
+  }
+};
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x04) return card.result & 0xFF;
+  if (offset === 0x05) return (card.result >> 8) & 0xFF;
+  if (offset === 0x06) return (card.result >> 16) & 0xFF;
+  if (offset === 0x07) return (card.result >> 24) & 0xFF;
+  return 0;
+};`
+  }
+};
+
 export const SlotStudio: React.FC<SlotStudioProps> = ({ emulator }) => {
   const [tick, setTick] = useState(0);
   const triggerRefresh = () => setTick(t => t + 1);
 
   const [printerPaper, setPrinterPaper] = useState('');
-  const [customJsCode, setCustomJsCode] = useState(
-`// Custom User-Scriptable Card (Slot 3)
-// Handles $C0B0 I/O reads & writes
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return 72; // Returns 72 deg F temperature
-  if (offset === 0x01) return Math.floor(Math.random() * 256); // Random noise
-  return 0x00;
-};
-
-card.onWriteHandler = (offset, value) => {
-  console.log(`Custom Card Write: Offset ${offset} = $${value.toString(16)}`);
-};`);
+  const [selectedPreset, setSelectedPreset] = useState('weather');
+  const [customJsCode, setCustomJsCode] = useState(PRESET_SCRIPTS.weather.code);
 
   const [activeToolkit, setActiveToolkit] = useState<'printer' | 'custom' | 'clock'>('printer');
 
@@ -85,6 +172,13 @@ card.onWriteHandler = (offset, value) => {
     URL.revokeObjectURL(url);
   };
 
+  const handleSelectPreset = (key: string) => {
+    setSelectedPreset(key);
+    if (PRESET_SCRIPTS[key]) {
+      setCustomJsCode(PRESET_SCRIPTS[key].code);
+    }
+  };
+
   const handleApplyCustomCard = () => {
     const card = emulator.slotManager.getCard(3) as CustomScriptableCard;
     if (card) {
@@ -110,7 +204,7 @@ card.onWriteHandler = (offset, value) => {
             <Layers className="w-4 h-4" />
             MOTHERBOARD PERIPHERAL EXPANSION BAY (SLOTS 1–7)
           </h3>
-          <p class="text-xs text-gray-400">
+          <p className="text-xs text-gray-400">
             Plug, unplug, inspect registers, or script custom hardware cards for the 50-pin Apple bus.
           </p>
         </div>
@@ -267,21 +361,32 @@ card.onWriteHandler = (offset, value) => {
         {/* Toolkit 2: Custom JS Sandbox */}
         {activeToolkit === 'custom' && (
           <div className="p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-wrap justify-between items-center gap-2">
               <div>
                 <span className="text-cyan-400 font-bold block">JavaScript Custom Card Sandbox (Slot 3):</span>
                 <span className="text-gray-400 text-[11px]">Script custom I/O registers ($C0B0-$C0BF) and slot ROM ($C300).</span>
               </div>
-              <button
-                onClick={handleApplyCustomCard}
-                className="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow flex items-center gap-1"
-              >
-                <Play className="w-3 h-3" /> Apply to Slot 3
-              </button>
+              <div className="flex items-center gap-2">
+                <select
+                  value={selectedPreset}
+                  onChange={e => handleSelectPreset(e.target.value)}
+                  className="bg-[#161b22] text-amber-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono"
+                >
+                  {Object.entries(PRESET_SCRIPTS).map(([k, v]) => (
+                    <option key={k} value={k}>{v.name}</option>
+                  ))}
+                </select>
+                <button
+                  onClick={handleApplyCustomCard}
+                  className="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow flex items-center gap-1"
+                >
+                  <Play className="w-3 h-3" /> Apply to Slot 3
+                </button>
+              </div>
             </div>
 
             <textarea
-              rows={8}
+              rows={9}
               value={customJsCode}
               onChange={e => setCustomJsCode(e.target.value)}
               className="w-full bg-[#05070a] border border-[#161f2c] rounded p-3 text-xs text-cyan-300 font-mono focus:outline-none"
