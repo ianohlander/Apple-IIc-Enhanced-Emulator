@@ -167,6 +167,48 @@
           </p>
         </div>
 
+        <!-- Lemon Squeezy (Merchant of Record) -->
+        <div class="card-box p-5 space-y-2 border-purple-500/30">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+            <span class="text-purple-300 font-bold text-sm">Lemon Squeezy (Merchant of Record Store)</span>
+            <a href="https://lemonsqueezy.com" target="_blank" class="text-[10px] text-purple-300 underline">lemonsqueezy.com ↗</a>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed">
+            <strong>What it is:</strong> A specialized e-commerce platform that acts as the <em>Merchant of Record (MoR)</em> for software developers.
+          </p>
+          <p class="text-gray-400 text-[10px]">
+            <strong>Why it matters (Zero Tax Headaches):</strong> If you sell software worldwide with standard Stripe, you must register for sales tax in dozens of US states and remit EU VAT yourself. With Lemon Squeezy, <em>they legally sell the software and handle all worldwide sales taxes and VAT</em> on your behalf!
+          </p>
+        </div>
+
+        <!-- Steam Direct -->
+        <div class="card-box p-5 space-y-2 border-cyan-500/30">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+            <span class="text-cyan-300 font-bold text-sm">Steam Direct (Valve Software Storefront)</span>
+            <a href="https://partner.steamgames.com" target="_blank" class="text-[10px] text-cyan-300 underline">partner.steamgames.com ↗</a>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed">
+            <strong>What it is:</strong> The premier PC and Mac digital software marketplace with over 130 million active users.
+          </p>
+          <p class="text-gray-400 text-[10px]">
+            <strong>Why it matters:</strong> Software listed under <em>Utilities &amp; Game Development</em> gains instant credibility, automated cross-platform updates, user reviews, and access to a massive audience of retro enthusiasts.
+          </p>
+        </div>
+
+        <!-- Tauri Native Packaging -->
+        <div class="card-box p-5 space-y-2 border-amber-500/30">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+            <span class="text-amber-300 font-bold text-sm">Tauri Framework (Rust Desktop Packaging)</span>
+            <a href="https://tauri.app" target="_blank" class="text-[10px] text-amber-300 underline">tauri.app ↗</a>
+          </div>
+          <p class="text-gray-300 text-[11px] leading-relaxed">
+            <strong>What it is:</strong> A toolkit that turns web apps into native Windows (<code>.exe</code>), Mac (<code>.dmg</code>), and Linux binaries.
+          </p>
+          <p class="text-gray-400 text-[10px]">
+            <strong>Why it matters (IP Protection):</strong> Unlike Electron (which leaves loose JavaScript files anyone can unpack), Tauri compiles and embeds your code into a secure native binary, keeping your core engine private.
+          </p>
+        </div>
+
       </div>
     </section>
 
@@ -339,7 +381,7 @@
         <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
           <div class="flex items-center gap-2">
             <span class="step-badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">2.3</span>
-            <span class="font-bold text-white text-sm">Host Retro Breakout on itch.io</span>
+            <span class="font-bold text-white text-sm">Host Retro Breakout &amp; Workstation on itch.io</span>
           </div>
           <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Time: ~15 mins | Cost: Free</span>
         </div>
@@ -349,9 +391,143 @@
             <li>Create an account at <a href="https://itch.io" target="_blank" class="text-emerald-400 underline">itch.io</a> and click <strong>"Create New Project"</strong>.</li>
             <li>Title: <code>Retro Breakout: 65C02 Edition (Built with Modern C# SDK)</code>.</li>
             <li>Classification: <code>Game</code> → Kind of Project: <code>HTML (Play in browser)</code>.</li>
-            <li>Pricing: Select <code>$0 or donate</code>.</li>
-            <li>Upload a zip of <code>index-standalone.html</code> configured to boot the Retro Breakout arcade demo on startup.</li>
+            <li>Pricing: Select <code>$0 or donate</code> for the web demo; offer downloadable standalone desktop build for <code>$29.99</code>.</li>
+            <li>Upload a zip of <code>index-standalone.html</code> and the compiled desktop binary.</li>
           </ol>
+        </div>
+      </div>
+
+      <!-- Task 2.4: Lemon Squeezy Storefront Setup -->
+      <div class="card-box p-6 space-y-4 font-mono text-xs border-purple-500/30">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2">
+            <span class="step-badge bg-purple-500/20 text-purple-300 border border-purple-500/40">2.4</span>
+            <span class="font-bold text-white text-sm">Set Up Lemon Squeezy for Desktop Pro Workstation ($29.99–$49.00)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-purple-950 text-purple-300 border border-purple-800">Time: ~20 mins | MoR Tax Handling Included</span>
+        </div>
+
+        <div class="space-y-3 text-[11px] text-gray-300 font-sans">
+          <p class="leading-relaxed">
+            Lemon Squeezy is the ideal storefront for non-marketers because it takes away the #1 legal/accounting nightmare: <strong>global sales taxes</strong>. When someone in Germany, Japan, or California buys your app, Lemon Squeezy calculates and pays the exact local tax, sends a clean receipt, and deposits net earnings into your bank account.
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5 font-mono text-[10px] text-gray-400">
+            <span class="text-purple-300 font-bold block">Exact Click-by-Click Steps:</span>
+            <ol class="list-decimal list-inside space-y-1">
+              <li>Sign up at <a href="https://lemonsqueezy.com" target="_blank" class="text-purple-400 underline">lemonsqueezy.com</a>.</li>
+              <li>Complete <em>Store Details</em>: Store Name = <code>Apple //c Ultra Workstation</code>, Support Email = <code>[Your Contact Email]</code>.</li>
+              <li>Under <em>Settings → Payouts</em>, connect your bank account via Stripe Express (provided automatically by Lemon Squeezy).</li>
+              <li>Click <strong>Products → New Product</strong>.</li>
+              <li><strong>Title:</strong> <code>Apple //c Ultra Workstation Pro (Desktop Edition)</code></li>
+              <li><strong>Price:</strong> Single payment of <code>$29.99</code> (or tiered: $29.99 Standard, $49.00 Pro Developer with Textbook Bundle).</li>
+              <li><strong>License Keys:</strong> Toggle <strong>"Generate License Keys"</strong> ON. This automatically gives every buyer a unique license key upon purchase!</li>
+              <li><strong>Fulfillment Files:</strong> Upload the Windows <code>.exe</code>/<code>.msi</code> and macOS <code>.dmg</code> binaries.</li>
+              <li>Click <strong>Publish Product</strong>. Copy the Checkout URL or embed the Lemon Squeezy overlay button directly into your website.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 2.5: Steam Direct Submission -->
+      <div class="card-box p-6 space-y-4 font-mono text-xs border-cyan-500/30">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2">
+            <span class="step-badge bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">2.5</span>
+            <span class="font-bold text-white text-sm">Publish on Steam Direct (Software &gt; Utilities &amp; Development)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Time: ~1–2 hours | Cost: $100 App Fee (Recoupable)</span>
+        </div>
+
+        <div class="space-y-3 text-[11px] text-gray-300 font-sans">
+          <p class="leading-relaxed">
+            Steam is the world's most trusted software marketplace for desktop users. Listing your application on Steam Direct gives you massive organic discoverability and instant customer trust.
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5 font-mono text-[10px] text-gray-400">
+            <span class="text-cyan-300 font-bold block">Steam Onboarding Checklist:</span>
+            <ol class="list-decimal list-inside space-y-1">
+              <li>Register as a Steamworks developer at <a href="https://partner.steamgames.com" target="_blank" class="text-cyan-400 underline">partner.steamgames.com</a>.</li>
+              <li>Complete the digital tax interview (Form W-9 for US individuals/entities, or W-8BEN for international creators).</li>
+              <li>Pay the one-time $100 Steam Direct submission fee (this $100 is fully refunded by Valve after your app grosses its first $1,000 in sales).</li>
+              <li>Create your Store Page:
+                <ul class="list-disc list-inside pl-3 space-y-0.5 text-gray-400">
+                  <li><strong>Category:</strong> <code>Software &gt; Utilities / Game Development / Emulation</code></li>
+                  <li><strong>Required Graphics:</strong> Header Capsule (460x215 px), Small Capsule (231x87 px), Main Capsule (616x353 px), and 5 high-res screenshots.</li>
+                  <li><strong>Description:</strong> Copy the description from <a href="launch-posts.html" class="text-cyan-400 underline">Launch Posts</a>.</li>
+                </ul>
+              </li>
+              <li>Upload your Tauri native build using SteamPipe GUI tool.</li>
+              <li>Click <strong>"Submit for Review"</strong> (Valve reviews store pages and builds within 3–5 business days).</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 2.6: Packaging Desktop App with Tauri (Rust) -->
+      <div class="card-box p-6 space-y-4 font-mono text-xs border-amber-500/30">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2">
+            <span class="step-badge bg-amber-500/20 text-amber-300 border border-amber-500/40">2.6</span>
+            <span class="font-bold text-white text-sm">Package the Standalone Desktop Binary with Tauri (Zero Rust Experience Needed)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Time: ~15 mins | Fully Automated</span>
+        </div>
+
+        <div class="space-y-3 text-[11px] text-gray-300 font-sans">
+          <p class="leading-relaxed">
+            You do <strong>not</strong> need to learn Rust programming to package Apple //c Ultra with Tauri. Tauri automatically wraps your existing web build (HTML/JS) and compiles it into an optimized, secure native application.
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[10px] text-gray-400">
+            <span class="text-amber-300 font-bold block">Exact Terminal Commands:</span>
+            <div class="p-2 bg-black rounded text-amber-400">
+              # 1. Install Tauri CLI into the repo<br>
+              npm install --save-dev @tauri-apps/cli<br><br>
+              # 2. Initialize Tauri configuration<br>
+              npx tauri init<br>
+              # When prompted: App name = "Apple //c Ultra", Window title = "Apple //c Ultra Workstation Pro", Web assets = "./"<br><br>
+              # 3. Build native release binaries for your operating system<br>
+              npm run tauri build
+            </div>
+            <p class="text-gray-400 text-[10px]">
+              The build output will be located in <code>src-tauri/target/release/bundle/</code>:
+              <br>• Windows: <code>.msi</code> installer and standalone <code>.exe</code>
+              <br>• macOS: <code>.dmg</code> disk image and Universal binary
+              <br>• Linux: <code>.AppImage</code> and <code>.deb</code> package
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 2.7: Beginner's Guide to Pricing & Bundling -->
+      <div class="card-box p-6 space-y-4 font-mono text-xs border-emerald-500/30">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2">
+            <span class="step-badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">2.7</span>
+            <span class="font-bold text-white text-sm">The Non-Marketer's Guide to Pricing, Discounts &amp; Bundling</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Business Psychology</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-sans text-xs text-gray-300">
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1">
+            <span class="text-amber-400 font-bold block font-mono text-[11px]">1. The $29.99 "Sweet Spot"</span>
+            <p class="text-[10px] text-gray-400 leading-relaxed">
+              In desktop software, prices below $15 trigger doubts about software quality ("is this abandonware?"), while prices above $50 trigger purchase hesitation. $29.99 sits in the impulse-buy zone for hobbyists and professionals alike.
+            </p>
+          </div>
+
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1">
+            <span class="text-cyan-400 font-bold block font-mono text-[11px]">2. The "Early Bird" 20% Launch</span>
+            <p class="text-[10px] text-gray-400 leading-relaxed">
+              Launch with a 2-week promo: <em>"Launch Special: $24.00 (Regular $29.99)"</em>. Urgency gives users a reason to buy immediately instead of bookmarking the page for later.
+            </p>
+          </div>
+
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1">
+            <span class="text-purple-400 font-bold block font-mono text-[11px]">3. Upsell Bundling ($49.99)</span>
+            <p class="text-[10px] text-gray-400 leading-relaxed">
+              Offer a <strong>"Master Developer Bundle"</strong> for $49.99 that includes the Desktop Pro App + Digital Textbook PDF + 5 Exclusive Custom Expansion Cards. Up to 35% of buyers will choose the higher tier!
+            </p>
+          </div>
         </div>
       </div>
 

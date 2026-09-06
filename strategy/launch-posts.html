@@ -149,6 +149,65 @@ I built Apple //c Ultra to bring back the magic of bare-metal computing—withou
 It's completely free and open-source. I'd love to hear your feedback! </pre>
     </div>
 
+  <!-- Post 4: Steam / Desktop Pro Launch Announcement -->
+    <div class="post-box p-6 space-y-4 font-mono text-xs border-purple-500/30">
+      <div class="flex items-center justify-between border-b border-[#222b3a] pb-3">
+        <div>
+          <span class="text-purple-300 font-bold block text-sm">4. Steam &amp; Desktop Pro Launch Announcement (Twitter / X, Discord, Reddit)</span>
+          <span class="text-gray-500 text-[11px]">Channels: Twitter/X, LinkedIn, Reddit, Steam Community Hub, Discord Servers</span>
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('steam-post').innerText); alert('Copied to clipboard!');" class="px-3 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded hover:bg-purple-500/30 transition">📋 Copy Post</button>
+      </div>
+
+      <pre id="steam-post" class="bg-[#080c13] p-4 rounded border border-[#192230] text-gray-200 leading-relaxed overflow-x-auto whitespace-pre-wrap">🚨 Announcing **Apple //c Ultra Workstation Pro (Desktop Edition)**!
+
+We've brought our zero-install in-browser 65C02 workstation to native desktop (Windows, macOS Universal, Linux)!
+
+💻 What's new in Desktop Pro:
+• 100% Offline Execution: Build, test, and compile 65C02 programs anywhere with zero internet connection.
+• Local Filesystem Mounting: Mount local folders directly into Drive 1/2 or Hard Disk (/HD) with instant bi-directional disk syncing.
+• Sandboxed Custom Expansion Cards: Build and save your own virtual slot peripherals (.card.js) to your local library.
+• Zero Permission Prompts: Direct USB Serial (Arduino/ESP32) and MIDI DAW connectivity without browser permission modals.
+• 1-Click ProDOS Exporter: Batch generate .DSK, .PO, and .2MG images for Floppy Emu and CFFA3000 physical hardware.
+
+🎁 Available now on Lemon Squeezy ($29.99 perpetual license) and Steam!
+Get it here: https://ianohlander.lemonsqueezy.com/checkout/buy/apple-2c-ultra-pro
+Free Web Demo: https://ianohlander.github.io/Apple-IIc-Enhanced-Emulator/</pre>
+    </div>
+
+    <!-- Post 5: Retrogaming Forum Announcement -->
+    <div class="post-box p-6 space-y-4 font-mono text-xs border-emerald-500/30">
+      <div class="flex items-center justify-between border-b border-[#222b3a] pb-3">
+        <div>
+          <span class="text-emerald-300 font-bold block text-sm">5. Vintage &amp; Retro Forum Announcement</span>
+          <span class="text-gray-500 text-[11px]">Forums: AppleFritter, VCFed (Vintage Computer Forum), AtariAge, Lemon64, 6502.org</span>
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('retro-forum-post').innerText); alert('Copied to clipboard!');" class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded hover:bg-emerald-500/30 transition">📋 Copy Post</button>
+      </div>
+
+      <pre id="retro-forum-post" class="bg-[#080c13] p-4 rounded border border-[#192230] text-gray-200 leading-relaxed overflow-x-auto whitespace-pre-wrap">Subject: [Release] Apple //c Ultra – 50 MHz 65C02 Workstation, C#/Java AOT Compilers, Clean-Room ROM &amp; 32MB SmartPort HD
+
+Hi everyone,
+
+I'd like to share an open-source Apple II systems project I've been developing: **Apple //c Ultra**.
+
+Link: https://ianohlander.github.io/Apple-IIc-Enhanced-Emulator/
+Source: https://github.com/ianohlander/Apple-IIc-Enhanced-Emulator
+
+Key Architectural Highlights:
+1. 100% Clean-Room Synthesized Firmware: Implements standard monitor vector ABI contracts ($FDED COUT, $FD1B KEYIN, $FC58 HOME) without bundling copyrighted Apple ROM dumps.
+2. 50 MHz Turbo Clock &amp; BCD ALU: Fully accurate decimal mode, CMOS instructions (BRA, STZ, PHX/PLX, TRB/TSB), and cycle clock scaling.
+3. Storage Matrix: 140KB Disk II GCR floppy controller, 32MB SmartPort Block Hard Disk (/HD with 65,536 blocks), and 1MB Slinky banked memory expansion.
+4. Sound &amp; Video: 1-bit speaker pulse, Dual AY-3-8910 Mockingboard (6 tone voices + noise), and Double Hi-Res (560x192 16-color) with NTSC artifacting.
+5. Modern Language Toolchain: Ahead-of-time compiles modern C# 10 and Java 17 ASTs down to native 65C02 machine code.
+6. 1-Click Physical Disk Exporter: Exports bootable ProDOS .DSK and .2MG images ready to drop onto an SD card for Floppy Emu or CFFA3000.
+
+I'd love feedback from the Apple II and 6502 community on hardware timings and vector compatibility!
+
+Cheers,
+Ian Ohlander</pre>
+    </div>
+
   </main>
 
   <!-- Footer -->
