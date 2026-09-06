@@ -12,9 +12,11 @@ import { RomBuilderStudio } from './components/UnderTheHood/RomBuilderStudio';
 import { ModernCodeStudio } from './components/UnderTheHood/ModernCodeStudio';
 import { TypeInStudio } from './components/UnderTheHood/TypeInStudio';
 import { AudioVisualizer } from './components/UnderTheHood/AudioVisualizer';
+import { SlotStudio } from './components/UnderTheHood/SlotStudio';
 import { DiskLibraryModal } from './components/DiskLibraryModal';
 import {
   Terminal,
+  Layers,
   Cpu,
   Binary,
   Sliders,
@@ -40,7 +42,7 @@ export const App: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [activeUnderHoodTab, setActiveUnderHoodTab] = useState<
-    'debugger' | 'memory' | 'softswitches' | 'storage' | 'rom' | 'typein' | 'code' | 'audio'
+    'debugger' | 'memory' | 'softswitches' | 'storage' | 'slots' | 'rom' | 'typein' | 'code' | 'audio'
   >('debugger');
 
   const [, setTick] = useState(0);
@@ -179,6 +181,7 @@ export const App: React.FC = () => {
               { id: 'memory', label: 'Memory Hex Map (1MB)', icon: Binary },
               { id: 'softswitches', label: 'Softswitches ($C000)', icon: Sliders },
               { id: 'storage', label: 'Floppy & 32MB HD', icon: HardDrive },
+              { id: 'slots', label: 'Slot & Card Studio', icon: Layers },
               { id: 'rom', label: 'Custom ROM Studio', icon: Terminal },
               { id: 'typein', label: 'Magazine Type-In', icon: BookOpen },
               { id: 'code', label: 'Java & .NET CLR', icon: Code },
@@ -211,6 +214,7 @@ export const App: React.FC = () => {
             {activeUnderHoodTab === 'storage' && (
               <StorageManager emulator={emulator} onRefresh={triggerRefresh} />
             )}
+            {activeUnderHoodTab === 'slots' && <SlotStudio emulator={emulator} />}
             {activeUnderHoodTab === 'rom' && <RomBuilderStudio emulator={emulator} />}
             {activeUnderHoodTab === 'typein' && <TypeInStudio system={emulator} />}
             {activeUnderHoodTab === 'code' && <ModernCodeStudio emulator={emulator} />}

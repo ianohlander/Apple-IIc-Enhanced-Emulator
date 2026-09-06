@@ -7,7 +7,7 @@
   <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Peripheral Card Emulation Guide — Apple //c Ultra</title>
+  <title>Custom Peripheral Card Emulation & Exhaustive I/O Usage Guide — Apple //c Ultra</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -15,6 +15,7 @@
     .font-mono-code { font-family: 'Space Mono', monospace; }
     .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
     .card-box { background: #101622; border: 1px solid #212c3d; border-radius: 0.75rem; }
+    .step-pill { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 9999px; font-weight: 800; font-size: 11px; font-family: 'Space Mono', monospace; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
@@ -26,8 +27,8 @@
     <div class="flex items-center space-x-3">
       <a href="../index.html" class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-black font-bold text-lg">🔌</a>
       <div>
-        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Developer Hardware Engineering</span>
-        <h1 class="text-base font-extrabold text-white">Custom Slot Peripheral Card Emulation Guide</h1>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Developer &amp; User Hardware Manual</span>
+        <h1 class="text-base font-extrabold text-white">Peripheral Card Architecture &amp; Exhaustive I/O Usage Guide</h1>
       </div>
     </div>
     <div class="flex items-center space-x-3 text-xs font-mono">
@@ -40,258 +41,328 @@
   <!-- Content -->
   <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12 text-sm">
 
-    <!-- Hero / Introduction Banner -->
+    <!-- Hero Banner -->
     <div class="bg-gradient-to-br from-amber-950/40 via-[#101622] to-cyan-950/40 border border-[#2a3642] rounded-2xl p-8 space-y-4 shadow-xl">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#2a3642] pb-3">
-        <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">Virtual Bus &amp; Slot Architecture</span>
+        <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">Master Hardware Bus Guide</span>
         <span class="px-3 py-1 rounded-full text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">Slots 1 through 7</span>
       </div>
-      <h2 class="text-2xl font-black text-white">How to Create and Simulate Custom Apple II Peripheral Cards</h2>
+      <h2 class="text-2xl font-black text-white">How to Use, Connect &amp; Program All Virtual Expansion Cards</h2>
       <p class="text-gray-300 text-xs leading-relaxed max-w-4xl">
-        The Apple II bus architecture is legendary for its open, modular slot design. In the Apple //c Ultra emulator, all peripheral cards (Mockingboard, Slinky RAM, Uthernet, Disk II, and SmartPort HD) implement a clean, decoupled <code>IPeripheralCard</code> contract. This guide explains how the bus decodes slot addresses, how to write your own custom card simulation in TypeScript/JavaScript, and how to bridge virtual 65C02 registers to modern Web APIs (Web MIDI, WebSockets, RTC).
+        This definitive guide covers every aspect of the Apple //c Ultra expansion bus: how the 65C02 decodes slot memory zones, how users interact with each card from Applesoft BASIC and machine code, how external I/O bridges connect to host Web APIs (Web MIDI, continuous printer paper, network sockets, host clock), and how developers can create their own custom simulated peripheral cards.
       </p>
     </div>
 
-    <!-- Bus Memory Architecture Diagram -->
+    <!-- Bus Topology & Slot Map Table -->
     <section class="space-y-4 font-mono text-xs">
-      <h3 class="text-base font-bold text-cyan-400 uppercase tracking-wider">The 3 Memory Zones of Apple II Expansion Slots</h3>
-      
-      <div class="bg-[#0b1017] border border-[#212d3d] rounded-xl p-5 space-y-3 font-mono text-xs">
-        <div class="flex items-center justify-between border-b border-[#212d3d] pb-2">
-          <span class="font-bold text-cyan-400 text-sm">📐 Figure P.1: Slot Address Decoding Topology</span>
-          <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Bus Mapping</span>
-        </div>
-        <div class="overflow-x-auto py-2">
-          <svg viewBox="0 0 880 200" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #06090e; border-radius: 8px; border: 1px solid #16202c;">
-            <!-- Zone 1: I/O Registers -->
-            <rect x="25" y="30" width="260" height="130" rx="4" fill="#1b1429" stroke="#c084fc" stroke-width="1.5" />
-            <text x="155" y="55" fill="#c084fc" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Zone A: I/O Softswitches</text>
-            <text x="155" y="75" fill="#e9d5ff" font-size="8" text-anchor="middle" font-family="monospace">$C080 + $n0 to $C08F + $n0</text>
-            <text x="155" y="95" fill="#a855f7" font-size="7.5" text-anchor="middle" font-family="monospace">16 Dedicated Registers per Slot</text>
-            <text x="155" y="115" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">Slot 4: $C0C0–$C0CF (Mockingboard)</text>
-            <text x="155" y="130" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">Slot 5: $C0B0–$C0BF (Uthernet)</text>
-            <text x="155" y="145" fill="#e9d5ff" font-size="7.5" text-anchor="middle" font-family="monospace">Slot 7: $C0F0–$C0FF (SmartPort)</text>
+      <h3 class="text-base font-bold text-cyan-400 uppercase tracking-wider">The 7-Slot Motherboard Architecture Matrix</h3>
 
-            <!-- Zone 2: Slot ROM -->
-            <rect x="310" y="30" width="260" height="130" rx="4" fill="#0c231a" stroke="#10b981" stroke-width="1.5" />
-            <text x="440" y="55" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Zone B: On-Card Slot ROM</text>
-            <text x="440" y="75" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">$C100 + $n00 to $C1FF + $n00</text>
-            <text x="440" y="95" fill="#10b981" font-size="7.5" text-anchor="middle" font-family="monospace">256 Bytes of Firmware per Slot</text>
-            <text x="440" y="115" fill="#a7f3d0" font-size="7.5" text-anchor="middle" font-family="monospace">Slot 4: $C400–$C4FF (Mouse / RTC)</text>
-            <text x="440" y="130" fill="#a7f3d0" font-size="7.5" text-anchor="middle" font-family="monospace">Slot 6: $C600–$C6FF (Disk II Boot)</text>
-            <text x="440" y="145" fill="#a7f3d0" font-size="7.5" text-anchor="middle" font-family="monospace">Slot 7: $C700–$C7FF (SmartPort MLI)</text>
-
-            <!-- Zone 3: Expansion ROM -->
-            <rect x="595" y="30" width="260" height="130" rx="4" fill="#2d1c08" stroke="#f59e0b" stroke-width="1.5" />
-            <text x="725" y="55" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Zone C: Expansion ROM Space</text>
-            <text x="725" y="75" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">$C800–$CFFF (2KB Banked)</text>
-            <text x="725" y="95" fill="#f59e0b" font-size="7.5" text-anchor="middle" font-family="monospace">Shared 2048-byte ROM Window</text>
-            <text x="725" y="115" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">Activated by accessing $CnXX</text>
-            <text x="725" y="130" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">Deactivated by accessing $CFFF</text>
-            <text x="725" y="145" fill="#fde68a" font-size="7.5" text-anchor="middle" font-family="monospace">Used by Pascal, SCSI &amp; Ethernet</text>
-          </svg>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse bg-[#0d1117] rounded-xl border border-[#212d3d]">
+          <thead>
+            <tr class="border-b border-[#212d3d] bg-[#161f2c] text-amber-400 text-[11px]">
+              <th class="p-3">Slot #</th>
+              <th class="p-3">Card Name</th>
+              <th class="p-3">I/O Registers ($C080+$n0)</th>
+              <th class="p-3">Slot ROM ($Cn00)</th>
+              <th class="p-3">Host Web API Connection</th>
+              <th class="p-3">BASIC Command</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#212d3d] text-gray-300 text-[11px]">
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 1</td>
+              <td class="p-3 text-white font-bold">ImageWriter II Printer</td>
+              <td class="p-3 text-cyan-300">$C090–$C09F</td>
+              <td class="p-3 text-purple-300">$C100–$C1FF</td>
+              <td class="p-3 text-emerald-400">Virtual Tractor Paper Console</td>
+              <td class="p-3 text-amber-300"><code>PR#1</code></td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 2</td>
+              <td class="p-3 text-white font-bold">Passport Web MIDI Master</td>
+              <td class="p-3 text-cyan-300">$C0A0–$C0AF</td>
+              <td class="p-3 text-purple-300">$C200–$C2FF</td>
+              <td class="p-3 text-emerald-400">Web MIDI API &amp; USB Synths</td>
+              <td class="p-3 text-amber-300"><code>IN#2 / PR#2</code></td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 3</td>
+              <td class="p-3 text-white font-bold">Custom User Sandbox Card</td>
+              <td class="p-3 text-cyan-300">$C0B0–$C0BF</td>
+              <td class="p-3 text-purple-300">$C300–$C3FF</td>
+              <td class="p-3 text-emerald-400">Custom JavaScript / REST APIs</td>
+              <td class="p-3 text-amber-300"><code>PEEK($C0B0)</code></td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 4</td>
+              <td class="p-3 text-white font-bold">Thunderclock Plus RTC</td>
+              <td class="p-3 text-cyan-300">$C0C0–$C0C7</td>
+              <td class="p-3 text-purple-300">$C400–$C4FF</td>
+              <td class="p-3 text-emerald-400">Host OS Date &amp; Time</td>
+              <td class="p-3 text-amber-300">ProDOS Time Driver</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 4/5</td>
+              <td class="p-3 text-white font-bold">Sweet Micro Mockingboard</td>
+              <td class="p-3 text-cyan-300">$C0C0–$C0CF</td>
+              <td class="p-3 text-purple-300">$C400–$C5FF</td>
+              <td class="p-3 text-emerald-400">Web Audio API (Dual AY-3-8910)</td>
+              <td class="p-3 text-amber-300">Assembly / C# Sound</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 5</td>
+              <td class="p-3 text-white font-bold">Uthernet W5100 Ethernet</td>
+              <td class="p-3 text-cyan-300">$C0B0–$C0BF</td>
+              <td class="p-3 text-purple-300">$C500–$C5FF</td>
+              <td class="p-3 text-emerald-400">WebSocket TCP/IP Bridge</td>
+              <td class="p-3 text-amber-300">Contiki / BBS Telnet</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 6</td>
+              <td class="p-3 text-white font-bold">Disk II 5.25" Floppy</td>
+              <td class="p-3 text-cyan-300">$C0E0–$C0EF</td>
+              <td class="p-3 text-purple-300">$C600–$C6FF</td>
+              <td class="p-3 text-emerald-400">IndexedDB Floppy Images (.DSK)</td>
+              <td class="p-3 text-amber-300"><code>PR#6</code></td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-amber-400">Slot 7</td>
+              <td class="p-3 text-white font-bold">SmartPort 32MB Hard Disk</td>
+              <td class="p-3 text-cyan-300">$C0F0–$C0FF</td>
+              <td class="p-3 text-purple-300">$C700–$C7FF</td>
+              <td class="p-3 text-emerald-400">32MB ProDOS Volume (/HD)</td>
+              <td class="p-3 text-amber-300"><code>PR#7</code></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- The IPeripheralCard Interface -->
-    <section class="space-y-4 font-mono text-xs">
-      <h3 class="text-base font-bold text-purple-400 uppercase tracking-wider">The Standard IPeripheralCard TypeScript Contract</h3>
-      <p class="text-gray-300 font-sans text-xs leading-relaxed">
-        Every peripheral card in the Apple //c Ultra architecture adheres to this minimal, decoupled interface:
-      </p>
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: EXHAUSTIVE USAGE GUIDES FOR EVERY PERIPHERAL CARD -->
+    <!-- ========================================================================= -->
+    <section class="space-y-8 font-mono text-xs">
+      <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center border border-emerald-500/40">📖</span>
+        <div>
+          <h3 class="text-base font-bold text-emerald-400">Exhaustive I/O Usage Guide for Every Peripheral Card</h3>
+          <p class="text-gray-400 text-[11px]">How to command, read, and connect each card from BASIC, 65C02 Assembly, C# and Java</p>
+        </div>
+      </div>
 
-      <pre class="bg-[#05070a] p-4 rounded-xl border border-[#161f2c] text-gray-300 text-[11px] leading-relaxed overflow-x-auto"><code>export interface IPeripheralCard {
-  /** Display name of the peripheral card */
-  readonly name: string;
+      <!-- CARD 1: PRINTER CARD (SLOT 1) -->
+      <div class="card-box p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
+            <span>🖨️</span>
+            <span>1. Apple ImageWriter II &amp; Dot Matrix Printer (Slot 1)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Serial I/O: $C090</span>
+        </div>
 
-  /** Expansion slot index (1 through 7) */
-  readonly slot: number;
+        <div class="space-y-2 text-gray-300 text-xs font-sans leading-relaxed">
+          <p>
+            <strong>What It Does:</strong> Redirects all character output from the screen to a virtual continuous tractor-feed dot matrix printer. The emulator captures all transmitted bytes into a live paper buffer in the <strong>Slot &amp; Card Studio</strong> with 1-click text copying and file downloads.
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+            <span class="text-amber-400 font-bold block">How to Use from Applesoft BASIC:</span>
+            <pre class="text-emerald-300">10 PR#1 : REM Redirect screen output to Slot 1 Printer
+20 PRINT "=================================================="
+30 PRINT "      APPLE //c ULTRA BUSINESS SALES REPORT       "
+40 PRINT "=================================================="
+50 PRINT "ITEM: 65C02 WORKSTATION ....... $1,295.00"
+60 PRINT "ITEM: 32MB SMARTPORT HD ........ $499.00"
+70 PRINT "ITEM: MOCKINGBOARD STEREO ...... $149.00"
+80 PRINT "--------------------------------------------------"
+90 PRINT "TOTAL:                          $1,943.00"
+100 PR#0 : REM Restore output back to CRT screen</pre>
+          </div>
 
-  /** Human-readable hardware description */
-  readonly description: string;
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+            <span class="text-cyan-400 font-bold block">How to Use from Modern C# .NET:</span>
+            <pre class="text-cyan-300">using System;
+using Apple2.Ultra;
 
-  /**
-   * Read from the card's 16-byte dedicated softswitch register space ($C080 + $n0)
-   * @param offset Register index 0x00 to 0x0F
-   * @returns 8-bit value (0x00 - 0xFF)
-   */
-  ioRead(offset: number): number;
+public class PrinterApp {
+    public static void Main() {
+        ApplePrinter.SetSlot(1);
+        ApplePrinter.WriteLine("C# AOT COMPILED PRINTOUT");
+        ApplePrinter.WriteLine("DATE: " + DateTime.Now.ToShortDateString());
+        ApplePrinter.FormFeed();
+        ApplePrinter.ResetToScreen();
+    }
+}</pre>
+          </div>
+        </div>
+      </div>
 
-  /**
-   * Write to the card's 16-byte dedicated softswitch register space ($C080 + $n0)
-   * @param offset Register index 0x00 to 0x0F
-   * @param value 8-bit data written by CPU (0x00 - 0xFF)
-   */
-  ioWrite(offset: number, value: number): void;
+      <!-- CARD 2: WEB MIDI & SERIAL CARD (SLOT 2) -->
+      <div class="card-box p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2 font-bold text-cyan-400 text-sm">
+            <span>🎹</span>
+            <span>2. Passport &amp; Web MIDI Master Card (Slot 2)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">6850 ACIA: $C0A0</span>
+        </div>
 
-  /**
-   * Read from the card's 256-byte on-board firmware ROM ($C100 + $n00 to $C1FF + $n00)
-   * @param offset ROM byte index 0x00 to 0xFF
-   * @returns 8-bit opcode/data byte
-   */
-  romRead(offset: number): number;
+        <div class="space-y-2 text-gray-300 text-xs font-sans leading-relaxed">
+          <p>
+            <strong>What It Does:</strong> Connects the Apple II's serial ACIA controller directly to the browser's <strong>Web MIDI API</strong>. Any 65C02 MIDI sequencing software (like *Passport Master Tracks* or custom C# sound routines) sends standard 31.25 kBaud MIDI note commands that play directly through your connected physical USB synthesizers, digital pianos, or DAW software (Ableton, Logic, Reaper).
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+            <span class="text-cyan-400 font-bold block">65C02 Assembly MIDI Note-On Transmission Routine:</span>
+            <pre class="text-gray-300">; --- SEND MIDI NOTE-ON: Note $3C (Middle C), Velocity $7F ---
+MIDI_NOTE_ON:
+    LDA #$90        ; MIDI Status Byte: Note-On, Channel 1
+    JSR MIDI_SEND
+    LDA #$3C        ; MIDI Data Byte 1: Pitch 60 (Middle C)
+    JSR MIDI_SEND
+    LDA #$7F        ; MIDI Data Byte 2: Velocity 127 (Max Volume)
+    JSR MIDI_SEND
+    RTS
 
-  /**
-   * Optional: Read from the 2KB shared expansion ROM ($C800-$CFFF)
-   */
-  expansionRomRead?(offset: number): number;
+MIDI_SEND:
+    STA $C0A1       ; Transmit byte to Slot 2 ACIA Data Register ($C0A1)
+    RTS</pre>
+          </div>
+        </div>
+      </div>
 
-  /** Reset card hardware state to power-on defaults */
-  reset(): void;
+      <!-- CARD 3: THUNDERCLOCK PLUS RTC (SLOT 4) -->
+      <div class="card-box p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2 font-bold text-purple-400 text-sm">
+            <span>⏰</span>
+            <span>3. Thunderclock Plus Real-Time Clock (Slot 4)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-purple-950 text-purple-300 border border-purple-800">ProDOS Driver: $C400</span>
+        </div>
 
-  /**
-   * Optional cycle clock tick for timing counters, audio DACs, or periodic IRQ triggers
-   * @param cycles Number of CPU clock cycles elapsed
-   */
-  tick?(cycles: number): void;
-}</code></pre>
+        <div class="space-y-2 text-gray-300 text-xs font-sans leading-relaxed">
+          <p>
+            <strong>What It Does:</strong> Supplies the exact local time and date from your host PC/Mac directly to ProDOS. When ProDOS creates or modifies files on the 32MB hard disk, it automatically stamps them with the true real-world timestamp!
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+            <span class="text-purple-400 font-bold block">Reading Date/Time Registers Directly in BASIC:</span>
+            <pre class="text-purple-300">10 HR = PEEK(49346) : MIN = PEEK(49345) : SEC = PEEK(49344)
+20 MO = PEEK(49348) : DAY = PEEK(49347) : YR  = PEEK(49349)
+30 PRINT "CURRENT TIME: "; HR; ":"; MIN; ":"; SEC
+40 PRINT "CURRENT DATE: "; MO; "/"; DAY; "/20"; YR</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: MOCKINGBOARD PSG SOUND (SLOT 4/5) -->
+      <div class="card-box p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2 font-bold text-pink-400 text-sm">
+            <span>🔊</span>
+            <span>4. Sweet Micro Mockingboard Stereo Sound Synthesizer (Slot 4/5)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-pink-950 text-pink-300 border border-pink-800">6522 VIAs: $C0C0–$C0CF</span>
+        </div>
+
+        <div class="space-y-2 text-gray-300 text-xs font-sans leading-relaxed">
+          <p>
+            <strong>What It Does:</strong> Emulates two General Instrument AY-3-8910 Programmable Sound Generator (PSG) chips interfaced through dual 6522 VIAs. Delivers <strong>6 simultaneous musical tone channels</strong>, 2 pseudo-random noise generators, and 16-bit hardware envelope modulation.
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+            <span class="text-pink-400 font-bold block">Writing a Tone in 65C02 Assembly:</span>
+            <pre class="text-gray-300">; --- PLAY 440 HZ (A4) ON MOCKINGBOARD CHANNEL A ---
+    LDA #$00        ; Register 0: Tone Fine Tune
+    STA $C0C0       ; Latch Register 0 on VIA B
+    LDA #$71        ; Divisor Low Byte ($71 = 440 Hz)
+    STA $C0C4       ; Write Data to VIA A
+    LDA #$08        ; Register 8: Channel A Amplitude
+    STA $C0C0
+    LDA #$0F        ; Volume 15 (Max)
+    STA $C0C4
+    RTS</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5: UTHERNET TCP/IP ETHERNET (SLOT 5) -->
+      <div class="card-box p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+          <div class="flex items-center gap-2 font-bold text-emerald-400 text-sm">
+            <span>🌐</span>
+            <span>5. Uthernet W5100 TCP/IP Network Card (Slot 5)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">WIZnet I/O: $C0B0–$C0BF</span>
+        </div>
+
+        <div class="space-y-2 text-gray-300 text-xs font-sans leading-relaxed">
+          <p>
+            <strong>What It Does:</strong> Bridges the 65C02 CPU to the internet via hardware WIZnet W5100 TCP/IP stack. Used by retro web browsers (Contiki OS), IRC chat clients, telnet BBS terminals, and modern C# HTTP clients.
+          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+            <span class="text-emerald-400 font-bold block">Sending an HTTP GET Request in C#:</span>
+            <pre class="text-emerald-300">using System;
+using Apple2.Ultra;
+
+public class WebClient {
+    public static void Main() {
+        AppleNetwork.InitEthernet(slot: 5);
+        string response = AppleNetwork.HttpGet("http://api.weather.gov/status");
+        Console.WriteLine("SERVER RESPONSE: " + response);
+    }
+}</pre>
+          </div>
+        </div>
+      </div>
+
     </section>
 
-    <!-- 3 Complete Working Blueprints -->
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: HOW TO WRITE YOUR OWN CUSTOM CARD IN JAVASCRIPT -->
+    <!-- ========================================================================= -->
     <section class="space-y-6 font-mono text-xs">
-      <h3 class="text-base font-bold text-emerald-400 uppercase tracking-wider">3 Production-Ready Card Blueprints</h3>
-
-      <!-- Blueprint 1: Real-Time Clock (Thunderclock) -->
-      <div class="card-box p-6 space-y-3">
-        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
-          <span class="text-amber-400 font-bold text-sm">Blueprint 1: Thunderclock / No-Slot Clock RTC Card (Slot 4)</span>
-          <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">ProDOS Time Driver</span>
+      <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 font-bold flex items-center justify-center border border-cyan-500/40">🧪</span>
+        <div>
+          <h3 class="text-base font-bold text-cyan-400">Tutorial: Creating Your Own Custom Card in JavaScript</h3>
+          <p class="text-gray-400 text-[11px]">Write custom hardware simulations in 10 lines of code and plug them into Slot 3</p>
         </div>
-        <p class="text-gray-300 text-xs font-sans leading-relaxed">
-          Provides the host computer's exact real-time clock and date to ProDOS without requiring physical Dallas DS1216 smartwatch chips:
-        </p>
-        <pre class="bg-[#05070a] p-4 rounded border border-[#161f2c] text-gray-300 text-[10px] leading-relaxed overflow-x-auto"><code>export class ThunderclockCard implements IPeripheralCard {
-  public readonly name = "Thunderclock Plus RTC";
-  public readonly slot = 4;
-  public readonly description = "Real-Time Clock & ProDOS Date Driver";
-  private latchRegister = 0;
-
-  public ioRead(offset: number): number {
-    const now = new Date();
-    switch (offset) {
-      case 0x00: return now.getSeconds();
-      case 0x01: return now.getMinutes();
-      case 0x02: return now.getHours();
-      case 0x03: return now.getDate();
-      case 0x04: return now.getMonth() + 1;
-      case 0x05: return now.getFullYear() % 100;
-      default: return 0x00;
-    }
-  }
-
-  public ioWrite(offset: number, value: number): void {
-    this.latchRegister = value;
-  }
-
-  public romRead(offset: number): number {
-    // ProDOS Clock Card ID Signature at $C400: $08, $28, $58, $70
-    const rom = [0x08, 0x28, 0x58, 0x70];
-    return offset < rom.length ? rom[offset] : 0x60; // RTS ($60)
-  }
-
-  public reset(): void { this.latchRegister = 0; }
-}</code></pre>
       </div>
 
-      <!-- Blueprint 2: Web MIDI Interface Card -->
-      <div class="card-box p-6 space-y-3">
-        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
-          <span class="text-cyan-400 font-bold text-sm">Blueprint 2: Passport / Yamaha Web MIDI Master Card (Slot 2)</span>
-          <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Web MIDI API Bridge</span>
-        </div>
+      <div class="card-box p-6 space-y-4">
         <p class="text-gray-300 text-xs font-sans leading-relaxed">
-          Connects vintage 65C02 MIDI sequencing software (Passport Master Tracks, Music Construction Set) directly to modern USB MIDI synthesizers via the browser's <code>navigator.requestMIDIAccess()</code>:
+          You can write a complete custom peripheral card directly in the browser's <strong>Slot &amp; Card Studio</strong> tab without rebuilding the emulator. Follow this 3-step tutorial to build a <strong>Live Cryptocurrency / Stock Ticker Card</strong>:
         </p>
-        <pre class="bg-[#05070a] p-4 rounded border border-[#161f2c] text-gray-300 text-[10px] leading-relaxed overflow-x-auto"><code>export class WebMidiCard implements IPeripheralCard {
-  public readonly name = "Passport MIDI Master Card";
-  public readonly slot = 2;
-  public readonly description = "6850 ACIA MIDI Controller connected to Web MIDI API";
-  private midiOutput: any = null;
 
-  constructor() {
-    if (typeof navigator !== 'undefined' && (navigator as any).requestMIDIAccess) {
-      (navigator as any).requestMIDIAccess().then((midi: any) => {
-        const outputs = Array.from(midi.outputs.values());
-        if (outputs.length > 0) this.midiOutput = outputs[0];
-      });
-    }
-  }
+        <div class="space-y-3">
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1">
+            <span class="text-cyan-400 font-bold block">Step 1: Write the Card JavaScript Logic in the Sandbox</span>
+            <pre class="text-cyan-300 text-[11px]">card.bitcoinPrice = 95000;
 
-  public ioRead(offset: number): number {
-    // 6850 ACIA Status Register ($C0A0): Bit 1 = Transmit Buffer Empty (1)
-    if (offset === 0x00) return 0x02; 
-    return 0x00;
-  }
+// Fetch live price every 30 seconds
+setInterval(async () => {
+  try {
+    const res = await fetch("https://api.coindesk.com/v1/bpi/currentprice.json");
+    const data = await res.json();
+    card.bitcoinPrice = Math.floor(data.bpi.USD.rate_float);
+  } catch (e) {}
+}, 30000);
 
-  public ioWrite(offset: number, value: number): void {
-    // 6850 ACIA Data Register ($C0A1): Send raw MIDI byte stream
-    if (offset === 0x01 && this.midiOutput) {
-      this.midiOutput.send([value]);
-    }
-  }
+// Respond to 65C02 register reads at $C0B0 ($C080 + Slot 3)
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.bitcoinPrice & 0xFF;         // Low byte
+  if (offset === 0x01) return (card.bitcoinPrice >> 8) & 0xFF;  // Mid byte
+  if (offset === 0x02) return (card.bitcoinPrice >> 16) & 0xFF; // High byte
+  return 0x00;
+};</pre>
+          </div>
 
-  public romRead(offset: number): number { return 0x60; }
-  public reset(): void {}
-}</code></pre>
-      </div>
-
-      <!-- Blueprint 3: Custom IoT / Weather Sensor Bridge Card -->
-      <div class="card-box p-6 space-y-3">
-        <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
-          <span class="text-pink-400 font-bold text-sm">Blueprint 3: Live Web IoT &amp; Sensor Bridge Card (Slot 5)</span>
-          <span class="px-2 py-0.5 rounded text-[10px] bg-pink-950 text-pink-300 border border-pink-800">Fetch / REST API Bridge</span>
-        </div>
-        <p class="text-gray-300 text-xs font-sans leading-relaxed">
-          Allows an Apple II BASIC or C# program to read live ambient temperature, cryptocurrency prices, or weather telemetry from the internet by reading registers at <code>$C0D0–$C0D3</code>:
-        </p>
-        <pre class="bg-[#05070a] p-4 rounded border border-[#161f2c] text-gray-300 text-[10px] leading-relaxed overflow-x-auto"><code>export class WebSensorCard implements IPeripheralCard {
-  public readonly name = "Ultra IoT Sensor Card";
-  public readonly slot = 5;
-  public readonly description = "REST API telemetry bridge for 65C02 programs";
-  private currentTemperature = 72; // Fahrenheit
-
-  constructor() {
-    // Poll live temperature every 60 seconds
-    setInterval(async () => {
-      try {
-        const res = await fetch("https://api.weather.gov/gridpoints/TOP/31,80/forecast");
-        const data = await res.json();
-        this.currentTemperature = data.properties.periods[0].temperature;
-      } catch (e) { /* fallback default */ }
-    }, 60000);
-  }
-
-  public ioRead(offset: number): number {
-    if (offset === 0x00) return this.currentTemperature & 0xFF; // Read temp via $C0D0
-    return 0x00;
-  }
-
-  public ioWrite(offset: number, value: number): void {}
-  public romRead(offset: number): number { return 0x60; }
-  public reset(): void {}
-}</code></pre>
-      </div>
-
-    </section>
-
-    <!-- Strategic & Architecture Recommendations -->
-    <section class="p-6 bg-[#0a0e17] rounded-xl border border-[#222b3a] space-y-4 font-mono text-xs">
-      <span class="text-amber-400 font-bold block text-sm">Official Architecture Recommendations</span>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 text-[11px]">
-        <div class="p-4 bg-[#101622] rounded-lg border border-[#212c3d] space-y-2">
-          <span class="text-cyan-400 font-bold block">1. Dynamic Slot Manager Registry</span>
-          <p class="text-gray-400">
-            Maintain a central <code>SlotManager</code> that manages an array of 7 <code>IPeripheralCard | null</code> slots. The MMU dispatches <code>$C080–$C0FF</code> and <code>$C100–$C7FF</code> dynamically to whichever card is plugged in!
-          </p>
-        </div>
-
-        <div class="p-4 bg-[#101622] rounded-lg border border-[#212c3d] space-y-2">
-          <span class="text-purple-400 font-bold block">2. In-Browser "Custom Card Studio"</span>
-          <p class="text-gray-400">
-            Provide a dedicated tab in the "Under the Hood" workbench where users can write or paste custom JavaScript card classes, hit "Plug into Slot 4", and immediately run 65C02 assembly or BASIC code interacting with their new card!
-          </p>
+          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1">
+            <span class="text-amber-400 font-bold block">Step 2: Read Live Data from Applesoft BASIC</span>
+            <pre class="text-amber-300 text-[11px]">10 LOW = PEEK(49328) : MID = PEEK(49329) : HIGH = PEEK(49330)
+20 PRICE = LOW + MID * 256 + HIGH * 65536
+30 PRINT "LIVE BITCOIN PRICE: $"; PRICE
+40 GOTO 10</pre>
+          </div>
         </div>
       </div>
     </section>
@@ -300,7 +371,7 @@
 
   <!-- Footer -->
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
-    Apple //c Ultra Architecture • Custom Slot Peripheral Card Emulation Guide
+    Apple //c Ultra Architecture • Custom Slot Peripheral Card Emulation &amp; Exhaustive I/O Manual
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
 

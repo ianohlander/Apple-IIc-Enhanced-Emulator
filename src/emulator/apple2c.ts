@@ -1,3 +1,4 @@
+import { SlotManager } from './slots/SlotManager';
 import { ClockSpeed, DisplayPhosphor, VideoMode } from '../types/emulator';
 import { CPU65C02 } from './cpu65C02';
 import { Apple2cMMU } from './mmu';
@@ -18,6 +19,7 @@ export class Apple2cUltra {
   public smartPort: SmartPortController;
   public uthernet: UthernetController;
   public diskSounds: FloppyAudioEffects;
+  public slotManager: SlotManager;
 
   public clockSpeed: number = ClockSpeed.SPEED_1MHZ;
   public isRunning: boolean = false;
@@ -34,6 +36,12 @@ export class Apple2cUltra {
     this.audio = new Apple2cAudio(mockingboard);
     this.uthernet = new UthernetController();
     this.diskSounds = new FloppyAudioEffects();
+    this.slotManager = new SlotManager(
+      this.diskController,
+      this.smartPort,
+      mockingboard,
+      this.uthernet
+    );
 
     // Sound effect hook for drive head step
     this.diskController.onStepSound = (track) => {
@@ -56,6 +64,8 @@ export class Apple2cUltra {
     const defaultRom = generateDefaultApple2cRom();
     this.mmu.rom.set(defaultRom);
 
+    this.mmu.slotManager = this.slotManager;
+    this.mmu.ioRouter.slotManager = this.slotManager;
     this.video = new Apple2cVideo(this.mmu);
     this.cpu = new CPU65C02(this.mmu);
   }

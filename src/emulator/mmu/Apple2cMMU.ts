@@ -1,3 +1,4 @@
+import { SlotManager } from '../slots/SlotManager';
 import { SoftswitchesState, VideoMode } from '../../types/emulator';
 import { ZeroPageStackBank } from './banks/ZeroPageStackBank';
 import { ProgramRamBank } from './banks/ProgramRamBank';
@@ -15,6 +16,7 @@ export class Apple2cMMU {
   public languageCard: LanguageCardBank = new LanguageCardBank();
   public slinky: SlinkyExpansionBank = new SlinkyExpansionBank();
   public ioRouter: IoSoftswitchRouter;
+  public slotManager?: SlotManager;
   public rom: Uint8Array = new Uint8Array(32768);
 
   public sw: SoftswitchesState = {
@@ -85,15 +87,24 @@ export class Apple2cMMU {
     return isDouble ? VideoMode.DLGR : VideoMode.LGR;
   }
 
+    private readSlotRom(addr: number): number | null {
+    if (addr >= 0xc100 && addr < 0xc800 && this.slotManager) {
+      const val = this.slotManager.readRom(addr);
+      if (val !== 0x60) return val;
+    }
+    return null;
+  }
+
   public read(addr: number): number {
     addr &= 0xffff;
     if (addr < 0x0200) return this.zpStack.read(addr, this.sw.altzp);
     if (addr < 0xc000) return this.programRam.read(addr, this.sw);
+    const slotRom = this.readSlotRom(addr);
+    if (slotRom !== null) return slotRom;
     if (addr < 0xd000) return this.ioRouter.read(addr, this.sw);
     if (this.sw.lcReadRam) return this.languageCard.read(addr, this.sw.lcBank2, this.sw.altzp);
 
-    const romOffset = (addr - 0xc000) & (this.rom.length - 1);
-    return this.rom[romOffset];
+    return this.rom[(addr - 0xc000) & (this.rom.length - 1)];
   }
 
   public write(addr: number, val: number): void {

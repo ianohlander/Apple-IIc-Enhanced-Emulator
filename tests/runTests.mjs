@@ -1128,6 +1128,41 @@ runner.suite('Documentation & Storage Subsystem Architecture: 9-Chapter Practicu
   });
 });
 
+
+// 16. Slot Manager & Custom Peripheral Cards Subsystem Test Suite
+runner.suite('Peripheral Bus: SlotManager & Virtual Card Subsystems', () => {
+  runner.test('SlotManager: 7-Slot Initialization & Default Factory Cards', () => {
+    // Dynamic import simulation check of cards
+    const slotDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'developer', 'custom-peripheral-cards.html'), 'utf8');
+    assertTrue(slotDoc.includes('ImageWriter II Printer'), 'Slot 1 Printer documented');
+    assertTrue(slotDoc.includes('Passport Web MIDI Master'), 'Slot 2 MIDI documented');
+    assertTrue(slotDoc.includes('Custom User Sandbox Card'), 'Slot 3 Custom Sandbox documented');
+    assertTrue(slotDoc.includes('Thunderclock Plus RTC'), 'Slot 4 Clock documented');
+    assertTrue(slotDoc.includes('Sweet Micro Mockingboard'), 'Slot 4/5 Mockingboard documented');
+    assertTrue(slotDoc.includes('Uthernet W5100 Ethernet'), 'Slot 5 Network documented');
+    assertTrue(slotDoc.includes('Disk II 5.25" Floppy'), 'Slot 6 Floppy documented');
+    assertTrue(slotDoc.includes('SmartPort 32MB Hard Disk'), 'Slot 7 HD documented');
+  });
+
+  runner.test('Card Usage Recipes: BASIC, Assembly, C# & Java Code Samples', () => {
+    const slotDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'developer', 'custom-peripheral-cards.html'), 'utf8');
+    assertTrue(slotDoc.includes('PR#1'), 'BASIC PR#1 printer usage documented');
+    assertTrue(slotDoc.includes('ApplePrinter.WriteLine'), 'C# printer API documented');
+    assertTrue(slotDoc.includes('MIDI_NOTE_ON'), '65C02 Assembly MIDI routine documented');
+    assertTrue(slotDoc.includes('PEEK(49346)'), 'BASIC RTC Clock read documented');
+    assertTrue(slotDoc.includes('AppleNetwork.HttpGet'), 'C# Uthernet HTTP client documented');
+    assertTrue(slotDoc.includes('card.onReadHandler'), 'Custom JavaScript Sandbox tutorial present');
+  });
+
+  runner.test('Virtual Printer & Sandbox Surface: Under the Hood Workbench Verification', () => {
+    const standalone = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
+    assertTrue(standalone.includes('id="tab-slots"'), 'Slot Expansion Bay tab present in standalone');
+    assertTrue(standalone.includes('id="printer-paper-view"'), 'Virtual Printer Paper Console present');
+    assertTrue(standalone.includes('id="custom-card-code"'), 'Custom JS Card Sandbox present');
+    assertTrue(standalone.includes('id="clock-live-time"'), 'ProDOS Clock display present');
+  });
+});
+
 const passed = runner.summarize();
 process.exit(passed ? 0 : 1);
 

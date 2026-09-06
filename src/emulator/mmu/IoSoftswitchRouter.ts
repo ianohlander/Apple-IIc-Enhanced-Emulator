@@ -1,3 +1,4 @@
+import { SlotManager } from '../slots/SlotManager';
 import { SoftswitchesState } from '../../types/emulator';
 import { SlinkyExpansionBank } from './banks/SlinkyExpansionBank';
 import { DiskIIController } from '../storage/diskII';
@@ -11,6 +12,7 @@ export class IoSoftswitchRouter {
   public smartPort: SmartPortController;
   public mockingboard: MockingboardController;
   public uthernet: UthernetController;
+  public slotManager?: SlotManager;
 
   public lastKeyPressed: number = 0;
   public keyStrobe: boolean = false;
@@ -94,6 +96,10 @@ export class IoSoftswitchRouter {
   }
 
   private readSlotDevice(addr: number): number {
+    if (this.slotManager) {
+      const slotVal = this.slotManager.readIo(addr);
+      if (slotVal !== 0) return slotVal;
+    }
     const slotNibble = (addr >> 4) & 0x0f;
     const offset = addr & 0x0f;
     const slotMap: Record<number, (off: number) => number> = {
@@ -129,6 +135,9 @@ export class IoSoftswitchRouter {
   }
 
   private writeSlotDevice(addr: number, val: number): void {
+    if (this.slotManager) {
+      this.slotManager.writeIo(addr, val);
+    }
     const slotNibble = (addr >> 4) & 0x0f;
     const offset = addr & 0x0f;
     const slotMap: Record<number, (off: number, v: number) => void> = {
