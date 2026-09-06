@@ -214,7 +214,21 @@
             <p class="text-gray-300 text-[11px]">
               "Apple" and "Apple II" are registered trademarks of Apple Inc. When selling commercial products (like courseware or VS Code extensions), avoid using "Apple" as the standalone brand. Instead, use <strong>Nominative Fair Use</strong> (e.g. <em>"Ultra 6502 Lab (Apple II Compatible)"</em>) and include the standard trademark disclaimer notice (see <a href="legal-compliance-and-ip.html" class="text-purple-400 underline">Legal &amp; IP Guide</a>).
             </p>
+          
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#1b2230] space-y-2">
+            <span class="text-emerald-400 font-bold block text-sm">Q4: If the ROM is clean-room, how do vintage DSK games and typed-in programs run?</span>
+            <p class="text-gray-300 text-[11px]">
+              <strong>The 4 Architectural Compatibility Layers:</strong><br>
+              1. <strong>Standard ABI Vectors ($F800–$FFFF):</strong> We implement the exact calling contracts for $FDED (COUT), $FD1B (KEYIN), and $FC58 (HOME).<br>
+              2. <strong>Disk Images Load Their Own OS:</strong> DSK images load DOS 3.3 (RWTS @ $B7E8) or ProDOS (MLI @ $BF00) directly into RAM, bypassing motherboard ROM during execution.<br>
+              3. <strong>Direct Silicon Softswitches ($C000–$C0FF):</strong> 95% of games bypass ROM entirely during gameplay, writing directly to hardware softswitches emulated with cycle accuracy.<br>
+              4. <strong>BASIC Tokenizer:</strong> Typed-in programs are tokenized into standard Applesoft bytecodes ($80–$EA) with Zero Page pointer setups.
+            </p>
+            <p class="text-gray-400 text-[10px]">
+              (For the complete technical breakdown and diagram, see <a href="legal-compliance-and-ip.html" class="text-emerald-400 underline">Legal Compliance &amp; Clean-Room Architecture</a>).
+            </p>
           </div>
+</div>
         </div>
       </div>
     </div>
