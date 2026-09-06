@@ -7,7 +7,7 @@
   <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Peripheral Card Emulation, Full JavaScript Sandbox API &amp; External I/O Architecture — Apple //c Ultra</title>
+  <title>The Three-Domain Peripheral Card Architecture &amp; Hardware Sandbox Guide — Apple //c Ultra</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -18,7 +18,10 @@
     .step-pill { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 9999px; font-weight: 800; font-size: 12px; font-family: 'Space Mono', monospace; }
     pre { background-color: #06090e; border: 1px solid #1a2332; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; }
     code { font-family: 'Space Mono', monospace; }
-    .api-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 0.25rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 700; }
+    .domain-tag { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.6rem; border-radius: 0.375rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+    .tag-domain1 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .tag-domain2 { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.4); }
+    .tag-domain3 { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
@@ -31,7 +34,7 @@
       <a href="../index.html" class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-black font-bold text-xl">🔌</a>
       <div>
         <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Developer &amp; Hardware Engineering Reference</span>
-        <h1 class="text-base font-extrabold text-white">Custom Peripheral Cards, Full JavaScript Sandbox API &amp; External I/O Guide</h1>
+        <h1 class="text-base font-extrabold text-white">The Three-Domain Peripheral Architecture: Apple II, Virtual Card &amp; Outside World</h1>
       </div>
     </div>
     <div class="flex items-center space-x-3 text-xs font-mono">
@@ -47,23 +50,47 @@
     <!-- Hero Banner -->
     <div class="bg-gradient-to-br from-amber-950/40 via-[#101622] to-cyan-950/40 border border-[#2a3642] rounded-2xl p-8 space-y-4 shadow-xl">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#2a3642] pb-3">
-        <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">Master Hardware Bus, Sandbox API &amp; I/O Subsystem</span>
+        <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">Master Hardware Bus, Sandbox Framework &amp; I/O Subsystem</span>
         <span class="px-3 py-1 rounded-full text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">Slots 1 through 7</span>
       </div>
-      <h2 class="text-2xl md:text-3xl font-black text-white">The Complete Guide to Custom Peripheral Card Engineering</h2>
+      <h2 class="text-2xl md:text-3xl font-black text-white">Understanding the Three-Domain Hardware Architecture</h2>
       <p class="text-gray-300 text-xs md:text-sm leading-relaxed max-w-4xl">
-        The Apple //c Ultra virtualizes a full 50-pin, 7-slot motherboard expansion architecture. Each slot decodes 16 dedicated I/O softswitches (<code class="text-cyan-300">$C080 + $n0</code>), a 256-byte Slot ROM (<code class="text-purple-300">$Cn00</code>), and optional banked 2KB expansion ROM (<code class="text-emerald-300">$C800–$CFFF</code>).
+        To understand how virtual expansion cards work in the Apple //c Ultra, we divide the entire system into <strong>Three Distinct Architectural Domains</strong>:
       </p>
-      <p class="text-gray-300 text-xs leading-relaxed max-w-4xl">
-        This document provides the <strong>complete JavaScript Emulator Sandbox API specification</strong>, details all properties, methods, and lifecycle callbacks of the <code class="text-amber-300">card</code> object, provides exhaustive data structures and object models for <strong>Web Serial (Arduino/ESP32)</strong>, <strong>Fetch (REST IoT APIs)</strong>, <strong>Web MIDI</strong>, and <strong>WebSockets</strong>, and explains where and how to write and run code in <strong>Applesoft BASIC</strong>, <strong>65C02 Assembly</strong>, <strong>C# .NET</strong>, and <strong>Java 17</strong>.
-      </p>
+      
+      <!-- 3 Domains Overview Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 font-mono text-xs">
+        <div class="p-3.5 bg-[#0a0e17] rounded-xl border border-amber-500/40 space-y-1.5">
+          <div class="domain-tag tag-domain1">Domain 1: Inside</div>
+          <span class="text-amber-400 font-bold block">The Apple //c Ultra Computer</span>
+          <p class="text-gray-400 font-sans text-[11px]">
+            65C02 CPU executing Applesoft BASIC, 65C02 Machine Code, C# .NET, or Java 17. Reads/writes softswitches at <code class="text-amber-300">$C0B0–$C0BF</code>.
+          </p>
+        </div>
+
+        <div class="p-3.5 bg-[#0a0e17] rounded-xl border border-cyan-500/40 space-y-1.5">
+          <div class="domain-tag tag-domain2">Domain 2: Middle</div>
+          <span class="text-cyan-400 font-bold block">The Virtual Peripheral Card</span>
+          <p class="text-gray-400 font-sans text-[11px]">
+            JavaScript script in the Sandbox. Runs inside the host browser runtime with full access to Web APIs: Web Serial, Fetch, WebSockets, Web MIDI.
+          </p>
+        </div>
+
+        <div class="p-3.5 bg-[#0a0e17] rounded-xl border border-emerald-500/40 space-y-1.5">
+          <div class="domain-tag tag-domain3">Domain 3: Outside</div>
+          <span class="text-emerald-400 font-bold block">The Outside World</span>
+          <p class="text-gray-400 font-sans text-[11px]">
+            Physical Arduinos, ESP32s, stepper motors, servo actuators, cloud REST weather feeds, local Python/Node daemons, and MIDI synthesizers.
+          </p>
+        </div>
+      </div>
 
       <!-- Quick Jump Navigation -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4 border-t border-[#2a3642] font-mono text-[11px]">
         <a href="#ui-guide" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-amber-400 font-bold text-center">📍 Application UI Map</a>
-        <a href="#sandbox-api" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-cyan-400 font-bold text-center">🧪 Sandbox 'card' API</a>
-        <a href="#external-io" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-emerald-400 font-bold text-center">🌐 Web Hardware APIs</a>
-        <a href="#weather-case-study" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-pink-400 font-bold text-center">🌤️ Weather Case Study</a>
+        <a href="#domain-framework" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-cyan-400 font-bold text-center">📐 3-Domain Framework</a>
+        <a href="#stepper-motor-case-study" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-emerald-400 font-bold text-center">⚙️ Stepper Motor Study</a>
+        <a href="#weather-case-study" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-pink-400 font-bold text-center">🌤️ Weather Station Study</a>
       </div>
     </div>
 
@@ -75,7 +102,7 @@
         <span class="step-pill bg-amber-500/20 text-amber-400 border border-amber-500/40">1</span>
         <div>
           <h3 class="text-base font-bold text-amber-400 font-mono uppercase">Where Is Everything in the Application UI?</h3>
-          <p class="text-gray-400 text-xs">A clear step-by-step visual roadmap so you know exactly which tab and textbox to use</p>
+          <p class="text-gray-400 text-xs">Clear instructions so you know exactly which tab and textbox to use for each code snippet</p>
         </div>
       </div>
 
@@ -85,24 +112,24 @@
         <div class="p-4 bg-[#0d1219] rounded-xl border border-[#212d3d] space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212d3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-cyan-400 text-sm">
-              <span>🧪</span>
-              <span>Where is the Custom Card JavaScript Sandbox?</span>
+              <span class="domain-tag tag-domain2">Domain 2</span>
+              <span>Where is the Custom Card JavaScript Sandbox Located?</span>
             </div>
             <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">Slot &amp; Card Studio</span>
           </div>
 
           <p class="text-gray-300 text-xs font-sans leading-relaxed">
-            The <strong>Custom Card JavaScript Sandbox</strong> is a built-in feature of the Apple //c Ultra emulator. It allows you to write custom hardware logic for <strong>Slot 3</strong> (I/O registers at <code class="text-cyan-300">$C0B0–$C0BF</code>) directly in the browser with real-time compilation!
+            The <strong>Custom Card JavaScript Sandbox</strong> is a built-in feature of the Apple //c Ultra emulator. It allows you to write custom hardware logic for <strong>Slot 3</strong> (I/O registers at <code class="text-cyan-300">$C0B0–$C0BF</code>) directly in the browser with real-time compilation:
           </p>
 
           <div class="bg-[#06090e] p-4 rounded-lg border border-[#1a2332] space-y-2 font-mono text-xs">
-            <span class="text-amber-400 font-bold block">How to Open and Use the Sandbox:</span>
+            <span class="text-amber-400 font-bold block">Step-by-Step Navigation to Open the Sandbox:</span>
             <ol class="list-decimal list-inside space-y-1.5 text-gray-300 pl-1">
               <li>Launch the emulator: open <a href="../../index-standalone.html" class="text-amber-400 underline font-bold" target="_blank">index-standalone.html</a> in any modern browser.</li>
               <li>Scroll down below the CRT screen to the <strong>"Under the Hood"</strong> workbench area.</li>
               <li>Click the <strong>🎛️ Slot &amp; Card Studio</strong> workbench tab (Tab 9).</li>
               <li>Inside the studio, click the <strong>🧪 Custom JS Card Sandbox (Slot 3)</strong> button.</li>
-              <li>Select a preset (e.g. <em>🌤️ IoT Weather Station</em>, <em>🔌 Web Serial Arduino Bridge</em>, <em>📈 Live Bitcoin Ticker</em>, or <em>🧮 32-Bit Math Co-Processor</em>) or write your custom code in the <strong>JavaScript Sandbox Textarea</strong>.</li>
+              <li>Paste or edit your JavaScript card script in the <strong>Sandbox Code Textarea</strong>.</li>
               <li>Click the blue <strong>▶ Apply to Slot 3</strong> button. Your virtual hardware card is immediately active on the 65C02 bus!</li>
             </ol>
           </div>
@@ -112,24 +139,24 @@
         <div class="p-4 bg-[#0d1219] rounded-xl border border-[#212d3d] space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212d3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
-              <span>☕</span>
+              <span class="domain-tag tag-domain1">Domain 1</span>
               <span>Where Do I Enter and Run C# and Java Code?</span>
             </div>
             <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-800">Java &amp; C# AOT Studio</span>
           </div>
 
           <p class="text-gray-300 text-xs font-sans leading-relaxed">
-            All modern C# and Java code samples provided in this guide are designed for the emulator's <strong>Ahead-Of-Time (AOT) Compiler Engine</strong>. You do NOT need a local .NET SDK or JDK installed.
+            All modern C# and Java code samples provided in this guide run on the emulator's <strong>Ahead-Of-Time (AOT) Compiler Engine</strong>:
           </p>
 
           <div class="bg-[#06090e] p-4 rounded-lg border border-[#1a2332] space-y-2 font-mono text-xs">
-            <span class="text-amber-400 font-bold block">How to Compile &amp; Run C# / Java Code:</span>
+            <span class="text-amber-400 font-bold block">Step-by-Step Navigation to Compile C# / Java:</span>
             <ol class="list-decimal list-inside space-y-1.5 text-gray-300 pl-1">
               <li>In the <strong>"Under the Hood"</strong> workbench area, click the <strong>☕ Java &amp; C# CLR</strong> tab (Tab 7).</li>
               <li>Select your language (<strong>C# .NET</strong> or <strong>Java 17</strong>) from the language selector.</li>
               <li>Paste the C# or Java class into the large <strong>Source Code Textbox</strong>.</li>
               <li>Click the gold <strong>⚡ Compile &amp; Run on Apple II</strong> button.</li>
-              <li>The AOT compiler translates the high-level code down to native 65C02 machine code, injects it into Apple II memory at <code class="text-cyan-300">$0800</code>, and jumps to it (<code class="text-purple-300">CALL 2048</code>) automatically!</li>
+              <li>The AOT compiler translates the high-level code down to native 65C02 machine code, injects it into RAM at <code class="text-cyan-300">$0800</code>, and executes it (<code class="text-purple-300">CALL 2048</code>) automatically!</li>
             </ol>
           </div>
         </div>
@@ -138,247 +165,162 @@
     </section>
 
     <!-- ========================================================================= -->
-    <!-- SECTION 1: FULL JAVASCRIPT SANDBOX 'CARD' OBJECT API SPECIFICATION -->
+    <!-- SECTION 1: THE THREE-DOMAIN FRAMEWORK IN DETAIL -->
     <!-- ========================================================================= -->
-    <section id="sandbox-api" class="space-y-6">
+    <section id="domain-framework" class="space-y-6">
       <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
         <span class="step-pill bg-cyan-500/20 text-cyan-400 border border-cyan-500/40">2</span>
         <div>
-          <h3 class="text-base font-bold text-cyan-400 font-mono uppercase">Full JavaScript Emulator Sandbox 'card' API Reference</h3>
-          <p class="text-gray-400 text-xs">Complete property definitions, method signatures, return types, and lifecycle event callbacks</p>
+          <h3 class="text-base font-bold text-cyan-400 font-mono uppercase">The Three-Domain Framework: How the Pieces Connect</h3>
+          <p class="text-gray-400 text-xs">How code in the JS Sandbox accesses host resources and communicates with the 65C02 CPU</p>
         </div>
       </div>
 
-      <div class="card-box p-6 space-y-8 text-xs leading-relaxed">
+      <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
         
-        <p class="text-gray-300 font-sans text-xs md:text-sm">
-          When you write script code in the Custom JS Card Sandbox, your code executes with direct access to the <code class="text-amber-300 font-bold">card</code> instance. Below is the complete TypeScript / JavaScript interface definition representing everything you can read, write, override, and hook:
-        </p>
-
-        <!-- TypeScript Interface Definition Block -->
-        <pre><code class="text-cyan-300">// Complete JavaScript Sandbox 'card' Object Interface Definition
-interface ICustomScriptableCard {
-  // --- METADATA & CONFIGURATION PROPERTIES ---
-  name: string;             // Human-readable card name (e.g. "IoT Weather Station")
-  slot: number;             // Slot index (default 3: maps to $C0B0 I/O & $C300 ROM)
-  description: string;      // Card description displayed in Under the Hood diagnostics
-  icon: string;             // Emoji / icon character (e.g. "🌤️", "🔌", "📈")
-  isPlugged: boolean;       // Set true to connect to motherboard bus, false to float High-Z
-
-  // --- MEMORY BUFFERS ---
-  registers: number[];      // 16-element array (0x00 to 0x0F) for I/O softswitches ($C0B0–$C0BF)
-  rom: number[];            // 256-element array (0x00 to 0xFF) for Slot ROM ($C300–$C3FF)
-  expansionRom: number[];   // 2048-element array (0x000 to 0x7FF) for Banked ROM ($C800–$CFFF)
-  state: Record&lt;string, any&gt;; // Custom dictionary for storing arbitrary user state/objects
-
-  // --- PRIMARY LIFECYCLE EVENT CALLBACKS (OVERRIDABLE) ---
-  
-  /**
-   * Called whenever 65C02 executes a read from the card's 16 I/O softswitches ($C0B0–$C0BF)
-   * Triggered by: LDA $C0B0, PEEK(49328), C# AppleMemory.Peek(0xC0B0), Java AppleSystem.peek(0xC0B0)
-   * @param offset Integer register index (0x00 to 0x0F, where 0x00 = $C0B0, 0x01 = $C0B1, ...)
-   * @returns 8-bit unsigned integer (0 to 255) returned to the 65C02 accumulator / bus
-   */
-  onReadHandler?: (offset: number) =&gt; number;
-
-  /**
-   * Called whenever 65C02 executes a write to the card's 16 I/O softswitches ($C0B0–$C0BF)
-   * Triggered by: STA $C0B0, POKE 49328, V, C# AppleMemory.Poke(0xC0B0, V), etc.
-   * @param offset Integer register index (0x00 to 0x0F)
-   * @param value 8-bit unsigned integer (0 to 255) written by the 65C02
-   */
-  onWriteHandler?: (offset: number, value: number) =&gt; void;
-
-  /**
-   * Optional: Called whenever 65C02 reads from the card's 256-byte Slot ROM ($C300–$C3FF)
-   * @param offset Byte offset within ROM (0x00 to 0xFF)
-   * @returns 8-bit opcode or data byte (0 to 255)
-   */
-  onRomReadHandler?: (offset: number) =&gt; number;
-
-  /**
-   * Optional: Called continuously during CPU execution cycles for timing, counters, or polling
-   * @param cycles Number of 65C02 clock cycles executed since last tick (e.g. 1,020,484 cycles/sec)
-   */
-  onTickHandler?: (cycles: number) =&gt; void;
-
-  /**
-   * Optional: Called when the Apple II undergoes a hard power reset or soft Ctrl-Reset
-   */
-  onResetHandler?: () =&gt; void;
-
-  // --- BUILT-IN HELPER UTILITY METHODS ---
-  setRegister(offset: number, value: number): void; // Set register value (0-15)
-  getRegister(offset: number): number;              // Get register value (0-15)
-  loadRomBytes(bytes: number[] | Uint8Array, startOffset?: number): void; // Bulk load 65C02 code
-  getDiagnostics(): Record&lt;string, number | string | boolean&gt;; // Return status dictionary
-}</code></pre>
-
-        <!-- Method-by-Method Detailed Table -->
-        <h4 class="text-sm font-bold text-amber-400 font-mono uppercase tracking-wider">Detailed Method &amp; Callback Signatures</h4>
-        
-        <div class="space-y-4">
-          
-          <!-- onReadHandler -->
-          <div class="p-4 bg-[#080d14] rounded-lg border border-[#16202e] space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-cyan-400 font-bold font-mono">card.onReadHandler = (offset) =&gt; number</span>
-              <span class="api-badge bg-cyan-950 text-cyan-300 border border-cyan-800">Softswitch Read Hook</span>
-            </div>
-            <p class="text-gray-300 font-sans">
-              <strong>When It Fires:</strong> Every time the 65C02 CPU reads an address between <code class="text-cyan-300">$C0B0</code> and <code class="text-cyan-300">$C0BF</code> (for Slot 3).
-            </p>
-            <ul class="list-disc list-inside text-gray-400 space-y-1 font-mono text-[11px]">
-              <li><code class="text-white">offset (number)</code>: Value from <code class="text-cyan-300">0</code> to <code class="text-cyan-300">15</code> (<code class="text-cyan-300">0x00</code> = $C0B0, <code class="text-cyan-300">0x01</code> = $C0B1, ... <code class="text-cyan-300">0x0F</code> = $C0BF).</li>
-              <li><code class="text-white">Return Value (number)</code>: Must return an integer from <code class="text-emerald-300">0</code> to <code class="text-emerald-300">255</code> (the emulator automatically masks with <code class="text-emerald-300">&amp; 0xFF</code>).</li>
-            </ul>
-            <pre><code class="text-emerald-300">// Example: Return temperature on offset 0, humidity on offset 1
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return 74;  // $C0B0: 74 deg F
-  if (offset === 0x01) return 55;  // $C0B1: 55% humidity
-  return 0x00;
-};</code></pre>
+        <!-- VISUAL DIAGRAM OF THE 3 DOMAINS -->
+        <div class="bg-[#080b0e] p-4 rounded-xl border border-[#1a2332] font-mono text-xs space-y-3">
+          <div class="flex justify-between items-center text-cyan-400 font-bold border-b border-[#1a2332] pb-2">
+            <span>📐 System Dataflow: Inside &harr; Middle &harr; Outside</span>
+            <span class="text-[10px] text-gray-500">Bus &amp; Web Bridge</span>
           </div>
+          <div class="overflow-x-auto py-2">
+            <svg viewBox="0 0 880 180" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #0d1219; border-radius: 8px; border: 1px solid #212d3d;">
+              <!-- Domain 1 Box -->
+              <rect x="20" y="20" width="240" height="140" rx="8" fill="#141a21" stroke="#f59e0b" stroke-width="2" />
+              <text x="140" y="45" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">DOMAIN 1: APPLE //c ULTRA</text>
+              <text x="140" y="65" fill="#94a3b8" font-size="8.5" text-anchor="middle" font-family="monospace">(Inside: 65C02 CPU Silicon)</text>
+              <rect x="35" y="80" width="210" height="22" rx="4" fill="#2d2109" stroke="#d97706" stroke-width="1" />
+              <text x="140" y="95" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">BASIC: PEEK / POKE 49328</text>
+              <rect x="35" y="110" width="210" height="22" rx="4" fill="#2d2109" stroke="#d97706" stroke-width="1" />
+              <text x="140" y="125" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">C# / Java: AppleMemory.Peek/Poke</text>
 
-          <!-- onWriteHandler -->
-          <div class="p-4 bg-[#080d14] rounded-lg border border-[#16202e] space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-amber-400 font-bold font-mono">card.onWriteHandler = (offset, value) =&gt; void</span>
-              <span class="api-badge bg-amber-950 text-amber-300 border border-amber-800">Softswitch Write Hook</span>
-            </div>
-            <p class="text-gray-300 font-sans">
-              <strong>When It Fires:</strong> Every time the 65C02 CPU writes an address between <code class="text-amber-300">$C0B0</code> and <code class="text-amber-300">$C0BF</code> (e.g. <code class="text-amber-300">POKE 49328, 42</code>).
-            </p>
-            <ul class="list-disc list-inside text-gray-400 space-y-1 font-mono text-[11px]">
-              <li><code class="text-white">offset (number)</code>: Register index (<code class="text-amber-300">0x00</code> to <code class="text-amber-300">0x0F</code>).</li>
-              <li><code class="text-white">value (number)</code>: 8-bit integer (<code class="text-emerald-300">0</code> to <code class="text-emerald-300">255</code>) written by the CPU.</li>
-            </ul>
-            <pre><code class="text-amber-300">// Example: Listen for control commands written to $C0B6
-card.onWriteHandler = (offset, value) => {
-  if (offset === 0x06 && value === 0xFF) {
-    console.log("Apple II sent reset command!");
-    card.rainCounter = 0;
-  }
-};</code></pre>
+              <!-- Arrow 1-2 -->
+              <line x1="260" y1="90" x2="320" y2="90" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4,4" />
+              <text x="290" y="82" fill="#fbbf24" font-size="7.5" text-anchor="middle" font-family="monospace">$C0B0</text>
+              <line x1="320" y1="100" x2="260" y2="100" stroke="#38bdf8" stroke-width="2" />
+
+              <!-- Domain 2 Box -->
+              <rect x="320" y="20" width="240" height="140" rx="8" fill="#141a21" stroke="#06b6d4" stroke-width="2" />
+              <text x="440" y="45" fill="#22d3ee" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">DOMAIN 2: VIRTUAL CARD</text>
+              <text x="440" y="65" fill="#94a3b8" font-size="8.5" text-anchor="middle" font-family="monospace">(Middle: JavaScript Sandbox)</text>
+              <rect x="335" y="80" width="210" height="22" rx="4" fill="#082f3b" stroke="#0891b2" stroke-width="1" />
+              <text x="440" y="95" fill="#a5f3fc" font-size="8" text-anchor="middle" font-family="monospace">card.onReadHandler(offset)</text>
+              <rect x="335" y="110" width="210" height="22" rx="4" fill="#082f3b" stroke="#0891b2" stroke-width="1" />
+              <text x="440" y="125" fill="#a5f3fc" font-size="8" text-anchor="middle" font-family="monospace">card.onWriteHandler(offset, val)</text>
+
+              <!-- Arrow 2-3 -->
+              <line x1="560" y1="90" x2="620" y2="90" stroke="#22d3ee" stroke-width="2" />
+              <text x="590" y="82" fill="#34d399" font-size="7.5" text-anchor="middle" font-family="monospace">Web APIs</text>
+              <line x1="620" y1="100" x2="560" y2="100" stroke="#34d399" stroke-width="2" stroke-dasharray="4,4" />
+
+              <!-- Domain 3 Box -->
+              <rect x="620" y="20" width="240" height="140" rx="8" fill="#141a21" stroke="#10b981" stroke-width="2" />
+              <text x="740" y="45" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">DOMAIN 3: OUTSIDE WORLD</text>
+              <text x="740" y="65" fill="#94a3b8" font-size="8.5" text-anchor="middle" font-family="monospace">(Outside: Physical Hardware &amp; Cloud)</text>
+              <rect x="635" y="80" width="210" height="22" rx="4" fill="#062e1e" stroke="#059669" stroke-width="1" />
+              <text x="740" y="95" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">USB Arduino / Stepper Motors / LEDs</text>
+              <rect x="635" y="110" width="210" height="22" rx="4" fill="#062e1e" stroke="#059669" stroke-width="1" />
+              <text x="740" y="125" fill="#a7f3d0" font-size="8" text-anchor="middle" font-family="monospace">Cloud REST APIs / Local Daemons</text>
+            </svg>
           </div>
+        </div>
 
-          <!-- onTickHandler -->
-          <div class="p-4 bg-[#080d14] rounded-lg border border-[#16202e] space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-purple-400 font-bold font-mono">card.onTickHandler = (cycles) =&gt; void</span>
-              <span class="api-badge bg-purple-950 text-purple-300 border border-purple-800">CPU Cycle Timer Hook</span>
-            </div>
-            <p class="text-gray-300 font-sans">
-              <strong>When It Fires:</strong> Executed in synchronization with CPU execution (approximately 1,020,484 cycles/sec at 1 MHz, or up to 50,000,000 cycles/sec at 50 MHz Turbo).
-            </p>
-            <pre><code class="text-purple-300">// Example: Decrement an internal hardware timer every 10,000 cycles
-card.cycleCounter = 0;
-card.onTickHandler = (cycles) => {
-  card.cycleCounter += cycles;
-  if (card.cycleCounter >= 1000000) { // ~1 second elapsed
-    card.cycleCounter = 0;
-    card.secondsOnline = (card.secondsOnline || 0) + 1;
-  }
-};</code></pre>
+        <!-- Clarification: Does the JS Sandbox have Network & Device Access? -->
+        <div class="p-4 bg-[#0a0e17] rounded-xl border border-cyan-500/30 space-y-2">
+          <div class="flex items-center gap-2 font-bold text-cyan-400">
+            <span class="domain-tag tag-domain2">Domain 2</span>
+            <span>Does the JavaScript Sandbox Have Network &amp; Hardware Access?</span>
           </div>
-
+          <p class="text-gray-300 font-sans">
+            <strong>YES!</strong> The JavaScript code you write in the sandbox executes directly inside the browser's JavaScript engine. It is NOT sandboxed from the web; rather, it is a <em>hardware virtualization sandbox</em> that connects the 65C02 CPU bus to standard browser APIs. It has full access to:
+          </p>
+          <ul class="list-disc list-inside text-gray-300 space-y-1 font-mono text-[11px] pl-2">
+            <li><code class="text-cyan-300">window.fetch()</code>: Query any public internet REST API (Weather, Crypto, Smart Home).</li>
+            <li><code class="text-cyan-300">navigator.serial</code>: Connect to real physical microcontrollers (Arduino, ESP32) over USB.</li>
+            <li><code class="text-cyan-300">new WebSocket('ws://localhost:8080')</code>: Stream bidirectional packets to/from local Python/Node daemons to execute shell commands or read local hardware.</li>
+            <li><code class="text-cyan-300">navigator.requestMIDIAccess()</code>: Send and receive notes to/from physical USB synthesizers and DAWs.</li>
+          </ul>
         </div>
 
       </div>
     </section>
 
     <!-- ========================================================================= -->
-    <!-- SECTION 2: WEB BROWSER HARDWARE APIS & DATA STRUCTURES -->
+    <!-- SECTION 2: CASE STUDY 1 — STEPPER MOTOR & ACTUATOR CONTROLLER -->
     <!-- ========================================================================= -->
-    <section id="external-io" class="space-y-6">
+    <section id="stepper-motor-case-study" class="space-y-6">
       <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
         <span class="step-pill bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">3</span>
         <div>
-          <h3 class="text-base font-bold text-emerald-400 font-mono uppercase">Standard Web Browser Hardware APIs &amp; Data Structures</h3>
-          <p class="text-gray-400 text-xs">Exhaustive syntax, schemas, data types, and copy-pasteable blueprints for real-world interfaces</p>
+          <h3 class="text-base font-bold text-emerald-400 font-mono uppercase">Case Study 1: Apple II Driving an Outside Stepper Motor (Actuator Output)</h3>
+          <p class="text-gray-400 text-xs">How the 65C02 sends motor step commands through the JS card to a physical USB Arduino and motor</p>
         </div>
       </div>
 
-      <div class="card-box p-6 space-y-8 text-xs leading-relaxed">
-        
-        <!-- API 1: Web Serial API -->
-        <div class="space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212c3d] pb-2">
-            <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
-              <span>🔌</span>
-              <span>1. Web Serial API: Connecting Physical USB Microcontrollers (Arduino / ESP32)</span>
-            </div>
-            <span class="api-badge bg-amber-950 text-amber-300 border border-amber-800">navigator.serial</span>
+      <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
+        <p class="text-gray-300 font-sans">
+          This example shows how an Apple II program writes a target step angle (e.g. 90 degrees) to softswitch register <code class="text-amber-300">$C0B0</code>, which the JavaScript card receives in <code class="text-cyan-300">card.onWriteHandler</code>, transmits over USB serial, and causes a physical 28BYJ-48 stepper motor to rotate in the real world!
+        </p>
+
+        <!-- Domain 3: Arduino Firmware -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="domain-tag tag-domain3">Domain 3: Outside World</span>
+            <span class="text-emerald-400 font-bold font-mono">Arduino C++ Firmware (Uploaded to Physical Arduino Uno + ULN2003 Motor Board)</span>
           </div>
+          <pre><code class="text-emerald-300">// Flash this sketch to your Arduino connected to a 28BYJ-48 Stepper Motor
+#include &lt;Stepper.h&gt;
 
-          <p class="text-gray-300 font-sans">
-            The <strong>Web Serial API</strong> allows web applications to read from and write to physical serial hardware devices (such as microcontrollers, GPS receivers, custom breadboards, and lab equipment) plugged into your computer's USB ports.
-          </p>
+const int STEPS_PER_REV = 2048; // 28BYJ-48 motor steps per full 360 deg turn
+Stepper myMotor(STEPS_PER_REV, 8, 10, 9, 11);
 
-          <div class="p-3 bg-[#0a0e17] rounded border border-[#1b2533] space-y-2">
-            <span class="text-amber-400 font-bold block font-mono">Web Serial Object Model &amp; Data Types:</span>
-            <ul class="list-disc list-inside text-gray-300 space-y-1 font-mono text-[11px]">
-              <li><code class="text-cyan-300">navigator.serial</code>: The entry point object provided by modern browsers (Chrome 89+, Edge 89+, Opera).</li>
-              <li><code class="text-cyan-300">port = await navigator.serial.requestPort()</code>: Prompts user with a secure browser modal to pick a USB COM port. Returns a <code class="text-white">SerialPort</code> object.</li>
-              <li><code class="text-cyan-300">await port.open({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' })</code>: Configures hardware UART baud rate and framing.</li>
-              <li><code class="text-cyan-300">port.readable.getReader()</code>: Returns a stream reader yielding <code class="text-purple-300">Uint8Array</code> byte buffers.</li>
-              <li><code class="text-cyan-300">port.writable.getWriter()</code>: Returns a stream writer accepting <code class="text-purple-300">Uint8Array</code> to transmit bytes to the microcontroller.</li>
-            </ul>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            <!-- Arduino Code -->
-            <div class="space-y-2">
-              <span class="text-amber-400 font-bold font-mono block">A. Arduino C++ Firmware (Upload to Arduino Uno / Nano):</span>
-              <pre><code class="text-amber-300">// Arduino Uno / ESP32 Sensor Transmitter
 void setup() {
-  Serial.begin(9600); // 9600 Baud Serial
+  Serial.begin(9600); // 9600 Baud USB Serial
+  myMotor.setSpeed(10); // 10 RPM
 }
 
 void loop() {
-  int sensorRaw = analogRead(A0); // Read analog pin
-  byte tempF = map(sensorRaw, 0, 1023, 32, 120);
-  
-  // Send 1 byte directly to Apple //c Ultra
-  Serial.write(tempF);
-  
-  // Check if Apple II sent a command back
+  // Listen for step command bytes sent from Apple //c Ultra
   if (Serial.available() > 0) {
-    byte cmd = Serial.read();
-    if (cmd == 0x01) digitalWrite(LED_BUILTIN, HIGH);
+    byte targetAngle = Serial.read(); // Byte from Apple II (e.g. 90 deg)
+    int stepsToMove = map(targetAngle, 0, 360, 0, STEPS_PER_REV);
+    
+    myMotor.step(stepsToMove); // Rotate physical motor shaft!
+    
+    // Send confirmation byte back to Apple II
+    Serial.write(0x01); // 0x01 = Movement Complete
   }
-  delay(500); // Sample twice per second
 }</code></pre>
-            </div>
+        </div>
 
-            <!-- Complete JavaScript Card -->
-            <div class="space-y-2">
-              <span class="text-cyan-400 font-bold font-mono block">B. Sandbox JavaScript Web Serial Card (Slot 3):</span>
-              <pre><code class="text-cyan-300">// Web Serial USB Hardware Bridge Card
-card.liveSensorByte = 72;
+        <!-- Domain 2: JavaScript Card Sandbox -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="domain-tag tag-domain2">Domain 2: Virtual Card Sandbox</span>
+            <span class="text-cyan-400 font-bold font-mono">JavaScript Card Script (Paste in Slot &amp; Card Studio &rarr; Slot 3 Sandbox)</span>
+          </div>
+          <pre><code class="text-cyan-300">// Stepper Motor Controller Card (Slot 3 @ $C0B0)
 card.serialPort = null;
 card.serialWriter = null;
+card.isMotorBusy = 0; // 0 = Ready, 1 = Moving
 
-// Connect USB Serial Port Button Handler
+// Connect to USB Arduino Port
 card.connectUsb = async () => {
   try {
-    if (!('serial' in navigator)) {
-      alert("Web Serial is supported in Chrome/Edge on localhost or HTTPS.");
-      return;
-    }
     card.serialPort = await navigator.serial.requestPort();
     await card.serialPort.open({ baudRate: 9600 });
     
-    // Setup background stream reader
-    const reader = card.serialPort.readable.getReader();
     card.serialWriter = card.serialPort.writable.getWriter();
+    const reader = card.serialPort.readable.getReader();
     
+    // Background reader listening for Arduino motor completion
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
-      if (value && value.length > 0) {
-        card.liveSensorByte = value[0]; // Latched
+      if (value && value.length > 0 && value[0] === 0x01) {
+        card.isMotorBusy = 0; // Motor finished move!
+        console.log("Motor rotation complete!");
       }
     }
   } catch (err) {
@@ -386,337 +328,276 @@ card.connectUsb = async () => {
   }
 };
 
-// 65C02 Softswitch Handlers
+// 65C02 Softswitch Read ($C0B0): Status register
 card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.liveSensorByte; // $C0B0
+  if (offset === 0x00) return card.isMotorBusy; // Returns 1 if busy, 0 if ready
   return 0x00;
 };
 
+// 65C02 Softswitch Write ($C0B0): Command register (angle 0-255)
 card.onWriteHandler = async (offset, val) => {
-  // Transmit byte from Apple II to Arduino over USB!
   if (offset === 0x00 && card.serialWriter) {
-    await card.serialWriter.write(new Uint8Array([val]));
+    card.isMotorBusy = 1; // Mark motor busy
+    await card.serialWriter.write(new Uint8Array([val])); // Send angle byte over USB!
   }
-};</code></pre>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- API 2: Fetch & REST APIs -->
-        <div class="space-y-4 pt-6 border-t border-[#212c3d]">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212c3d] pb-2">
-            <div class="flex items-center gap-2 font-bold text-cyan-400 text-sm">
-              <span>🌐</span>
-              <span>2. Fetch API: Cloud IoT, Live Weather &amp; Financial REST Services</span>
-            </div>
-            <span class="api-badge bg-cyan-950 text-cyan-300 border border-cyan-800">window.fetch()</span>
-          </div>
-
-          <p class="text-gray-300 font-sans">
-            Using standard <code class="text-cyan-300">fetch()</code>, your virtual card can query any HTTP REST endpoint (such as OpenWeatherMap, CoinGecko, Home Assistant, or local LAN REST servers) and store the parsed JSON values into 65C02 registers.
-          </p>
-
-          <pre><code class="text-cyan-300">// Cloud REST Telemetry Card (Slot 3 @ $C0B0)
-card.bitcoinPrice = 95000;
-card.tempF = 72;
-
-// Query REST API every 30 seconds
-async function fetchCloudData() {
-  try {
-    const res = await fetch("https://api.coindesk.com/v1/bpi/currentprice.json");
-    const json = await res.json();
-    card.bitcoinPrice = Math.floor(json.bpi.USD.rate_float);
-  } catch (e) {
-    console.warn("REST fetch error:", e);
-  }
-}
-
-fetchCloudData();
-setInterval(fetchCloudData, 30000);
-
-card.onReadHandler = (offset) => {
-  // Return 24-bit integer across 3 registers ($C0B0, $C0B1, $C0B2)
-  if (offset === 0x00) return card.bitcoinPrice & 0xFF;         // Low byte
-  if (offset === 0x01) return (card.bitcoinPrice >> 8) & 0xFF;  // Mid byte
-  if (offset === 0x02) return (card.bitcoinPrice >> 16) & 0xFF; // High byte
-  return 0x00;
 };</code></pre>
         </div>
 
-        <!-- API 3: Web MIDI API -->
-        <div class="space-y-4 pt-6 border-t border-[#212c3d]">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212c3d] pb-2">
-            <div class="flex items-center gap-2 font-bold text-pink-400 text-sm">
-              <span>🎹</span>
-              <span>3. Web MIDI API: USB Synthesizers, Keyboards &amp; DAWs</span>
-            </div>
-            <span class="api-badge bg-pink-950 text-pink-300 border border-pink-800">navigator.requestMIDIAccess()</span>
+        <!-- Domain 1: Apple II Code in BASIC & C# -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="domain-tag tag-domain1">Domain 1: Apple //c Ultra</span>
+            <span class="text-amber-400 font-bold font-mono">Programs Running on the Apple II (Applesoft BASIC &amp; Modern C#)</span>
           </div>
 
-          <p class="text-gray-300 font-sans">
-            Connects 65C02 sound routines directly to physical musical hardware via standard 3-byte MIDI packets (<code class="text-pink-300">[status, noteNumber, velocity]</code>).
-          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- BASIC Motor Controller -->
+            <div class="space-y-1.5">
+              <span class="text-amber-300 font-bold font-mono">A. Applesoft BASIC Motor Control Listing:</span>
+              <pre><code class="text-amber-300">10 HOME : PRINT " APPLE //c STEPPER MOTOR ROBOT"
+20 PRINT "--------------------------------"
+30 INPUT "ENTER ROTATION ANGLE (0-255 DEG): "; DEG
+40 POKE 49328, DEG : REM Send angle to $C0B0
+50 PRINT "MOTOR ROTATING..."
+60 IF PEEK(49328) = 1 THEN GOTO 60 : REM Wait while busy
+70 PRINT "MOVEMENT COMPLETE!"
+80 GOTO 30</code></pre>
+            </div>
 
-          <pre><code class="text-pink-300">// Web MIDI Transceiver Card
-card.midiOutput = null;
+            <!-- C# Motor Controller -->
+            <div class="space-y-1.5">
+              <span class="text-cyan-300 font-bold font-mono">B. Modern C# .NET Motor Control Class (AOT Studio):</span>
+              <pre><code class="text-cyan-300">using System;
+using Apple2.Ultra;
 
-card.initMidi = async () => {
-  if ('requestMIDIAccess' in navigator) {
-    const access = await navigator.requestMIDIAccess();
-    const outputs = Array.from(access.outputs.values());
-    if (outputs.length > 0) {
-      card.midiOutput = outputs[0]; // Attach to first USB synthesizer
-      console.log("Connected to MIDI Output:", card.midiOutput.name);
+public class RobotArmController {
+    public static void Main() {
+        AppleConsole.ClearScreen();
+        AppleConsole.WriteLine("C# ROBOT MOTOR CONTROLLER");
+        
+        // Command 90 degree rotation
+        AppleMemory.Poke(0xC0B0, 90);
+        AppleConsole.WriteLine("ROTATING SHAFT 90 DEG...");
+        
+        // Poll status register until ready
+        while (AppleMemory.Peek(0xC0B0) == 1) {
+            // Wait
+        }
+        
+        AppleAudio.Beep(frequency: 1000, durationMs: 100);
+        AppleConsole.WriteLine("POSITION REACHED!");
     }
-  }
-};
-card.initMidi();
+}</code></pre>
+            </div>
 
-// 65C02 writes: $C0B0 = Note Number (60 = Middle C), $C0B1 = Trigger Note On
-card.currentNote = 60;
-card.onWriteHandler = (offset, val) => {
-  if (offset === 0x00) card.currentNote = val & 0x7F;
-  if (offset === 0x01 && card.midiOutput) {
-    // Transmit MIDI Note-On: Channel 1 (0x90), Pitch, Velocity (0x7F = 127)
-    card.midiOutput.send([0x90, card.currentNote, 0x7F]);
-    setTimeout(() => card.midiOutput.send([0x80, card.currentNote, 0x00]), 300); // Note-Off
-  }
-};</code></pre>
+          </div>
         </div>
 
       </div>
     </section>
 
     <!-- ========================================================================= -->
-    <!-- SECTION 3: COMPLETE IOT WEATHER STATION CASE STUDY -->
+    <!-- SECTION 3: CASE STUDY 2 — CLOUD IOT ENVIRONMENTAL WEATHER STATION -->
     <!-- ========================================================================= -->
     <section id="weather-case-study" class="space-y-6">
       <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
         <span class="step-pill bg-pink-500/20 text-pink-400 border border-pink-500/40">4</span>
         <div>
-          <h3 class="text-base font-bold text-pink-400 font-mono uppercase">Complete Case Study: Multi-Sensor Weather Station</h3>
-          <p class="text-gray-400 text-xs">End-to-end implementation: Hardware registers, JavaScript bridge, and software in 4 languages</p>
+          <h3 class="text-base font-bold text-pink-400 font-mono uppercase">Case Study 2: Cloud IoT Weather Station (Telemetry Ingested by Apple II)</h3>
+          <p class="text-gray-400 text-xs">How live internet weather data flows from cloud REST servers into 65C02 registers</p>
         </div>
       </div>
 
-      <div class="card-box p-6 space-y-8 text-xs">
+      <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
         
-        <!-- Register Layout -->
-        <div class="space-y-3">
-          <h4 class="text-sm font-bold text-amber-400 font-mono">1. Hardware Register Memory Map (Slot 3 @ $C0B0)</h4>
-          <div class="overflow-x-auto font-mono text-[11px]">
-            <table class="w-full text-left border-collapse bg-[#06090e] rounded-lg border border-[#1a2332]">
-              <thead>
-                <tr class="border-b border-[#1a2332] bg-[#0f1724] text-amber-400">
-                  <th class="p-2.5">Address</th>
-                  <th class="p-2.5">BASIC PEEK/POKE</th>
-                  <th class="p-2.5">Type</th>
-                  <th class="p-2.5">Register Name</th>
-                  <th class="p-2.5">Description &amp; Units</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-[#1a2332] text-gray-300">
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B0</td>
-                  <td class="p-2.5"><code>PEEK(49328)</code></td>
-                  <td class="p-2.5 text-emerald-400">Read</td>
-                  <td class="p-2.5 font-bold text-white">TEMP_DATA</td>
-                  <td class="p-2.5">Current Temperature (Integer °F, e.g. 74)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B1</td>
-                  <td class="p-2.5"><code>PEEK(49329)</code></td>
-                  <td class="p-2.5 text-emerald-400">Read</td>
-                  <td class="p-2.5 font-bold text-white">HUMID_DATA</td>
-                  <td class="p-2.5">Relative Humidity (0–100% RH)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B2</td>
-                  <td class="p-2.5"><code>PEEK(49330)</code></td>
-                  <td class="p-2.5 text-emerald-400">Read</td>
-                  <td class="p-2.5 font-bold text-white">PRESS_LOW</td>
-                  <td class="p-2.5">Barometric Pressure Low Byte (hPa × 10 MOD 256)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B3</td>
-                  <td class="p-2.5"><code>PEEK(49331)</code></td>
-                  <td class="p-2.5 text-emerald-400">Read</td>
-                  <td class="p-2.5 font-bold text-white">PRESS_HIGH</td>
-                  <td class="p-2.5">Barometric Pressure High Byte (hPa × 10 / 256)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B4</td>
-                  <td class="p-2.5"><code>PEEK(49332)</code></td>
-                  <td class="p-2.5 text-emerald-400">Read</td>
-                  <td class="p-2.5 font-bold text-white">WIND_SPEED</td>
-                  <td class="p-2.5">Wind Speed (Miles Per Hour)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B5</td>
-                  <td class="p-2.5"><code>PEEK(49333)</code></td>
-                  <td class="p-2.5 text-emerald-400">Read</td>
-                  <td class="p-2.5 font-bold text-white">RAIN_GAUGE</td>
-                  <td class="p-2.5">Accumulated Daily Rainfall (Hundredths of an inch)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B6</td>
-                  <td class="p-2.5"><code>POKE 49334, V</code></td>
-                  <td class="p-2.5 text-purple-400">Write</td>
-                  <td class="p-2.5 font-bold text-white">CONTROL_CMD</td>
-                  <td class="p-2.5">Command (0=Metric, 1=Imperial, $FF=Reset Rain Gauge)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-cyan-300">$C0B7</td>
-                  <td class="p-2.5"><code>PEEK(49335)</code></td>
-                  <td class="p-2.5 text-emerald-400">Read</td>
-                  <td class="p-2.5 font-bold text-white">STATUS_FLAG</td>
-                  <td class="p-2.5">Status Strobe (Bit 7 = 1 when data valid &amp; ready)</td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Domain 3: Cloud REST Service -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="domain-tag tag-domain3">Domain 3: Outside World</span>
+            <span class="text-emerald-400 font-bold font-mono">Cloud REST Weather API (OpenWeatherMap / NOAA Endpoint)</span>
           </div>
+          <p class="text-gray-300 font-sans">
+            Public internet HTTP server returning live JSON weather observations:
+          </p>
+          <pre><code class="text-emerald-300">// HTTP GET https://api.openweathermap.org/data/2.5/weather?q=Cupertino&amp;units=imperial
+{
+  "main": { "temp": 74.5, "humidity": 52, "pressure": 1013 },
+  "wind": { "speed": 12.4 },
+  "name": "Cupertino"
+}</code></pre>
         </div>
 
-        <!-- Sandbox JavaScript -->
-        <div class="space-y-3">
-          <h4 class="text-sm font-bold text-cyan-400 font-mono">2. JavaScript Card Script (Paste in Slot 3 Sandbox)</h4>
-          <pre><code class="text-cyan-300">// Ultra IoT Weather Station Card (Slot 3 @ $C0B0)
+        <!-- Domain 2: JavaScript Card Sandbox -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="domain-tag tag-domain2">Domain 2: Virtual Card Sandbox</span>
+            <span class="text-cyan-400 font-bold font-mono">JavaScript Card Script (Slot &amp; Card Studio &rarr; Slot 3 Sandbox)</span>
+          </div>
+          <pre><code class="text-cyan-300">// Cloud Weather Station Card (Slot 3 @ $C0B0)
 card.tempF = 74;
 card.humidity = 52;
-card.pressure = 1013.2; // hPa
-card.windSpeed = 12;    // mph
-card.rainGauge = 8;     // 0.08 in
+card.pressure = 1013;
+card.windSpeed = 12;
 
-setInterval(() => {
-  card.tempF = 72 + Math.floor(Math.random() * 6);
-  card.humidity = 48 + Math.floor(Math.random() * 10);
-  card.windSpeed = 8 + Math.floor(Math.random() * 8);
-}, 4000);
-
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.tempF & 0xFF;                  // $C0B0
-  if (offset === 0x01) return card.humidity & 0xFF;               // $C0B1
-  const pressInt = Math.floor(card.pressure * 10);
-  if (offset === 0x02) return pressInt & 0xFF;                   // $C0B2 (Low)
-  if (offset === 0x03) return (pressInt >> 8) & 0xFF;            // $C0B3 (High)
-  if (offset === 0x04) return card.windSpeed & 0xFF;              // $C0B4
-  if (offset === 0x05) return card.rainGauge & 0xFF;              // $C0B5
-  if (offset === 0x07) return 0x80;                              // $C0B7: Ready Strobe
-  return 0x00;
-};
-
-card.onWriteHandler = (offset, val) => {
-  if (offset === 0x06 && val === 0xFF) {
-    card.rainGauge = 0;
-    console.log("Rain gauge reset by Apple II command!");
+// Fetch live weather from cloud API every 60 seconds
+async function updateLiveWeather() {
+  try {
+    const res = await fetch("https://api.weather.gov/gridpoints/MTR/90,105/forecast");
+    const data = await res.json();
+    card.tempF = data.properties.periods[0].temperature;
+    card.humidity = data.properties.periods[0].relativeHumidity.value || 50;
+    card.windSpeed = parseInt(data.properties.periods[0].windSpeed) || 10;
+  } catch (err) {
+    console.warn("Weather fetch error, using sensor defaults", err);
   }
+}
+
+updateLiveWeather();
+setInterval(updateLiveWeather, 60000);
+
+// 65C02 Softswitch Read Handler ($C0B0–$C0BF)
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.tempF & 0xFF;        // $C0B0: Temp (deg F)
+  if (offset === 0x01) return card.humidity & 0xFF;     // $C0B1: Humidity (%)
+  if (offset === 0x02) return card.pressure & 0xFF;     // $C0B2: Pressure Low
+  if (offset === 0x03) return (card.pressure >> 8) & 0xFF; // $C0B3: Pressure High
+  if (offset === 0x04) return card.windSpeed & 0xFF;    // $C0B4: Wind Speed (mph)
+  if (offset === 0x07) return 0x80;                    // $C0B7: Data Ready Strobe
+  return 0x00;
 };</code></pre>
         </div>
 
-        <!-- Software in 4 Languages -->
-        <div class="space-y-4 pt-4 border-t border-[#212c3d]">
-          <h4 class="text-base font-bold text-white font-mono uppercase">
-            3. Software Implementations on the Apple II
-          </h4>
-
-          <!-- Language A: Applesoft BASIC -->
-          <div class="p-4 bg-[#080d14] rounded-xl border border-[#16202e] space-y-2">
-            <span class="text-amber-400 font-bold font-mono text-sm block">A. Applesoft BASIC Live Dashboard:</span>
-            <pre><code class="text-amber-300">10 HOME : VTAB 2 : HTAB 6 : PRINT " APPLE //c ULTRA WEATHER STATION"
-20 PRINT "========================================"
-30 VTAB 5 : HTAB 3 : PRINT "TEMPERATURE: "; PEEK(49328); " DEG F"
-40 VTAB 7 : HTAB 3 : PRINT "HUMIDITY:    "; PEEK(49329); " % RH"
-50 P_LOW = PEEK(49330) : P_HI = PEEK(49331)
-60 PRESS = (P_LOW + P_HI * 256) / 10
-70 VTAB 9 : HTAB 3 : PRINT "PRESSURE:    "; PRESS; " hPa"
-80 VTAB 11: HTAB 3 : PRINT "WIND SPEED:  "; PEEK(49332); " MPH"
-90 VTAB 13: HTAB 3 : PRINT "RAINFALL:    "; PEEK(49333) / 100; " INCHES"
-100 FOR D = 1 TO 800 : NEXT D : GOTO 30</code></pre>
+        <!-- Domain 1: Apple II Code in BASIC, C#, Java -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="domain-tag tag-domain1">Domain 1: Apple //c Ultra</span>
+            <span class="text-amber-400 font-bold font-mono">Reading Telemetry on the Apple II (BASIC, C#, and Java)</span>
           </div>
 
-          <!-- Language B: Modern C# .NET -->
-          <div class="p-4 bg-[#080d14] rounded-xl border border-[#16202e] space-y-2">
-            <span class="text-cyan-400 font-bold font-mono text-sm block">B. Modern C# .NET App (Paste in ☕ Java &amp; C# CLR Workbench Tab):</span>
-            <pre><code class="text-cyan-300">using System;
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            
+            <!-- BASIC -->
+            <div class="space-y-1">
+              <span class="text-amber-300 font-bold font-mono">A. Applesoft BASIC:</span>
+              <pre><code class="text-amber-300">10 HOME
+20 PRINT " CUPERTINO WEATHER"
+30 PRINT "------------------"
+40 PRINT "TEMP: "; PEEK(49328); " F"
+50 PRINT "HUM : "; PEEK(49329); " %"
+60 PRINT "WIND: "; PEEK(49332); " MPH"
+70 FOR D=1 TO 500:NEXT:GOTO 40</code></pre>
+            </div>
+
+            <!-- C# -->
+            <div class="space-y-1">
+              <span class="text-cyan-300 font-bold font-mono">B. Modern C# .NET (AOT Studio):</span>
+              <pre><code class="text-cyan-300">using System;
 using Apple2.Ultra;
 
-public class WeatherStationApp {
-    public static void Main() {
-        AppleConsole.ClearScreen();
-        AppleConsole.WriteLine(" C# AOT WEATHER STATION (SLOT 3)");
-        AppleConsole.WriteLine("--------------------------------");
-        
-        byte temp = AppleMemory.Peek(0xC0B0);
-        byte humid = AppleMemory.Peek(0xC0B1);
-        int pressure = (AppleMemory.Peek(0xC0B2) + (AppleMemory.Peek(0xC0B3) << 8)) / 10;
-        byte wind = AppleMemory.Peek(0xC0B4);
-        
-        AppleConsole.WriteLine("TEMPERATURE : " + temp + " F");
-        AppleConsole.WriteLine("HUMIDITY    : " + humid + " %");
-        AppleConsole.WriteLine("PRESSURE    : " + pressure + " hPa");
-        AppleConsole.WriteLine("WIND SPEED  : " + wind + " MPH");
-        
-        if (temp > 85) {
-            AppleAudio.Beep(frequency: 800, durationMs: 150);
-            AppleConsole.WriteLine("[!] HIGH TEMPERATURE ALERT");
-        }
-    }
+public class WeatherApp {
+  public static void Main() {
+    byte t = AppleMemory.Peek(0xC0B0);
+    byte h = AppleMemory.Peek(0xC0B1);
+    Console.WriteLine("TEMP: " + t + " F");
+    Console.WriteLine("HUM : " + h + " %");
+  }
 }</code></pre>
-          </div>
+            </div>
 
-          <!-- Language C: Modern Java 17 -->
-          <div class="p-4 bg-[#080d14] rounded-xl border border-[#16202e] space-y-2">
-            <span class="text-purple-400 font-bold font-mono text-sm block">C. Modern Java 17 Class (Paste in ☕ Java &amp; C# CLR Workbench Tab):</span>
-            <pre><code class="text-purple-300">package apple2.apps;
-import apple2.hardware.AppleSystem;
+            <!-- Java -->
+            <div class="space-y-1">
+              <span class="text-purple-300 font-bold font-mono">C. Modern Java 17 (AOT Studio):</span>
+              <pre><code class="text-purple-300">import apple2.hardware.AppleSystem;
 
-public class JavaWeatherMonitor {
-    public static void main(String[] args) {
-        AppleSystem.clearScreen();
-        AppleSystem.print("JAVA 17 AOT COMPILED WEATHER APP\n");
-        AppleSystem.print("================================\n");
-        
-        int temp = AppleSystem.peek(0xC0B0);
-        int humidity = AppleSystem.peek(0xC0B1);
-        int wind = AppleSystem.peek(0xC0B4);
-        
-        AppleSystem.print("TEMP: " + temp + " DEG F\n");
-        AppleSystem.print("HUMIDITY: " + humidity + " %\n");
-        AppleSystem.print("WIND: " + wind + " MPH\n");
-    }
+public class JavaWeather {
+  public static void main(String[] a) {
+    int t = AppleSystem.peek(0xC0B0);
+    AppleSystem.print("TEMP: " + t + " F\n");
+  }
 }</code></pre>
-          </div>
+            </div>
 
-          <!-- Language D: 65C02 Machine Code / Assembly -->
-          <div class="p-4 bg-[#080d14] rounded-xl border border-[#16202e] space-y-2">
-            <span class="text-emerald-400 font-bold font-mono text-sm block">D. 65C02 Assembly High-Speed Telemetry Sampler:</span>
-            <pre><code class="text-gray-300">; --- READ WEATHER SENSORS AT $C0B0 TO ZERO PAGE $80-$85 ---
-SAMPLE_SENSORS:
-    LDX #$00        ; Initialize register offset index
-READ_LOOP:
-    LDA $C0B0,X     ; Read Slot 3 sensor register ($C0B0 + X)
-    STA $80,X       ; Store into Zero Page telemetry buffer ($80 + X)
-    INX
-    CPX #$06        ; Sampled all 6 sensor channels?
-    BNE READ_LOOP
-    RTS             ; Return to caller (Total: 18 microseconds)</code></pre>
           </div>
-
         </div>
 
       </div>
     </section>
 
     <!-- ========================================================================= -->
-    <!-- SECTION 4: FULL 7-SLOT FACTORY EXPANSION CARDS CATALOG -->
+    <!-- SECTION 4: CASE STUDY 3 — LOCAL WEBSOCKET DAEMON & HOST PROCESS RUNNER -->
     <!-- ========================================================================= -->
-    <section id="all-cards-catalog" class="space-y-6">
+    <section class="space-y-6">
       <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
         <span class="step-pill bg-purple-500/20 text-purple-400 border border-purple-500/40">5</span>
         <div>
-          <h3 class="text-base font-bold text-purple-400 font-mono uppercase">Full 7-Slot Motherboard Factory Cards Catalog</h3>
-          <p class="text-gray-400 text-xs">Complete reference for every factory expansion card in the Apple //c Ultra motherboard rack</p>
+          <h3 class="text-base font-bold text-purple-400 font-mono uppercase">Case Study 3: Executing Local Host OS Processes &amp; Shell Commands</h3>
+          <p class="text-gray-400 text-xs">How the Apple II can trigger local Python/Node scripts on your PC via a local WebSocket daemon</p>
+        </div>
+      </div>
+
+      <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
+        <p class="text-gray-300 font-sans">
+          Want the Apple II to launch a local Python script, read a file from your PC's desktop, or control smart home lights? Run a tiny 10-line WebSocket daemon on your PC and connect the virtual card to <code class="text-purple-300">ws://localhost:8080</code>!
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Domain 3: Python Daemon -->
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="domain-tag tag-domain3">Domain 3: Outside World</span>
+              <span class="text-emerald-400 font-bold font-mono">Local Python Daemon (Run on Host PC)</span>
+            </div>
+            <pre><code class="text-emerald-300"># Run on your PC: python server.py
+import asyncio, websockets, subprocess
+
+async def handler(websocket):
+    async for msg in websocket:
+        print(f"Apple II Command: {msg}")
+        if msg == "LAUNCH_CALC":
+            subprocess.Popen(["calc.exe"])
+            await websocket.send("CALC_LAUNCHED")
+
+async def main():
+    async with websockets.serve(handler, "localhost", 8080):
+        await asyncio.Future()
+
+asyncio.run(main())</code></pre>
+          </div>
+
+          <!-- Domain 2: JavaScript Card -->
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="domain-tag tag-domain2">Domain 2: Virtual Card Sandbox</span>
+              <span class="text-cyan-400 font-bold font-mono">JavaScript WebSocket Card (Slot 3)</span>
+            </div>
+            <pre><code class="text-cyan-300">// Local Host Process Bridge Card
+card.ws = new WebSocket("ws://localhost:8080");
+
+card.onWriteHandler = (offset, val) => {
+  // If Apple II writes 1 to $C0B0, tell Python to launch calculator!
+  if (offset === 0x00 && val === 0x01) {
+    if (card.ws.readyState === WebSocket.OPEN) {
+      card.ws.send("LAUNCH_CALC");
+    }
+  }
+};</code></pre>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 5: FULL 7-SLOT FACTORY EXPANSION CARDS CATALOG -->
+    <!-- ========================================================================= -->
+    <section id="all-cards-catalog" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
+        <span class="step-pill bg-pink-500/20 text-pink-400 border border-pink-500/40">6</span>
+        <div>
+          <h3 class="text-base font-bold text-pink-400 font-mono uppercase">Full 7-Slot Factory Expansion Cards Catalog</h3>
+          <p class="text-gray-400 text-xs">Complete reference for every built-in factory peripheral card in the Apple //c Ultra</p>
         </div>
       </div>
 
@@ -729,7 +610,7 @@ READ_LOOP:
               <span>🖨️</span>
               <span>1. ImageWriter II Printer Card (Slot 1 @ $C090)</span>
             </div>
-            <span class="api-badge bg-amber-950 text-amber-300 border border-amber-800">Serial I/O: $C090</span>
+            <span class="domain-tag tag-domain2">Serial I/O: $C090</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -772,7 +653,7 @@ public class PrintReport {
               <span>🎹</span>
               <span>2. Passport Web MIDI Master Card (Slot 2 @ $C0A0)</span>
             </div>
-            <span class="api-badge bg-cyan-950 text-cyan-300 border border-cyan-800">6850 ACIA: $C0A0</span>
+            <span class="domain-tag tag-domain2">6850 ACIA: $C0A0</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -803,7 +684,7 @@ MIDI_SEND:
               <span>🧪</span>
               <span>3. Custom User Sandbox Card (Slot 3 @ $C0B0)</span>
             </div>
-            <span class="api-badge bg-emerald-950 text-emerald-300 border border-emerald-800">User I/O: $C0B0</span>
+            <span class="domain-tag tag-domain2">User I/O: $C0B0</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -826,7 +707,7 @@ MIDI_SEND:
               <span>⏰</span>
               <span>4. Thunderclock Plus RTC (Slot 4 @ $C0C0)</span>
             </div>
-            <span class="api-badge bg-purple-950 text-purple-300 border border-purple-800">ProDOS Driver: $C400</span>
+            <span class="domain-tag tag-domain2">ProDOS Driver: $C400</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -848,7 +729,7 @@ MIDI_SEND:
               <span>🔊</span>
               <span>5. Sweet Micro Mockingboard PSG Sound Card (Slot 4/5 @ $C0C0–$C0CF)</span>
             </div>
-            <span class="api-badge bg-pink-950 text-pink-300 border border-pink-800">Dual AY-3-8910</span>
+            <span class="domain-tag tag-domain2">Dual AY-3-8910</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -863,7 +744,7 @@ MIDI_SEND:
               <span>🌐</span>
               <span>6. Uthernet W5100 Ethernet Card (Slot 5 @ $C0D0)</span>
             </div>
-            <span class="api-badge bg-blue-950 text-blue-300 border border-blue-800">WIZnet TCP/IP</span>
+            <span class="domain-tag tag-domain2">WIZnet TCP/IP</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -892,7 +773,7 @@ public class WebClient {
               <span>💾</span>
               <span>7. Disk II 5.25" Floppy Controller (Slot 6 @ $C0E0)</span>
             </div>
-            <span class="api-badge bg-amber-950 text-amber-300 border border-amber-800">Disk II $C600</span>
+            <span class="domain-tag tag-domain2">Disk II $C600</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -907,7 +788,7 @@ public class WebClient {
               <span>⚡</span>
               <span>8. SmartPort 32MB Hard Disk Controller (Slot 7 @ $C0F0)</span>
             </div>
-            <span class="api-badge bg-emerald-950 text-emerald-300 border border-emerald-800">ProDOS $C700</span>
+            <span class="domain-tag tag-domain2">ProDOS $C700</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
@@ -922,7 +803,7 @@ public class WebClient {
 
   <!-- Footer -->
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
-    Apple //c Ultra Architecture • Custom Slot Peripheral Card Emulation, Full JavaScript Sandbox API &amp; Hardware Reference
+    Apple //c Ultra Architecture • The Three-Domain Hardware Architecture &amp; Custom Peripheral Reference
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
 
