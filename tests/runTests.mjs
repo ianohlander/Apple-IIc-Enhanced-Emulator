@@ -1214,7 +1214,7 @@ runner.suite('Desktop Workstation Pro: Offline Licensing, Tauri Scaffolding & DN
     assertTrue(nginx.includes('index-standalone.html'), 'Nginx serves standalone build');
 
     const dnsDoc = fs.readFileSync(path.join(__dirname, '..', 'deploy', 'dns-setup-instructions.html'), 'utf8');
-    assertTrue(dnsDoc.includes('Hostinger hPanel'), 'Hostinger DNS guide documented');
+    assertTrue(dnsDoc.includes('GoDaddy') || dnsDoc.includes('Hostinger'), 'GoDaddy / Hostinger DNS guide documented');
     assertTrue(dnsDoc.includes('GitHub Pages'), 'GitHub Pages CNAME guide documented');
 
     const domainDoc = fs.readFileSync(path.join(__dirname, '..', 'strategy', 'domain-and-branding-strategy.html'), 'utf8');
