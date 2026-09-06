@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+  <meta name="author" content="Ian Ohlander">
+  <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
+  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Course Syllabus (15-Week) — Apple //c Ultra</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    .table-tech { width: 100%; border-collapse: collapse; font-family: 'Space Mono', monospace; font-size: 0.75rem; }
+    .table-tech th { background: #161f2e; color: #34d399; padding: 0.6rem 0.8rem; text-align: left; border-bottom: 2px solid #2d3748; }
+    .table-tech td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #1a2230; color: #cbd5e1; }
+    .table-tech tr:hover { background: #111827; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow text-black font-bold text-lg">🎓</a>
+      <div>
+        <span class="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">Academic Courseware Suite</span>
+        <h1 class="text-base font-extrabold text-white">CS 340: Bare-Metal Computer Architecture &amp; Compiler Lowering</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Dashboard</a>
+      <a href="commercialization-roadmap.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-purple-400 rounded transition border border-[#30363d]">Monetization →</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12 text-sm">
+
+    <!-- Course Info Card -->
+    <div class="bg-[#101622] border border-[#212c3d] rounded-2xl p-6 md:p-8 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212c3d] pb-3">
+        <span class="text-xs font-mono font-bold text-emerald-400 uppercase">Undergraduate / Graduate CS Curriculum</span>
+        <span class="text-xs font-mono text-gray-400">3 Credit Hours • Prerequisite: CS 101 / Intro to Programming</span>
+      </div>
+      <h2 class="text-2xl font-black text-white">Course Overview &amp; Pedagogical Philosophy</h2>
+      <p class="text-gray-300 text-xs leading-relaxed">
+        <strong>CS 340</strong> provides an unvarnished, hands-on journey from high-level modern programming languages (C# and Java) directly to physical microprocessor registers, memory-mapped I/O multiplexers, audio synthesizers, and magnetic mass storage block drivers. 
+        Utilizing the zero-install <strong>Apple //c Ultra</strong> platform, students gain deep intuition for compilation, register allocation, and hardware execution without complex virtualization layers.
+      </p>
+    </div>
+
+    <!-- 15-Week Semester Schedule Table -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-bold text-emerald-400 font-mono uppercase">15-Week Semester Lecture &amp; Lab Schedule</h3>
+      <div class="overflow-x-auto">
+        <table class="table-tech">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Lecture Topic</th>
+              <th>Textbook Chapter</th>
+              <th>Guided Practicum Lab</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-amber-400 font-bold">Week 01</td>
+              <td>History of 8-Bit Architecture &amp; The 65C02 Silicon Core</td>
+              <td>Chapter 1</td>
+              <td>Lab 1.1: Register Inspector &amp; Single-Step Execution</td>
+            </tr>
+            <tr>
+              <td class="text-amber-400 font-bold">Week 02</td>
+              <td>ALU Math: Binary Two's Complement, BCD Decimal Mode &amp; Flags</td>
+              <td>Chapter 1</td>
+              <td>Lab 1.2: BCD Decimal Arithmetic &amp; Carry/Overflow Analysis</td>
+            </tr>
+            <tr>
+              <td class="text-amber-400 font-bold">Week 03</td>
+              <td>Memory Multiplexing: ALTZP, Language Card &amp; 128KB Bank Switching</td>
+              <td>Chapter 1</td>
+              <td>Lab 1.3: Shadow RAM Bank Switching &amp; Memory Isolation</td>
+            </tr>
+            <tr>
+              <td class="text-cyan-400 font-bold">Week 04</td>
+              <td>Video Rasterizers, DRAM Refresh &amp; Scanline Interleave Math</td>
+              <td>Chapter 2</td>
+              <td>Lab 2.1: Hi-Res Scanline Base Address Formula Derivation</td>
+            </tr>
+            <tr>
+              <td class="text-cyan-400 font-bold">Week 05</td>
+              <td>Double Hi-Res (560x192 16-Color) &amp; NTSC Color Artifacting</td>
+              <td>Chapter 2</td>
+              <td>Lab 2.2: 80STORE Auxiliary Video Blitting &amp; Color Masks</td>
+            </tr>
+            <tr>
+              <td class="text-purple-400 font-bold">Week 06</td>
+              <td>Sound Synthesis: 1-Bit Speaker Toggles to AY-3-8910 6-Channel PSG</td>
+              <td>Chapter 3</td>
+              <td>Lab 3.1: Polyphonic Major Chord Programming &amp; Envelope Tuning</td>
+            </tr>
+            <tr>
+              <td class="text-emerald-400 font-bold">Week 07</td>
+              <td>Six Program Entry Pipelines &amp; Raw Monitor Hex Injection</td>
+              <td>Chapter 4</td>
+              <td>Lab 4.1: $0300 Assembly String Out Routine Injection</td>
+            </tr>
+            <tr>
+              <td class="text-yellow-400 font-bold">Week 08</td>
+              <td><strong>MIDTERM EXAM &amp; COMPILER ARCHITECTURE REVIEW</strong></td>
+              <td>—</td>
+              <td>Midterm Project: Custom 65C02 Peephole Optimizer</td>
+            </tr>
+            <tr>
+              <td class="text-pink-400 font-bold">Week 09</td>
+              <td>Custom ROM Architecture, 27C256 EPROMs &amp; Reset Vectors</td>
+              <td>Chapter 5</td>
+              <td>Lab 5.1: Flashing Custom Boot Banners &amp; $FFFC Vectors</td>
+            </tr>
+            <tr>
+              <td class="text-amber-400 font-bold">Week 10</td>
+              <td>AOT Compiler Design: High-Level AST to 65C02 Lowering</td>
+              <td>Chapter 6</td>
+              <td>Lab 6.1: C# Variable Mapping to Zero Page ($06–$1F)</td>
+            </tr>
+            <tr>
+              <td class="text-amber-400 font-bold">Week 11</td>
+              <td>Case Studies: Breakout Physics, Sprite Blitters &amp; Raycasting</td>
+              <td>Chapter 6</td>
+              <td>Lab 6.2: C# Retro Breakout Paddle Collision Lowering</td>
+            </tr>
+            <tr>
+              <td class="text-blue-400 font-bold">Week 12</td>
+              <td>Motherboard 7-Slot Peripheral Expansion Bay &amp; I/O Decoding</td>
+              <td>Chapter 7</td>
+              <td>Lab 7.1: Hot-Plugging Expansion Cards &amp; Memory Maps</td>
+            </tr>
+            <tr>
+              <td class="text-emerald-400 font-bold">Week 13</td>
+              <td>Disk II Floppy Architecture: 6-and-2 GCR Nibblization &amp; Steppers</td>
+              <td>Chapter 8</td>
+              <td>Lab 8.1: Floppy Sector Inspection &amp; GCR Decoding</td>
+            </tr>
+            <tr>
+              <td class="text-emerald-400 font-bold">Week 14</td>
+              <td>SmartPort 32MB Hard Disk Block I/O &amp; ProDOS MLI ($C700)</td>
+              <td>Chapter 8</td>
+              <td>Lab 8.3: Direct MLI Assembly Driver Programming ($C700)</td>
+            </tr>
+            <tr>
+              <td class="text-yellow-400 font-bold">Week 15</td>
+              <td><strong>FINAL CAPSTONE PRESENTATIONS &amp; TOURNAMENT</strong></td>
+              <td>Chapter 9</td>
+              <td>Final Project: Full C#/Java Game with 32MB HD Persistence</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
+    Apple //c Ultra Academic Curriculum • CS 340 Course Syllabus
+    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>

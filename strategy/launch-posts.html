@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+  <meta name="author" content="Ian Ohlander">
+  <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
+  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Launch Scripts & Copy — Apple //c Ultra Strategy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    .post-box { background: #0f141d; border: 1px solid #222b3a; border-radius: 0.75rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <a href="index.html" class="w-8 h-8 rounded bg-gradient-to-br from-cyan-500 to-blue-700 flex items-center justify-center shadow text-black font-bold text-lg">🚀</a>
+      <div>
+        <span class="text-xs font-mono text-cyan-400 font-bold tracking-widest uppercase">Strategy Module: Community Launch</span>
+        <h1 class="text-base font-extrabold text-white">Battle-Tested Launch Scripts &amp; Announcement Copy</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">← Dashboard</a>
+      <a href="course-syllabus.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-emerald-400 rounded transition border border-[#30363d]">Syllabus →</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12 text-sm">
+
+    <!-- Hacker News Show HN Script -->
+    <div class="post-box p-6 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#222b3a] pb-3">
+        <div>
+          <span class="text-amber-400 font-bold block text-sm">1. Hacker News: Show HN Announcement</span>
+          <span class="text-gray-500 text-[11px]">Timing: Tuesday or Wednesday at 8:00 AM EST (Peak HN traffic)</span>
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('hn-post').innerText); alert('Copied to clipboard!');" class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded hover:bg-amber-500/30 transition">📋 Copy Post</button>
+      </div>
+
+      <div class="text-gray-400 space-y-1">
+        <div><strong>Title:</strong> Show HN: Apple //c Ultra – In-browser 65C02 lab compiling C# and Java to silicon</div>
+        <div><strong>URL:</strong> https://ianohlander.github.io/Apple-IIc-Enhanced-Emulator/</div>
+      </div>
+
+      <pre id="hn-post" class="bg-[#080c13] p-4 rounded border border-[#192230] text-gray-200 leading-relaxed overflow-x-auto whitespace-pre-wrap">Hi HN,
+
+I built Apple //c Ultra (https://ianohlander.github.io/Apple-IIc-Enhanced-Emulator/), an in-browser systems laboratory that lets you write modern C# .NET Core and Java 17 and compiles it Ahead-Of-Time (AOT) down to native 65C02 machine code running on a virtual Apple //c.
+
+Why build this?
+Modern computer architectures (x86-64, ARM64) are wonderful, but their complexity makes it almost impossible to "see" how high-level code lowers to physical memory and hardware registers. The 65C02 is simple and pure enough that every single CPU cycle, register, and softswitch is visible.
+
+What's in the box:
+1. 100% Zero-Dependency Standalone Browser Runtime: Runs completely in client-side JavaScript/HTML5 without any server backend or Webpack build step.
+2. AOT Compiler with Source Mapping: Compiles high-level C# classes and Java methods into 65C02 assembly with inline source comments mapping every statement to its resulting opcodes.
+3. 5 OOP Case Studies: Includes a complete Retro Breakout arcade game, an RPG Dungeon Crawler, a Sensor Logger, a Chiptune Music Tracker, and a 3D Raycaster.
+4. Complete Hardware Subsystems:
+   • 65C02 CPU with 1.02 MHz to 50.0 MHz Turbo clock scaling and BCD decimal mode.
+   • Double Hi-Res (560x192 16-color) with NTSC artifact color and CRT phosphor filters.
+   • Mockingboard sound synthesis (dual AY-3-8910 + 6522 VIA).
+   • 140KB Disk II Floppy (6-and-2 GCR) + SmartPort 32MB Virtual Hard Disk (/HD) + 1MB Slinky RAM Disk.
+   • 7-Slot Peripheral Expansion Bay with hot-pluggable cards.
+   • 6-Tab Under the Hood Hacker Workbench (Debugger, Hex Block Editor, ROM Builder, Type-In OCR Studio).
+5. Comprehensive Courseware: Includes an open 9-Chapter University Textbook with 25+ hands-on guided laboratory exercises.
+
+GitHub Repository: https://github.com/ianohlander/Apple-IIc-Enhanced-Emulator
+Storage Deep-Dive: https://ianohlander.github.io/Apple-IIc-Enhanced-Emulator/docs/storage-guide.html
+
+I'd love to hear your feedback on the compiler lowering and emulation architecture!</pre>
+    </div>
+
+    <!-- Reddit Posts (Tailored per Subreddit) -->
+    <div class="post-box p-6 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#222b3a] pb-3">
+        <div>
+          <span class="text-cyan-400 font-bold block text-sm">2. Reddit: r/programming &amp; r/csharp Tailored Post</span>
+          <span class="text-gray-500 text-[11px]">Subreddits: r/programming, r/csharp, r/dotnet, r/Compilers</span>
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('reddit-csharp').innerText); alert('Copied to clipboard!');" class="px-3 py-1 bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 rounded hover:bg-cyan-500/30 transition">📋 Copy Post</button>
+      </div>
+
+      <pre id="reddit-csharp" class="bg-[#080c13] p-4 rounded border border-[#192230] text-gray-200 leading-relaxed overflow-x-auto whitespace-pre-wrap">**Title:** I wrote a C# to 65C02 AOT Compiler &amp; Apple IIc Workstation in pure in-browser JavaScript
+
+Hey everyone,
+
+I've been working on a project called **Apple //c Ultra** (https://ianohlander.github.io/Apple-IIc-Enhanced-Emulator/) that explores compiling modern C# 10 and Java 17 down to bare-metal 65C02 assembly.
+
+You can write C# code like this:
+```csharp
+public class BreakoutGame {
+    public static void Main() {
+        AppleVideo.SetMode(VideoMode.DoubleHiRes);
+        Ball ball = new Ball(70, 96, 1, -1);
+        while (true) {
+            ball.Update();
+            if (ball.Y >= 180) AppleSound.Beep(440, 20);
+        }
+    }
+}
+```
+
+When you click "Compile &amp; Run", the AOT engine lowers the AST directly into 65C02 machine code, assigns Zero Page registers ($06-$1F), maps pixel plotting to the 80STORE auxiliary video bank ($C00D/$C05F), and runs it on a 50 MHz virtual 65C02 CPU in real time.
+
+Live interactive emulator: https://ianohlander.github.io/Apple-IIc-Enhanced-Emulator/
+Full open-source repo: https://github.com/ianohlander/Apple-IIc-Enhanced-Emulator
+
+Check it out and let me know what you think!</pre>
+    </div>
+
+    <!-- Product Hunt Launch Kit -->
+    <div class="post-box p-6 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#222b3a] pb-3">
+        <div>
+          <span class="text-emerald-400 font-bold block text-sm">3. Product Hunt Launch Kit</span>
+          <span class="text-gray-500 text-[11px]">Tagline, Maker Comment, and Highlights</span>
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('ph-kit').innerText); alert('Copied to clipboard!');" class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded hover:bg-emerald-500/30 transition">📋 Copy Kit</button>
+      </div>
+
+      <pre id="ph-kit" class="bg-[#080c13] p-4 rounded border border-[#192230] text-gray-200 leading-relaxed overflow-x-auto whitespace-pre-wrap">**Product Name:** Apple //c Ultra
+**Tagline:** Write modern C# &amp; Java on 1984 65C02 silicon in your browser
+**Short Description:** A zero-install bare-metal computer architecture and compiler laboratory. Compile C# and Java to native 65C02 machine code, debug hardware registers, synthesize Mockingboard chiptunes, and persist data to 32MB SmartPort hard disks.
+
+**Maker First Comment:**
+Hey Product Hunt! 👋
+
+I'm Ian Ohlander, creator of Apple //c Ultra.
+
+Modern systems engineering education has a big problem: contemporary CPUs are so complex that it's nearly impossible for developers to understand how their code actually executes on hardware.
+
+I built Apple //c Ultra to bring back the magic of bare-metal computing—without requiring any software installation:
+• 🚀 Code in C# 10 or Java 17 and watch it compile into 65C02 assembly in real time.
+• 🕹️ Play and inspect full case studies like Retro Breakout, Dungeon Crawlers, and 3D Raycasters.
+• 💾 Master storage mechanics from 140KB Floppy GCR to 32MB ProDOS Hard Disks.
+• 🎓 Learn via a complete 9-Chapter University Textbook and 25+ Guided Labs.
+
+It's completely free and open-source. I'd love to hear your feedback! </pre>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
+    Apple //c Ultra Strategic Expansion Suite • Confidential Launch Copy
+    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>
