@@ -53,7 +53,7 @@
     </div>
 
     <!-- Quick Links Grid to Sub-Documents -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 font-mono text-xs">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 font-mono text-xs">
       <a href="email-templates.html" class="p-4 bg-[#121722] hover:bg-[#182030] border border-[#232f42] rounded-xl transition space-y-2 block">
         <span class="text-amber-400 font-bold block text-sm">✉️ Email Outreach Templates</span>
         <p class="text-gray-400 text-[11px]">5 tailored, ready-to-send templates for CS Professors, YouTubers, Museums &amp; KansasFest.</p>
@@ -69,6 +69,10 @@
       <a href="commercialization-roadmap.html" class="p-4 bg-[#121722] hover:bg-[#182030] border border-[#232f42] rounded-xl transition space-y-2 block">
         <span class="text-purple-400 font-bold block text-sm">💼 Monetization &amp; 90-Day Plan</span>
         <p class="text-gray-400 text-[11px]">Tiered revenue models, licensing agreements, and 30/60/90-day execution milestones.</p>
+      </a>
+      <a href="legal-compliance-and-ip.html" class="p-4 bg-[#121722] hover:bg-[#182030] border border-[#232f42] rounded-xl transition space-y-2 block">
+        <span class="text-pink-400 font-bold block text-sm">⚖️ Legal &amp; IP Compliance</span>
+        <p class="text-gray-400 text-[11px]">Clean-room ROM verification, Apple trademark nominative fair use, and commercial safe harbors.</p>
       </a>
     </div>
 
@@ -162,6 +166,55 @@
             <li>Offer the <strong>University Courseware Pack</strong> ($499 departmental license) including lab test harnesses and lecture slides.</li>
             <li>Set up <strong>GitHub Sponsors</strong> and <strong>Patreon</strong> for retro enthusiasts to vote on new virtual expansion cards.</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 5: Legal Architecture, ROM Copyright & Commercialization Safeguards -->
+      <div class="section-card p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-[#232b38] pb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded bg-pink-500/20 text-pink-400 font-mono font-bold flex items-center justify-center border border-pink-500/40">5</span>
+            <h4 class="text-lg font-bold text-white">Pillar 5: Legal Architecture, ROM Copyright &amp; Commercialization Safeguards</h4>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-pink-950 text-pink-300 border border-pink-800">IP &amp; Compliance</span>
+        </div>
+
+        <div class="space-y-4 text-xs leading-relaxed text-gray-300">
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#1b2230] space-y-2">
+            <span class="text-amber-400 font-bold block text-sm">Q1: Aren't there concerns regarding Apple copyright of any Apple II ROMs we are using?</span>
+            <p class="text-gray-300 text-[11px]">
+              <strong>Direct Answer:</strong> Yes, original Apple ROM dumps (such as Microsoft/Apple Applesoft BASIC and the 1984 32KB masked system ROMs) remain the intellectual property of Apple Inc. Distributing or selling original Apple binary dumps without a license would infringe their copyright.
+            </p>
+            <p class="text-emerald-400 text-[11px] font-bold">
+              ✓ How Apple //c Ultra Solves This (100% Clean-Room Architecture):
+            </p>
+            <p class="text-gray-300 text-[11px]">
+              The built-in default firmware in this emulator (<code>generateDefaultApple2cRom()</code> in <code>src/emulator/roms/defaultRoms.ts</code>) is a <strong>100% clean-room synthesized BIOS</strong> written entirely from scratch in TypeScript. It provides standard reset vectors ($FFFC-$FFFD), clear screen routines ($FC58), character I/O ($FDED), and keyboard polling ($FD1B) without containing a single byte of Apple's proprietary 1984 mask ROM code. Furthermore, the Custom ROM Studio enables a "Bring Your Own ROM" (BYOR) workflow for users who dump ROMs from their own physical machines.
+            </p>
+          </div>
+
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#1b2230] space-y-2">
+            <span class="text-cyan-400 font-bold block text-sm">Q2: Can the application itself be legally commercialized and monetized?</span>
+            <p class="text-gray-300 text-[11px]">
+              <strong>Direct Answer:</strong> Yes. Under landmark US federal court rulings (<em>Sony Computer Entertainment v. Connectix Corp.</em>, 203 F.3d 596, and <em>Sony v. Bleem!</em>), writing software that emulates the behavior of hardware (like 6502/65C02 CPUs, ALU logic, video framebuffers, and sound chips) is completely legal.
+            </p>
+            <p class="text-cyan-400 text-[11px] font-bold">
+              ✓ What You Can Legally Monetize Freely:
+            </p>
+            <ul class="list-disc list-inside text-gray-300 space-y-1 text-[11px]">
+              <li><strong>Your Original Software &amp; Compilers:</strong> The C# 10 and Java 17 AOT compilers, 65C02 emulator, and debugger toolchain.</li>
+              <li><strong>Textbooks &amp; Courseware Packs:</strong> The 9-chapter Systems Engineering textbook, university lab manuals, and solution keys ($499/dept).</li>
+              <li><strong>Original Games:</strong> Retro Breakout, Dungeon Crawler, Raycaster, and new titles created with the SDK.</li>
+              <li><strong>Developer Extensions:</strong> VS Code marketplace extensions and profiling tools.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#1b2230] space-y-2">
+            <span class="text-purple-400 font-bold block text-sm">Q3: How do we handle Apple's Trademarks ("Apple", "Apple II", "Apple //c")?</span>
+            <p class="text-gray-300 text-[11px]">
+              "Apple" and "Apple II" are registered trademarks of Apple Inc. When selling commercial products (like courseware or VS Code extensions), avoid using "Apple" as the standalone brand. Instead, use <strong>Nominative Fair Use</strong> (e.g. <em>"Ultra 6502 Lab (Apple II Compatible)"</em>) and include the standard trademark disclaimer notice (see <a href="legal-compliance-and-ip.html" class="text-purple-400 underline">Legal &amp; IP Guide</a>).
+            </p>
+          </div>
         </div>
       </div>
     </div>
