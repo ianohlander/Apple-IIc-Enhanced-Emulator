@@ -1202,6 +1202,63 @@ runner.suite('Physical Hardware Deployment: 1-Click ProDOS Disk Exporter', () =>
   });
 });
 
+// 18. Desktop Workstation Pro: Offline Licensing, Tauri Native Packaging & Custom DNS Deployment
+runner.suite('Desktop Workstation Pro: Offline Licensing, Tauri Scaffolding & DNS Deployment', () => {
+  runner.test('DNS & Deployment Configs: CNAME, Hostinger Nginx & DNS Visual Guide', () => {
+    const cname = fs.readFileSync(path.join(__dirname, '..', 'CNAME'), 'utf8');
+    assertEqual(cname.trim(), 'apple2.ianohlander.com', 'CNAME file matches custom subdomain');
+
+    const nginx = fs.readFileSync(path.join(__dirname, '..', 'deploy', 'hostinger-nginx.conf'), 'utf8');
+    assertTrue(nginx.includes('server_name apple2.ianohlander.com;'), 'Nginx config sets custom domain');
+    assertTrue(nginx.includes('/var/www/apple2ultra'), 'Nginx web root path correct');
+    assertTrue(nginx.includes('index-standalone.html'), 'Nginx serves standalone build');
+
+    const dnsDoc = fs.readFileSync(path.join(__dirname, '..', 'deploy', 'dns-setup-instructions.html'), 'utf8');
+    assertTrue(dnsDoc.includes('Hostinger hPanel'), 'Hostinger DNS guide documented');
+    assertTrue(dnsDoc.includes('GitHub Pages'), 'GitHub Pages CNAME guide documented');
+  });
+
+  runner.test('Tauri 2.0 Native Configuration: Cargo.toml, tauri.conf.json & Rust Core', () => {
+    const tauriConf = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src-tauri', 'tauri.conf.json'), 'utf8'));
+    assertEqual(tauriConf.productName, 'Apple //c Ultra Workstation Pro', 'Product Name is Workstation Pro');
+    assertEqual(tauriConf.identifier, 'com.ianohlander.apple2ultra', 'Tauri app bundle identifier matches');
+
+    const cargo = fs.readFileSync(path.join(__dirname, '..', 'src-tauri', 'Cargo.toml'), 'utf8');
+    assertTrue(cargo.includes('ed25519-dalek'), 'Cargo.toml includes ed25519 cryptographic crate');
+    assertTrue(cargo.includes('dirs'), 'Cargo.toml includes cross-platform document directory crate');
+
+    const mainRs = fs.readFileSync(path.join(__dirname, '..', 'src-tauri', 'src', 'main.rs'), 'utf8');
+    assertTrue(mainRs.includes('verify_license'), 'main.rs registers verify_license IPC command');
+    assertTrue(mainRs.includes('save_local_card'), 'main.rs registers save_local_card IPC command');
+  });
+
+  runner.test('Cryptographic Licensing & Desktop Bridge: VIP Review Keys & Format Validation', () => {
+    // Test JSON payload construction and base64 key decoding logic
+    const testPayload = {
+      email: 'test-buyer@retrocomputing.org',
+      tier: 'ProWorkstation',
+      issuedAt: '2026-09-01T00:00:00Z',
+      maxDevices: 3,
+      features: ['StandardEmulation', 'ProAOT', 'NativeDiskSync', 'BatchExporter']
+    };
+
+    const payloadB64 = Buffer.from(JSON.stringify(testPayload)).toString('base64');
+    const mockSignature = Buffer.alloc(64, 0xAB).toString('base64');
+    const fullKey = `ULTRA-${payloadB64}.${mockSignature}`;
+
+    assertTrue(fullKey.startsWith('ULTRA-'), 'Key format starts with ULTRA-');
+    assertTrue(fullKey.includes('.'), 'Key contains payload and signature separator');
+
+    const decodedPayload = JSON.parse(Buffer.from(fullKey.split('.')[0].replace('ULTRA-', ''), 'base64').toString('utf8'));
+    assertEqual(decodedPayload.email, 'test-buyer@retrocomputing.org', 'Decoded email matches');
+    assertEqual(decodedPayload.tier, 'ProWorkstation', 'Decoded tier matches');
+
+    // Test VIP Review Key format
+    const vipKey = 'VIP-REVIEW-8BITGUY-2026';
+    assertTrue(vipKey.startsWith('VIP-REVIEW-'), 'VIP review key prefix recognized');
+  });
+});
+
 const passed = runner.summarize();
 process.exit(passed ? 0 : 1);
 

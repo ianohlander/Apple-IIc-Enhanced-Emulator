@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/dev/tooling/cli/schema.json",
+  "productName": "Apple //c Ultra Workstation Pro",
+  "version": "1.0.0",
+  "identifier": "com.ianohlander.apple2ultra",
+  "build": {
+    "frontendDist": "../",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Apple //c Ultra Workstation Pro (65C02 Silicon & AOT Studio)",
+        "width": 1280,
+        "height": 860,
+        "minWidth": 960,
+        "minHeight": 640,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true,
+        "theme": "Dark"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "copyright": "Copyright © 2026 Ian Ohlander. All rights reserved.",
+    "category": "DeveloperTool",
+    "shortDescription": "Apple //c Ultra 65C02 Hardware Emulator & AOT Compiler Workstation",
+    "longDescription": "High-performance cycle-exact 65C02 systems workstation, compiling modern C# .NET and Java 17 directly down to 65C02 machine code with 32MB SmartPort HD, Mockingboard chiptunes, and 7-slot peripheral bus."
+  }
+}
