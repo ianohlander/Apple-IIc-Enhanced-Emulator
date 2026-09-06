@@ -43,6 +43,9 @@
       <a href="../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">
         ⚡ Launch Emulator
       </a>
+      <a href="developer/custom-peripheral-cards.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-amber-400 font-bold rounded transition border border-[#30363d]">
+        🔌 Expansion Slots 1–7
+      </a>
       <a href="../manual.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
         Full Manual
       </a>
@@ -58,10 +61,16 @@
       </p>
       <div class="flex flex-wrap items-center gap-3 pt-2">
         <a href="comprehensive-ultra-tutorial.html" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-bold font-mono text-xs rounded-lg shadow-lg transition">
-          📖 Open Master Architecture & Systems Tutorial (9 Chapters & 25+ Labs) →
+          📖 Open Master Architecture & Systems Tutorial (10 Chapters & 30+ Labs) →
         </a>
-        <a href="developer/index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-[#21262d] hover:bg-[#30363d] text-amber-400 font-bold font-mono text-xs rounded-lg border border-[#30363d] transition">
-          🚀 Developer Engineering Hub (11 Modules) →
+        <a href="developer/custom-peripheral-cards.html" class="inline-flex items-center gap-2 px-4 py-2 bg-[#1c2430] hover:bg-[#253040] text-amber-400 font-bold font-mono text-xs rounded-lg border border-amber-500/50 shadow-md transition">
+          🔌 Expansion Cards &amp; Peripheral Slots Manual (Slots 1–7) →
+        </a>
+        <a href="developer/physical-hardware-export.html" class="inline-flex items-center gap-2 px-4 py-2 bg-[#16222f] hover:bg-[#203040] text-cyan-400 font-bold font-mono text-xs rounded-lg border border-cyan-500/50 shadow-md transition">
+          ⚡ 1-Click Physical Hardware Exporter (Floppy Emu / CFFA) →
+        </a>
+        <a href="developer/index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-[#21262d] hover:bg-[#30363d] text-gray-300 font-bold font-mono text-xs rounded-lg border border-[#30363d] transition">
+          🚀 Developer Engineering Hub (12 Modules) →
         </a>
       </div>
     </div>
@@ -73,39 +82,195 @@
         <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">Portal Map</span>
       </div>
       <p class="text-gray-400 text-xs">
-        Interactive map connecting emulator hardware silicon, developer guides, firmware toolchains, and modern language runtimes:
+        Interactive map connecting emulator hardware silicon, 7-slot expansion bus, developer guides, firmware toolchains, and modern language runtimes:
       </p>
       <div class="overflow-x-auto py-2">
-        <svg viewBox="0 0 880 160" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
+        <svg viewBox="0 0 920 180" class="w-full max-w-5xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
           <!-- Hub -->
-          <rect x="350" y="45" width="180" height="70" rx="8" fill="#1e293b" stroke="#fbbf24" stroke-width="2" />
-          <text x="440" y="75" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">APPLE //c ULTRA</text>
-          <text x="440" y="95" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">50 MHz Silicon Workstation</text>
+          <rect x="370" y="55" width="180" height="70" rx="8" fill="#1e293b" stroke="#fbbf24" stroke-width="2" />
+          <text x="460" y="85" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">APPLE //c ULTRA</text>
+          <text x="460" y="105" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">50 MHz Silicon Workstation</text>
 
-          <!-- Satellite 1: Textbook -->
-          <rect x="25" y="20" width="190" height="55" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.5" />
-          <text x="120" y="42" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">Master Textbook</text>
-          <text x="120" y="58" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">7 Chapters &amp; 20+ Guided Labs</text>
-          <line x1="215" y1="47" x2="350" y2="70" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3" />
+          <!-- Satellite 1: Expansion Cards (Slots 1-7) -->
+          <rect x="20" y="15" width="200" height="50" rx="6" fill="#141a21" stroke="#f59e0b" stroke-width="1.8" />
+          <text x="120" y="34" fill="#fbbf24" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">🔌 Slots 1–7 Expansion Bus</text>
+          <text x="120" y="48" fill="#fde68a" font-size="7" text-anchor="middle" font-family="monospace">Printer, MIDI, RTC, Mockingboard, Net</text>
+          <line x1="220" y1="40" x2="370" y2="75" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="3,3" />
 
-          <!-- Satellite 2: C# Guide -->
-          <rect x="25" y="90" width="190" height="55" rx="6" fill="#141a21" stroke="#34d399" stroke-width="1.5" />
-          <text x="120" y="112" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">C# Game Engineering</text>
-          <text x="120" y="128" fill="#a7f3d0" font-size="7" text-anchor="middle" font-family="monospace">RetroBreakout Arcade Case Study</text>
-          <line x1="215" y1="117" x2="350" y2="90" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3,3" />
+          <!-- Satellite 2: Physical Hardware Exporter -->
+          <rect x="20" y="75" width="200" height="50" rx="6" fill="#141a21" stroke="#06b6d4" stroke-width="1.5" />
+          <text x="120" y="94" fill="#22d3ee" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">⚡ Physical Hardware Exporter</text>
+          <text x="120" y="108" fill="#a5f3fc" font-size="7" text-anchor="middle" font-family="monospace">1-Click ProDOS .DSK / .PO / .2MG</text>
+          <line x1="220" y1="100" x2="370" y2="95" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="3,3" />
 
-          <!-- Satellite 3: ROM Guide -->
-          <rect x="665" y="20" width="190" height="55" rx="6" fill="#141a21" stroke="#e879f9" stroke-width="1.5" />
-          <text x="760" y="42" fill="#e879f9" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">Custom ROM Creation</text>
-          <text x="760" y="58" fill="#f5d0fe" font-size="7" text-anchor="middle" font-family="monospace">Firmware Patching &amp; Flashing</text>
-          <line x1="665" y1="47" x2="530" y2="70" stroke="#e879f9" stroke-width="1.5" stroke-dasharray="3,3" />
+          <!-- Satellite 3: Master Textbook -->
+          <rect x="20" y="130" width="200" height="40" rx="6" fill="#141a21" stroke="#38bdf8" stroke-width="1.2" />
+          <text x="120" y="147" fill="#38bdf8" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="monospace">📖 Master Systems Textbook</text>
+          <text x="120" y="160" fill="#bae6fd" font-size="6.8" text-anchor="middle" font-family="monospace">10 Chapters &amp; 30+ Guided Labs</text>
+          <line x1="220" y1="150" x2="370" y2="115" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
 
-          <!-- Satellite 4: Hardware Ref -->
-          <rect x="665" y="90" width="190" height="55" rx="6" fill="#141a21" stroke="#00e5ff" stroke-width="1.5" />
-          <text x="760" y="112" fill="#00e5ff" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">Hardware Reference</text>
-          <text x="760" y="128" fill="#bae6fd" font-size="7" text-anchor="middle" font-family="monospace">50-Pin Bus &amp; Softswitch Matrix</text>
-          <line x1="665" y1="117" x2="530" y2="90" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="3,3" />
+          <!-- Satellite 4: Custom ROM Guide -->
+          <rect x="700" y="15" width="200" height="50" rx="6" fill="#141a21" stroke="#e879f9" stroke-width="1.5" />
+          <text x="800" y="34" fill="#e879f9" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">⚡ Custom ROM Creation</text>
+          <text x="800" y="48" fill="#f5d0fe" font-size="7" text-anchor="middle" font-family="monospace">Firmware Patching &amp; Flashing</text>
+          <line x1="700" y1="40" x2="550" y2="75" stroke="#e879f9" stroke-width="1.5" stroke-dasharray="3,3" />
+
+          <!-- Satellite 5: Hardware & Softswitch Reference -->
+          <rect x="700" y="75" width="200" height="50" rx="6" fill="#141a21" stroke="#10b981" stroke-width="1.5" />
+          <text x="800" y="94" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">⚙️ Hardware Reference</text>
+          <text x="800" y="108" fill="#a7f3d0" font-size="7" text-anchor="middle" font-family="monospace">50-Pin Bus &amp; Softswitch Matrix</text>
+          <line x1="700" y1="100" x2="550" y2="95" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,3" />
+
+          <!-- Satellite 6: C# & Java AOT Runtime -->
+          <rect x="700" y="130" width="200" height="40" rx="6" fill="#141a21" stroke="#f43f5e" stroke-width="1.2" />
+          <text x="800" y="147" fill="#fb7185" font-size="8.5" font-weight="bold" text-anchor="middle" font-family="monospace">☕ C# / Java 65C02 AOT</text>
+          <text x="800" y="160" fill="#fecdd3" font-size="6.8" text-anchor="middle" font-family="monospace">Native Object-Oriented Compilers</text>
+          <line x1="700" y1="150" x2="550" y2="115" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3,3" />
         </svg>
+      </div>
+    </div>
+
+    <!-- FEATURED EXPANSION SLOTS SHOWCASE BANNER -->
+    <div class="bg-gradient-to-br from-[#161f2c] via-[#101622] to-[#1a1528] border-2 border-amber-500/60 rounded-2xl p-6 md:p-8 shadow-2xl space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#30363d] pb-4">
+        <div class="flex items-center space-x-3">
+          <span class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-black font-bold text-xl">🔌</span>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/50 text-amber-300 font-mono font-bold uppercase">Motherboard Expansion Bus</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-500/50 text-cyan-300 font-mono font-bold uppercase">Slots 1 to 7 Active</span>
+            </div>
+            <h3 class="text-xl md:text-2xl font-black text-white mt-1">Expansion Cards &amp; Peripheral Slot Subsystem</h3>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+          <a href="developer/custom-peripheral-cards.html" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg transition shadow">
+            📖 Open Exhaustive Card Guide →
+          </a>
+          <a href="../index-standalone.html#workbench" class="px-3 py-2 bg-[#21262d] hover:bg-[#30363d] text-amber-400 rounded-lg border border-[#30363d] transition">
+            🎛️ Launch Slot &amp; Card Studio
+          </a>
+        </div>
+      </div>
+
+      <p class="text-gray-300 text-xs md:text-sm leading-relaxed">
+        The Apple //c Ultra features a modular, hot-swappable <strong>7-Slot Motherboard Architecture</strong>. Each slot decodes 16 dedicated I/O softswitch registers (<code class="text-cyan-300">$C080 + $n0</code>), a 256-byte Slot ROM (<code class="text-purple-300">$Cn00</code>), and optional banked 2KB expansion ROM (<code class="text-emerald-300">$C800–$CFFF</code>). Here is how each plugged-in card operates:
+      </p>
+
+      <!-- 7 Slots Visual Interactive Rack -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
+        
+        <!-- Slot 1 -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-amber-400">
+            <span class="font-bold">Slot 1: Printer</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-amber-950/60 rounded border border-amber-800">$C090</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>ImageWriter II:</strong> Captures all <code>PR#1</code> print output to a virtual tractor-feed paper console with 1-click text/PDF download.
+          </p>
+          <div class="text-[10px] text-emerald-400 bg-black/40 p-1.5 rounded">BASIC: <code>PR#1 : PRINT "..." : PR#0</code></div>
+        </div>
+
+        <!-- Slot 2 -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-cyan-400">
+            <span class="font-bold">Slot 2: Web MIDI</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-cyan-950/60 rounded border border-cyan-800">$C0A0</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>MIDI Master:</strong> Transmits 31.25 kBaud MIDI note-on/off messages directly to connected USB synthesizers &amp; DAWs via Web MIDI API.
+          </p>
+          <div class="text-[10px] text-cyan-300 bg-black/40 p-1.5 rounded">BASIC / ASM: <code>IN#2 / PR#2 / $C0A1</code></div>
+        </div>
+
+        <!-- Slot 3 -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-emerald-400">
+            <span class="font-bold">Slot 3: JS Sandbox</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-emerald-950/60 rounded border border-emerald-800">$C0B0</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>Scriptable Card:</strong> Write custom JavaScript handlers for <code>ioRead()</code>, <code>ioWrite()</code>, and <code>romRead()</code> to build your own virtual hardware!
+          </p>
+          <div class="text-[10px] text-emerald-300 bg-black/40 p-1.5 rounded">I/O: <code>PEEK(49328) / POKE</code></div>
+        </div>
+
+        <!-- Slot 4 -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-purple-400">
+            <span class="font-bold">Slot 4: Thunderclock</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-purple-950/60 rounded border border-purple-800">$C0C0</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>ProDOS RTC:</strong> Supplies real-world host PC date &amp; time to ProDOS file timestamps and clock routines at <code>$C400</code>.
+          </p>
+          <div class="text-[10px] text-purple-300 bg-black/40 p-1.5 rounded">Driver: <code>$C400 ProDOS Clock</code></div>
+        </div>
+
+        <!-- Slot 5 -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-pink-400">
+            <span class="font-bold">Slot 5: Mockingboard</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-pink-950/60 rounded border border-pink-800">$C0D0</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>Dual AY-3-8910:</strong> 6-channel programmable audio synthesis &amp; 6522 VIA timers for Ultima, Skyfox, and C# chiptunes.
+          </p>
+          <div class="text-[10px] text-pink-300 bg-black/40 p-1.5 rounded">Chiptunes: <code>6 Channels + Noise</code></div>
+        </div>
+
+        <!-- Slot 5 Alt: Uthernet -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-blue-400">
+            <span class="font-bold">Slot 5: Uthernet</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-blue-950/60 rounded border border-blue-800">$C0D0</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>W5100 Ethernet:</strong> Hardware TCP/IP stack for BBS Telnet, Contiki OS, and retro networked multiplayer gaming.
+          </p>
+          <div class="text-[10px] text-blue-300 bg-black/40 p-1.5 rounded">Network: <code>IP / TCP / Telnet</code></div>
+        </div>
+
+        <!-- Slot 6 -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-amber-300">
+            <span class="font-bold">Slot 6: Disk II</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-amber-950/60 rounded border border-amber-800">$C0E0</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>Floppy Drive:</strong> 140KB 5.25" floppy controller supporting 6-and-2 GCR encoding &amp; 4-phase stepper motor logic.
+          </p>
+          <div class="text-[10px] text-amber-300 bg-black/40 p-1.5 rounded">Boot: <code>PR#6 / Boot Disk</code></div>
+        </div>
+
+        <!-- Slot 7 -->
+        <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
+          <div class="flex justify-between items-center text-emerald-300">
+            <span class="font-bold">Slot 7: SmartPort HD</span>
+            <span class="text-[10px] px-1.5 py-0.5 bg-emerald-950/60 rounded border border-emerald-800">$C0F0</span>
+          </div>
+          <p class="text-[11px] text-gray-300 font-sans">
+            <strong>32MB Hard Disk:</strong> 65,536 ProDOS blocks mapped to <code>/HD</code> with 1-click physical export to Floppy Emu &amp; CFFA3000.
+          </p>
+          <div class="text-[10px] text-emerald-300 bg-black/40 p-1.5 rounded">ProDOS: <code>PR#7 / 32MB /HD</code></div>
+        </div>
+
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#212d3d]">
+        <div class="text-xs text-gray-400">
+          💡 Need to program a card or create your own custom peripheral?
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="developer/custom-peripheral-cards.html" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-bold font-mono text-xs rounded-lg transition shadow">
+            🔌 Open Exhaustive Expansion Cards &amp; I/O Guide →
+          </a>
+          <a href="developer/physical-hardware-export.html" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-black font-bold font-mono text-xs rounded-lg transition shadow">
+            ⚡ Physical Hardware Exporter Guide →
+          </a>
+        </div>
       </div>
     </div>
 
@@ -117,7 +282,7 @@
         <div>
           <div class="flex justify-between items-start mb-3">
             <span class="text-xs px-2.5 py-1 rounded bg-amber-500/20 border border-amber-500/50 text-amber-400 font-mono font-bold">
-              ★ DEVELOPER SUITE — 11 ENGINEERING MODULES
+              ★ DEVELOPER SUITE — 12 ENGINEERING MODULES
             </span>
             <span class="text-amber-400 text-lg">⚙️</span>
           </div>
@@ -129,7 +294,7 @@
           </p>
         </div>
         <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-1">
-          Open Developer Hub (11 Modules) →
+          Open Developer Hub (12 Modules) →
         </span>
       </a>
 
@@ -156,6 +321,28 @@
 
       
       
+      
+      <!-- Card: Expansion Cards & Peripheral Slot Manual (Slots 1-7) -->
+      <a href="developer/custom-peripheral-cards.html" class="group p-6 bg-[#161b22] border border-[#30363d] rounded-xl hover:border-amber-500/50 transition shadow-lg flex flex-col justify-between">
+        <div>
+          <div class="flex justify-between items-start mb-3">
+            <span class="text-xs px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono font-bold">
+              EXPANSION SLOTS 1–7
+            </span>
+            <span class="text-amber-400 text-lg">🔌</span>
+          </div>
+          <h3 class="text-lg font-bold text-white group-hover:text-amber-400 transition mb-2">
+            Expansion Cards &amp; Peripheral Slot Manual (Slots 1–7)
+          </h3>
+          <p class="text-xs text-gray-400 leading-relaxed mb-4">
+            Exhaustive guide to all 7 motherboard expansion slots: ImageWriter II Printer (PR#1), Web MIDI Master Card (IN#2/PR#2), Thunderclock RTC, Mockingboard 6-Channel PSG, Uthernet TCP/IP Ethernet, and custom JavaScript hardware card scripting.
+          </p>
+        </div>
+        <span class="text-xs font-mono text-amber-400 font-bold flex items-center gap-1">
+          Open Expansion Cards Guide →
+        </span>
+      </a>
+
       <!-- Card: Physical Hardware Exporter Guide -->
       <a href="developer/physical-hardware-export.html" class="group p-6 bg-[#161b22] border border-[#30363d] rounded-xl hover:border-cyan-500/50 transition shadow-lg flex flex-col justify-between">
         <div>

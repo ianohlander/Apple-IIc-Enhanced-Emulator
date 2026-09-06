@@ -152,7 +152,11 @@
           <span class="text-gray-500">&rarr;</span>
         </a>
         <a href="#ch9" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-[#21293a] rounded-lg transition flex items-center justify-between">
-          <span class="text-yellow-400 font-bold">9. 6-Tab Workbench Mastery</span>
+          <span class="text-yellow-400 font-bold">9. Workbench Mastery</span>
+          <span class="text-gray-500">&rarr;</span>
+        </a>
+        <a href="#ch10" class="p-3 bg-[#0a0e17] hover:bg-[#121927] border border-amber-500/50 rounded-lg transition flex items-center justify-between col-span-1 sm:col-span-2 md:col-span-3">
+          <span class="text-amber-400 font-bold">10. Expansion Slots &amp; Custom Peripheral Card Engineering (Slots 1–7) 🔌</span>
           <span class="text-gray-500">&rarr;</span>
         </a>
       </div>
@@ -1626,6 +1630,53 @@ STREAM_LOOP:
       </div>
     </section>
 
+    
+    <!-- CHAPTER 10: MOTHERBOARD EXPANSION SLOTS & CUSTOM HARDWARE CARD ENGINEERING -->
+    <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-6 font-mono text-xs" id="ch10">
+      <div class="flex flex-wrap items-center justify-between border-b border-[#30363d] pb-3 gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 text-lg">🔌</span>
+          <h3 class="text-lg font-bold text-white uppercase tracking-wider font-mono">
+            Chapter 10: Motherboard Expansion Slots &amp; Custom Peripheral Card Engineering (Slots 1–7)
+          </h3>
+        </div>
+        <a href="developer/custom-peripheral-cards.html" class="px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded text-[10px] font-bold">
+          Full Peripheral Card Manual ↗
+        </a>
+      </div>
+
+      <p class="text-gray-300 text-xs font-sans leading-relaxed">
+        The Apple II's enduring genius was Steve Wozniak's open 50-pin expansion bus. In this chapter, we explore the memory decoding for Slots 1 through 7, how each peripheral card connects to modern browser Web APIs, and how to write your own custom simulated hardware cards in JavaScript.
+      </p>
+
+      <!-- LAB 10.1 -->
+      <div class="p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
+        <span class="text-amber-400 font-bold block text-sm">LAB EXERCISE 10.1: Tractor-Feed Virtual Printing via PR#1</span>
+        <p class="text-gray-300 text-[11px] font-sans">
+          In immediate mode, enter the following Applesoft BASIC program to format and print a simulated sales report to Slot 1:
+        </p>
+        <pre class="bg-[#05070a] p-3 rounded text-emerald-300 text-[11px]">10 PR#1
+20 PRINT "========================================"
+30 PRINT "   APPLE //c ULTRA LAB 10.1 PRINTOUT    "
+40 PRINT "========================================"
+50 FOR I = 1 TO 5: PRINT "TEST RECORD #"; I: NEXT I
+60 PR#0</pre>
+        <p class="text-gray-400 text-[10px]">
+          Open the <strong>🎛️ Slot &amp; Card Studio</strong> tab in the workbench to inspect the captured paper output and download it as a <code>.txt</code> file!
+        </p>
+      </div>
+
+      <!-- LAB 10.2 -->
+      <div class="p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
+        <span class="text-cyan-400 font-bold block text-sm">LAB EXERCISE 10.2: Real-Time Host Clock Polling via $C400</span>
+        <p class="text-gray-300 text-[11px] font-sans">
+          Read the live host computer clock registers directly from memory-mapped I/O:
+        </p>
+        <pre class="bg-[#05070a] p-3 rounded text-cyan-300 text-[11px]">10 H = PEEK(49346): M = PEEK(49345): S = PEEK(49344)
+20 PRINT "HOST TIME: "; H; ":"; M; ":"; S</pre>
+      </div>
+    </section>
+
     <!-- CHAPTER 9: Under the Hood Workbench & System Tools Mastery -->
     <section id="ch9" class="space-y-6">
       <div class="flex items-center gap-3">
@@ -1713,6 +1764,145 @@ STREAM_LOOP:
             </ol>
           </div>
         </div>
+      </div>
+    </section>
+
+
+    <!-- CHAPTER 10: Motherboard Expansion Slots & Custom Peripheral Card Engineering -->
+    <section id="ch10" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold text-lg flex items-center justify-center border border-amber-500/40">10</span>
+        <div>
+          <h3 class="text-2xl font-black text-white tracking-tight">Chapter 10: Motherboard Expansion Slots &amp; Custom Peripheral Card Engineering</h3>
+          <span class="text-xs font-mono text-gray-400">Decoupled IPeripheralCard contract, $C080+$n0 softswitch decoding, $Cn00 ROMs, and hot-swappable hardware slots 1–7</span>
+        </div>
+      </div>
+
+      <div class="bg-[#121722] border border-[#21293a] rounded-2xl p-6 md:p-8 space-y-6">
+        
+        <p class="text-gray-300 leading-relaxed text-xs md:text-sm">
+          While the vintage 1984 Apple //c had integrated serial, floppy, and mouse ports, the <strong>Apple //c Ultra</strong> virtualizes a full 50-pin 7-slot motherboard expansion architecture. Each slot decodes 16 dedicated I/O softswitch registers (<code class="text-cyan-300">$C080 + $n0</code>), a 256-byte Slot ROM (<code class="text-purple-300">$Cn00–$CnFF</code>), and optional banked 2KB expansion ROM (<code class="text-emerald-300">$C800–$CFFF</code>).
+        </p>
+
+        <!-- Slot Topology Table -->
+        <div class="overflow-x-auto font-mono text-xs">
+          <table class="w-full text-left border-collapse bg-[#0a0e17] rounded-xl border border-[#21293a]">
+            <thead>
+              <tr class="border-b border-[#21293a] bg-[#161f2c] text-amber-400">
+                <th class="p-3">Slot #</th>
+                <th class="p-3">Peripheral Card</th>
+                <th class="p-3">I/O Registers</th>
+                <th class="p-3">Slot ROM</th>
+                <th class="p-3">Host Web API Connection</th>
+                <th class="p-3">BASIC Command</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#21293a] text-gray-300 text-[11px]">
+              <tr>
+                <td class="p-3 font-bold text-amber-400">Slot 1</td>
+                <td class="p-3 text-white">ImageWriter II Printer</td>
+                <td class="p-3 text-cyan-300">$C090–$C09F</td>
+                <td class="p-3 text-purple-300">$C100–$C1FF</td>
+                <td class="p-3 text-emerald-400">Virtual Tractor Paper Console (PDF/Text)</td>
+                <td class="p-3 text-amber-300"><code>PR#1</code></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-amber-400">Slot 2</td>
+                <td class="p-3 text-white">Web MIDI Master Card</td>
+                <td class="p-3 text-cyan-300">$C0A0–$C0AF</td>
+                <td class="p-3 text-purple-300">$C200–$C2FF</td>
+                <td class="p-3 text-emerald-400">Web MIDI API &amp; USB Synthesizers</td>
+                <td class="p-3 text-amber-300"><code>IN#2 / PR#2</code></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-amber-400">Slot 3</td>
+                <td class="p-3 text-white">Custom Scriptable Sandbox</td>
+                <td class="p-3 text-cyan-300">$C0B0–$C0BF</td>
+                <td class="p-3 text-purple-300">$C300–$C3FF</td>
+                <td class="p-3 text-emerald-400">User JavaScript / REST APIs</td>
+                <td class="p-3 text-amber-300"><code>PEEK($C0B0)</code></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-amber-400">Slot 4</td>
+                <td class="p-3 text-white">Thunderclock Plus RTC</td>
+                <td class="p-3 text-cyan-300">$C0C0–$C0C7</td>
+                <td class="p-3 text-purple-300">$C400–$C4FF</td>
+                <td class="p-3 text-emerald-400">Host OS Date &amp; Time (ProDOS Driver)</td>
+                <td class="p-3 text-amber-300">ProDOS Time Driver</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-amber-400">Slot 5</td>
+                <td class="p-3 text-white">Mockingboard PSG / Uthernet</td>
+                <td class="p-3 text-cyan-300">$C0D0–$C0DF</td>
+                <td class="p-3 text-purple-300">$C500–$C5FF</td>
+                <td class="p-3 text-emerald-400">Web Audio API / WebSocket TCP Bridge</td>
+                <td class="p-3 text-amber-300">Assembly / Contiki</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-amber-400">Slot 6</td>
+                <td class="p-3 text-white">Disk II Floppy Drive</td>
+                <td class="p-3 text-cyan-300">$C0E0–$C0EF</td>
+                <td class="p-3 text-purple-300">$C600–$C6FF</td>
+                <td class="p-3 text-emerald-400">IndexedDB Floppy Storage (.DSK)</td>
+                <td class="p-3 text-amber-300"><code>PR#6</code></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-amber-400">Slot 7</td>
+                <td class="p-3 text-white">SmartPort 32MB Hard Disk</td>
+                <td class="p-3 text-cyan-300">$C0F0–$C0FF</td>
+                <td class="p-3 text-purple-300">$C700–$C7FF</td>
+                <td class="p-3 text-emerald-400">32MB ProDOS Volume (/HD) &amp; Exporter</td>
+                <td class="p-3 text-amber-300"><code>PR#7</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Guided Labs 10.1 & 10.2 -->
+        <div class="space-y-4 pt-4 border-t border-[#252f42]">
+          <h4 class="text-lg font-bold text-amber-400">10.1 Guided Laboratory Practicum: Expansion Cards &amp; Scripting</h4>
+
+          <!-- Lab 10.1 -->
+          <div class="task-card space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 10.1</span>
+              <span class="font-bold text-white text-xs">Virtual Continuous Tractor-Feed Dot Matrix Printing (PR#1)</span>
+            </div>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
+              <li>Open the emulator and type <code>PR#1</code> to route screen character vectors through Slot 1.</li>
+              <li>Type a BASIC program: <code>10 PRINT "ULTRA PRINTER TEST" : 20 FOR I=1 TO 5 : PRINT "LINE #";I : NEXT : 30 PR#0</code> and run it.</li>
+              <li>Switch to the <strong>🎛️ Slot &amp; Card Studio</strong> workbench tab: observe the rendered paper output in the live tractor-feed paper monitor!</li>
+              <li>Click <strong>📄 Download Text</strong> or <strong>🖨️ Download PDF</strong> to save your printed vintage report!</li>
+            </ol>
+          </div>
+
+          <!-- Lab 10.2 -->
+          <div class="task-card space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 10.2</span>
+              <span class="font-bold text-white text-xs">Scripting a Custom JavaScript Hardware Peripheral Card in Slot 3</span>
+            </div>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
+              <li>Open the <strong>🎛️ Slot &amp; Card Studio</strong> tab and select <strong>Slot 3: Custom Sandbox Card</strong>.</li>
+              <li>In the JavaScript editor, define a hardware temperature register:
+                <pre class="p-2 bg-black/60 rounded text-emerald-300 text-[11px] mt-1">card.ioRead = (reg) => {
+  if (reg === 0) return Math.floor(20 + Math.random() * 5); // Return simulated Celsius temp
+  return 0;
+};</pre>
+              </li>
+              <li>Click <strong>Apply Custom Card Script</strong>.</li>
+              <li>Switch to the Apple II screen and type <code>PRINT PEEK(49328)</code>: watch the 65C02 read your live simulated temperature sensor!</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#252f42] font-mono text-xs">
+          <span class="text-gray-400">Exhaustive programming recipes (BASIC, 65C02 ASM, C#, Java 17):</span>
+          <a href="developer/custom-peripheral-cards.html" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg transition shadow">
+            📖 Open Complete Peripheral Cards Manual →
+          </a>
+        </div>
+
       </div>
     </section>
 

@@ -92,6 +92,7 @@
           <a href="#ch8" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">8. DHGR & Mockingboard</a>
           <a href="#ch9" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">9. Under the Hood Suite</a>
           <a href="#ch10" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition">10. Complete Memory Maps</a>
+          <a href="#slots" class="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-amber-400 transition text-amber-400 font-bold">11. Expansion Slots (1–7) 🔌</a>
         </nav>
 
         <div class="pt-3 border-t border-[#30363d] text-[10px] text-gray-500">
@@ -582,7 +583,53 @@ namespace SoundEngine {
       </section>
 
       <!-- Footer -->
-      <footer class="text-center text-xs font-mono text-gray-500 pt-8 pb-12 border-t border-[#30363d]">
+      
+    <!-- Chapter: Motherboard Expansion Slots & Peripheral Cards -->
+    <section id="slots" class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 text-lg">🔌</span>
+          <h3 class="text-base font-bold text-white uppercase tracking-wider font-mono">Motherboard Expansion Slots &amp; Peripheral Cards (Slots 1–7)</h3>
+        </div>
+        <a href="developer/custom-peripheral-cards.html" class="text-[11px] text-amber-400 underline">Exhaustive Card Manual →</a>
+      </div>
+
+      <p class="text-gray-300 text-xs font-sans leading-relaxed">
+        The Apple //c Ultra features a virtualized 50-pin expansion bus with full support for hardware peripheral cards across Slots 1 through 7. You can plug, unplug, and command cards directly from Applesoft BASIC, 65C02 machine code, or modern C# and Java:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 text-[11px]">
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#212c3d] space-y-2">
+          <span class="text-amber-400 font-bold block">🖨️ Slot 1: ImageWriter II Printer Card</span>
+          <p class="text-gray-400">
+            Type <code>PR#1</code> in BASIC to redirect all printed output to the virtual tractor-feed printer in the Slot Studio. Type <code>PR#0</code> to return to screen.
+          </p>
+        </div>
+
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#212c3d] space-y-2">
+          <span class="text-cyan-400 font-bold block">🎹 Slot 2: Web MIDI Master Controller</span>
+          <p class="text-gray-400">
+            Connects 65C02 MIDI sequencers (e.g. Master Tracks) directly to external USB MIDI keyboards and DAWs via the browser's Web MIDI API.
+          </p>
+        </div>
+
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#212c3d] space-y-2">
+          <span class="text-purple-400 font-bold block">⏰ Slot 4: Thunderclock Real-Time Clock</span>
+          <p class="text-gray-400">
+            Supplies current host computer time to ProDOS at <code>$C400</code>, ensuring all files created on the 32MB hard disk receive accurate timestamps.
+          </p>
+        </div>
+
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#212c3d] space-y-2">
+          <span class="text-emerald-400 font-bold block">🌐 Slot 5: Uthernet TCP/IP Network Card</span>
+          <p class="text-gray-400">
+            Hardware WIZnet W5100 network interface at <code>$C0B0</code>. Used by Contiki web browser, telnet BBS terminals, and C# HTTP clients.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="text-center text-xs font-mono text-gray-500 pt-8 pb-12 border-t border-[#30363d]">
         Apple //c Ultra • Technical Reference Manual & Programming Guide • Cupertino, California 
       
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
