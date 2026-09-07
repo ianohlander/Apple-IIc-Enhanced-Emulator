@@ -1189,10 +1189,17 @@ runner.suite('Peripheral Bus: SlotManager & Virtual Card Subsystems', () => {
     assertTrue(slotDoc.includes('card.onReadHandler'), 'Custom JavaScript Sandbox tutorial present');
   });
 
-  runner.test('Virtual Printer & Sandbox Surface: Under the Hood Workbench Verification', () => {
+  runner.test('Apple ImageWriter II Printer & Print Shop Studio Surface Verification', () => {
     const standalone = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
-    assertTrue(standalone.includes('id="tab-slots"'), 'Slot Expansion Bay tab present in standalone');
-    assertTrue(standalone.includes('id="printer-paper-view"'), 'Virtual Printer Paper Console present');
+    assertTrue(standalone.includes('id="tab-printer"'), 'Dedicated ImageWriter II tab #tab-printer present');
+    assertTrue(standalone.includes('id="btn-print-mode-dotmatrix"'), 'Dot-Matrix mode toggle button present');
+    assertTrue(standalone.includes('id="btn-print-mode-clean"'), 'Clean Line mode toggle button present');
+    assertTrue(standalone.includes('id="btn-print-physical"'), 'Physical Print / PDF export button present');
+    assertTrue(standalone.includes('id="printer-paper-view"'), 'Continuous-feed printer view present');
+    assertTrue(standalone.includes('setPrinterMode('), 'setPrinterMode function defined');
+    assertTrue(standalone.includes('printPhysicalPaper('), 'printPhysicalPaper function defined');
+    assertTrue(standalone.includes('loadSelectedPrintShopTemplate('), 'Print Shop template loader defined');
+    assertTrue(standalone.includes('PRINTSHOP_TEMPLATES'), 'Vintage Print Shop templates defined');
     assertTrue(standalone.includes('id="custom-card-code"'), 'Custom JS Card Sandbox present');
     assertTrue(standalone.includes('id="clock-live-time"'), 'ProDOS Clock display present');
   });

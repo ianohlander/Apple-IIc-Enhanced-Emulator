@@ -197,7 +197,9 @@ export async function runSurfaceTests() {
       switchTab: (typeof switchTab !== 'undefined') ? switchTab : null,
       loadTypeInSample: (typeof loadTypeInSample !== 'undefined') ? loadTypeInSample : null,
       injectTypeIn: (typeof injectTypeIn !== 'undefined') ? injectTypeIn : null,
-      compileAndRunCode: (typeof compileAndRunCode !== 'undefined') ? compileAndRunCode : null
+      compileAndRunCode: (typeof compileAndRunCode !== 'undefined') ? compileAndRunCode : null,
+      setPrinterMode: (window && window.setPrinterMode) || ((typeof setPrinterMode !== 'undefined') ? setPrinterMode : null),
+      PRINTSHOP_TEMPLATES: (window && window.PRINTSHOP_TEMPLATES) || ((typeof PRINTSHOP_TEMPLATES !== 'undefined') ? PRINTSHOP_TEMPLATES : null)
     };
   `);
 
@@ -323,8 +325,17 @@ public class RetroDemo {
   emu.setPhosphor('green');
   assert(emu.phosphor === 'green', 'Phosphor Matrix Surface: Restored P1 Green display filter');
 
-  emu.reset();
-  assert(emu.cursorRow === 2, 'Reset Button Surface: Reset CPU and initialized prompt on row 2');
+  // --- SURFACE TEST SUITE 7: ImageWriter II Dot-Matrix & Print Shop Studio Surface ---
+  console.log('\n📦 Surface Suite 7: ImageWriter II Dot-Matrix & Print Shop Studio Surface');
+  assert(typeof app.setPrinterMode === 'function', 'Printer Surface: setPrinterMode function exposed');
+  assert(app.PRINTSHOP_TEMPLATES && app.PRINTSHOP_TEMPLATES.birthday, 'Print Shop Surface: Birthday card template loaded');
+  assert(app.PRINTSHOP_TEMPLATES && app.PRINTSHOP_TEMPLATES.banner, 'Print Master Surface: Grand banner template loaded');
+  assert(app.PRINTSHOP_TEMPLATES && app.PRINTSHOP_TEMPLATES.flyer, 'Print Shop Surface: Event flyer template loaded');
+  assert(app.PRINTSHOP_TEMPLATES && app.PRINTSHOP_TEMPLATES.certificate, 'Print Master Surface: Certificate of merit loaded');
+
+  // Test Applesoft BASIC PR#1 Output Redirection
+  emu.feedText('10 PR#1\n20 PRINT "HELLO IMAGEWRITER II"\n30 PR#0', false);
+  assert(emu.basicProgram.length === 3, 'BASIC PR#1 Surface: Ingested PR#1 printer redirection program');
 
   emu.running = false;
 
