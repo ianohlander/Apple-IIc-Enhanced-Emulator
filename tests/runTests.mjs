@@ -1090,7 +1090,7 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
     assertTrue(html.includes('fullscreen-active'), 'fullscreen-active responsive styles defined');
 
     // Vintage Peripheral Bay Toolbar Icons & Tooltips
-    const bayButtons = ['storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'crt', 'keyboard', 'info'];
+    const bayButtons = ['storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'keyboard', 'info'];
     for (const bay of bayButtons) {
       assertTrue(html.includes(`id="btn-bay-${bay}"`), `Hardware bay button #btn-bay-${bay} exists`);
     }

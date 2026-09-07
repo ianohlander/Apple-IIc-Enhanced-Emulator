@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Enhanced 65C02 Web Workstation &amp; Vintage Hardware Bay</title>
+  <title>65C02 Ultra Workstation — Enhanced 65C02 CMOS Web Workstation &amp; Vintage Hardware Bay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
@@ -51,32 +51,9 @@
       transform: translateY(2px);
       box-shadow: 0 1px 0 #14161a;
     }
-    .vintage-bay-btn {
-      background: linear-gradient(180deg, #1c2330 0%, #10151f 100%);
-      border: 1px solid #2d384d;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-      transition: all 0.15s ease-in-out;
-    }
-    .vintage-bay-btn:hover {
-      background: linear-gradient(180deg, #253043 0%, #161e2c 100%);
-      border-color: #f59e0b;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 15px rgba(245, 158, 11, 0.2);
-    }
-    .vintage-bay-btn:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
     .cabinet-drawer {
       box-shadow: -10px 0 35px rgba(0, 0, 0, 0.85);
       border-left: 2px solid #38455a;
-    }
-    .tractor-paper {
-      background-color: #f9f8f3;
-      background-image: linear-gradient(#e6edf3 1px, transparent 1px), linear-gradient(90deg, #e6edf3 1px, transparent 1px), linear-gradient(#f0f7ea 50%, #ffffff 50%);
-      background-size: 20px 20px, 20px 20px, 100% 32px;
-      color: #111e13;
-      font-family: 'Space Mono', monospace;
     }
     .tooltip-hint {
       position: relative;
@@ -100,11 +77,11 @@
       z-index: 100;
     }
     .screen-normal {
-      max-width: 54rem; /* max-w-4xl */
+      max-width: 56rem;
       width: 100%;
     }
     #crt-frame {
-      max-height: calc(100vh - 210px);
+      max-height: calc(100vh - 220px);
       aspect-ratio: 4 / 3;
       width: auto;
       margin: 0 auto;
@@ -200,7 +177,7 @@
       background-color: #141a24 !important;
       color: #34d399 !important;
     }
-    #phosphor-select option[value="amber"], #phosphor-select option[value="color"] {
+    #phosphor-select option[value="amber"], #phosphor-select option[value="color"], #speed-select option[value="50"] {
       color: #fbbf24 !important;
     }
     #phosphor-select option[value="white"] {
@@ -211,7 +188,7 @@
       overflow: hidden !important;
     }
     .fullscreen-active #monitor-container {
-      max-width: 96vw !important;
+      max-width: 98vw !important;
       width: 100% !important;
       display: flex !important;
       flex-direction: column !important;
@@ -222,45 +199,41 @@
       margin: 0 auto !important;
     }
     .fullscreen-active #crt-bezel-box {
-      max-width: 95vw !important;
+      max-width: 96vw !important;
       width: 100% !important;
       padding: 0.5rem 1rem !important;
     }
     .fullscreen-active #crt-frame {
-      max-height: calc(100vh - 170px) !important;
-      height: calc(100vh - 170px) !important;
+      max-height: calc(100vh - 160px) !important;
+      height: calc(100vh - 160px) !important;
       width: auto !important;
       aspect-ratio: 4 / 3 !important;
       margin: 0 auto !important;
     }
     .fullscreen-active #apple-case-chassis {
-      max-width: 95vw !important;
+      max-width: 96vw !important;
       width: 100% !important;
-      padding: 0.5rem 1rem !important;
-    }
-    select, select option {
-      background-color: #141a24 !important;
-      color: #f1f5f9 !important;
+      padding: 0.35rem 1rem !important;
     }
   </style>
 </head>
-<body class="bg-[#0b0d12] text-gray-100 min-h-screen flex flex-col items-center p-3 sm:p-6 overflow-x-hidden">
+<body class="bg-[#0b0d12] text-gray-100 min-h-screen flex flex-col items-center p-3 sm:p-5 overflow-x-hidden">
 
   <!-- Top Rainbow Ribbon Bar -->
   <div class="fixed top-0 left-0 right-0 h-1.5 rainbow-border z-50"></div>
 
   <!-- Header & Navigation Bar -->
-  <header class="w-full max-w-6xl mt-2 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-stone-800 pb-3 font-mono text-xs">
+  <header class="w-full max-w-6xl mt-2 mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-stone-800 pb-3 font-mono text-xs">
     <div class="flex items-center space-x-3">
       <div class="w-7 h-7 rounded-full rainbow-border p-0.5 flex items-center justify-center shadow-lg">
-        <div class="w-full h-full bg-[#0b0d12] rounded-full flex items-center justify-center text-white font-black text-sm"></div>
+        <div class="w-full h-full bg-[#0b0d12] rounded-full flex items-center justify-center text-amber-400 font-black text-sm">⚡</div>
       </div>
       <div>
         <h1 class="font-black text-base tracking-wider text-white flex items-center gap-2">
-          <span>APPLE //c ULTRA</span>
-          <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/40">VINTAGE WORKSTATION</span>
+          <span>65C02 ULTRA</span>
+          <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/40 font-bold">VINTAGE WORKSTATION</span>
         </h1>
-        <p class="text-[11px] text-stone-400">Authentic 65C02 CMOS Hardware, Slinky 1MB RAM, SmartPort HD, ImageWriter II &amp; Multi-Slot Cards</p>
+        <p class="text-[11px] text-stone-400">Enhanced 65C02 CMOS Web Workstation • Compatible with Apple //c Architecture • Slinky 1MB RAM • 32MB HD</p>
       </div>
     </div>
 
@@ -278,40 +251,60 @@
     </div>
   </header>
 
-  
-
   <!-- ========================================================================= -->
-  <!-- MAIN WORKSPACE: CRT MONITOR & EXPANDABLE VIEWPORT -->
+  <!-- MAIN WORKSPACE: CRT MONITOR & UNIFIED BEZEL CONTROLLER -->
   <!-- ========================================================================= -->
-  <main id="monitor-container" class="screen-normal flex flex-col items-center gap-4 transition-all duration-300">
+  <main id="monitor-container" class="screen-normal flex flex-col items-center gap-3.5 transition-all duration-300">
     
     <!-- Heavy CRT Bezel Enclosure -->
-    <div id="crt-bezel-box" class="crt-bezel p-4 sm:p-6 rounded-3xl w-full border border-stone-700 shadow-2xl relative">
+    <div id="crt-bezel-box" class="crt-bezel p-3.5 sm:p-5 rounded-3xl w-full border border-stone-700 shadow-2xl relative">
       
-      <!-- Bezel Top Bar: Phosphor Selector, Sizing Controls & Fullscreen -->
-      <div class="flex flex-wrap items-center justify-between pb-3 mb-2 border-b border-stone-700/60 gap-2 font-mono text-xs">
+      <!-- Bezel Top Bar: Phosphor, Speed, Reset, Power, Flyouts, Fullscreen & Paste -->
+      <div class="flex flex-wrap items-center justify-between pb-3 mb-2.5 border-b border-stone-700/60 gap-2 font-mono text-xs">
         
         <!-- Left: Status LEDs & Model -->
         <div class="flex items-center space-x-2">
           <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50 animate-pulse" title="System Power & Video Clock Online"></div>
-          <span class="font-black text-xs tracking-wider text-stone-300">MONITOR //c</span>
-          <span class="text-[10px] text-stone-500 hidden sm:inline">HIGH-RESOLUTION CRT</span>
+          <span class="font-black text-xs tracking-wider text-stone-300">MONITOR ULTRA</span>
+          <span class="text-[10px] text-stone-500 hidden xl:inline">HIGH-RESOLUTION CRT</span>
         </div>
 
-        <!-- Center: Phosphor Selector -->
-        <div class="flex items-center space-x-1.5">
-          <span class="text-stone-400 text-[10px] font-bold">PHOSPHOR:</span>
-          <select id="phosphor-select" class="bg-[#141a24] text-emerald-400 font-bold px-2 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none">
-            <option value="color" class="bg-[#141a24] text-amber-300">🎨 Color NTSC Composite</option>
-            <option value="green" class="bg-[#141a24] text-emerald-400" selected>🟢 P1 High-Persistence Green</option>
-            <option value="amber" class="bg-[#141a24] text-amber-400">🟡 P3 Amber Display</option>
-            <option value="white" class="bg-[#141a24] text-stone-200">⚪ P4 Monochrome B&amp;W</option>
-          </select>
+        <!-- Center: Phosphor & Clock Speed Selectors -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex items-center space-x-1">
+            <span class="text-stone-400 text-[10px] font-bold">PHOSPHOR:</span>
+            <select id="phosphor-select" onchange="if(window.emulator) window.emulator.setPhosphor(this.value)" class="bg-[#141a24] text-emerald-400 font-bold px-2 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none">
+              <option value="color" class="bg-[#141a24] text-amber-300">🎨 Color Composite</option>
+              <option value="green" class="bg-[#141a24] text-emerald-400" selected>🟢 P1 Green</option>
+              <option value="amber" class="bg-[#141a24] text-amber-400">🟡 P3 Amber</option>
+              <option value="white" class="bg-[#141a24] text-stone-200">⚪ P4 B&amp;W</option>
+            </select>
+          </div>
+
+          <div class="flex items-center space-x-1">
+            <span class="text-stone-400 text-[10px] font-bold">SPEED:</span>
+            <select id="speed-select" class="bg-[#141a24] text-amber-400 font-bold px-2 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none">
+              <option value="1" class="bg-[#141a24] text-stone-200">1.02 MHz (1984)</option>
+              <option value="2.8" class="bg-[#141a24] text-stone-200">2.80 MHz (IIGS)</option>
+              <option value="8" class="bg-[#141a24] text-stone-200">8.00 MHz (Zip)</option>
+              <option value="50" class="bg-[#141a24] text-amber-400 font-bold" selected>50.0 MHz (Ultra)</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Right: Hardware Quick Flyouts, Keyboard Flyout, Info Guide, Fullscreen & Paste -->
+        <!-- Center-Right: Reset & Power Switches -->
         <div class="flex items-center space-x-1.5">
-          <!-- Quick Hardware Flyouts Group (Available in Fullscreen & Normal) -->
+          <button id="reset-btn" onclick="if(window.emulator) window.emulator.reset()" class="px-2.5 py-1 bg-red-800 hover:bg-red-700 text-white font-bold rounded shadow-md border border-red-900 transition flex items-center gap-1 text-xs tooltip-hint" data-tooltip="Warm Boot Reset (Vectors $FFFC-$FFFD)">
+            RESET
+          </button>
+          <button id="power-btn" onclick="if(window.emulator) { window.emulator.reset(); window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40)); window.emulator.writeString(0, 8, 'APPLE //c ULTRA (50 MHz)'); window.emulator.writeString(2, 0, '] █'); window.emulator.cursorRow = 2; window.emulator.renderScreen(); if(window.showToast) window.showToast('⚡ Cold Power Cycle Completed'); }" class="px-2.5 py-1 bg-emerald-800 hover:bg-emerald-700 text-white font-bold rounded shadow-md border border-emerald-900 transition flex items-center gap-1 text-xs tooltip-hint" data-tooltip="Cold Power Cycle (Re-initializes all 128KB RAM & MMU)">
+            POWER
+          </button>
+        </div>
+
+        <!-- Right: Hardware Quick Flyouts, Keyboard, Fullscreen & Paste-to-Screen -->
+        <div class="flex items-center space-x-1.5">
+          <!-- Quick Hardware Flyouts Group (No redundant CRT icon) -->
           <div class="flex items-center bg-[#10141d] rounded-lg p-0.5 border border-stone-700 space-x-0.5">
             <button id="btn-bay-storage" onclick="openCabinet('storage')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Floppy &amp; 32MB HD Storage Bay">💾</button>
             <button id="btn-bay-printer" onclick="openCabinet('printer')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="ImageWriter II Printer">🖨️</button>
@@ -320,7 +313,6 @@
             <button id="btn-bay-typein" onclick="openCabinet('typein')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Magazine Type-In Transcriber">📖</button>
             <button id="btn-bay-debugger" onclick="openCabinet('debugger')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="65C02 CPU Register &amp; Disassembler">⚙️</button>
             <button id="btn-bay-rom" onclick="openCabinet('rom')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Custom ROM &amp; Firmware Studio">⚡</button>
-            <button id="btn-bay-crt" onclick="openCabinet('crt')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="CRT Phosphor &amp; Display Settings">📺</button>
             <button id="btn-bay-keyboard" onclick="toggleKeyboard()" class="px-1.5 py-0.5 bg-amber-500/10 hover:bg-amber-500/30 text-amber-300 hover:text-amber-200 rounded text-xs transition tooltip-hint border border-amber-500/30" data-tooltip="Fly-Up 63-Key Mechanical Keyboard (Bottom Drawer)">⌨️</button>
             <button id="btn-bay-info" onclick="openCabinet('info')" class="px-1.5 py-0.5 bg-cyan-500/10 hover:bg-cyan-500/30 text-cyan-300 hover:text-cyan-200 rounded text-xs transition tooltip-hint border border-cyan-500/30" data-tooltip="Hardware Quick Guide &amp; Flyout Map">ⓘ</button>
           </div>
@@ -330,9 +322,9 @@
             <span>⛶</span> Fullscreen
           </button>
 
-          <!-- Clipboard Paste -->
-          <button id="paste-btn" onclick="pasteClipboard()" class="px-2.5 py-1 bg-amber-700 hover:bg-amber-600 text-white font-bold rounded border border-amber-800 transition flex items-center gap-1 shadow tooltip-hint" data-tooltip="Paste Text from Clipboard directly into Keyboard Strobe ($C000)">
-            <span>📋</span> Paste
+          <!-- Clipboard Paste-to-Screen -->
+          <button id="paste-btn" onclick="pasteClipboard()" class="px-2.5 py-1 bg-amber-700 hover:bg-amber-600 text-white font-bold rounded border border-amber-800 transition flex items-center gap-1 shadow tooltip-hint" data-tooltip="Pastes clipboard text directly into the 65C02 Keyboard Strobe register ($C000) and Applesoft BASIC prompt">
+            <span>📋</span> Paste to Screen ($C000)
           </button>
         </div>
       </div>
@@ -345,71 +337,53 @@
 
     </div>
 
-    <!-- Apple IIc Platinum Case & Hardware Controls -->
-    <div id="apple-case-chassis" class="apple-case text-stone-800 p-4 sm:p-5 rounded-2xl w-full border border-[#c4bfb0] flex flex-wrap items-center justify-between gap-4 transition-all duration-300">
+    <!-- Case Chassis & System Specs Strip -->
+    <div id="apple-case-chassis" class="apple-case text-stone-800 p-3.5 sm:p-4 rounded-2xl w-full border border-[#c4bfb0] flex flex-wrap items-center justify-between gap-3 transition-all duration-300">
       
       <!-- Badge & Silicon Specs -->
       <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-600 via-amber-700 to-amber-900 flex items-center justify-center text-white font-black text-xl shadow border border-amber-500/50"></div>
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-600 via-amber-700 to-amber-900 flex items-center justify-center text-white font-black text-lg shadow border border-amber-500/50">⚡</div>
         <div>
-          <div class="font-black text-sm tracking-wider font-mono text-stone-900 flex items-center gap-2">
-            <span>Apple //c Ultra</span>
+          <div class="font-black text-xs tracking-wider font-mono text-stone-900 flex items-center gap-2">
+            <span>65C02 ULTRA WORKSTATION</span>
             <span class="px-1.5 py-0.5 rounded text-[9px] bg-stone-800 text-amber-300 font-bold">AOT EDITION</span>
           </div>
-          <div class="text-[10px] text-stone-700 font-mono">50 MHz Turbo 65C02 • 1MB Slinky Aux RAM • 32MB SmartPort HD</div>
+          <div class="text-[10px] text-stone-700 font-mono">50 MHz Turbo 65C02 • 1MB Slinky Aux RAM • 32MB SmartPort HD • Compatible with Apple //c Architecture</div>
         </div>
       </div>
 
-      <!-- Hardware Speed Softswitches & Reset Switches -->
-      <div class="flex flex-wrap items-center gap-3 font-mono text-xs">
-        <div class="flex flex-col">
-          <span class="text-[10px] text-stone-700 font-bold mb-0.5">CLOCK SPEED</span>
-          <select id="speed-select" class="bg-[#141a24] text-amber-400 font-bold px-2.5 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none">
-            <option value="1" class="bg-[#141a24] text-stone-200">1.02 MHz (Vintage 1984)</option>
-            <option value="2.8" class="bg-[#141a24] text-stone-200">2.80 MHz (Apple IIGS)</option>
-            <option value="8" class="bg-[#141a24] text-stone-200">8.00 MHz (ZipChip Accelerator)</option>
-            <option value="50" class="bg-[#141a24] text-amber-400 font-bold" selected>50.0 MHz (Ultra Turbo)</option>
-          </select>
+      <!-- Chassis Ventilation & Status Indicator -->
+      <div class="flex items-center space-x-2 font-mono text-[10px] text-stone-600">
+        <div class="flex space-x-1">
+          <span class="w-6 h-1.5 bg-stone-500/40 rounded-full"></span>
+          <span class="w-6 h-1.5 bg-stone-500/40 rounded-full"></span>
+          <span class="w-6 h-1.5 bg-stone-500/40 rounded-full"></span>
+          <span class="w-6 h-1.5 bg-stone-500/40 rounded-full"></span>
         </div>
-
-        <div class="flex items-center space-x-2 pt-2.5">
-          <button id="reset-btn" class="px-3.5 py-1.5 bg-red-800 hover:bg-red-700 text-white font-bold rounded shadow-md border border-red-900 transition flex items-center gap-1 tooltip-hint" data-tooltip="Warm Boot Reset (Vectors $FFFC-$FFFD)">
-            RESET
-          </button>
-          <button id="power-btn" class="px-3.5 py-1.5 bg-emerald-800 hover:bg-emerald-700 text-white font-bold rounded shadow-md border border-emerald-900 transition flex items-center gap-1 tooltip-hint" data-tooltip="Cold Power Cycle (Re-initializes all 128KB RAM & MMU)">
-            POWER
-          </button>
-        </div>
+        <span class="font-bold text-stone-700">CMOS SYSTEM PASS</span>
       </div>
 
     </div>
 
   </main>
 
-  
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-[100000] flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- ========================================================================= -->
-  <!-- SLIDING HARDWARE CABINET DRAWER (FLYOUT BAY FOR ALL EXPANDED HARDWARE) -->
-  <!-- ========================================================================= -->
-  
   <!-- Dimmed Drawer Backdrop -->
   <div id="cabinet-backdrop" onclick="closeCabinet()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[99998] hidden transition-opacity duration-300"></div>
 
-  
   <!-- ========================================================================= -->
   <!-- FLY-UP BOTTOM MECHANICAL KEYBOARD DRAWER (63-KEY APPLE MATRIX) -->
   <!-- ========================================================================= -->
-  
-  <!-- Dimmed Keyboard Drawer Backdrop -->
   <div id="keyboard-backdrop" onclick="toggleKeyboard(false)" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[99980] hidden transition-opacity duration-300"></div>
 
-  <!-- Fly-Up Mechanical Keyboard Drawer -->
   <aside id="bottom-keyboard-drawer" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl bg-[#14181f] border-t-2 border-x-2 border-stone-700 rounded-t-2xl shadow-[0_-15px_40px_rgba(0,0,0,0.85)] p-4 z-[99990] translate-y-full transition-transform duration-300 ease-out font-mono text-xs flex flex-col space-y-2">
     <!-- Keyboard Header Controls -->
     <div class="flex items-center justify-between text-[11px] text-stone-300 border-b border-stone-800 pb-2 px-1">
       <div class="flex items-center gap-2">
         <span class="text-amber-400 font-bold text-sm">⌨️</span>
-        <span class="font-bold text-amber-300">Apple //c Standard 63-Key Matrix</span>
+        <span class="font-bold text-amber-300">Standard 63-Key Matrix (Apple //c Layout)</span>
         <span class="text-[10px] text-stone-400 hidden sm:inline">• Click keys or type on physical keyboard • Strobe $C000</span>
       </div>
       
@@ -425,7 +399,9 @@
     <div id="keyboard-container" class="space-y-1 pt-1"></div>
   </aside>
 
-  <!-- Hardware Drawer Container -->
+  <!-- ========================================================================= -->
+  <!-- SLIDING HARDWARE CABINET DRAWER (FLYOUT BAY FOR ALL EXPANDED HARDWARE) -->
+  <!-- ========================================================================= -->
   <aside id="vintage-cabinet-drawer" class="fixed top-0 right-0 h-full w-full max-w-2xl bg-[#0f141d] cabinet-drawer z-[99999] translate-x-full transition-transform duration-300 flex flex-col font-mono text-xs overflow-hidden">
     
     <!-- Cabinet Brushed Aluminum Top Header -->
@@ -435,7 +411,7 @@
           🎛️
         </div>
         <div>
-          <span class="text-[10px] text-amber-400 font-bold uppercase tracking-widest block">Apple //c Ultra Peripheral Cabinet</span>
+          <span class="text-[10px] text-amber-400 font-bold uppercase tracking-widest block">65C02 Ultra Hardware Cabinet</span>
           <h3 id="cabinet-title" class="text-sm font-black text-white uppercase">Hardware Expansion Bay</h3>
         </div>
       </div>
@@ -490,9 +466,9 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div class="space-y-1">
               <span class="text-gray-400 text-[10px] block font-bold">LOADED DISK IMAGE (.DSK / .DO / .PO):</span>
-              <input type="file" id="floppy-file-input" accept=".dsk,.do,.po" class="hidden" onchange="handleCustomFloppyFile(event)">
-              <div id="floppy-status-text" class="p-2.5 bg-[#05070a] border border-[#1b2533] rounded text-emerald-400 text-[11px] truncate">
-                Default: DOS 3.3 / ProDOS System Master (140 KB)
+              <input type="file" id="floppy-file-input" accept=".dsk,.do,.po" class="hidden" onchange="handleFloppyFileUpload(event)">
+              <div id="floppy-drive-status" class="p-2.5 bg-[#05070a] border border-[#1b2533] rounded text-emerald-400 text-[11px] truncate">
+                Drive 1: DOS 3.3 / ProDOS System Master (140 KB)
               </div>
             </div>
 
@@ -539,7 +515,7 @@
           </div>
 
           <p class="text-[11px] text-gray-400 leading-relaxed">
-            Persisted in browser IndexedDB/LocalStorage. Emulates Apple SmartPort Unit 1 Block Device Protocol with zero seek times.
+            Persisted in browser memory. Emulates SmartPort Unit 1 Block Device Protocol with zero seek times.
           </p>
 
           <div class="flex flex-wrap gap-2 pt-1">
@@ -555,11 +531,7 @@
       </div>
 
       <!-- ========================================================================= -->
-      <!-- TAB 2: SLOT EXPANSION BAY & VIRTUAL PRINTER -->
-      <!-- ========================================================================= -->
-      
-      <!-- ========================================================================= -->
-      <!-- TAB: APPLE IMAGEWRITER II TRACTOR-FEED DOT-MATRIX PRINTER & PRINT SHOP -->
+      <!-- TAB 2: APPLE IMAGEWRITER II TRACTOR-FEED DOT-MATRIX PRINTER -->
       <!-- ========================================================================= -->
       <div id="tab-printer" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-5">
         
@@ -571,15 +543,15 @@
             </div>
             <div>
               <h4 class="text-sm font-bold text-emerald-400">APPLE IMAGEWRITER II TRACTOR-FEED PRINTER (SLOT 1)</h4>
-              <p class="text-xs text-gray-400">9-Pin Impact Dot-Matrix Simulation • Continuous Perforated Fanfold Paper • Print Shop &amp; Print Master Studio</p>
+              <p class="text-xs text-gray-400">9-Pin Impact Dot-Matrix Simulation • Continuous Perforated Fanfold Paper • Real 65C02 Hardware Output</p>
             </div>
           </div>
           <span class="px-2.5 py-1 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE (PR#1)
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE (PR#1 @ $C100)
           </span>
         </div>
 
-        <!-- Controls: Mode Switch, Paper Stock & Print Shop Templates -->
+        <!-- Controls: Mode Switch, Paper Stock & Hardware Self-Test -->
         <div class="p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
           
           <div class="flex flex-wrap items-center justify-between gap-3">
@@ -605,23 +577,15 @@
                 <option value="ivory">📜 Ivory Certificate Parchment</option>
               </select>
             </div>
+
+            <!-- 65C02 Hardware Self-Test Button -->
+            <button onclick="runCpuPrinterSelfTest()" class="px-3 py-1 bg-amber-600/80 hover:bg-amber-600 text-white font-bold rounded border border-amber-500/40 text-xs transition flex items-center gap-1">
+              ⚡ 65C02 Centronics Self-Test
+            </button>
           </div>
 
-          <!-- Print Shop & Print Master Vintage Studio Templates -->
-          <div class="border-t border-[#1e2736] pt-3 flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2 flex-1 min-w-[260px]">
-              <span class="text-amber-400 text-[11px] font-bold">PRINT STUDIO:</span>
-              <select id="printshop-template-select" class="flex-1 bg-[#141a24] text-amber-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none">
-                <option value="birthday">💌 The Print Shop: Birthday Greeting Card (1984)</option>
-                <option value="banner">🎪 Print Master: Giant Grand Banner ("WELCOME")</option>
-                <option value="flyer">📢 The Print Shop: Retro Computer Expo Flyer</option>
-                <option value="certificate">🏆 Print Master: Certificate of Excellence</option>
-                <option value="catalog">📜 Applesoft BASIC: PR#1 Catalog &amp; Memory Dump</option>
-              </select>
-            </div>
-            <button onclick="loadSelectedPrintShopTemplate()" class="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-black font-bold rounded shadow transition text-xs flex items-center gap-1">
-              ▶ Load Studio Template
-            </button>
+          <div class="border-t border-[#1e2736] pt-2 text-[11px] text-stone-400">
+            <strong class="text-amber-400">Direct 65C02 Centronics Stream:</strong> Any software running on the CPU (Print Shop, Print Master, AppleWorks, BASIC via <code class="text-emerald-300">PR#1</code>) sends its live output directly to this tractor-feed printer in real time.
           </div>
 
         </div>
@@ -629,7 +593,6 @@
         <!-- Action Toolbar: Print to Physical/PDF, Copy, Download, Clear, Form Feed -->
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex flex-wrap items-center gap-1.5">
-            <!-- Physical Print / PDF Export Button -->
             <button id="btn-print-physical" onclick="printPhysicalPaper()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded shadow transition text-xs flex items-center gap-1.5">
               🖨️ Print Output (Paper / PDF)
             </button>
@@ -663,10 +626,11 @@
 
           <!-- Printable Continuous Fanfold Paper Area -->
           <div class="flex-1 p-4 paper-greenbar overflow-x-auto min-h-[300px]" id="printer-paper-surface">
-            <textarea id="printer-paper-view" rows="14" class="w-full bg-transparent border-0 resize-y p-0 focus:outline-none print-font-dotmatrix" spellcheck="false">*** APPLE IMAGEWRITER II ONLINE: READY FOR PRINT SHOP, PRINT MASTER &amp; BASIC PR#1 ***
+            <textarea id="printer-paper-view" rows="14" class="w-full bg-transparent border-0 resize-y p-0 focus:outline-none print-font-dotmatrix" spellcheck="false">*** APPLE IMAGEWRITER II PRINTER ONLINE (SLOT 1 @ $C100) ***
 -----------------------------------------------------------------------------------------
-Type PR#1 in BASIC to route all PRINT statements directly to this continuous paper feed.
-Select Print Studio templates above to generate vintage 1984 banners, greeting cards &amp; flyers.
+The simulated 65C02 CPU directly drives this continuous tractor-feed paper feed.
+Any vintage software (Print Shop, Print Master, AppleWorks, BASIC, Assembly) sending
+bytes to Slot 1 ($C090 / $C100 / PR#1) will stream its output directly here.
 -----------------------------------------------------------------------------------------</textarea>
           </div>
 
@@ -679,12 +643,16 @@ Select Print Studio templates above to generate vintage 1984 banners, greeting c
           </div>
         </div>
 
-        <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">ImageWriter II Hardware Emulation:</strong> Centronics parallel port mapping at <code>$C100</code> (Slot 1). Captures text, form feeds ($0C), line feeds ($0A), and 8-bit graphics raster streams.
+        <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono flex items-center justify-between">
+          <span><strong class="text-amber-400">Centronics Parallel Bus:</strong> Data latch at <code class="text-emerald-300">$C090</code>, Firmware at <code class="text-emerald-300">$C100</code>.</span>
+          <span id="printer-byte-count" class="text-stone-300 font-bold">0 Bytes</span>
         </div>
 
       </div>
 
+      <!-- ========================================================================= -->
+      <!-- TAB 3: 7-SLOT MOTHERBOARD EXPANSION BAY -->
+      <!-- ========================================================================= -->
       <div id="tab-slots" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-5">
         <div class="flex flex-wrap justify-between items-center border-b border-[#2a3642] pb-3 gap-2">
           <div>
@@ -699,9 +667,7 @@ Select Print Studio templates above to generate vintage 1984 banners, greeting c
         </div>
 
         <!-- 7-Slot Motherboard Matrix -->
-        <div id="slots-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <!-- Dynamically populated by renderSlotBay() -->
-        </div>
+        <div id="slots-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
 
         <!-- Interactive Peripheral Toolkits -->
         <div class="border-t border-[#2a3642] pt-4 space-y-4">
@@ -738,9 +704,9 @@ Select Print Studio templates above to generate vintage 1984 banners, greeting c
             </div>
 
             <div class="p-3 bg-[#0a0d13] border border-[#1b2535] rounded text-emerald-400 text-xs font-mono flex items-center justify-between">
-    <span>Slot 1 Centronics Latch: <strong>$C090</strong> | Card ROM: <strong>$C100</strong> (Active)</span>
-    <button onclick="switchTab('printer')" class="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-600 text-white rounded font-bold text-[11px]">View ImageWriter II Feed 🖨️</button>
-  </div>
+              <span>Slot 1 Centronics Latch: <strong>$C090</strong> | Card ROM: <strong>$C100</strong> (Active)</span>
+              <button onclick="switchTab('printer')" class="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-600 text-white rounded font-bold text-[11px]">View ImageWriter II Feed 🖨️</button>
+            </div>
           </div>
 
           <!-- Toolkit 2: Custom JS Sandbox -->
@@ -748,46 +714,17 @@ Select Print Studio templates above to generate vintage 1984 banners, greeting c
             <div class="flex flex-wrap justify-between items-center gap-2">
               <div>
                 <span class="text-cyan-400 font-bold block">JavaScript Custom Card Sandbox (Universal Slots 1–7):</span>
-                <span id="custom-slot-desc" class="text-gray-400 text-[11px]">Script custom I/O registers ($C080 + Slot*16) and slot ROM ($CS00). Assignable to ANY slot!</span>
-              </div>
-              <div class="flex flex-wrap items-center gap-2">
-                <div class="flex items-center gap-1">
-                  <label for="custom-slot-select" class="text-stone-400 text-[11px] font-bold">Target Slot:</label>
-                  <select id="custom-slot-select" onchange="updateCustomCardSlot(this.value)" class="bg-[#141a24] text-cyan-300 border border-[#2a3642] rounded px-2 py-1 text-xs font-mono focus:outline-none">
-                    <option value="1">Slot 1 ($C090 / $C100)</option>
-                    <option value="2">Slot 2 ($C0A0 / $C200)</option>
-                    <option value="3" selected>Slot 3 ($C0B0 / $C300) [Default]</option>
-                    <option value="4">Slot 4 ($C0C0 / $C400)</option>
-                    <option value="5">Slot 5 ($C0D0 / $C500)</option>
-                    <option value="6">Slot 6 ($C0E0 / $C600)</option>
-                    <option value="7">Slot 7 ($C0F0 / $C700)</option>
-                  </select>
-                </div>
-                <select id="custom-preset-select" onchange="selectCustomCardPreset(this.value)" class="bg-[#141a24] text-amber-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none">
-                  <option value="weather" class="bg-[#141a24] text-stone-200 font-mono">🌤️ IoT Weather Station (Temp, Humidity, Pressure, Wind)</option>
-                  <option value="serial" class="bg-[#141a24] text-stone-200 font-mono">🔌 Web Serial Arduino / ESP32 Sensor Bridge</option>
-                  <option value="crypto" class="bg-[#141a24] text-stone-200 font-mono">📈 Live Bitcoin / Crypto Price Ticker (REST API)</option>
-                  <option value="math" class="bg-[#141a24] text-stone-200 font-mono">🧮 32-Bit Math Hardware Co-Processor (Multiply/Divide)</option>
-                </select>
-                <button id="btn-apply-custom-card" onclick="applyCustomCardScript()" class="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow flex items-center gap-1">
-                  ▶ Apply to Slot 3
-                </button>
+                <span class="text-gray-400 text-[11px]">Script custom I/O registers ($C080 + Slot*16) and slot ROM ($CS00).</span>
               </div>
             </div>
 
-            <textarea id="custom-card-code" rows="9" class="w-full bg-[#05070a] border border-[#161f2c] rounded p-3 text-xs text-cyan-300 font-mono focus:outline-none">// Preset: IoT Weather Station (Universal Slot Script)
+            <textarea id="custom-card-code" rows="7" class="w-full bg-[#05070a] border border-[#161f2c] rounded p-3 text-xs text-cyan-300 font-mono focus:outline-none">// Preset: IoT Weather Station (Universal Slot Script)
 card.temperature = 74; // deg F
 card.humidity = 48;    // % RH
-card.pressure = 1013;  // hPa
-card.windSpeed = 12;   // mph
 
 card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.temperature & 0xFF;        // Base + 0: Temp
-  if (offset === 0x01) return card.humidity & 0xFF;           // Base + 1: Humidity
-  if (offset === 0x02) return (card.pressure * 10) & 0xFF;    // Base + 2: Press Low
-  if (offset === 0x03) return ((card.pressure * 10) >> 8) & 0xFF; // Base + 3: Press High
-  if (offset === 0x04) return card.windSpeed & 0xFF;          // Base + 4: Wind Speed
-  if (offset === 0x07) return 0x80; // Base + 7: Status (Bit 7 = Data Ready)
+  if (offset === 0x00) return card.temperature & 0xFF;
+  if (offset === 0x01) return card.humidity & 0xFF;
   return 0x00;
 };</textarea>
           </div>
@@ -812,7 +749,7 @@ card.onReadHandler = (offset) => {
       </div>
 
       <!-- ========================================================================= -->
-      <!-- TAB 3: MODERN JAVA & C# CLR AOT COMPILER -->
+      <!-- TAB 4: MODERN JAVA & C# CLR AOT COMPILER -->
       <!-- ========================================================================= -->
       <div id="tab-code" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
         <div class="flex flex-wrap justify-between items-center border-b border-[#2a3642] pb-3 gap-2">
@@ -822,53 +759,46 @@ card.onReadHandler = (offset) => {
           </div>
           <div class="flex items-center gap-2">
             <label class="text-gray-400 text-xs font-sans">OOP Case Study:</label>
-            <select id="case-study-select" onchange="loadSelectedCaseStudy(this.value)" class="bg-[#141a24] text-cyan-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none focus:border-cyan-500">
-              <option value="csharp-standard" class="bg-[#141a24] text-stone-200 font-mono">Standard C# (.NET Core System &amp; Math)</option>
-              <option value="java-standard" class="bg-[#141a24] text-stone-200 font-mono">Standard Java (JDK 17 java.util &amp; ArrayList)</option>
-              <option value="csharp-breakout" class="bg-[#141a24] text-cyan-300 font-mono font-bold">Case 1 (C#): Retro Breakout Arcade</option>
-              <option value="java-breakout" class="bg-[#141a24] text-cyan-300 font-mono font-bold">Case 1 (Java): Retro Breakout Arcade</option>
-              <option value="csharp-starship3d" class="bg-[#141a24] text-stone-200 font-mono">Case 2 (C#): 3D Wireframe Starship Engine</option>
-              <option value="java-starship3d" class="bg-[#141a24] text-stone-200 font-mono">Case 2 (Java): 3D Wireframe Engine</option>
-              <option value="csharp-storage" class="bg-[#141a24] text-emerald-400 font-mono">Case 3 (C#): SmartPort HD 32MB Storage Ledger</option>
-              <option value="java-storage" class="bg-[#141a24] text-emerald-400 font-mono">Case 3 (Java): SmartPort ProDOS Storage Driver</option>
-              <option value="csharp-synth" class="bg-[#141a24] text-purple-300 font-mono">Case 4 (C#): Mockingboard FM Multi-Voice Synth</option>
-              <option value="java-synth" class="bg-[#141a24] text-purple-300 font-mono">Case 4 (Java): Mockingboard PSG Tracker</option>
-              <option value="csharp-fractal" class="bg-[#141a24] text-stone-200 font-mono">Case 5 (C#): Fixed-Point Mandelbrot Fractal</option>
-              <option value="java-fractal" class="bg-[#141a24] text-stone-200 font-mono">Case 5 (Java): Double Hi-Res Fractal Waves</option>
-              <option value="assembly" class="bg-[#141a24] text-amber-400 font-mono">Raw 65C02 Assembly ($2000 Monitor)</option>
+            <select id="case-study-select" onchange="loadSelectedCaseStudy(this.value)" class="bg-[#141a24] text-cyan-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none">
+              <option value="breakout" class="bg-[#141a24] text-cyan-300 font-mono font-bold">Case 1 (C#): Retro Breakout Arcade</option>
+              <option value="slinky" class="bg-[#141a24] text-emerald-400 font-mono">Case 2 (C#): 1MB Slinky RAM Disk Manager</option>
+              <option value="chiptune" class="bg-[#141a24] text-purple-300 font-mono">Case 3 (C#): Mockingboard PSG Chiptune</option>
             </select>
           </div>
         </div>
 
-        <textarea id="code-source" rows="8" class="w-full bg-[#0d1117] border border-[#2a3642] rounded p-3 text-xs text-cyan-300 font-mono focus:outline-none">using System;
-using System.Collections.Generic;
+        <textarea id="code-studio-editor" rows="7" class="w-full bg-[#0d1117] border border-[#2a3642] rounded p-3 text-xs text-cyan-300 font-mono focus:outline-none">using System;
+using Apple2.Ultra;
 
-namespace DotNetCoreStandardApp {
-    public class Program {
-        public static void Main(string[] args) {
-            Console.WriteLine("HELLO FROM STANDARD C# .NET CORE!");
-            List<string> items = new List<string>();
-            items.Add("65C02 CMOS CORE (50 MHz TURBO)");
-            items.Add("128KB EXPANDED RAM");
-            for (int i = 0; i < items.Count; i++) {
-                Console.WriteLine("ITEM " + (i + 1) + ": " + items[i]);
-            }
-            int maxVal = Math.Max(25, 100);
-            Console.WriteLine("MATH.MAX(25, 100) = " + maxVal);
+namespace RetroArcade {
+    public class BreakoutGame {
+        public static void Main() {
+            Graphics.SetDoubleHiRes(true);
+            Console.WriteLine("BREAKOUT 1984 INITIALIZED");
+            Audio.PlayChiptune(440, 100);
         }
     }
 }</textarea>
 
-        <div class="flex justify-between items-center pt-2">
-          <span id="code-status" class="text-xs text-gray-400">Standard Class Libraries: System, Collections.Generic, java.lang, java.util</span>
+        <div class="flex justify-between items-center pt-1">
+          <div class="flex gap-2">
+            <button onclick="loadSampleCSharp()" class="px-2.5 py-1 bg-[#1f2633] text-cyan-300 rounded text-xs border border-[#3b475d]">Load C#</button>
+            <button onclick="loadSampleJava()" class="px-2.5 py-1 bg-[#1f2633] text-amber-300 rounded text-xs border border-[#3b475d]">Load Java</button>
+            <button onclick="loadSampleAssembly()" class="px-2.5 py-1 bg-[#1f2633] text-emerald-300 rounded text-xs border border-[#3b475d]">Load Assembly</button>
+          </div>
           <button onclick="compileAndRunCode()" class="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded text-xs">
             ⚡ Compile &amp; Run on 65C02
           </button>
         </div>
+
+        <div class="space-y-1 pt-2 border-t border-[#1f2633]">
+          <span class="text-gray-400 text-[10px] block font-bold">65C02 AOT NATIVE MACHINE ASSEMBLY OUTPUT:</span>
+          <textarea id="code-studio-asm" rows="5" readonly class="w-full bg-[#05070a] border border-[#1b2533] rounded p-2.5 text-xs text-amber-400 font-mono focus:outline-none">; Click 'Compile & Run on 65C02' above to generate native 65C02 machine instructions.</textarea>
+        </div>
       </div>
 
       <!-- ========================================================================= -->
-      <!-- TAB 4: MAGAZINE TYPE-IN TRANSCRIBER & OCR -->
+      <!-- TAB 5: MAGAZINE TYPE-IN TRANSCRIBER & OCR -->
       <!-- ========================================================================= -->
       <div id="tab-typein" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
         <div class="flex flex-wrap justify-between items-center border-b border-[#2a3642] pb-3 gap-2">
@@ -895,15 +825,15 @@ namespace DotNetCoreStandardApp {
 90 END</textarea>
 
         <div class="flex justify-between items-center pt-2">
-          <span id="typein-status" class="text-xs text-gray-400">Ready to inject into Apple II.</span>
+          <span id="typein-status" class="text-xs text-gray-400">Ready to inject into 65C02 RAM.</span>
           <button onclick="injectTypeIn()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded text-xs">
-            ▶ Feed into Apple II
+            ▶ Feed into 65C02
           </button>
         </div>
       </div>
 
       <!-- ========================================================================= -->
-      <!-- TAB 5: 65C02 CPU DEBUGGER & DISASSEMBLER -->
+      <!-- TAB 6: 65C02 CPU DEBUGGER & DISASSEMBLER -->
       <!-- ========================================================================= -->
       <div id="tab-debugger" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
         <div class="grid grid-cols-5 gap-2 text-center bg-[#0d1117] p-3 rounded border border-[#2a3642] text-xs">
@@ -914,18 +844,15 @@ namespace DotNetCoreStandardApp {
           <div><span class="text-gray-500">PC:</span> <span id="dbg-pc" class="text-emerald-400 font-bold">$2000</span></div>
         </div>
 
+        <div class="flex gap-2">
+          <button onclick="stepCpu()" class="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded text-xs">Step Instruction (F8)</button>
+          <button onclick="resetCpu()" class="px-3 py-1 bg-red-800 hover:bg-red-700 text-white font-bold rounded text-xs">Reset CPU (F12)</button>
+        </div>
+
         <pre id="dbg-disasm" class="bg-[#0d1117] p-3 rounded border border-[#2a3642] text-xs text-amber-300 max-h-96 overflow-y-auto leading-relaxed">; ==============================================================================
-; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# RETRO BREAKOUT ULTRA
-; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)
-; Binary Base Address: $2000 | Total Payload: 612 Bytes
+; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# RETRO BREAKOUT
+; Target System: 65C02 Ultra Workstation (WDC 65C02 CMOS @ 50 MHz Turbo)
 ; ==============================================================================
-;
-; --- ZERO-PAGE & MEMORY LAYOUT ALLOCATIONS ---
-; // [C#] public class Paddle : GameObject { public byte X; public byte Y; public byte Width; }
-; $0010: Paddle.X         (Zero Page, 1 byte, default 118 = $76)
-; $0011: Paddle.Y         (Zero Page, 1 byte, default 178 = $B2)
-; $0012: Paddle.Width     (Zero Page, 1 byte, const 44 = $2C)
-;
 ; $2000: D8            CLD                 ; Clear Decimal Mode
 ; $2001: A2 FF         LDX #$FF            ; Initialize Stack Pointer
 ; $2003: 9A            TXS                 ; SP = $FF
@@ -934,14 +861,34 @@ namespace DotNetCoreStandardApp {
 ; $200D: 8D 5F C0      STA $C05F           ; Softswitch $C05F: DHIRESON</pre>
       </div>
 
-      
       <!-- ========================================================================= -->
-      <!-- TAB 7: HARDWARE ARCHITECTURE GUIDE & FLYOUT MAP -->
+      <!-- TAB 7: CUSTOM ROM & FIRMWARE STUDIO -->
+      <!-- ========================================================================= -->
+      <div id="tab-rom" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
+        <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
+          <div>
+            <h4 class="text-sm font-bold text-pink-400">CUSTOM FIRMWARE &amp; ROM STUDIO</h4>
+            <p class="text-xs text-gray-400">Hot-swap 32KB System BIOS or synthesize custom reset handlers.</p>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-pink-950 text-pink-300 border border-pink-800 font-bold">BYOR READY</span>
+        </div>
+
+        <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-2">
+          <label class="font-bold text-pink-400 block text-xs">CUSTOM BOOT BANNER MODIFIER:</label>
+          <div class="flex gap-2">
+            <input type="text" id="custom-banner-text" value="APPLE //c ULTRA (50 MHz)" class="flex-1 bg-[#161b22] border border-[#2a3642] rounded px-3 py-1.5 text-xs text-white">
+            <button onclick="flashCustomBanner()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded text-xs">⚡ Hot-Patch Banner</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 8: HARDWARE ARCHITECTURE GUIDE & FLYOUT MAP -->
       <!-- ========================================================================= -->
       <div id="tab-info" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-5">
         <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
           <div>
-            <h4 class="text-sm font-bold text-cyan-400">APPLE //c ULTRA HARDWARE &amp; FLYOUT MAP</h4>
+            <h4 class="text-sm font-bold text-cyan-400">65C02 ULTRA HARDWARE &amp; ARCHITECTURAL MAP</h4>
             <p class="text-xs text-gray-400">Quick architectural guide to all simulated add-on subsystems and vintage peripherals.</p>
           </div>
           <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">SYSTEM GUIDE</span>
@@ -1014,7 +961,7 @@ namespace DotNetCoreStandardApp {
               <span>⚡</span> <span>Custom ROM &amp; Firmware Studio</span>
             </div>
             <p class="text-[11px] text-stone-300 leading-relaxed">
-              Hot-swap 32KB System BIOS (ROM 255, ROM 0, ROM 3, ROM 4X, Apple //e Enhanced) or upload custom 32KB binary images with instant hot-patching.
+              Hot-swap 32KB System BIOS or upload custom 32KB binary images with instant hot-patching.
             </p>
           </div>
 
@@ -1037,39 +984,24 @@ namespace DotNetCoreStandardApp {
         </div>
       </div>
 
-      <!-- ========================================================================= -->
-      <!-- TAB 6: CUSTOM ROM STUDIO -->
-      <!-- ========================================================================= -->
-      <div id="tab-rom" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-4">
-        <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
-          <div>
-            <h4 class="text-sm font-bold text-pink-400">CUSTOM FIRMWARE &amp; ROM STUDIO</h4>
-            <p class="text-xs text-gray-400">Hot-swap 32KB System BIOS or synthesize custom reset handlers.</p>
-          </div>
-          <span class="px-2 py-0.5 rounded text-[10px] bg-pink-950 text-pink-300 border border-pink-800 font-bold">BYOR READY</span>
-        </div>
-
-        <div class="p-3 bg-[#0d1117] rounded border border-[#2a3642] space-y-2">
-          <label class="font-bold text-pink-400 block text-xs">CUSTOM BOOT BANNER MODIFIER:</label>
-          <div class="flex gap-2">
-            <input type="text" id="rom-banner" value="APPLE //c ULTRA ENHANCED 50 MHz" class="flex-1 bg-[#161b22] border border-[#2a3642] rounded px-3 py-1.5 text-xs text-white">
-            <button onclick="flashCustomBanner()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded text-xs">⚡ Hot-Patch Banner</button>
-          </div>
-        </div>
-      </div>
-
     </div>
 
   </aside>
 
-  <!-- Footer -->
-  <footer class="mt-8 text-stone-500 text-xs font-mono text-center max-w-4xl border-t border-stone-800 pt-4 w-full">
-    Apple //c Ultra Standalone Web Workstation • 65C02 CMOS Emulation • Double Hi-Res NTSC Graphics • Web Audio Mockingboard
-    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
+  <!-- Footer with Full Legal Trademark Disclaimers -->
+  <footer class="mt-8 text-stone-400 text-xs font-mono text-center max-w-4xl border-t border-stone-800 pt-4 w-full space-y-2">
+    <div class="text-stone-300 font-bold">
+      65C02 Ultra Workstation • Enhanced 65C02 CMOS Hardware Emulation Platform
+    </div>
+    <div class="text-[11px] text-stone-500 leading-relaxed max-w-3xl mx-auto">
+      Apple, Apple II, Apple //c, ProDOS, ImageWriter, Disk II, and Applesoft are registered trademarks of Apple Inc. 
+      This educational web workstation is an independent, clean-room emulator and is not affiliated with, endorsed by, or sponsored by Apple Inc.
+    </div>
+    <div class="text-[11px] text-stone-400 font-bold">
+      © 2026 Ian Ohlander. All rights reserved.
+    </div>
   </footer>
-
-  <!-- Complete Standalone Emulator Runtime JavaScript -->
-  <script>
+<script>
 
     // =========================================================================
     // GLOBAL STATE & PERIPHERAL CONFIGURATION (HOISTED)
@@ -1116,6 +1048,24 @@ namespace DotNetCoreStandardApp {
 
     window.customCards = {};
 
+    // Toast Notification System
+    window.showToast = function(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'px-4 py-2.5 rounded-lg font-mono text-xs font-bold shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 ' +
+        (type === 'success' ? 'bg-emerald-900/90 text-emerald-200 border border-emerald-500' : 'bg-stone-900/95 text-amber-300 border border-amber-500/50');
+      toast.innerText = msg;
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    };
+
     // =========================================================================
     // TOP-LEVEL HOISTED UI NAVIGATION & HARDWARE HANDLERS
     // =========================================================================
@@ -1147,8 +1097,7 @@ namespace DotNetCoreStandardApp {
         typein: 'Magazine Type-In Transcriber & OCR',
         debugger: '65C02 CPU Register & Disasm Monitor',
         rom: 'Custom Firmware & ROM Studio',
-        crt: 'CRT Display & Phosphor Controller',
-        info: 'Apple //c Ultra System Guide & Peripheral Architecture'
+        info: '65C02 Ultra System Guide & Peripheral Architecture'
       };
       if (titleElem && titles[tabId]) {
         titleElem.innerText = titles[tabId];
@@ -1168,13 +1117,7 @@ namespace DotNetCoreStandardApp {
       if (drawer) drawer.classList.remove('translate-x-full');
       if (backdrop) backdrop.classList.remove('hidden');
 
-      if (cabinetId === 'crt') {
-        const crt = document.getElementById('crt-bezel-box');
-        if (crt) crt.scrollIntoView({ behavior: 'smooth' });
-        window.closeCabinet();
-      } else {
-        window.switchTab(cabinetId || 'storage');
-      }
+      window.switchTab(cabinetId || 'storage');
     };
 
     window.closeCabinet = function() {
@@ -1200,14 +1143,66 @@ namespace DotNetCoreStandardApp {
     };
 
     window.toggleFullscreen = function() {
-      const container = document.getElementById('emulator-container');
-      if (!container) return;
-      if (!document.fullscreenElement) {
-        container.requestFullscreen().catch(err => {
-          console.warn('Fullscreen request failed:', err);
-        });
+      const elem = document.getElementById('monitor-container') || document.documentElement;
+      const fsElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+      
+      if (!fsElement) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen().catch(err => console.warn('Fullscreen request failed:', err));
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        }
       } else {
-        document.exitFullscreen();
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(err => console.warn('Exit fullscreen failed:', err));
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    };
+
+    // Attach Fullscreen Change Events
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+      document.addEventListener(evt, () => {
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+        document.body.classList.toggle('fullscreen-active', isFs);
+        const btn = document.getElementById('btn-screen-fullscreen');
+        if (btn) {
+          btn.innerHTML = isFs ? '<span>🗗</span> Windowed' : '<span>⛶</span> Fullscreen';
+        }
+      });
+    });
+
+    window.pasteClipboard = async function() {
+      try {
+        let text = '';
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          text = await navigator.clipboard.readText();
+        } else {
+          text = prompt('Paste text to send directly to 65C02 Keyboard ($C000):') || '';
+        }
+        if (!text) return;
+        
+        if (window.emulator) {
+          window.emulator.feedText(text, true);
+          window.showToast(`📋 Pasted ${text.length} characters into 65C02 Keyboard ($C000)`, 'success');
+          if (window.emulator.playBeep) window.emulator.playBeep(880, 0.08);
+        }
+      } catch (err) {
+        console.warn('Clipboard read error:', err);
+        const fallback = prompt('Paste text to send directly to 65C02 Keyboard ($C000):');
+        if (fallback && window.emulator) {
+          window.emulator.feedText(fallback, true);
+          window.showToast(`📋 Pasted ${fallback.length} characters into 65C02 Keyboard ($C000)`, 'success');
+        }
       }
     };
 
@@ -1301,7 +1296,7 @@ namespace DotNetCoreStandardApp {
     window.copyPrinterPaper = function() {
       const text = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
       navigator.clipboard.writeText(text);
-      alert('Printer paper buffer copied to clipboard!');
+      window.showToast('📋 Printer buffer copied to clipboard!', 'success');
     };
 
     window.downloadPrinterPaper = function() {
@@ -1315,7 +1310,7 @@ namespace DotNetCoreStandardApp {
       URL.revokeObjectURL(url);
     };
 
-    window.loadSelectedPrintShopTemplate = function() {
+    window.loadSelectedPrintShopTemplate = function loadSelectedPrintShopTemplate() {
       const select = document.getElementById('printshop-template-select');
       const key = select ? select.value : 'birthday';
       if (window.PRINTSHOP_TEMPLATES[key]) {
@@ -1331,8 +1326,7 @@ namespace DotNetCoreStandardApp {
       window.emulator.outputSlot = 1;
       const testLines = [
         "*** 65C02 CPU HARDWARE PRINTER TEST (PR#1) ***",
-        "TIMESTAMP: 07-SEP-2026 12:00:00 PST",
-        "SYSTEM: APPLE //c ULTRA 50.0 MHz",
+        "SYSTEM: 65C02 ULTRA WORKSTATION (50.0 MHz)",
         "SLOT 1 I/O: $C090 (CENTRONICS DATA LATCH) | FIRMWARE: $C100",
         "CHARACTER SET: 9-PIN IMPACT MATRIX RASTER TEST",
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 !@#$%^&*()_+-=[]{}",
@@ -1346,6 +1340,7 @@ namespace DotNetCoreStandardApp {
         }
         window.emulator.writeMem(0xC090, 0x0D);
       }
+      window.showToast('🖨️ 65C02 Centronics hardware self-test complete!', 'success');
     };
     window.executePrinterCpuTest = window.runCpuPrinterSelfTest;
 
@@ -1410,7 +1405,6 @@ namespace DotNetCoreStandardApp {
         } else if (preset === 'bare') {
           window.slots[s].plugged = false;
         } else if (preset === 'gaming') {
-          // Gaming: Mockingboard (4), Floppy (6), Slinky (5), Printer (1)
           window.slots[s].plugged = (s === 4 || s === 6 || s === 5 || s === 1);
         }
       }
@@ -1471,6 +1465,7 @@ namespace DotNetCoreStandardApp {
       if (!file) return;
       if (status) status.innerText = `Drive 1: ${file.name} (${file.size} bytes)`;
       if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(880, 0.1);
+      window.showToast(`💾 Loaded disk image: ${file.name}`, 'success');
     };
 
     window.bootFloppyDrive = function() {
@@ -1481,7 +1476,7 @@ namespace DotNetCoreStandardApp {
       if (!window.emulator) return;
       window.emulator.cursorRow = 0;
       window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40));
-      window.emulator.writeString(0, 10, "APPLE //c ULTRA (50 MHz)");
+      window.emulator.writeString(0, 8, "APPLE //c ULTRA (50 MHz)");
       window.emulator.writeString(1, 2, "DOS 3.3 SYSTEM MASTER LOADED");
       window.emulator.writeString(3, 0, "] █");
       window.emulator.cursorRow = 3;
@@ -1505,7 +1500,7 @@ namespace DotNetCoreStandardApp {
       if (!window.emulator) return;
       window.emulator.cursorRow = 0;
       window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40));
-      window.emulator.writeString(0, 10, "PRODOS 2.4.2 (SMARTPORT HD)");
+      window.emulator.writeString(0, 7, "PRODOS 2.4.2 (SMARTPORT HD)");
       window.emulator.writeString(1, 2, "32MB CONTIGUOUS VOLUME /HD ONLINE");
       window.emulator.writeString(3, 0, "] █");
       window.emulator.cursorRow = 3;
@@ -1581,7 +1576,7 @@ namespace DotNetCoreStandardApp {
       const asmViewer = document.getElementById('code-studio-asm');
       if (!editor || !asmViewer) return;
       const code = editor.value;
-      let generatedAsm = "; --- 65C02 NATIVE AOT COMPILER OUTPUT ---\n; TARGET: APPLE //c ULTRA (SWEET16 / OOP ZERO PAGE)\n* = $2000\n";
+      let generatedAsm = "; --- 65C02 NATIVE AOT COMPILER OUTPUT ---\n; TARGET: 65C02 ULTRA WORKSTATION (SWEET16 / ZERO PAGE)\n* = $2000\n";
       if (code.includes('BreakoutGame') || code.includes('BREAKOUT')) {
         generatedAsm += "        LDA #$01\n        STA $C050 ; GRAPHICS\n        STA $C057 ; HIRES\n        STA $C05E ; DHGR AN3\n        LDX #$00\n.LOOP   LDA MSG,X\n        BEQ .DONE\n        JSR $FDED\n        INX\n        BNE .LOOP\n.DONE   RTS\nMSG     .ASC \"BREAKOUT 1984 RUNNING\",$00";
       } else {
@@ -1685,7 +1680,7 @@ namespace DotNetCoreStandardApp {
 
     window.flashCustomBanner = function() {
       const input = document.getElementById('custom-banner-text');
-      const text = input ? input.value : 'APPLE //c ULTRA';
+      const text = input ? input.value : 'APPLE //c ULTRA (50 MHz)';
       if (!window.emulator) return;
       window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40));
       window.emulator.writeString(0, Math.max(0, Math.floor((40 - text.length) / 2)), text.toUpperCase());
@@ -2116,7 +2111,7 @@ namespace DotNetCoreStandardApp {
         this.renderScreen();
       }
 
-                        readMem(addr) {
+                                    readMem(addr) {
         addr = addr & 0xffff;
         
         // $0000–$BFFF: RAM
@@ -2131,7 +2126,7 @@ namespace DotNetCoreStandardApp {
             if (this.keyQueue.length > 0) {
               return (this.keyQueue[0] | 0x80) & 0xff;
             }
-            return 0x00; // Bit 7 clear when no key pending
+            return 0x00;
           }
           if (addr === 0xc010) {
             // Keyboard Strobe Clear ($C010)
