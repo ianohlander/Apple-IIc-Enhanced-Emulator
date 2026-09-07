@@ -1295,6 +1295,37 @@ runner.suite('Desktop Workstation Pro: Offline Licensing, Tauri Scaffolding & DN
   });
 });
 
+
+// 19. User Acceptance Testing (UAT): 10-Station Execution Runbook & Verification Suite
+runner.suite('User Acceptance Testing (UAT): 10-Station Runbook & Verification Circuit', () => {
+  runner.test('UAT Master Runbook: docs/uat-test-runbook.html & docs/developer/uat-test-runbook.html Integrity', () => {
+    const rootUat = fs.readFileSync(path.join(__dirname, '..', 'docs', 'uat-test-runbook.html'), 'utf8');
+    const devUat = fs.readFileSync(path.join(__dirname, '..', 'docs', 'developer', 'uat-test-runbook.html'), 'utf8');
+
+    // Verify 10 Stations coverage in root UAT
+    assertTrue(rootUat.includes('Station 1: First Boot, Case Controls &amp; Speed Softswitches'), 'Station 1 present');
+    assertTrue(rootUat.includes('Station 2: CRT Display Engine, Phosphors &amp; Sizing Modes'), 'Station 2 present');
+    assertTrue(rootUat.includes('Station 3: Docked 63-Key Keyboard &amp; Strobe Input'), 'Station 3 present');
+    assertTrue(rootUat.includes('Station 4: Storage Bay — Floppy Disks &amp; SmartPort 32MB HD'), 'Station 4 present');
+    assertTrue(rootUat.includes('Station 5: Motherboard Peripheral Bay &amp; Universal Slots 1–7'), 'Station 5 present');
+    assertTrue(rootUat.includes('Station 6: Modern Java &amp; C# AOT Compiler Studio'), 'Station 6 present');
+    assertTrue(rootUat.includes('Station 7: Magazine Type-In Transcriber &amp; OCR'), 'Station 7 present');
+    assertTrue(rootUat.includes('Station 8: CPU Register &amp; Disassembly Trace Monitor'), 'Station 8 present');
+    assertTrue(rootUat.includes('Station 9: Custom ROM Firmware Studio &amp; BYOR'), 'Station 9 present');
+    assertTrue(rootUat.includes('Station 10: Standalone Desktop &amp; Deployment Verification'), 'Station 10 present');
+
+    // Verify Developer mirror
+    assertTrue(devUat.includes('Station 5: Motherboard Peripheral Bay &amp; Universal Slots 1–7'), 'Developer mirror Station 5 present');
+    assertTrue(devUat.includes('Station 6: Modern Java &amp; C# AOT Compiler Studio'), 'Developer mirror Station 6 present');
+  });
+
+  runner.test('Documentation Portal Links to UAT Playbook', () => {
+    const indexDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
+    assertTrue(indexDoc.includes('uat-test-runbook.html'), 'docs/index.html links to UAT runbook');
+    assertTrue(indexDoc.includes('10-STATION UAT PLAYBOOK'), 'UAT Playbook card badge present');
+  });
+});
+
 const passed = runner.summarize();
 process.exit(passed ? 0 : 1);
 

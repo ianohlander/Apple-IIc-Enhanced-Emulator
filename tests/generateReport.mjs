@@ -96,7 +96,7 @@ const html = `<!DOCTYPE html>
 
     <div class="flex items-center space-x-3 text-xs font-mono">
       <span class="px-2.5 py-1 rounded badge-pass font-bold flex items-center gap-1">
-        ✓ 25/25 SUITES PASSED (100%)
+        ✓ 51/51 SUITES PASSED (100%)
       </span>
       <a href="../index-standalone.html" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow">
         ⚡ Launch Emulator
@@ -131,7 +131,7 @@ const html = `<!DOCTYPE html>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-[#30363d] font-mono text-xs">
         <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
           <span class="text-gray-400 block mb-1">Automated Test Suites</span>
-          <span class="text-xl font-bold text-emerald-400">25 / 25 Passed</span>
+          <span class="text-xl font-bold text-emerald-400">51 / 51 Passed</span>
           <span class="text-[10px] text-gray-500 block">100% Pass Rate (0 Failures)</span>
         </div>
         <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
