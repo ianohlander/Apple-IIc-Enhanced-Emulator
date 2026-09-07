@@ -227,14 +227,14 @@
       </div>
     </section>
 
-    <!-- Station 2: CRT Display Engine, Phosphors & Fullscreen Modes -->
+    <!-- Station 2: CRT Display Engine, Phosphors & Fullscreen Immersion -->
     <section class="uat-card p-6 md:p-8 space-y-4">
       <div class="flex flex-wrap items-center justify-between border-b border-[#232f42] pb-3 gap-2">
         <div class="flex items-center space-x-3">
           <span class="step-number">2</span>
           <div>
-            <h3 class="text-base font-bold text-white">Station 2: CRT Display Engine, Phosphors &amp; Sizing Modes</h3>
-            <span class="text-xs text-stone-400">Validates 4:3 Normal, Expanded Theater (94vw/75vh), Fullscreen &amp; Color filters.</span>
+            <h3 class="text-base font-bold text-white">Station 2: CRT Display Engine, Phosphors &amp; Fullscreen Immersion</h3>
+            <span class="text-xs text-stone-400">Validates 4:3 Normal, Fullscreen Immersion, Zero Bottom Truncation &amp; Flyout Drawer Access.</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">DISPLAY ENGINE</span>
@@ -252,20 +252,20 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-2-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-2-2">
-              <strong>2.2 Expanded Theater Viewport:</strong> Click the <strong>Expanded</strong> button in the monitor bezel. Verify the CRT expands smoothly across 94vw and 75vh height without distortion. Click <strong>Normal</strong> to return.
+              <strong>2.2 Fullscreen Immersion &amp; Zero Truncation:</strong> Click <strong>⛶ Fullscreen</strong> (or press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Alt+Enter</kbd> / <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">F11</kbd>). Confirm the CRT monitor expands to fill the viewport while keeping the bottom platinum case chassis (50 MHz speed dropdown, Reset, and Power buttons) completely visible with zero bottom truncation.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-2-3" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-2-3">
-              <strong>2.3 HTML5 True Fullscreen:</strong> Click <strong>⛶ Fullscreen</strong> (or press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Alt+Enter</kbd> / <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">F11</kbd>). Confirm the browser enters native full-screen mode. Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd> to exit cleanly.
+              <strong>2.3 Fullscreen Flyout Drawer Access:</strong> While in full screen mode, click any quick hardware icon (<code>💾 Storage</code>, <code>🖨️ Printer</code>, <code>🎛️ Slots</code>, <code>☕ AOT</code>, <code>📖 Type-In</code>, <code>⚙️ CPU</code>, <code>⚡ ROM</code>). Verify the hardware cabinet drawer slides smoothly over the right side of the screen, providing 100% full access to all simulated hardware, disk drives, printers, and compilers. Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd> to close the drawer.
             </label>
           </div>
         </div>
 
         <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">Expected Result:</strong> Pixel-crisp 560x384 canvas scaling with authentic scanline overlay in all 3 sizing tiers.
+          <strong class="text-amber-400">Expected Result:</strong> Crisp 4:3 CRT canvas scaling, untruncated bottom chassis controls, and effortless slide-out hardware cabinet access in both normal and fullscreen modes.
         </div>
       </div>
     </section>

@@ -1083,12 +1083,11 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
   runner.test('Vintage Peripheral Bays, Fullscreen Viewport & Docked Keyboard UI Integrity', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
 
-    // Viewport Screen Sizing Controls
-    assertTrue(html.includes('id="btn-screen-normal"'), 'Screen size button #btn-screen-normal exists');
-    assertTrue(html.includes('id="btn-screen-expanded"'), 'Screen size button #btn-screen-expanded exists');
+    // Viewport Fullscreen Sizing Controls & Quick Flyouts
     assertTrue(html.includes('id="btn-screen-fullscreen"'), 'Screen size button #btn-screen-fullscreen exists');
-    assertTrue(html.includes('setScreenSize('), 'setScreenSize JavaScript function defined');
     assertTrue(html.includes('toggleFullscreen('), 'toggleFullscreen JavaScript function defined');
+    assertTrue(html.includes('setScreenMode('), 'setScreenMode JavaScript function defined');
+    assertTrue(html.includes('fullscreen-active'), 'fullscreen-active responsive styles defined');
 
     // Vintage Peripheral Bay Toolbar Icons & Tooltips
     const bayButtons = ['storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'crt'];
@@ -1304,7 +1303,7 @@ runner.suite('User Acceptance Testing (UAT): 10-Station Runbook & Verification C
 
     // Verify 10 Stations coverage in root UAT
     assertTrue(rootUat.includes('Station 1: First Boot, Case Controls &amp; Speed Softswitches'), 'Station 1 present');
-    assertTrue(rootUat.includes('Station 2: CRT Display Engine, Phosphors &amp; Sizing Modes'), 'Station 2 present');
+    assertTrue(rootUat.includes('Station 2: CRT Display Engine, Phosphors &amp; Fullscreen Immersion'), 'Station 2 present');
     assertTrue(rootUat.includes('Station 3: Docked 63-Key Keyboard &amp; Strobe Input'), 'Station 3 present');
     assertTrue(rootUat.includes('Station 4: Storage Bay — Floppy Disks &amp; SmartPort 32MB HD'), 'Station 4 present');
     assertTrue(rootUat.includes('Station 5: Motherboard Peripheral Bay &amp; Universal Slots 1–7'), 'Station 5 present');
