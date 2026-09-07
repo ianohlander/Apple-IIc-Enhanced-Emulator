@@ -7,7 +7,7 @@
   <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Comprehensive User Acceptance Testing (UAT) Runbook</title>
+  <title>65C02 Ultra Workstation — Comprehensive User Acceptance Testing (UAT) Runbook</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -71,14 +71,14 @@
   <header class="bg-[#131924] border-b border-[#243042] px-6 py-4 flex flex-wrap items-center justify-between shadow-lg gap-4">
     <div class="flex items-center space-x-3">
       <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 via-amber-600 to-amber-800 flex items-center justify-center shadow text-black font-black text-xl">
-        
+        ⚡
       </div>
       <div>
         <div class="flex items-center gap-2">
           <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">QA &amp; Release Engineering</span>
           <span class="text-[10px] px-2 py-0.5 rounded-full badge-uat-ready font-bold">RELEASE 2.4.2 READY</span>
         </div>
-        <h1 class="text-lg font-extrabold text-white">Apple //c Ultra — Comprehensive User Acceptance Testing (UAT) Runbook</h1>
+        <h1 class="text-lg font-extrabold text-white">65C02 Ultra Workstation — Comprehensive User Acceptance Testing (UAT) Runbook</h1>
       </div>
     </div>
 
@@ -111,19 +111,19 @@
         User Acceptance Testing (UAT) Master Execution Plan
       </h2>
       <p class="text-gray-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
-        This document provides an exhaustive, step-by-step verification checklist for manual and semi-automated user testing of the Apple //c Ultra emulator. Use this runbook to validate all 10 hardware bays, multi-slot virtual cards, modern Java/C# AOT compiler pipelines, magazine type-in transcriber, phosphor display filters, and storage subsystems prior to public deployment.
+        This document provides an exhaustive, step-by-step verification checklist for manual and automated user testing of the 65C02 Ultra Workstation (Compatible with Apple //c Architecture). Use this runbook to validate top bezel controls, CRT phosphors, fullscreen immersion, clipboard paste with live character toasts, fly-up 63-key matrix keyboard, ImageWriter II continuous tractor printer (with 5 paper stocks, dot-matrix fonts, form feed, buffer clear &amp; zero-blank-page PDF export), 7-slot expansion bus, universal JS card sandbox, Java &amp; C# AOT compilers, magazine type-in transcriber, CPU disassembly monitor, custom ROM studio, and legal fair-use compliance prior to deployment.
       </p>
 
       <!-- Key Metrics & Test Summary Cards -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-[#243144] font-mono text-xs">
         <div class="bg-[#0b0e14] p-3 rounded-xl border border-[#1e293b]">
           <span class="text-stone-400 block mb-1">Automated Unit Suites</span>
-          <span class="text-xl font-bold text-emerald-400">51 / 51 Passed</span>
+          <span class="text-xl font-bold text-emerald-400">53 / 53 Passed</span>
           <span class="text-[10px] text-stone-500 block">100% Green (0 Failures)</span>
         </div>
         <div class="bg-[#0b0e14] p-3 rounded-xl border border-[#1e293b]">
           <span class="text-stone-400 block mb-1">Browser Surface Tests</span>
-          <span class="text-xl font-bold text-amber-400">18 / 18 Passed</span>
+          <span class="text-xl font-bold text-amber-400">23 / 23 Passed</span>
           <span class="text-[10px] text-stone-500 block">Canvas, Keyboard &amp; Audio</span>
         </div>
         <div class="bg-[#0b0e14] p-3 rounded-xl border border-[#1e293b]">
@@ -151,12 +151,12 @@
       <div class="space-y-3">
         <div class="p-3.5 bg-[#080b10] rounded-lg border border-[#1c2638] space-y-2">
           <div class="flex justify-between text-stone-400 font-bold">
-            <span>Step 0.1: Run Full 51-Suite Automated Unit &amp; Architecture Tests</span>
+            <span>Step 0.1: Run Full 53-Suite Automated Unit &amp; Architecture Tests</span>
             <span class="text-emerald-400">Automated</span>
           </div>
           <pre class="text-emerald-400 bg-black/50 p-2.5 rounded border border-[#162030]"><code>npm test</code></pre>
           <p class="text-[11px] text-stone-400 font-sans">
-            <strong>Expected Output:</strong> <code>51/51 Suites/Tests Passed, 0 Failed</code> (Verifies 65C02 CPU microcode, MMU banking, Slinky 1MB DMA, Mockingboard PSG, and AOT compiler lowering).
+            <strong>Expected Output:</strong> <code>53/53 Suites/Tests Passed, 0 Failed</code> (Verifies 65C02 CPU microcode, MMU banking, Slinky 1MB DMA, Mockingboard PSG, ProDOS MLI, ImageWriter II Centronics latch, and AOT compiler lowering).
           </p>
         </div>
 
@@ -167,7 +167,7 @@
           </div>
           <pre class="text-emerald-400 bg-black/50 p-2.5 rounded border border-[#162030]"><code>node tests/surfaceTestSuite.mjs</code></pre>
           <p class="text-[11px] text-stone-400 font-sans">
-            <strong>Expected Output:</strong> <code>18/18 Tests Passed, 0 Failed</code> (Verifies canvas rasterization, keyboard strobe FIFO, immediate math evaluation, and type-in ingestion).
+            <strong>Expected Output:</strong> <code>23/23 Tests Passed, 0 Failed</code> (Verifies canvas rasterization, keyboard strobe FIFO, immediate math evaluation, type-in ingestion, AOT statements, phosphor switching, and printer surface).
           </p>
         </div>
       </div>
@@ -184,7 +184,7 @@
           <span class="step-number">1</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 1: First Boot, Case Controls &amp; Speed Softswitches</h3>
-            <span class="text-xs text-stone-400">Validates cold boot ROM banner, warm reset, and 50 MHz turbo throttling.</span>
+            <span class="text-xs text-stone-400">Validates cold boot ROM banner, top bezel controls, power cycle, warm reset, and 50 MHz turbo throttling.</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">CORE CHASSIS</span>
@@ -195,34 +195,34 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-1-1" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-1-1">
-              <strong>1.1 Initial Boot Verification:</strong> Open <a href="../index-standalone.html" target="_blank" class="text-amber-400 underline font-mono">index-standalone.html</a> directly in Google Chrome, Microsoft Edge, or Mozilla Firefox. Confirm the monitor displays <code>APPLE //c ULTRA (50 MHz TURBO)</code> on Row 0 and a blinking green cursor prompt <code>] █</code> on Row 2.
+              <strong>1.1 Initial Boot Verification:</strong> Open <a href="../index-standalone.html" target="_blank" class="text-amber-400 underline font-mono">index-standalone.html</a> directly in Google Chrome, Microsoft Edge, or Mozilla Firefox. Confirm the monitor displays <code>65C02 ULTRA WORKSTATION (50 MHz TURBO)</code> on Row 0, nominative fair use subtext (*"Compatible with Apple //c Architecture"*), and a blinking green cursor prompt <code>] █</code> on Row 2.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-1-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-1-2">
-              <strong>1.2 Power Cycle Button:</strong> Click the green <strong>POWER</strong> button on the case chassis. Verify the audio clicks, memory is re-initialized, and the screen re-boots cleanly.
+              <strong>1.2 Power Cycle Button (Top Bezel):</strong> Click the green <strong>POWER</strong> button on the top bezel bar. Verify the audio clicks, memory is re-initialized, and the system re-boots cleanly.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-1-3" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-1-3">
-              <strong>1.3 Warm Reset Button:</strong> Click the red <strong>RESET</strong> button. Confirm that the CPU warm-boots without wiping existing VRAM contents.
+              <strong>1.3 Warm Reset Button (Top Bezel):</strong> Click the red <strong>RESET</strong> button on the top bezel bar. Confirm that the CPU warm-boots without wiping existing VRAM contents or breaking cursor positioning.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-1-4" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-1-4">
-              <strong>1.4 Clock Speed Dropdown:</strong> Select <code>1.02 MHz (Vintage 1984)</code>, <code>2.80 MHz (Apple IIGS)</code>, <code>8.00 MHz (ZipChip)</code>, and <code>50.0 MHz (Ultra Turbo)</code>. Verify text contrast remains crisp and readable against dark background.
+              <strong>1.4 Clock Speed Throttling (Top Bezel Dropdown):</strong> In the top bezel speed dropdown, select <code>1.02 MHz (Vintage 1984)</code>, <code>2.80 MHz (Apple IIGS)</code>, <code>8.00 MHz (ZipChip)</code>, and <code>50.0 MHz (Ultra Turbo)</code>. Verify smooth speed transitions with zero UI distortion.
             </label>
           </div>
         </div>
 
         <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">Expected Result:</strong> Immediate prompt readiness (&lt;100ms), zero console JavaScript errors, audible power-cycle tone.
+          <strong class="text-amber-400">Expected Result:</strong> Immediate prompt readiness (&lt;100ms), zero console JavaScript errors, audible power-cycle tone, and all primary controls comfortably unified on the monitor top bezel.
         </div>
       </div>
     </section>
@@ -234,7 +234,7 @@
           <span class="step-number">2</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 2: CRT Display Engine, Phosphors &amp; Fullscreen Immersion</h3>
-            <span class="text-xs text-stone-400">Validates 4:3 Normal, Fullscreen Immersion, Zero Bottom Truncation &amp; Flyout Drawer Access.</span>
+            <span class="text-xs text-stone-400">Validates 4:3 Normal &amp; Fullscreen container toggle, Phosphor Selection in top bar, and Clipboard Paste-to-Screen with Toast feedback.</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">DISPLAY ENGINE</span>
@@ -245,27 +245,34 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-2-1" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-2-1">
-              <strong>2.1 CRT Phosphor Selector:</strong> Switch between <code>🟢 P1 Green</code>, <code>🟡 P3 Amber</code>, <code>⚪ P4 B&amp;W</code>, and <code>🎨 Color NTSC</code>. Verify the text glow, scanlines, and canvas font color update instantaneously.
+              <strong>2.1 CRT Phosphor Selector (Top Bezel):</strong> Select <code>🟢 P1 Green</code>, <code>🟡 P3 Amber</code>, <code>⚪ P4 B&amp;W</code>, and <code>🎨 Color NTSC</code> from the top bezel phosphor dropdown. Verify the text glow, scanlines, and canvas font color update instantaneously without screen glitching.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-2-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-2-2">
-              <strong>2.2 Fullscreen Immersion &amp; Zero Truncation:</strong> Click <strong>⛶ Fullscreen</strong> (or press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Alt+Enter</kbd> / <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">F11</kbd>). Confirm the CRT monitor expands to fill the viewport while keeping the bottom platinum case chassis (50 MHz speed dropdown, Reset, and Power buttons) completely visible with zero bottom truncation.
+              <strong>2.2 True Fullscreen Container Toggle:</strong> Click <strong>⛶ Fullscreen</strong> in the top bezel (or press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Alt+Enter</kbd> / <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">F11</kbd>). Confirm the CRT monitor container cleanly expands to fill the entire screen while maintaining aspect ratio, and the button changes to <strong>🗗 Windowed</strong>. Click <strong>🗗 Windowed</strong> (or press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd>) to exit.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-2-3" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-2-3">
-              <strong>2.3 Fullscreen Flyout Drawer Access:</strong> While in full screen mode, click any quick hardware icon (<code>💾 Storage</code>, <code>🖨️ Printer</code>, <code>🎛️ Slots</code>, <code>☕ AOT</code>, <code>📖 Type-In</code>, <code>⚙️ CPU</code>, <code>⚡ ROM</code>). Verify the hardware cabinet drawer slides smoothly over the right side of the screen, providing 100% full access to all simulated hardware, disk drives, printers, and compilers. Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd> to close the drawer.
+              <strong>2.3 Clipboard Paste to Screen ($C000) &amp; Live Toast:</strong> Copy any text or multi-line BASIC snippet to your system clipboard and click <strong>📋 Paste to Screen ($C000)</strong> in the top bezel. Confirm the characters stream into the keyboard strobe FIFO and a glowing toast banner appears confirming the exact number of characters pasted into memory.
+            </label>
+          </div>
+
+          <div class="flex items-start gap-2 font-sans text-stone-300">
+            <input type="checkbox" id="uat-chk-2-4" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
+            <label for="uat-chk-2-4">
+              <strong>2.4 Slide-Out Hardware Cabinet Drawer:</strong> Click any quick hardware icon (<code>💾 Storage</code>, <code>🖨️ Printer</code>, <code>🎛️ Slots</code>, <code>☕ AOT</code>, <code>📖 Type-In</code>, <code>⚙️ CPU</code>, <code>⚡ ROM</code>). Verify the cabinet drawer slides smoothly from the right with a dimmed backdrop. Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd> or click the backdrop to close.
             </label>
           </div>
         </div>
 
         <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">Expected Result:</strong> Crisp 4:3 CRT canvas scaling, untruncated bottom chassis controls, and effortless slide-out hardware cabinet access in both normal and fullscreen modes.
+          <strong class="text-amber-400">Expected Result:</strong> Razor-sharp CRT canvas scaling, seamless fullscreen transitions, informative paste feedback toasts, and streamlined top bezel controls.
         </div>
       </div>
     </section>
@@ -277,7 +284,7 @@
           <span class="step-number">3</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 3: Fly-Up 63-Key Keyboard &amp; Strobe Input</h3>
-            <span class="text-xs text-stone-400">Validates physical keystrokes, bottom fly-up matrix drawer, immediate math &amp; clipboard paste.</span>
+            <span class="text-xs text-stone-400">Validates physical keystrokes, bottom fly-up matrix drawer, Caps Lock, 40/80 switch, Open/Solid Apple modifiers, and strobe ($C000).</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">KEYBOARD &amp; I/O</span>
@@ -288,41 +295,34 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-3-1" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-3-1">
-              <strong>3.1 Immediate Mode Typing:</strong> Type <code>? 128 * 4</code> on your physical keyboard and press Return. Confirm the CRT outputs <code>512</code> immediately.
+              <strong>3.1 Immediate Mode Typing:</strong> Type <code>? 128 * 4</code> on your physical keyboard and press Return. Confirm the CRT outputs <code>512</code> immediately with authentic keystroke audio clicks.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-3-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-3-2">
-              <strong>3.2 Fly-Up Bottom Keyboard Drawer:</strong> Click the <strong>⌨️</strong> button on the CRT bezel quick-access icon bar. Confirm the 63-key matrix slides UP smoothly from the bottom of the screen with zero page scrolling.
+              <strong>3.2 Fly-Up Bottom Keyboard Drawer:</strong> Click the <strong>⌨️</strong> button in the top bezel toolbar. Confirm the authentic 63-key vintage mechanical matrix slides UP smoothly from the bottom of the viewport with zero page scrolling.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-3-3" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-3-3">
-              <strong>3.3 Matrix Key Clicks &amp; Screen Clear:</strong> Click keys on the bottom keyboard matrix (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Verify the screen clears and moves the cursor to row 0.
+              <strong>3.3 Matrix Key Clicks &amp; Modifiers:</strong> Click virtual keys on the matrix (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Test the <strong>Caps Lock</strong> key, <strong>40/80 Col</strong> switch, <strong>Open Apple (⌘)</strong>, <strong>Solid Apple (⌥)</strong>, and arrow keys. Verify that HOME clears the screen and moves the cursor to row 0.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-3-4" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-3-4">
-              <strong>3.4 Clipboard Paste Button:</strong> Copy a multi-line BASIC snippet to your clipboard and click <strong>📋 Paste</strong>. Confirm the characters stream into the keyboard FIFO strobe ($C000).
-            </label>
-          </div>
-
-          <div class="flex items-start gap-2 font-sans text-stone-300">
-            <input type="checkbox" id="uat-chk-3-5" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
-            <label for="uat-chk-3-5">
-              <strong>3.5 Keyboard Drawer Dismissal:</strong> Press <strong>Esc</strong>, click outside on the backdrop, or click <strong>✕ Close Keyboard</strong>. Confirm the drawer slides down and is cleanly hidden.
+              <strong>3.4 Keyboard Drawer Dismissal:</strong> Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd>, click the dimmed backdrop, or click <strong>✕ Close Keyboard</strong>. Confirm the drawer slides down cleanly.
             </label>
           </div>
         </div>
 
         <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">Expected Result:</strong> Responsive typing with audible click feedback, smooth slide-up animation, and zero vertical spilling.
+          <strong class="text-amber-400">Expected Result:</strong> Responsive mechanical key clicking, reliable $C000 strobe polling, and convenient fly-up keyboard accessibility.
         </div>
       </div>
     </section>
@@ -334,7 +334,7 @@
           <span class="step-number">4</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 4: Storage Bay — Floppy Disks &amp; SmartPort 32MB HD</h3>
-            <span class="text-xs text-stone-400">Validates DSK mounting, stepper seeking sounds, ProDOS 2.4.2 boot, and 32MB HD block I/O.</span>
+            <span class="text-xs text-stone-400">Validates DSK mounting, stepper seeking sounds, ProDOS 2.4.2 boot, 32MB HD block I/O, and Slinky 1MB RAM disk.</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">STORAGE &amp; GCR</span>
@@ -345,7 +345,7 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-4-1" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-4-1">
-              <strong>4.1 Open Storage Bay Cabinet:</strong> Click the <strong>💾 Storage Bay</strong> button in the vintage toolbar. Verify the aluminum flyout drawer slides in from the right with dimmed backdrop.
+              <strong>4.1 Open Storage Bay:</strong> Click the <strong>💾 Storage Bay</strong> quick icon or tab. Verify the storage cabinet drawer slides in with Drive 1 (Floppy 140KB), Drive 2, SmartPort 32MB HD, and Slinky 1MB RAM disk.
             </label>
           </div>
 
@@ -384,10 +384,10 @@
           <span class="step-number">5</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 5: Motherboard Peripheral Bay &amp; Universal Slots 1–7</h3>
-            <span class="text-xs text-stone-400">Validates slot plugging, ImageWriter II printer, and custom JS virtual cards in ANY slot 1–7.</span>
+            <span class="text-xs text-stone-400">Validates ImageWriter II 9-pin tractor-feed printer (5 paper stocks, dot-matrix fonts, form feed, buffer clear &amp; zero-blank-page print) and custom JS virtual cards in ANY slot 1–7.</span>
           </div>
         </div>
-        <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">SLOT EXPANSION</span>
+        <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">SLOT EXPANSION &amp; PRINTER</span>
       </div>
 
       <div class="space-y-4 text-xs">
@@ -395,14 +395,23 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-5-1" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-5-1">
-              <strong>5.1 7-Slot Motherboard Matrix:</strong> Open the <strong>🎛️ Slot Bay</strong> flyout. Verify all 7 slots are displayed with status badges (<code>PLUGGED</code> / <code>EMPTY</code>). Click <strong>⏏️ Unplug Card</strong> and <strong>🔌 Plug In Card</strong>; verify hardware plug/unplug audio chimes.
+              <strong>5.1 ImageWriter II Continuous Tractor-Feed Printing (PR#1):</strong>
+              <ul class="list-disc list-inside mt-1 ml-4 space-y-1 text-stone-400">
+                <li>Execute <code>PR#1 : PRINT "TEST PRINT" : PR#0</code> in BASIC, or click <strong>🖨️ Centronics Hardware Self-Test</strong>. Confirm authentic 9-pin dot-matrix printhead sound and characters rendering onto the paper.</li>
+                <li><strong>5 Paper Stocks:</strong> Select <code>Pure Blank White (No Lines)</code>, <code>Pure Blank Ivory (No Lines)</code>, <code>Classic Green-Bar Fanfold</code>, <code>Classic Lined White</code>, and <code>Classic Lined Ivory</code>. Verify that blank modes display completely clean paper without horizontal ruled lines.</li>
+                <li><strong>Font Switch:</strong> Toggle between <code>9-Pin Dot-Matrix</code> and <code>Clean Line</code> fonts. Verify immediate rendering updates.</li>
+                <li><strong>Form Feed ($0C):</strong> Click <strong>📄 Form Feed</strong> and confirm continuous paper ejects to top-of-form.</li>
+                <li><strong>Clean Buffer Clear:</strong> Click <strong>🗑️ Clear</strong>. Confirm the printer paper resets completely empty without any informative text (like "buffer cleared") contaminating the paper.</li>
+                <li><strong>Zero-Blank-Page Physical Print:</strong> Click <strong>🖨️ Print / PDF</strong>. Verify the print preview contains ONLY the printed data on 1 page with zero extra blank pages.</li>
+                <li><strong>Print Shop / Print Master DSK Integrity:</strong> Confirm banner and sign printing is strictly handled through genuine disk images and 65C02 Centronics hardware execution.</li>
+              </ul>
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-5-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-5-2">
-              <strong>5.2 Virtual ImageWriter II Printer Console:</strong> Switch to the <strong>🖨️ Virtual Printer</strong> toolkit. Test <strong>📋 Copy</strong>, <strong>💾 Download .txt</strong>, and <strong>🗑️ Clear</strong> buttons.
+              <strong>5.2 7-Slot Motherboard Matrix:</strong> Open the <strong>🎛️ Slot Bay</strong>. Verify all 7 slots are displayed with status badges (<code>PLUGGED</code> / <code>EMPTY</code>). Click <strong>⏏️ Unplug Card</strong> and <strong>🔌 Plug In Card</strong>; verify hardware plug/unplug audio chimes.
             </label>
           </div>
 
@@ -411,8 +420,7 @@
             <label for="uat-chk-5-3">
               <strong>5.3 Universal Custom JS Card Sandbox (Slots 1–7):</strong> Switch to the <strong>🧪 Custom JS Card Sandbox</strong> toolkit.
               <ul class="list-disc list-inside mt-1 ml-4 space-y-1 text-stone-400">
-                <li>Select <strong>Target Slot: Slot 1 ($C090)</strong>, <strong>Slot 2 ($C0A0)</strong>, <strong>Slot 3 ($C0B0)</strong>, <strong>Slot 4 ($C0C0)</strong>, <strong>Slot 5 ($C0D0)</strong>, <strong>Slot 6 ($C0E0)</strong>, or <strong>Slot 7 ($C0F0)</strong>.</li>
-                <li>Verify the button text dynamically updates to <code>▶ Apply to Slot &lt;N&gt;</code> and the description shows the corresponding I/O and ROM addresses.</li>
+                <li>Select <strong>Target Slot: Slot 1 ($C090)</strong> through <strong>Slot 7 ($C0F0)</strong>. Verify the button text updates to <code>▶ Apply to Slot &lt;N&gt;</code> and shows the corresponding I/O and ROM addresses.</li>
                 <li>Select the <strong>🌤️ IoT Weather Station</strong> preset and click <strong>▶ Apply to Slot &lt;N&gt;</strong>.</li>
                 <li>Confirm the alert displays: <code>✅ Custom Virtual Hardware Card successfully compiled &amp; plugged into Slot &lt;N&gt;!</code> and the motherboard grid updates Slot &lt;N&gt; with the 🧪 icon and custom name.</li>
               </ul>
@@ -421,7 +429,7 @@
         </div>
 
         <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">Expected Result:</strong> Complete slot independence; custom virtual peripherals can be mapped and executed in any slot 1 through 7 without restrictions.
+          <strong class="text-amber-400">Expected Result:</strong> Authentic tractor-feed printer with 5 stock textures, zero-blank-page PDF export, and full 7-slot universal peripheral card independence.
         </div>
       </div>
     </section>
@@ -490,7 +498,7 @@
           <span class="step-number">7</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 7: Magazine Type-In Transcriber &amp; OCR</h3>
-            <span class="text-xs text-stone-400">Validates vintage listings (inCider Kaleidoscope, Compute! Lunar Lander, Nibble Starfield).</span>
+            <span class="text-xs text-stone-400">Validates vintage listings (inCider Kaleidoscope, Compute! Lunar Lander, Nibble Starfield, $0300 Hex Dump).</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">TYPE-IN STUDIO</span>
@@ -515,7 +523,14 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-7-3" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-7-3">
-              <strong>7.3 65C02 Hex Dump Injection ($300):</strong> Load <code>65C02 Hex Dump ($300)</code> and inject. Confirm the machine code routine prints <code>APPLE</code> via standard ROM COUT ($FDED).
+              <strong>7.3 Nibble 3D Starfield (1983):</strong> Load and feed Nibble 3D Starfield. Confirm star particles radiate outwards in 3D perspective.
+            </label>
+          </div>
+
+          <div class="flex items-start gap-2 font-sans text-stone-300">
+            <input type="checkbox" id="uat-chk-7-4" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
+            <label for="uat-chk-7-4">
+              <strong>7.4 65C02 Hex Dump Injection ($300):</strong> Load <code>65C02 Hex Dump ($300)</code> and inject. Confirm the machine code routine prints <code>APPLE</code> via standard ROM COUT ($FDED).
             </label>
           </div>
         </div>
@@ -533,7 +548,7 @@
           <span class="step-number">8</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 8: CPU Register &amp; Disassembly Trace Monitor</h3>
-            <span class="text-xs text-stone-400">Validates live hardware registers (A, X, Y, SP, PC) and disassembly trace window.</span>
+            <span class="text-xs text-stone-400">Validates live hardware registers (A, X, Y, SP, PC, flags), instruction stepping, and disassembly trace window.</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">CPU MONITOR</span>
@@ -544,14 +559,14 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-8-1" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-8-1">
-              <strong>8.1 Live Register Inspection:</strong> Open <strong>⚙️ CPU Monitor</strong>. Confirm the 5 register badges (<code>A</code>, <code>X</code>, <code>Y</code>, <code>SP</code>, <code>PC</code>) display valid hexadecimal values (e.g. <code>PC: $2000</code>).
+              <strong>8.1 Live Register Inspection:</strong> Open <strong>⚙️ CPU Monitor</strong>. Confirm the 5 register badges (<code>A</code>, <code>X</code>, <code>Y</code>, <code>SP</code>, <code>PC</code>) and status flags display valid hexadecimal values (e.g. <code>PC: $2000</code>).
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-8-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-8-2">
-              <strong>8.2 Disassembly Code View:</strong> Verify the disassembly viewport renders clean 65C02 assembly mnemonics (e.g. <code>CLD</code>, <code>LDX #$FF</code>, <code>TXS</code>, <code>STA $C050</code>).
+              <strong>8.2 Disassembly Code View &amp; Stepping:</strong> Verify the disassembly viewport renders clean 65C02 assembly mnemonics (e.g. <code>CLD</code>, <code>LDX #$FF</code>, <code>TXS</code>, <code>STA $C050</code>). Click <strong>Step Instruction (F8)</strong> to verify single-step execution.
             </label>
           </div>
         </div>
@@ -580,7 +595,7 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-9-1" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-9-1">
-              <strong>9.1 Custom Boot Banner Hot-Patch:</strong> Open <strong>⚡ ROM Studio</strong>. Edit the text input to <code>APPLE //c ULTRA CUSTOM EDITION</code> and click <strong>⚡ Hot-Patch Banner</strong>. Verify the top row of the CRT display updates immediately.
+              <strong>9.1 Custom Boot Banner Hot-Patch:</strong> Open <strong>⚡ ROM Studio</strong>. Edit the text input to <code>65C02 ULTRA CUSTOM EDITION</code> and click <strong>⚡ Hot-Patch Banner</strong>. Verify the top row of the CRT display updates immediately.
             </label>
           </div>
         </div>
@@ -598,7 +613,7 @@
           <span class="step-number">10</span>
           <div>
             <h3 class="text-base font-bold text-white">Station 10: Standalone Desktop &amp; Deployment Verification</h3>
-            <span class="text-xs text-stone-400">Validates zero-bundler standalone execution, Tauri 2.0 config, and DNS playbook.</span>
+            <span class="text-xs text-stone-400">Validates zero-bundler standalone execution, Tauri 2.0 config, legal fair-use compliance, and documentation links.</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">DEPLOYMENT &amp; DESKTOP</span>
@@ -616,13 +631,20 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-10-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-10-2">
-              <strong>10.2 Deployment &amp; Strategy Documentation Links:</strong> Verify all documentation links in the header (<a href="tactical-execution-playbook.html" class="text-emerald-400 underline">Tactical Execution Playbook</a>, <a href="developer/custom-peripheral-cards.html" class="text-amber-400 underline">Card Developer Guide</a>, <a href="index.html" class="text-cyan-400 underline">Docs Hub</a>) resolve properly.
+              <strong>10.2 Legal Trademark Fair-Use Compliance:</strong> Verify the application clearly displays <code>65C02 Ultra Workstation</code> with the nominative fair use subtitle (<em>"Compatible with Apple //c Architecture"</em>) and contains appropriate educational disclaimers.
+            </label>
+          </div>
+
+          <div class="flex items-start gap-2 font-sans text-stone-300">
+            <input type="checkbox" id="uat-chk-10-3" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
+            <label for="uat-chk-10-3">
+              <strong>10.3 Documentation Portal Links:</strong> Verify all documentation links in the header (<a href="developer/custom-peripheral-cards.html" class="text-amber-400 underline">Card Developer Guide</a>, <a href="comprehensive-ultra-tutorial.html" class="text-emerald-400 underline">Master Tutorial Textbook</a>, <a href="index.html" class="text-cyan-400 underline">Docs Hub</a>) resolve properly.
             </label>
           </div>
         </div>
 
         <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">Expected Result:</strong> Complete standalone packaging readiness for both web hosting and native Tauri desktop executables.
+          <strong class="text-amber-400">Expected Result:</strong> Complete standalone packaging readiness for both web hosting and native Tauri desktop executables with full trademark compliance.
         </div>
       </div>
     </section>
@@ -648,12 +670,12 @@
         </div>
         <div class="p-3.5 bg-[#0a0d14] rounded-xl border border-[#1c2638] space-y-1">
           <span class="text-stone-400 block font-bold">COMPLIANCE STATUS:</span>
-          <span class="text-amber-400 font-bold">100% Passed (51 Suites + 18 Surface)</span>
+          <span class="text-amber-400 font-bold">100% Passed (53 Suites + 23 Surface)</span>
         </div>
       </div>
 
       <div class="pt-2 text-stone-400 text-xs font-sans leading-relaxed">
-        All 10 testing stations verify that the Apple //c Ultra workstation fulfills all requirements for silicon accuracy, 7-slot universal peripheral expansion, AOT compiler pipelines, and standalone deployment.
+        All 10 testing stations verify that the 65C02 Ultra Workstation fulfills all requirements for silicon accuracy, 7-slot universal peripheral expansion, ImageWriter II continuous tractor printing with 5 paper stocks, AOT compiler pipelines, and standalone deployment.
       </div>
     </section>
 
@@ -661,8 +683,8 @@
 
   <!-- Footer -->
   <footer class="mt-12 bg-[#090b10] border-t border-[#1a2332] text-stone-500 text-xs font-mono text-center py-6 w-full">
-    Apple //c Ultra QA Engineering • 65C02 CMOS Emulation • User Acceptance Testing Runbook
-    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
+    65C02 Ultra QA Engineering • 65C02 CMOS Emulation • User Acceptance Testing Runbook
+    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>
   </footer>
 
 </body>
