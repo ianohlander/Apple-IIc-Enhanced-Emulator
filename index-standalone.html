@@ -121,6 +121,14 @@
       background-color: #121820;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.7);
     }
+    .paper-blank {
+      background-color: #ffffff;
+      background-image: none !important;
+    }
+    .paper-plain-ivory {
+      background-color: #fbf8f0;
+      background-image: none !important;
+    }
     .paper-greenbar {
       background-color: #faf9f5;
       background-image: linear-gradient(rgba(215, 238, 220, 0.45) 50%, transparent 50%);
@@ -128,7 +136,7 @@
     }
     .paper-white {
       background-color: #ffffff;
-      background-image: linear-gradient(#f4f4f4 1px, transparent 1px);
+      background-image: linear-gradient(#f0f0f0 1px, transparent 1px);
       background-size: 100% 24px;
     }
     .paper-ivory {
@@ -586,9 +594,11 @@
             <div class="flex items-center gap-2">
               <span class="text-stone-400 text-[11px] font-bold">PAPER STOCK:</span>
               <select id="printer-paper-stock" onchange="setPaperStock(this.value)" class="bg-[#141a24] text-emerald-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none">
-                <option value="greenbar">🟢 Green-Bar Fanfold (1/2" Bands)</option>
-                <option value="white">⚪ Classic White Fanfold</option>
-                <option value="ivory">📜 Ivory Certificate Parchment</option>
+                <option value="blank" selected>⚪ Pure Blank White (No Lines / Plain)</option>
+                <option value="greenbar">🟢 Green-Bar Fanfold (1/2" Data Bands)</option>
+                <option value="white">📏 Lined White Fanfold (Ruled Lines)</option>
+                <option value="plain-ivory">📜 Pure Blank Ivory (No Lines)</option>
+                <option value="ivory">📜 Lined Ivory Parchment</option>
               </select>
             </div>
 
@@ -639,7 +649,7 @@
           </div>
 
           <!-- Printable Continuous Fanfold Paper Area -->
-          <div class="flex-1 p-4 paper-greenbar overflow-x-auto min-h-[300px]" id="printer-paper-surface">
+          <div class="flex-1 p-4 paper-blank overflow-x-auto min-h-[300px]" id="printer-paper-surface">
             <textarea id="printer-paper-view" rows="14" class="w-full bg-transparent border-0 resize-y p-0 focus:outline-none print-font-dotmatrix" spellcheck="false" placeholder="[ ImageWriter II 9-pin dot-matrix tractor-feed paper is online. Real-time 65C02 printer stream via PR#1 or $C090 will appear here... ]"></textarea>
           </div>
 
@@ -1256,8 +1266,10 @@ namespace RetroArcade {
     window.setPaperStock = function(stock) {
       const surface = document.getElementById('printer-paper-surface');
       if (!surface) return;
-      surface.classList.remove('paper-greenbar', 'paper-white', 'paper-ivory');
-      if (stock === 'greenbar') surface.classList.add('paper-greenbar');
+      surface.classList.remove('paper-blank', 'paper-plain-ivory', 'paper-greenbar', 'paper-white', 'paper-ivory');
+      if (stock === 'blank') surface.classList.add('paper-blank');
+      else if (stock === 'plain-ivory') surface.classList.add('paper-plain-ivory');
+      else if (stock === 'greenbar') surface.classList.add('paper-greenbar');
       else if (stock === 'white') surface.classList.add('paper-white');
       else if (stock === 'ivory') surface.classList.add('paper-ivory');
     };
@@ -2121,7 +2133,7 @@ namespace RetroArcade {
         this.renderScreen();
       }
 
-                                          readMem(addr) {
+                                                readMem(addr) {
         addr = addr & 0xffff;
         
         // $0000–$BFFF: RAM
