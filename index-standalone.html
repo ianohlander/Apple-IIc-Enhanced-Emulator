@@ -261,14 +261,8 @@
 
     <!-- Quick Navigation & Documentation Links -->
     <div class="flex flex-wrap items-center gap-2">
-      <a href="docs/index.html" class="px-2.5 py-1.5 rounded-lg bg-[#141a24] hover:bg-[#1e2736] text-stone-300 border border-stone-700 transition flex items-center gap-1">
-        <span>📖</span> Docs Hub
-      </a>
-      <a href="docs/developer/custom-peripheral-cards.html" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-[#141a24] hover:bg-[#1e2736] text-amber-300 border border-stone-700 transition flex items-center gap-1">
-        <span>🎛️</span> Card Dev Guide
-      </a>
-      <a href="docs/tactical-execution-playbook.html" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-[#141a24] hover:bg-[#1e2736] text-emerald-400 border border-stone-700 transition flex items-center gap-1">
-        <span>🚀</span> Deployment Playbook
+      <a href="docs/index.html" class="px-3 py-1.5 rounded-lg bg-[#141a24] hover:bg-[#1e2736] text-stone-200 border border-stone-700 transition flex items-center gap-1.5 shadow">
+        <span>📖</span> Documentation
       </a>
     </div>
   </header>
@@ -678,7 +672,10 @@
             <h4 class="text-sm font-bold text-amber-400">MOTHERBOARD PERIPHERAL EXPANSION BAY (SLOTS 1–7)</h4>
             <p class="text-xs text-gray-400">Plug in, unplug, or swap hardware expansion cards on the 50-pin Apple bus.</p>
           </div>
-          <div class="flex flex-wrap gap-1.5 text-xs">
+          <div class="flex flex-wrap items-center gap-1.5 text-xs">
+            <a href="docs/developer/custom-peripheral-cards.html" target="_blank" class="px-2.5 py-1 bg-amber-600/30 hover:bg-amber-600 text-amber-300 hover:text-white font-bold rounded border border-amber-500/40 transition flex items-center gap-1">
+              📖 Card Developer Guide ↗
+            </a>
             <button onclick="applySlotPreset('all')" class="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded">⚡ Plug All Cards</button>
             <button onclick="applySlotPreset('gaming')" class="px-2.5 py-1 bg-[#1f2633] hover:bg-[#2d3748] text-amber-300 rounded border border-[#2a3642]">🎮 Gaming Setup</button>
             <button onclick="applySlotPreset('bare')" class="px-2.5 py-1 bg-[#1f2633] hover:bg-[#2d3748] text-gray-300 rounded border border-[#2a3642]">🧹 Unplug All</button>
