@@ -84,7 +84,7 @@
           </button>
           <button onclick="switchView('sec-desktop')" id="btn-sec-desktop" class="tab-btn w-full text-left px-3 py-2 rounded-md hover:bg-[#1a2332] text-gray-300 transition flex items-center justify-between">
             <span class="flex items-center gap-2"><span>💻</span> <strong>3. Desktop Pro (Tauri 2.0)</strong></span>
-            <span class="text-[10px] text-purple-400">Automated</span>
+            <span class="text-[10px] text-purple-400">Deep-Dive</span>
           </button>
           <button onclick="switchView('sec-tiers')" id="btn-sec-tiers" class="tab-btn w-full text-left px-3 py-2 rounded-md hover:bg-[#1a2332] text-gray-300 transition flex items-center justify-between">
             <span class="flex items-center gap-2"><span>💳</span> <strong>4. Tiers &amp; Lemon Squeezy</strong></span>
@@ -300,7 +300,7 @@
               </div>
               
               <p class="leading-relaxed">
-                You do <strong>not</strong> need an IDE (like Visual Studio or VS Code) or local compilers (Rust, Cargo, MSVC C++, Xcode) installed on your computer. Standalone release binaries (<10MB standalone native desktop apps for Windows, macOS, and Linux) are generated using either of the two turnkey methods below:
+                You do <strong>not</strong> need an IDE (like Visual Studio or VS Code) or local compilers (Rust, Cargo, MSVC C++, Xcode) installed on your computer. Standalone release binaries (&lt;10MB standalone native desktop apps for Windows, macOS, and Linux) are generated using either of the two turnkey methods below:
               </p>
 
               <!-- Method 1 -->
@@ -599,43 +599,188 @@
       </section>
 
       <!-- ========================================================================= -->
-      <!-- MODULE 3: DOWNLOADABLE DESKTOP WORKSTATION (TAURI 2.0 & OFFLINE LICENSING) -->
+      <!-- MODULE 3: DOWNLOADABLE DESKTOP WORKSTATION (TAURI 2.0 DEEP-DIVE) -->
       <!-- ========================================================================= -->
-      <section id="sec-desktop" class="space-y-6 scroll-mt-24">
+      <section id="sec-desktop" class="space-y-8 scroll-mt-24">
         <div class="flex items-center justify-between border-b border-[#212c3d] pb-3">
           <div class="flex items-center gap-3">
             <span class="w-9 h-9 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center border border-purple-500/40 text-lg">💻</span>
             <div>
-              <h3 class="text-xl font-extrabold text-white">3. Downloadable Desktop Workstation Pro (Tauri 2.0)</h3>
-              <p class="text-gray-400 text-xs font-mono">Automated builds via Antigravity / GitHub Actions &amp; asymmetric Ed25519 licensing</p>
+              <h3 class="text-xl font-extrabold text-white">3. Downloadable Desktop Workstation Pro: How Executables Are Created</h3>
+              <p class="text-gray-400 text-xs font-mono">Deep technical architecture, compilation pipeline, cloud CI/CD &amp; offline Ed25519 licensing</p>
             </div>
           </div>
-          <span class="px-2.5 py-1 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800">Desktop Pro</span>
+          <span class="px-2.5 py-1 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800">Deep-Dive</span>
         </div>
 
+        <!-- 3.1 Architectural Pipeline -->
         <div class="card-box p-6 space-y-4 text-xs">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+            <span class="text-purple-300 font-bold text-sm font-mono">3.1 The Binary Compilation &amp; Packaging Architecture</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800">Tauri 2.0 Engine</span>
+          </div>
+
+          <p class="text-gray-300 leading-relaxed font-sans">
+            Unlike Electron (which ships a bloated 150MB+ Chromium browser and leaves JavaScript in easily unpackable <code>app.asar</code> archives), <strong>Apple //c Ultra Workstation Pro uses Tauri 2.0</strong> to compile a compact <strong>&lt;10MB standalone native executable</strong> with hardened anti-tamper security:
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 font-mono text-[11px]">
+            <div class="p-3.5 bg-[#080d14] rounded border border-[#1b2533] space-y-2">
+              <span class="text-cyan-300 font-bold block text-xs">1. Native C/Rust Binary Embedding</span>
+              <p class="text-gray-400 font-sans text-xs">
+                During the build step, all HTML, CSS, and minified JavaScript files are compressed, encrypted, and statically compiled directly inside the native OS machine binary (<code>.exe</code>, <code>.dmg</code>, <code>.AppImage</code>). There are zero loose source files on disk.
+              </p>
+            </div>
+
+            <div class="p-3.5 bg-[#080d14] rounded border border-[#1b2533] space-y-2">
+              <span class="text-emerald-300 font-bold block text-xs">2. WebAssembly Instruction Core</span>
+              <p class="text-gray-400 font-sans text-xs">
+                The core 65C02 CPU execution loop, cycle-accurate instruction dispatch, and memory softswitch controllers are compiled into binary WebAssembly (<code>.wasm</code>), executing with near-native CPU dispatch speeds while preventing reverse engineering.
+              </p>
+            </div>
+
+            <div class="p-3.5 bg-[#080d14] rounded border border-[#1b2533] space-y-2">
+              <span class="text-amber-300 font-bold block text-xs">3. Native OS Webview Engine</span>
+              <p class="text-gray-400 font-sans text-xs">
+                Uses the operating system's built-in modern webview: <strong>Microsoft Edge WebView2</strong> on Windows 10/11, <strong>Apple WKWebView</strong> on macOS, and <strong>WebKitGTK</strong> on Linux. This reduces RAM footprint from 400MB down to &lt;45MB!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.2 Detailed Step-by-Step Creation Methods -->
+        <div class="card-box p-6 space-y-6 text-xs">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+            <span class="text-cyan-300 font-bold text-sm font-mono">3.2 Detailed Step-by-Step Executable Creation Guide</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">Zero IDE Required</span>
+          </div>
+
+          <!-- Method 1: In-Chat Antigravity Execution -->
+          <div class="p-4 bg-[#090e18] rounded-xl border border-[#1b2c44] space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-cyan-300 font-bold font-mono text-sm flex items-center gap-2">
+                <span>🤖</span> Method 1: Local Generation via Antigravity (Zero Local Toolchains Needed)
+              </span>
+              <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 font-mono text-[10px]">Easiest Local Method</span>
+            </div>
+            
+            <p class="text-gray-300 font-sans text-xs leading-relaxed">
+              Because Antigravity has direct autonomous access to your repository and build environment, you never have to install Rust, Visual Studio C++ Build Tools, Cargo, or Node build tools yourself.
+            </p>
+
+            <div class="p-3 bg-black rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+              <span class="text-amber-400 font-bold block">How to trigger a local build:</span>
+              <div class="flex items-center justify-between bg-[#0b0e14] p-2 rounded border border-[#192332]">
+                <span class="text-amber-300">"Antigravity, compile the standalone desktop release binaries"</span>
+                <button onclick="copySnippet('antigravity-cmd-val', 'Prompt copied!')" class="px-2 py-1 bg-amber-500/20 text-amber-300 rounded border border-amber-500/40 text-xs hover:bg-amber-500/30">📋 Copy Prompt</button>
+              </div>
+              <p class="text-gray-400 text-[10px] font-sans pt-1">
+                <strong>What Antigravity does behind the scenes:</strong><br>
+                1. Executes <code>npm run build</code> to produce minified production frontend assets in <code>dist/</code>.<br>
+                2. Invokes <code>tauri build</code> with production optimizations (<code>lto = true</code>, <code>opt-level = 3</code>).<br>
+                3. Generates the standalone Windows installer at <code>src-tauri/target/release/bundle/nsis/Apple2Ultra-Setup.exe</code> and enterprise MSI at <code>src-tauri/target/release/bundle/msi/Apple2Ultra.msi</code>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Method 2: GitHub Actions Cloud Matrix -->
+          <div class="p-4 bg-[#091510] rounded-xl border border-[#1b432a] space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-emerald-300 font-bold font-mono text-sm flex items-center gap-2">
+                <span>☁️</span> Method 2: Multi-Platform Cloud Compilation via GitHub Actions
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-mono text-[10px]">Windows + macOS + Linux</span>
+            </div>
+
+            <p class="text-gray-300 font-sans text-xs leading-relaxed">
+              If you need <strong>macOS (.dmg Universal for Apple Silicon &amp; Intel)</strong> and <strong>Linux (.AppImage)</strong> binaries without owning a Mac or Linux computer, our automated GitHub Actions workflow compiles all 3 operating systems in the cloud on GitHub's high-speed servers:
+            </p>
+
+            <div class="p-3 bg-black rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+              <span class="text-emerald-400 font-bold block">Exact Click-by-Click Instructions:</span>
+              <ol class="list-decimal list-inside space-y-1.5 text-gray-300 font-sans text-xs">
+                <li>Open your browser to your GitHub repository: <a href="https://github.com/ianohlander/Apple-IIc-Enhanced-Emulator" target="_blank" class="text-emerald-400 underline font-mono">github.com/ianohlander/Apple-IIc-Enhanced-Emulator</a>.</li>
+                <li>Click the <strong>Actions</strong> tab located at the top of the repository.</li>
+                <li>In the left workflow sidebar, click <strong>"Release Desktop Binaries (Tauri 2.0)"</strong>.</li>
+                <li>Click the <strong>"Run workflow"</strong> dropdown button on the right-hand side.</li>
+                <li>Leave the branch set to <code>main</code> and click the green <strong>"Run workflow"</strong> button.</li>
+                <li>GitHub launches 3 parallel virtual machines:
+                  <ul class="list-disc list-inside pl-4 space-y-0.5 text-gray-400 text-[11px] pt-1">
+                    <li><strong class="text-gray-300">Windows Runner:</strong> Produces <code>Apple2Ultra-Setup.exe</code> and <code>Apple2Ultra.msi</code>.</li>
+                    <li><strong class="text-gray-300">macOS Runner:</strong> Produces <code>Apple2Ultra.dmg</code> Universal binary (M1/M2/M3/M4 + Intel).</li>
+                    <li><strong class="text-gray-300">Ubuntu Runner:</strong> Produces <code>Apple2Ultra.AppImage</code> and <code>Apple2Ultra.deb</code>.</li>
+                  </ul>
+                </li>
+                <li>After ~3 minutes, navigate to the <strong>Releases</strong> page (<code>/releases</code>) to download your compiled installer assets!</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Method 3: Tagged Release Workflow -->
+          <div class="p-4 bg-[#140f1c] rounded-xl border border-[#3b214f] space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-purple-300 font-bold font-mono text-sm flex items-center gap-2">
+                <span>🏷️</span> Method 3: Automated Git Release Tag Trigger
+              </span>
+              <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-mono text-[10px]">Commercial Release</span>
+            </div>
+
+            <p class="text-gray-300 font-sans text-xs leading-relaxed">
+              When you are ready to publish a new official version (e.g. <code>v1.0.0</code>) for Lemon Squeezy and Steam customers:
+            </p>
+
+            <div class="p-3 bg-black rounded border border-[#1b2533] space-y-1.5 font-mono text-[11px]">
+              <span class="text-purple-300 font-bold block">Prompt Antigravity in chat:</span>
+              <div class="bg-[#0b0e14] p-2 rounded border border-[#192332] text-amber-300">
+                "Antigravity, create and push git release tag v1.0.0"
+              </div>
+              <p class="text-gray-400 text-[10px] font-sans pt-1">
+                GitHub Actions automatically detects the tag push, compiles the multi-platform matrix, creates a formal GitHub Release titled <em>"Apple //c Ultra Workstation Pro v1.0.0"</em>, and uploads the <code>.exe</code>, <code>.dmg</code>, and <code>.AppImage</code> directly to the release page.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.3 Offline Licensing Engine & Decoupled Storage -->
+        <div class="card-box p-6 space-y-4 text-xs">
+          <div class="flex items-center justify-between border-b border-[#212c3d] pb-2">
+            <span class="text-amber-300 font-bold text-sm font-mono">3.3 Offline Ed25519 Cryptographic Licensing &amp; Decoupled Workspace</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-800">Zero Crackable DRM</span>
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 bg-[#080d14] rounded border border-[#1b2533] space-y-2">
-              <span class="text-purple-300 font-bold font-mono text-sm block">🔒 5-Tier IP Protection Architecture:</span>
-              <ul class="list-disc list-inside space-y-1 text-gray-400 text-[11px]">
-                <li><strong>Native C/Rust Machine Code:</strong> Web assets are compressed and embedded inside compiled native binaries (<code>.exe</code>, <code>.dmg</code>), preventing easy ASAR extraction.</li>
-                <li><strong>WebAssembly Core:</strong> CPU execution loop is lowered to binary WebAssembly bytecode.</li>
-                <li><strong>Offline Ed25519 Verification:</strong> License keys are validated via embedded public keys without requiring an active internet connection.</li>
-                <li><strong>Decoupled User Workspaces:</strong> Custom user expansion cards and disks are saved into <code>~/Documents/Apple2Ultra/</code>, keeping your source code safe.</li>
+              <span class="text-amber-400 font-bold font-mono text-xs block">🔑 Offline Ed25519 Cryptographic License Engine:</span>
+              <p class="text-gray-300 text-[11px] leading-relaxed">
+                The desktop edition uses asymmetric digital signatures (<code>ed25519-dalek</code> in Rust + <code>src/desktop/licenseManager.ts</code>). Customers receive an offline license key upon Lemon Squeezy checkout:
+              </p>
+              <div class="p-2 bg-black rounded border border-[#1b2533] font-mono text-[10px] text-gray-300 overflow-x-auto">
+                ULTRA-[BASE64_USER_PAYLOAD].[BASE64_ED25519_SIGNATURE]
+              </div>
+              <ul class="list-disc list-inside space-y-1 text-gray-400 text-[10px]">
+                <li><strong>100% Offline:</strong> Validated locally via your embedded public key—zero phone-home DRM servers.</li>
+                <li><strong>Built-in VIP Review Keys:</strong> YouTuber review copies (e.g. <code>VIP-REVIEW-8BITGUY-2026</code>) activate Pro features instantly.</li>
               </ul>
             </div>
 
             <div class="p-4 bg-[#080d14] rounded border border-[#1b2533] space-y-2">
-              <span class="text-cyan-300 font-bold font-mono text-sm block">📦 Multi-Platform Packaging via GitHub Actions:</span>
-              <ul class="list-disc list-inside space-y-1 text-gray-400 text-[11px]">
-                <li><strong>Windows:</strong> <code>Apple2Ultra-Setup.exe</code> and <code>.msi</code> (<10MB installer).</li>
-                <li><strong>macOS:</strong> <code>Apple2Ultra.dmg</code> Universal binary for Apple Silicon (M1/M2/M3) and Intel.</li>
-                <li><strong>Linux:</strong> <code>Apple2Ultra.AppImage</code> and <code>.deb</code> package.</li>
-                <li><strong>Cloud CI/CD:</strong> Triggered in 1-click under GitHub Actions tab or automatically on release tags.</li>
-              </ul>
+              <span class="text-cyan-400 font-bold font-mono text-xs block">📁 Decoupled Local Storage Architecture:</span>
+              <p class="text-gray-300 text-[11px] leading-relaxed">
+                To prevent users from modifying or copying your proprietary emulator code, Tauri maps all user files into their personal operating system document folder:
+              </p>
+              <div class="p-2 bg-black rounded border border-[#1b2533] font-mono text-[10px] text-cyan-300">
+                ~/Documents/Apple2Ultra/<br>
+                ├── Cards/ &nbsp;&nbsp;&nbsp;(Custom .card.js files)<br>
+                ├── Disks/ &nbsp;&nbsp;&nbsp;(.dsk, .po, .2mg virtual disk images)<br>
+                └── Configs/ &nbsp;(Machine state snapshots &amp; palettes)
+              </div>
+              <p class="text-gray-400 text-[10px]">
+                Users can write expansion cards in JavaScript or drop ROM dumps into these folders without ever touching the compiled application binary!
+              </p>
             </div>
           </div>
         </div>
+
       </section>
 
       <!-- ========================================================================= -->
