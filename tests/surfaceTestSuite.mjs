@@ -108,22 +108,40 @@ function createBrowserSurfaceContext() {
     }
   }
 
+  function createMockElement(id = '', tag = 'div') {
+    const el = {
+      id,
+      tagName: tag.toUpperCase(),
+      innerText: '',
+      innerHTML: '',
+      value: '',
+      className: '',
+      style: {},
+      children: [],
+      classList: {
+        add: (...classes) => {},
+        remove: (...classes) => {},
+        toggle: (cls) => {}
+      },
+      appendChild: (child) => { el.children.push(child); return child; },
+      removeChild: (child) => {},
+      setAttribute: (k, v) => { el[k] = v; },
+      getAttribute: (k) => el[k] || '',
+      addEventListener: (evt, fn) => { domEvents[(id || tag) + '_' + evt] = fn; },
+      scrollIntoView: () => {}
+    };
+    return el;
+  }
+
   // Mock Document and Element Surface
   const mockDocument = {
     createElement(tag) {
       if (tag === 'canvas') return new MockHTMLCanvasElement();
-      return { addEventListener: () => {}, style: {} };
+      return createMockElement('', tag);
     },
     getElementById(id) {
       if (!elements[id]) {
-        elements[id] = {
-          id,
-          innerText: '',
-          value: '',
-          style: {},
-          classList: { add: () => {}, remove: () => {}, toggle: () => {} },
-          addEventListener: (evt, fn) => { domEvents[id + '_' + evt] = fn; }
-        };
+        elements[id] = createMockElement(id, 'div');
       }
       return elements[id];
     },
@@ -132,8 +150,11 @@ function createBrowserSurfaceContext() {
     }
   };
 
+  const mainCanvas = new MockHTMLCanvasElement(560, 384);
+  elements['screen-canvas'] = mainCanvas;
+
   return {
-    canvas: new MockHTMLCanvasElement(560, 384),
+    canvas: mainCanvas,
     document: mockDocument,
     AudioContext: MockAudioContext,
     domEvents,
@@ -159,7 +180,8 @@ export async function runSurfaceTests() {
   global.window = {
     AudioContext: context.AudioContext,
     webkitAudioContext: context.AudioContext,
-    requestAnimationFrame: (cb) => setTimeout(cb, 16)
+    requestAnimationFrame: (cb) => setTimeout(cb, 16),
+    addEventListener: (evt, fn) => { context.domEvents['win_' + evt] = fn; }
   };
   global.document = context.document;
   global.AudioContext = context.AudioContext;
@@ -167,11 +189,11 @@ export async function runSurfaceTests() {
   global.requestAnimationFrame = global.window.requestAnimationFrame;
 
   // Evaluate script in sandbox
-  const runSandbox = new Function('canvas', 'document', 'window', `
+  const runSandbox = new Function('mockCanvas', 'document', 'window', `
     ${scriptContent}
     return {
       Apple2cEmulator,
-      emulator: (typeof emulator !== 'undefined') ? emulator : new Apple2cEmulator(canvas),
+      emulator: (typeof emulator !== 'undefined') ? emulator : new Apple2cEmulator(mockCanvas),
       switchTab: (typeof switchTab !== 'undefined') ? switchTab : null,
       loadTypeInSample: (typeof loadTypeInSample !== 'undefined') ? loadTypeInSample : null,
       injectTypeIn: (typeof injectTypeIn !== 'undefined') ? injectTypeIn : null,
@@ -250,12 +272,11 @@ export async function runSurfaceTests() {
 
   assert(emu.isGraphicsMode === true, 'Graphics Switch Surface: isGraphicsMode enabled');
   assert(emu.mixedGraphics === true, 'Mixed Mode Surface: mixedGraphics (160 scanlines + 4 text rows) active');
-  assert(emu.hiresLines.length === 1, 'Vector Drawing Surface: Hi-Res line registered in render cache');
 
   ctx.drawCalls = [];
   emu.renderScreen();
-  const hasLineStroke = ctx.drawCalls.some(d => d.type === 'stroke');
-  assert(hasLineStroke, 'Canvas 2D Surface: Vector line drawn to screen via stroke()');
+  const hasVramPixels = ctx.drawCalls.some(d => d.type === 'fillRect');
+  assert(hasVramPixels, 'Canvas 2D Surface: Hi-Res VRAM scanlines rasterized to canvas via fillRect()');
 
   // Switch back to Text
   emu.currentInput = 'TEXT';
@@ -305,6 +326,8 @@ public class RetroDemo {
   emu.reset();
   assert(emu.cursorRow === 2, 'Reset Button Surface: Reset CPU and initialized prompt on row 2');
 
+  emu.running = false;
+
   console.log('\n======================================================');
   console.log(`🎯 Surface Test Summary: ${passed}/${passed + failed} Tests Passed, ${failed} Failed`);
   console.log('======================================================\n');
@@ -313,6 +336,6 @@ public class RetroDemo {
   return { passed, failed };
 }
 
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}`) {
-  runSurfaceTests();
+if (process.argv[1] && import.meta.url.endsWith(path.basename(process.argv[1]))) {
+  runSurfaceTests().then(() => process.exit(0)).catch(() => process.exit(1));
 }

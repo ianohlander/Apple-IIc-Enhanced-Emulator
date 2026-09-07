@@ -1079,6 +1079,37 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
       assertTrue(html.includes(`switchTab('${t}')`), `Tab switchTab('${t}') click handler wired`);
     }
   });
+
+  runner.test('Vintage Peripheral Bays, Fullscreen Viewport & Docked Keyboard UI Integrity', () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
+
+    // Viewport Screen Sizing Controls
+    assertTrue(html.includes('id="btn-screen-normal"'), 'Screen size button #btn-screen-normal exists');
+    assertTrue(html.includes('id="btn-screen-expanded"'), 'Screen size button #btn-screen-expanded exists');
+    assertTrue(html.includes('id="btn-screen-fullscreen"'), 'Screen size button #btn-screen-fullscreen exists');
+    assertTrue(html.includes('setScreenSize('), 'setScreenSize JavaScript function defined');
+    assertTrue(html.includes('toggleFullscreen('), 'toggleFullscreen JavaScript function defined');
+
+    // Vintage Peripheral Bay Toolbar Icons & Tooltips
+    const bayButtons = ['storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'crt'];
+    for (const bay of bayButtons) {
+      assertTrue(html.includes(`id="btn-bay-${bay}"`), `Hardware bay button #btn-bay-${bay} exists`);
+      assertTrue(html.includes(`openCabinet('${bay}')`), `openCabinet('${bay}') handler wired`);
+    }
+
+    // Flyout Cabinet Drawer & Backdrop
+    assertTrue(html.includes('id="vintage-cabinet-drawer"'), 'Sliding cabinet drawer #vintage-cabinet-drawer exists');
+    assertTrue(html.includes('id="cabinet-backdrop"'), 'Cabinet backdrop overlay #cabinet-backdrop exists');
+    assertTrue(html.includes('closeCabinet()'), 'closeCabinet JavaScript function defined');
+
+    // Docked Vintage Keyboard & Toggle
+    assertTrue(html.includes('id="docked-keyboard-panel"'), 'Docked keyboard panel #docked-keyboard-panel exists');
+    assertTrue(html.includes('id="btn-toggle-keyboard"'), 'Keyboard toggle button #btn-toggle-keyboard exists');
+    assertTrue(html.includes('toggleKeyboard()'), 'toggleKeyboard JavaScript function defined');
+
+    // ImageWriter II Tractor Paper View
+    assertTrue(html.includes('id="printer-paper-view"'), 'Continuous-feed printer view #printer-paper-view exists');
+  });
 });
 
 
