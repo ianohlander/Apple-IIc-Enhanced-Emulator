@@ -100,6 +100,28 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.8);
     }
 
+    /* High-contrast dark theme styling for all select dropdowns & popup options across all OSes */
+    select {
+      background-color: #121721 !important;
+      color: #fbbf24 !important;
+      border: 1px solid #334155 !important;
+      color-scheme: dark;
+    }
+    select option {
+      background-color: #121721 !important;
+      color: #f1f5f9 !important;
+      padding: 6px 12px;
+    }
+    select option:checked {
+      background-color: #2563eb !important;
+      color: #ffffff !important;
+      font-weight: bold;
+    }
+    select option:hover {
+      background-color: #1e293b !important;
+      color: #fbbf24 !important;
+    }
+
     /* Screen Sizing Modes */
     .screen-normal {
       max-width: 680px;
@@ -294,13 +316,13 @@
         
         <div class="flex flex-wrap items-center gap-2">
           <!-- Phosphor Color Selector -->
-          <div class="flex items-center gap-1 bg-stone-900 px-2 py-1 rounded border border-stone-700 text-xs">
-            <span class="text-[10px] text-stone-500">PHOSPHOR:</span>
-            <select id="phosphor-select" class="bg-transparent text-stone-200 font-bold focus:outline-none cursor-pointer">
-              <option value="color">Color NTSC</option>
-              <option value="green" selected>P1 Green (525nm)</option>
-              <option value="amber">P3 Amber (600nm)</option>
-              <option value="white">P4 B&amp;W Monochrome</option>
+          <div class="flex items-center gap-1.5 bg-[#0e1219] px-2.5 py-1 rounded-lg border border-stone-700 text-xs shadow-inner">
+            <span class="text-[10px] text-amber-400 font-bold">PHOSPHOR:</span>
+            <select id="phosphor-select" class="bg-[#141a24] text-amber-300 font-bold font-mono px-2 py-0.5 rounded border border-stone-600 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer">
+              <option value="color" class="bg-[#141a24] text-stone-100 font-mono font-bold">🎨 Color NTSC Composite</option>
+              <option value="green" class="bg-[#141a24] text-emerald-400 font-mono font-bold" selected>🟢 P1 Green (525nm High-Contrast)</option>
+              <option value="amber" class="bg-[#141a24] text-amber-400 font-mono font-bold">🟡 P3 Amber (600nm High-Persistence)</option>
+              <option value="white" class="bg-[#141a24] text-stone-100 font-mono font-bold">⚪ P4 B&amp;W Monochrome</option>
             </select>
           </div>
 
@@ -348,11 +370,11 @@
       <div class="flex flex-wrap items-center gap-3 font-mono text-xs">
         <div class="flex flex-col">
           <span class="text-[10px] text-stone-700 font-bold mb-0.5">CLOCK SPEED</span>
-          <select id="speed-select" class="bg-stone-800 text-amber-400 font-bold px-2 py-1 rounded border border-stone-700 shadow-inner text-xs cursor-pointer">
-            <option value="1">1.02 MHz (Vintage 1984)</option>
-            <option value="2.8">2.80 MHz (Apple IIGS)</option>
-            <option value="8">8.00 MHz (ZipChip Accelerator)</option>
-            <option value="50" selected>50.0 MHz (Ultra Turbo)</option>
+          <select id="speed-select" class="bg-[#141a24] text-amber-400 font-bold px-2.5 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none">
+            <option value="1" class="bg-[#141a24] text-stone-200">1.02 MHz (Vintage 1984)</option>
+            <option value="2.8" class="bg-[#141a24] text-stone-200">2.80 MHz (Apple IIGS)</option>
+            <option value="8" class="bg-[#141a24] text-stone-200">8.00 MHz (ZipChip Accelerator)</option>
+            <option value="50" class="bg-[#141a24] text-amber-400 font-bold" selected>50.0 MHz (Ultra Turbo)</option>
           </select>
         </div>
 
@@ -595,11 +617,11 @@
                 <span class="text-gray-400 text-[11px]">Script custom I/O registers ($C0B0-$C0BF) and slot ROM ($C300).</span>
               </div>
               <div class="flex items-center gap-2">
-                <select id="custom-preset-select" onchange="selectCustomCardPreset(this.value)" class="bg-[#161b22] text-amber-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono">
-                  <option value="weather">🌤️ IoT Weather Station (Temp, Humidity, Pressure, Wind)</option>
-                  <option value="serial">🔌 Web Serial Arduino / ESP32 Sensor Bridge</option>
-                  <option value="crypto">📈 Live Bitcoin / Crypto Price Ticker (REST API)</option>
-                  <option value="math">🧮 32-Bit Math Hardware Co-Processor (Multiply/Divide)</option>
+                <select id="custom-preset-select" onchange="selectCustomCardPreset(this.value)" class="bg-[#141a24] text-amber-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none">
+                  <option value="weather" class="bg-[#141a24] text-stone-200 font-mono">🌤️ IoT Weather Station (Temp, Humidity, Pressure, Wind)</option>
+                  <option value="serial" class="bg-[#141a24] text-stone-200 font-mono">🔌 Web Serial Arduino / ESP32 Sensor Bridge</option>
+                  <option value="crypto" class="bg-[#141a24] text-stone-200 font-mono">📈 Live Bitcoin / Crypto Price Ticker (REST API)</option>
+                  <option value="math" class="bg-[#141a24] text-stone-200 font-mono">🧮 32-Bit Math Hardware Co-Processor (Multiply/Divide)</option>
                 </select>
                 <button onclick="applyCustomCardScript()" class="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow flex items-center gap-1">
                   ▶ Apply to Slot 3
@@ -654,20 +676,20 @@ card.onReadHandler = (offset) => {
           </div>
           <div class="flex items-center gap-2">
             <label class="text-gray-400 text-xs font-sans">OOP Case Study:</label>
-            <select id="case-study-select" onchange="loadSelectedCaseStudy(this.value)" class="bg-[#1c222b] text-cyan-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs focus:outline-none focus:border-cyan-500">
-              <option value="csharp-standard">Standard C# (.NET Core System &amp; Math)</option>
-              <option value="java-standard">Standard Java (JDK 17 java.util &amp; ArrayList)</option>
-              <option value="csharp-breakout">Case 1 (C#): Retro Breakout Arcade</option>
-              <option value="java-breakout">Case 1 (Java): Retro Breakout Arcade</option>
-              <option value="csharp-starship3d">Case 2 (C#): 3D Wireframe Starship Engine</option>
-              <option value="java-starship3d">Case 2 (Java): 3D Wireframe Engine</option>
-              <option value="csharp-storage">Case 3 (C#): SmartPort HD 32MB Storage Ledger</option>
-              <option value="java-storage">Case 3 (Java): SmartPort ProDOS Storage Driver</option>
-              <option value="csharp-synth">Case 4 (C#): Mockingboard FM Multi-Voice Synth</option>
-              <option value="java-synth">Case 4 (Java): Mockingboard PSG Tracker</option>
-              <option value="csharp-fractal">Case 5 (C#): Fixed-Point Mandelbrot Fractal</option>
-              <option value="java-fractal">Case 5 (Java): Double Hi-Res Fractal Waves</option>
-              <option value="assembly">Raw 65C02 Assembly ($2000 Monitor)</option>
+            <select id="case-study-select" onchange="loadSelectedCaseStudy(this.value)" class="bg-[#141a24] text-cyan-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none focus:border-cyan-500">
+              <option value="csharp-standard" class="bg-[#141a24] text-stone-200 font-mono">Standard C# (.NET Core System &amp; Math)</option>
+              <option value="java-standard" class="bg-[#141a24] text-stone-200 font-mono">Standard Java (JDK 17 java.util &amp; ArrayList)</option>
+              <option value="csharp-breakout" class="bg-[#141a24] text-cyan-300 font-mono font-bold">Case 1 (C#): Retro Breakout Arcade</option>
+              <option value="java-breakout" class="bg-[#141a24] text-cyan-300 font-mono font-bold">Case 1 (Java): Retro Breakout Arcade</option>
+              <option value="csharp-starship3d" class="bg-[#141a24] text-stone-200 font-mono">Case 2 (C#): 3D Wireframe Starship Engine</option>
+              <option value="java-starship3d" class="bg-[#141a24] text-stone-200 font-mono">Case 2 (Java): 3D Wireframe Engine</option>
+              <option value="csharp-storage" class="bg-[#141a24] text-emerald-400 font-mono">Case 3 (C#): SmartPort HD 32MB Storage Ledger</option>
+              <option value="java-storage" class="bg-[#141a24] text-emerald-400 font-mono">Case 3 (Java): SmartPort ProDOS Storage Driver</option>
+              <option value="csharp-synth" class="bg-[#141a24] text-purple-300 font-mono">Case 4 (C#): Mockingboard FM Multi-Voice Synth</option>
+              <option value="java-synth" class="bg-[#141a24] text-purple-300 font-mono">Case 4 (Java): Mockingboard PSG Tracker</option>
+              <option value="csharp-fractal" class="bg-[#141a24] text-stone-200 font-mono">Case 5 (C#): Fixed-Point Mandelbrot Fractal</option>
+              <option value="java-fractal" class="bg-[#141a24] text-stone-200 font-mono">Case 5 (Java): Double Hi-Res Fractal Waves</option>
+              <option value="assembly" class="bg-[#141a24] text-amber-400 font-mono">Raw 65C02 Assembly ($2000 Monitor)</option>
             </select>
           </div>
         </div>
@@ -796,7 +818,9 @@ namespace DotNetCoreStandardApp {
     Apple //c Ultra Standalone Web Workstation • 65C02 CMOS Emulation • Double Hi-Res NTSC Graphics • Web Audio Mockingboard
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
-<script>
+
+  <!-- Complete Standalone Emulator Runtime JavaScript -->
+  <script>
 
     // -------------------------------------------------------------
     // Viewport Expansion, Fullscreen & Vintage Hardware Cabinets
@@ -934,7 +958,6 @@ namespace DotNetCoreStandardApp {
       }
     });
 
-    // -------------------------------------------------------------
     // Core 65C02 & Apple II Video Engine Implementation
     // -------------------------------------------------------------
     // -------------------------------------------------------------
