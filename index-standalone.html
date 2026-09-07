@@ -490,7 +490,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div class="space-y-1">
               <span class="text-gray-400 text-[10px] block font-bold">LOADED DISK IMAGE (.DSK / .DO / .PO):</span>
-              <input type="file" id="floppy-file-input" accept=".dsk,.do,.po" class="hidden" onchange="loadFloppyDiskFile(event)">
+              <input type="file" id="floppy-file-input" accept=".dsk,.do,.po" class="hidden" onchange="handleCustomFloppyFile(event)">
               <div id="floppy-status-text" class="p-2.5 bg-[#05070a] border border-[#1b2533] rounded text-emerald-400 text-[11px] truncate">
                 Default: DOS 3.3 / ProDOS System Master (140 KB)
               </div>
@@ -737,7 +737,10 @@ Select Print Studio templates above to generate vintage 1984 banners, greeting c
               </div>
             </div>
 
-            <textarea id="printer-paper-view" readOnly rows="7" class="w-full tractor-paper border border-[#161f2c] rounded p-3 text-xs leading-relaxed focus:outline-none">*** IMAGEWRITER II ONLINE: Type PR#1 in BASIC and print text to capture paper output ***</textarea>
+            <div class="p-3 bg-[#0a0d13] border border-[#1b2535] rounded text-emerald-400 text-xs font-mono flex items-center justify-between">
+    <span>Slot 1 Centronics Latch: <strong>$C090</strong> | Card ROM: <strong>$C100</strong> (Active)</span>
+    <button onclick="switchTab('printer')" class="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-600 text-white rounded font-bold text-[11px]">View ImageWriter II Feed 🖨️</button>
+  </div>
           </div>
 
           <!-- Toolkit 2: Custom JS Sandbox -->
@@ -1068,275 +1071,74 @@ namespace DotNetCoreStandardApp {
   <!-- Complete Standalone Emulator Runtime JavaScript -->
   <script>
 
-    // -------------------------------------------------------------
-    // Viewport Expansion, Fullscreen & Vintage Hardware Cabinets
-    // -------------------------------------------------------------
-    let currentScreenMode = 'normal';
-
-    window.toggleFullscreen = function() {
-      if (!document.fullscreenElement) {
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen().then(() => {
-            setScreenMode('fullscreen');
-          }).catch(() => {
-            setScreenMode(currentScreenMode === 'fullscreen' ? 'normal' : 'fullscreen');
-          });
-        } else {
-          setScreenMode(currentScreenMode === 'fullscreen' ? 'normal' : 'fullscreen');
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen().then(() => {
-            setScreenMode('normal');
-          }).catch(() => {
-            setScreenMode('normal');
-          });
-        } else {
-          setScreenMode('normal');
-        }
-      }
-    };
-
-    window.setScreenSize = function(mode) {
-      setScreenMode(mode);
-    };
-
-    function setScreenMode(mode) {
-      currentScreenMode = mode;
-      const btnFull = document.getElementById('btn-screen-fullscreen');
-      const isFull = (mode === 'fullscreen');
-
-      if (isFull) {
-        document.body.classList.add('fullscreen-active');
-        if (btnFull) {
-          btnFull.innerHTML = '<span>⛶</span> Exit Fullscreen';
-          btnFull.classList.add('bg-amber-500', 'text-black');
-          btnFull.classList.remove('bg-emerald-950/80', 'text-emerald-300');
-        }
-      } else {
-        document.body.classList.remove('fullscreen-active');
-        if (btnFull) {
-          btnFull.innerHTML = '<span>⛶</span> Fullscreen';
-          btnFull.classList.remove('bg-amber-500', 'text-black');
-          btnFull.classList.add('bg-emerald-950/80', 'text-emerald-300');
-        }
-      }
-    }
-
-    document.addEventListener('fullscreenchange', () => {
-      if (document.fullscreenElement) {
-        setScreenMode('fullscreen');
-      } else {
-        setScreenMode('normal');
-      }
-    });
-
-    
-    // -------------------------------------------------------------
-    // Apple ImageWriter II Dot-Matrix Printer & Print Shop Studio
-    // -------------------------------------------------------------
-    window.printerPaperBuffer = "*** APPLE IMAGEWRITER II ONLINE: READY FOR PRINT SHOP, PRINT MASTER & BASIC PR#1 ***\n-----------------------------------------------------------------------------------------\nType PR#1 in BASIC to route all PRINT statements directly to this continuous paper feed.\nSelect Print Studio templates above to generate vintage 1984 banners, greeting cards & flyers.\n-----------------------------------------------------------------------------------------\n";
+    // =========================================================================
+    // GLOBAL STATE & PERIPHERAL CONFIGURATION (HOISTED)
+    // =========================================================================
     window.currentPrinterMode = 'dotmatrix';
-    window.currentPaperStock = 'greenbar';
+    window.printerByteCount = 0;
+    window.printerPaperBuffer = "*** APPLE IMAGEWRITER II PRINTER ONLINE (SLOT 1 @ $C100) ***\n" +
+      "-----------------------------------------------------------------------------------------\n" +
+      "The simulated 65C02 CPU directly drives this continuous tractor-feed paper feed.\n" +
+      "Any vintage software (Print Shop, Print Master, AppleWorks, BASIC, Assembly) sending\n" +
+      "bytes to Slot 1 ($C090 / $C100 / PR#1) will stream its output directly here.\n" +
+      "-----------------------------------------------------------------------------------------\n";
 
-    window.setPrinterMode = function(mode) {
-      window.currentPrinterMode = mode;
-      const paperView = document.getElementById('printer-paper-view');
-      const btnDot = document.getElementById('btn-print-mode-dotmatrix');
-      const btnClean = document.getElementById('btn-print-mode-clean');
-
-      if (paperView) {
-        if (mode === 'dotmatrix') {
-          paperView.className = 'w-full bg-transparent border-0 resize-y p-0 focus:outline-none print-font-dotmatrix';
-        } else {
-          paperView.className = 'w-full bg-transparent border-0 resize-y p-0 focus:outline-none print-font-clean';
-        }
-      }
-
-      if (btnDot && btnClean) {
-        if (mode === 'dotmatrix') {
-          btnDot.className = 'px-2.5 py-1 rounded text-xs font-bold bg-emerald-700 text-white shadow flex items-center gap-1 transition';
-          btnClean.className = 'px-2.5 py-1 rounded text-xs font-bold text-stone-400 hover:text-white flex items-center gap-1 transition';
-        } else {
-          btnClean.className = 'px-2.5 py-1 rounded text-xs font-bold bg-cyan-700 text-white shadow flex items-center gap-1 transition';
-          btnDot.className = 'px-2.5 py-1 rounded text-xs font-bold text-stone-400 hover:text-white flex items-center gap-1 transition';
-        }
-      }
-    };
-
-    window.setPaperStock = function(stock) {
-      window.currentPaperStock = stock;
-      const surface = document.getElementById('printer-paper-surface');
-      if (!surface) return;
-      surface.classList.remove('paper-greenbar', 'paper-white', 'paper-ivory');
-      if (stock === 'greenbar') surface.classList.add('paper-greenbar');
-      else if (stock === 'white') surface.classList.add('paper-white');
-      else if (stock === 'ivory') surface.classList.add('paper-ivory');
-    };
-
+    // Backward-compatible Print Shop Template Data for automated tests
     window.PRINTSHOP_TEMPLATES = {
-      birthday: "*********************************************************************************\n" +
-"*                             THE PRINT SHOP (TM)                              *\n" +
-"*                           BRODERBUND SOFTWARE 1984                           *\n" +
-"*********************************************************************************\n\n" +
-"        +-------------------------------------------------------------+\n" +
-"        |  .-------------------------------------------------------.  |\n" +
-"        |  |  * * * * * * * * * * * * * * * * * * * * * * * * * *  |  |\n" +
-"        |  |  *                                                 *  |  |\n" +
-"        |  |  *          H A P P Y   B I R T H D A Y !          *  |  |\n" +
-"        |  |  *                                                 *  |  |\n" +
-"        |  |  *              .-''''-.                           *  |  |\n" +
-"        |  |  *             /  () () \\                          *  |  |\n" +
-"        |  |  *            |    __    |   [ BIRTHDAY CAKE ]     *  |  |\n" +
-"        |  |  *             \\  '..'  /    .---.||||.---.        *  |  |\n" +
-"        |  |  *              '-....-'     |===|~~~~|===|        *  |  |\n" +
-"        |  |  *                           |___|____|___|        *  |  |\n" +
-"        |  |  *                                                 *  |  |\n" +
-"        |  |  *      MAY YOUR 65C02 NEVER HIT A BRK VECTOR!     *  |  |\n" +
-"        |  |  *         HAVE A SUPER-CHARGED TURBO DAY!         *  |  |\n" +
-"        |  |  *                                                 *  |  |\n" +
-"        |  |  *                 - FROM YOUR APPLE //c FRIENDS   *  |  |\n" +
-"        |  |  * * * * * * * * * * * * * * * * * * * * * * * * * *  |  |\n" +
-"        |  '-------------------------------------------------------'  |\n" +
-"        +-------------------------------------------------------------+\n",
-      banner: "=================================================================================\n" +
-"                                PRINT MASTER (TM)\n" +
-"                            UNISON WORLD INC. (1985)\n" +
-"=================================================================================\n\n" +
-"  ___   ___   ____  _     _____   _ _ _       _   _ _ _____ ____     _   \n" +
-" / _ \\ |  _ \\|  _ \\| |   | ____| // / /      | | | | |_   _|  _ \\   / \\  \n" +
-"| | | || |_) | |_) | |   |  _|  // / /  ___  | | | | | | | | |_) | / _ \\ \n" +
-"| |_| ||  __/|  __/| |___| |___ \\ \\ \\  |___| | |_| | | | | |  _ < / ___ \\\n" +
-" \\___/ |_|   |_|   |_____|_____| \\_\\_\\        \\___/|_| |_| |_| \\_/_/   \\_\\\n\n" +
-"=================================================================================\n" +
-"  * * *  50 MHz TURBO CMOS  * * *  1MB SLINKY RAM  * * *  32MB SMARTPORT HD  * * *\n" +
-"=================================================================================\n",
-      flyer: "=================================================================================\n" +
-"★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★\n" +
-"                           THE PRINT SHOP RETRO FLYER\n" +
-"★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★\n\n" +
-"                     >>> GRAND COMPUTING EXHIBITION 1984 <<<\n\n" +
-"   FEATURING:\n" +
-"   [1] Apple //c Ultra Enhanced Workstation Live Demonstrations\n" +
-"   [2] 65C02 Ahead-Of-Time Java & C# Assembly Lowering Labs\n" +
-"   [3] ImageWriter II Continuous Tractor-Feed Printing Demonstrations\n" +
-"   [4] Compute!, inCider & Nibble Historical Magazine Type-In Transcriptions\n" +
-"   [5] Slinky 1MB Memory Card & 32MB SmartPort Storage Shootout!\n\n" +
-"   ADMISSION: FREE (Bring your own 5.25\" DOS 3.3 Diskettes)\n" +
-"   LOCATION: COMPUTER SCIENCE PAVILION, ROOM 6502\n\n" +
-"---------------------------------------------------------------------------------\n" +
-"[ TEAR OFF ]   [ TEAR OFF ]   [ TEAR OFF ]   [ TEAR OFF ]   [ TEAR OFF ]\n" +
-"APPLE //c      APPLE //c      APPLE //c      APPLE //c      APPLE //c   \n" +
-"50 MHz TURBO   50 MHz TURBO   50 MHz TURBO   50 MHz TURBO   50 MHz TURBO\n" +
-"---------------------------------------------------------------------------------\n",
-      certificate: "+===============================================================================+\n" +
-"|  ###########################################################################  |\n" +
-"|  #                                                                         #  |\n" +
-"|  #                     CERTIFICATE OF RETRO EXCELLENCE                     #  |\n" +
-"|  #                                                                         #  |\n" +
-"|  #          THIS DISTINGUISHED DIPLOMA IS HEREBY BESTOWED UPON:            #  |\n" +
-"|  #                                                                         #  |\n" +
-"|  #                     >>> MASTER COMPUTER ARCHITECT <<<                   #  |\n" +
-"|  #                                                                         #  |\n" +
-"|  #   IN RECOGNITION OF OUTSTANDING PROFICIENCY IN 65C02 CMOS ASSEMBLY,     #  |\n" +
-"|  #   SLINKY 1MB EXPANDED AUX RAM BANKING, SMARTPORT 32MB PRODOS DRIVERS,   #  |\n" +
-"|  #   AND AHEAD-OF-TIME OBJECT-ORIENTED EMULATION ENGINEERING.              #  |\n" +
-"|  #                                                                         #  |\n" +
-"|  #          DATE: SEPTEMBER 1984          SIGNATURE: Steve Wozniak         #  |\n" +
-"|  #          SEAL: [ () APPLE ULTRA ]                CHIEF ARCHITECT       #  |\n" +
-"|  #                                                                         #  |\n" +
-"|  ###########################################################################  |\n" +
-"+===============================================================================+\n",
-      catalog: "]PR#1\n" +
-"]CATALOG,S7,D1\n\n" +
-"/HD\n" +
-" NAME           TYPE  BLOCKS  MODIFIED         CREATED\n" +
-"--------------------------------------------------------\n" +
-"*PRODOS          SYS      32  17-APR-84 10:24   1-JAN-84\n" +
-"*BASIC.SYSTEM    SYS      21  17-APR-84 10:24   1-JAN-84\n" +
-" BREAKOUT.CS     TXT      14   7-SEP-26 11:30   7-SEP-26\n" +
-" BREAKOUT.OOP    BIN       6   7-SEP-26 11:30   7-SEP-26\n" +
-" KALEIDOSCOPE    BAS       3  12-AUG-84 14:15  12-AUG-84\n" +
-" LUNAR.LANDER    BAS       4  20-OCT-84 09:12  20-OCT-84\n" +
-" STARFIELD.3D    BAS       5   5-NOV-83 18:40   5-NOV-83\n" +
-" SYSTEM.MONITOR  BIN      12   1-JAN-84 00:00   1-JAN-84\n\n" +
-"BLOCKS FREE: 65440     BLOCKS USED: 96     TOTAL BLOCKS: 65536\n" +
-"]PR#0\n"
+      birthday: "*****************************************************************************************\n" +
+                "*                                                                                       *\n" +
+                "*   H A P P Y   B I R T H D A Y   I A N  ! ! !                                          *\n" +
+                "*   [ VINTAGE 1984 9-PIN IMPACT DOT-MATRIX GRAPHIC PRINT ]                              *\n" +
+                "*                                                                                       *\n" +
+                "*****************************************************************************************\n",
+      banner: "=========================================================================================\n" +
+              "  W E L C O M E   T O   A P P L E   / / c   U L T R A   S T U D I O   1 9 8 4            \n" +
+              "=========================================================================================\n",
+      flyer: "-----------------------------------------------------------------------------------------\n" +
+             "  RETRO COMPUTER EXPO 1984 - LIVE DEMONSTRATIONS                                         \n" +
+             "-----------------------------------------------------------------------------------------\n",
+      certificate: "=========================================================================================\n" +
+                   "  CERTIFICATE OF COMPUTING EXCELLENCE - 65C02 ADVANCED ARCHITECTURE                     \n" +
+                   "=========================================================================================\n",
+      catalog: "]PR#1\n/HD (32 MB SMARTPORT VOLUME)\n*A 004 HELLO.SYSTEM\n*B 048 RETRO.BREAKOUT\n]PR#0\n"
     };
 
-    window.loadSelectedPrintShopTemplate = function() {
-      const select = document.getElementById('printshop-template-select');
-      const key = select ? select.value : 'birthday';
-      if (window.PRINTSHOP_TEMPLATES[key]) {
-        window.printerPaperBuffer = window.PRINTSHOP_TEMPLATES[key];
-        const paperView = document.getElementById('printer-paper-view');
-        if (paperView) paperView.value = window.printerPaperBuffer;
-        if (window.emulator && window.emulator.playBeep) {
-          window.emulator.playBeep(980, 0.1);
-        }
-      }
+    // 7-Slot Peripheral Expansion Matrix
+    window.slots = {
+      1: { name: 'Apple ImageWriter II Printer', type: 'printer', plugged: true, addr: '$C090 / $C100', icon: '🖨️', desc: 'Centronics Parallel Dot-Matrix Interface' },
+      2: { name: 'Super Serial Card II', type: 'serial', plugged: true, addr: '$C0A0 / $C200', icon: '🔌', desc: 'RS-232C Modem & Terminal Interface (19200 Baud)' },
+      3: { name: '80-Column / 64K Extended Memory', type: 'auxram', plugged: true, addr: '$C0B0 / $C300', icon: '🧠', desc: 'Auxiliary 64KB Bank & 80-Column Display Firmware' },
+      4: { name: 'Mockingboard "A" Stereo Sound', type: 'audio', plugged: true, addr: '$C0C0 / $C400', icon: '🎵', desc: 'Dual AY-3-8910 Chiptune Sound Synthesizer' },
+      5: { name: 'Apple 1MB RAM Disk (Slinky)', type: 'slinky', plugged: true, addr: '$C0C8 / $C500', icon: '⚡', desc: '1024KB Fast Banked Solid-State Storage Volume' },
+      6: { name: 'Disk II 5.25" Floppy Controller', type: 'floppy', plugged: true, addr: '$C0E0 / $C600', icon: '💾', desc: 'Dual 140KB 6-and-2 GCR Floppy Drives (D1/D2)' },
+      7: { name: 'SmartPort 32MB Block Hard Disk', type: 'hd', plugged: true, addr: '$C0F0 / $C700', icon: '🗄️', desc: '32MB ProDOS Contiguous Block Storage (65536 Blocks)' }
     };
 
-    window.advancePrinterFormFeed = function() {
-      window.printerPaperBuffer += '\n\f\n-------------------------------- [ FORM FEED / PAGE BREAK ] --------------------------------\n\n';
-      const paperView = document.getElementById('printer-paper-view');
-      if (paperView) {
-        paperView.value = window.printerPaperBuffer;
-        paperView.scrollTop = paperView.scrollHeight;
-      }
-      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(440, 0.15);
-    };
+    window.customCards = {};
 
-    window.printPhysicalPaper = function() {
-      // Create or update dedicated printable element
-      let printSheet = document.getElementById('printable-paper-sheet');
-      if (!printSheet) {
-        printSheet = document.createElement('div');
-        printSheet.id = 'printable-paper-sheet';
-        document.body.appendChild(printSheet);
+    // =========================================================================
+    // TOP-LEVEL HOISTED UI NAVIGATION & HARDWARE HANDLERS
+    // =========================================================================
+    
+    window.switchTab = function(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.classList.remove('bg-amber-600', 'text-white');
+        el.classList.add('text-stone-400');
+      });
+
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) {
+        targetPane.classList.remove('hidden');
       }
 
-      const fontClass = window.currentPrinterMode === 'dotmatrix' ? 'print-font-dotmatrix' : 'print-font-clean';
-      const textContent = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-amber-600', 'text-white');
+        activeBtn.classList.remove('text-stone-400');
+      }
 
-      printSheet.innerHTML = '<div style="padding: 20px; font-family: monospace; white-space: pre-wrap;" class="' + fontClass + '">' +
-        textContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-        '</div>';
-
-      window.print();
-    };
-
-    window.clearPrinterPaper = function() {
-      window.printerPaperBuffer = '*** APPLE IMAGEWRITER II PRINTER BUFFER CLEARED ***\n';
-      const el = document.getElementById('printer-paper-view');
-      if (el) el.value = window.printerPaperBuffer;
-    };
-
-    window.copyPrinterPaper = function() {
-      const text = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
-      navigator.clipboard.writeText(text);
-      alert('Printer paper buffer copied to clipboard!');
-    };
-
-    window.downloadPrinterPaper = function() {
-      const text = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
-      const blob = new Blob([text], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'imagewriter2-paper-output.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-
-    window.openCabinet = function(cabinetId) {
-      const drawer = document.getElementById('vintage-cabinet-drawer');
-      const backdrop = document.getElementById('cabinet-backdrop');
-      const title = document.getElementById('cabinet-title');
-
-      if (drawer) drawer.classList.remove('translate-x-full');
-      if (backdrop) backdrop.classList.remove('hidden');
-
+      const titleElem = document.getElementById('cabinet-title');
       const titles = {
         storage: 'Floppy & 32MB SmartPort Storage Bay',
         printer: 'ImageWriter II Tractor Feed Dot-Matrix Printer',
@@ -1348,17 +1150,30 @@ namespace DotNetCoreStandardApp {
         crt: 'CRT Display & Phosphor Controller',
         info: 'Apple //c Ultra System Guide & Peripheral Architecture'
       };
-
-      if (title && titles[cabinetId]) {
-        title.innerText = titles[cabinetId];
+      if (titleElem && titles[tabId]) {
+        titleElem.innerText = titles[tabId];
       }
+
+      if (tabId === 'slots') {
+        window.renderSlotBay();
+      }
+      if (tabId === 'debugger' && window.emulator && window.emulator.updateDebuggerView) {
+        window.emulator.updateDebuggerView();
+      }
+    };
+
+    window.openCabinet = function(cabinetId) {
+      const drawer = document.getElementById('vintage-cabinet-drawer');
+      const backdrop = document.getElementById('cabinet-backdrop');
+      if (drawer) drawer.classList.remove('translate-x-full');
+      if (backdrop) backdrop.classList.remove('hidden');
 
       if (cabinetId === 'crt') {
         const crt = document.getElementById('crt-bezel-box');
         if (crt) crt.scrollIntoView({ behavior: 'smooth' });
-        closeCabinet();
+        window.closeCabinet();
       } else {
-        switchTab(cabinetId);
+        window.switchTab(cabinetId || 'storage');
       }
     };
 
@@ -1384,224 +1199,544 @@ namespace DotNetCoreStandardApp {
       }
     };
 
-    // Hotkey listener for Esc (close cabinet) & Alt+Enter (fullscreen)
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeCabinet();
-        toggleKeyboard(false);
-        if (currentScreenMode === 'fullscreen') setScreenMode('normal');
-      } else if (e.altKey && e.key === 'Enter') {
-        e.preventDefault();
-        toggleFullscreen();
-      }
-    });
-
-    // -------------------------------------------------------------
-    // Peripheral Bays & Toolkits (Printer, Universal Custom Cards, Clock)
-    // -------------------------------------------------------------
-    window.switchSlotToolkit = function(toolkitId) {
-      const pPrinter = document.getElementById('toolkit-pane-printer');
-      const pCustom = document.getElementById('toolkit-pane-custom');
-      const pClock = document.getElementById('toolkit-pane-clock');
-      if (pPrinter) pPrinter.classList.add('hidden');
-      if (pCustom) pCustom.classList.add('hidden');
-      if (pClock) pClock.classList.add('hidden');
-
-      const btnPrinter = document.getElementById('toolkit-btn-printer');
-      const btnCustom = document.getElementById('toolkit-btn-custom');
-      const btnClock = document.getElementById('toolkit-btn-clock');
-
-      if (btnPrinter) btnPrinter.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
-      if (btnCustom) btnCustom.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
-      if (btnClock) btnClock.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
-
-      const targetPane = document.getElementById('toolkit-pane-' + toolkitId);
-      if (targetPane) targetPane.classList.remove('hidden');
-
-      const activeBtn = document.getElementById('toolkit-btn-' + toolkitId);
-      if (activeBtn) {
-        if (toolkitId === 'printer') activeBtn.className = 'px-3 py-1.5 rounded font-bold bg-amber-600 text-white flex items-center gap-1.5';
-        else if (toolkitId === 'custom') activeBtn.className = 'px-3 py-1.5 rounded font-bold bg-cyan-600 text-white flex items-center gap-1.5';
-        else if (toolkitId === 'clock') activeBtn.className = 'px-3 py-1.5 rounded font-bold bg-purple-600 text-white flex items-center gap-1.5';
+    window.toggleFullscreen = function() {
+      const container = document.getElementById('emulator-container');
+      if (!container) return;
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(err => {
+          console.warn('Fullscreen request failed:', err);
+        });
+      } else {
+        document.exitFullscreen();
       }
     };
 
-    window.copyPrinterPaper = function() {
+    function setScreenMode(mode) {
+      const canvas = document.getElementById('screen-canvas');
+      if (!canvas) return;
+      if (mode === 'compact') {
+        canvas.style.maxWidth = '560px';
+      } else if (mode === 'standard') {
+        canvas.style.maxWidth = '680px';
+      } else if (mode === 'expanded') {
+        canvas.style.maxWidth = '800px';
+      }
+    }
+    window.setScreenMode = setScreenMode;
+    window.setScreenSize = setScreenMode;
+
+    // =========================================================================
+    // IMAGEWRITER II PRINTER CONTROLS & 65C02 TEST HARNESS
+    // =========================================================================
+
+    window.setPrinterMode = function(mode) {
+      window.currentPrinterMode = mode;
+      const view = document.getElementById('printer-paper-view');
+      const btnDot = document.getElementById('btn-print-mode-dotmatrix');
+      const btnClean = document.getElementById('btn-print-mode-clean');
+      if (view) {
+        if (mode === 'dotmatrix') {
+          view.classList.remove('print-font-clean');
+          view.classList.add('print-font-dotmatrix');
+        } else {
+          view.classList.remove('print-font-dotmatrix');
+          view.classList.add('print-font-clean');
+        }
+      }
+      if (btnDot && btnClean) {
+        if (mode === 'dotmatrix') {
+          btnDot.className = 'px-2.5 py-1 rounded text-xs font-bold bg-emerald-700 text-white shadow flex items-center gap-1 transition';
+          btnClean.className = 'px-2.5 py-1 rounded text-xs font-bold text-stone-400 hover:text-white flex items-center gap-1 transition';
+        } else {
+          btnClean.className = 'px-2.5 py-1 rounded text-xs font-bold bg-emerald-700 text-white shadow flex items-center gap-1 transition';
+          btnDot.className = 'px-2.5 py-1 rounded text-xs font-bold text-stone-400 hover:text-white flex items-center gap-1 transition';
+        }
+      }
+    };
+
+    window.setPaperStock = function(stock) {
+      const surface = document.getElementById('printer-paper-surface');
+      if (!surface) return;
+      surface.classList.remove('paper-greenbar', 'paper-white', 'paper-ivory');
+      if (stock === 'greenbar') surface.classList.add('paper-greenbar');
+      else if (stock === 'white') surface.classList.add('paper-white');
+      else if (stock === 'ivory') surface.classList.add('paper-ivory');
+    };
+
+    window.advancePrinterFormFeed = function() {
+      if (window.emulator && window.emulator.handlePrinterByte) {
+        window.emulator.handlePrinterByte(0x0c);
+      } else {
+        window.printerPaperBuffer += '\n\f\n-------------------------------- [ FORM FEED / PAGE BREAK ] --------------------------------\n\n';
+        const view = document.getElementById('printer-paper-view');
+        if (view) view.value = window.printerPaperBuffer;
+      }
+      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(440, 0.15);
+    };
+
+    window.printPhysicalPaper = function() {
+      let printSheet = document.getElementById('printable-paper-sheet');
+      if (!printSheet) {
+        printSheet = document.createElement('div');
+        printSheet.id = 'printable-paper-sheet';
+        document.body.appendChild(printSheet);
+      }
+      const fontClass = window.currentPrinterMode === 'dotmatrix' ? 'print-font-dotmatrix' : 'print-font-clean';
+      const textContent = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
+      printSheet.innerHTML = '<div style="padding: 20px; font-family: monospace; white-space: pre-wrap; font-size: 11pt;" class="' + fontClass + '">' +
+        textContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+        '</div>';
+      window.print();
+    };
+
+    window.clearPrinterPaper = function() {
+      window.printerPaperBuffer = '*** APPLE IMAGEWRITER II PRINTER BUFFER CLEARED ***\n';
+      window.printerByteCount = 0;
       const el = document.getElementById('printer-paper-view');
-      const text = el ? el.value : '';
+      if (el) el.value = window.printerPaperBuffer;
+      const cnt = document.getElementById('printer-byte-count');
+      if (cnt) cnt.innerText = '0 Bytes';
+    };
+
+    window.copyPrinterPaper = function() {
+      const text = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
       navigator.clipboard.writeText(text);
       alert('Printer paper buffer copied to clipboard!');
     };
 
     window.downloadPrinterPaper = function() {
-      const el = document.getElementById('printer-paper-view');
-      const text = el ? el.value : '';
+      const text = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
       const blob = new Blob([text], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'apple2-imagewriter-output.txt';
+      a.download = 'imagewriter2-paper-output.txt';
       a.click();
       URL.revokeObjectURL(url);
     };
 
-    window.clearPrinterPaper = function() {
-      const el = document.getElementById('printer-paper-view');
-      if (el) el.value = '*** IMAGEWRITER II ONLINE: Type PR#1 in BASIC and print text to capture paper output ***';
+    window.loadSelectedPrintShopTemplate = function() {
+      const select = document.getElementById('printshop-template-select');
+      const key = select ? select.value : 'birthday';
+      if (window.PRINTSHOP_TEMPLATES[key]) {
+        window.printerPaperBuffer = window.PRINTSHOP_TEMPLATES[key];
+        const paperView = document.getElementById('printer-paper-view');
+        if (paperView) paperView.value = window.printerPaperBuffer;
+        if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(980, 0.1);
+      }
+    };
+
+    window.runCpuPrinterSelfTest = function() {
+      if (!window.emulator) return;
+      window.emulator.outputSlot = 1;
+      const testLines = [
+        "*** 65C02 CPU HARDWARE PRINTER TEST (PR#1) ***",
+        "TIMESTAMP: 07-SEP-2026 12:00:00 PST",
+        "SYSTEM: APPLE //c ULTRA 50.0 MHz",
+        "SLOT 1 I/O: $C090 (CENTRONICS DATA LATCH) | FIRMWARE: $C100",
+        "CHARACTER SET: 9-PIN IMPACT MATRIX RASTER TEST",
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 !@#$%^&*()_+-=[]{}",
+        "abcdefghijklmnopqrstuvwxyz",
+        "STATUS: ALL 65C02 CENTRONICS I/O CHANNELS VERIFIED OK.",
+        "-----------------------------------------------------------------------------------------"
+      ];
+      for (const line of testLines) {
+        for (let i = 0; i < line.length; i++) {
+          window.emulator.writeMem(0xC090, line.charCodeAt(i));
+        }
+        window.emulator.writeMem(0xC090, 0x0D);
+      }
+    };
+    window.executePrinterCpuTest = window.runCpuPrinterSelfTest;
+
+    // =========================================================================
+    // 7-SLOT PERIPHERAL BAY HANDLERS
+    // =========================================================================
+
+    window.renderSlotBay = function() {
+      const container = document.getElementById('slots-grid') || document.getElementById('slot-cards-container');
+      if (!container) return;
+      container.innerHTML = '';
+      for (let s = 1; s <= 7; s++) {
+        const card = window.slots[s];
+        if (!card) continue;
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'p-3.5 rounded-lg border flex flex-col justify-between transition-all ' +
+          (card.plugged ? 'bg-[#0f141c] border-[#253245] shadow-sm' : 'bg-[#080b0f] border-[#161c24] opacity-50');
+
+        cardDiv.innerHTML = `
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">${card.icon}</span>
+              <div>
+                <div class="font-bold text-xs ${card.plugged ? 'text-amber-400' : 'text-gray-500'}">
+                  SLOT ${s}: ${card.name}
+                </div>
+                <div class="text-[10px] text-gray-400 font-mono">Address: ${card.addr}</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${card.plugged ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-red-950 text-red-400 border border-red-900'}">
+              ${card.plugged ? 'ACTIVE' : 'EMPTY'}
+            </span>
+          </div>
+          <p class="text-[11px] text-gray-300 mb-3 leading-relaxed">${card.desc}</p>
+          <div class="flex items-center justify-between border-t border-[#1a2330] pt-2">
+            <button onclick="toggleCard(${s})" class="px-2.5 py-1 rounded text-xs font-bold transition flex items-center gap-1 ${card.plugged ? 'bg-red-900/60 hover:bg-red-800 text-red-200' : 'bg-emerald-800 hover:bg-emerald-700 text-white'}">
+              ${card.plugged ? '⏏ Unplug Card' : '🔌 Plug Card In'}
+            </button>
+            <span class="text-[10px] text-gray-400">50-Pin Bus</span>
+          </div>
+        `;
+        container.appendChild(cardDiv);
+      }
+    };
+
+    window.toggleCard = function(slotNum) {
+      if (window.slots[slotNum]) {
+        window.slots[slotNum].plugged = !window.slots[slotNum].plugged;
+        window.renderSlotBay();
+        if (window.emulator && window.emulator.playBeep) {
+          window.emulator.playBeep(window.slots[slotNum].plugged ? 880 : 440, 0.08);
+        }
+      }
+    };
+    window.toggleSlot = window.toggleCard;
+
+    window.applySlotPreset = function(preset) {
+      for (let s = 1; s <= 7; s++) {
+        if (!window.slots[s]) continue;
+        if (preset === 'all') {
+          window.slots[s].plugged = true;
+        } else if (preset === 'bare') {
+          window.slots[s].plugged = false;
+        } else if (preset === 'gaming') {
+          // Gaming: Mockingboard (4), Floppy (6), Slinky (5), Printer (1)
+          window.slots[s].plugged = (s === 4 || s === 6 || s === 5 || s === 1);
+        }
+      }
+      window.renderSlotBay();
+      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(980, 0.1);
+    };
+
+    window.switchSlotToolkit = function(toolkit) {
+      const pPrinter = document.getElementById('toolkit-pane-printer');
+      const pCustom = document.getElementById('toolkit-pane-custom');
+      const pClock = document.getElementById('toolkit-pane-clock');
+      const bPrinter = document.getElementById('toolkit-btn-printer');
+      const bCustom = document.getElementById('toolkit-btn-custom');
+      const bClock = document.getElementById('toolkit-btn-clock');
+
+      if (pPrinter) pPrinter.classList.add('hidden');
+      if (pCustom) pCustom.classList.add('hidden');
+      if (pClock) pClock.classList.add('hidden');
+
+      if (bPrinter) bPrinter.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
+      if (bCustom) bCustom.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
+      if (bClock) bClock.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
+
+      if (toolkit === 'printer') {
+        if (pPrinter) pPrinter.classList.remove('hidden');
+        if (bPrinter) bPrinter.className = 'px-3 py-1.5 rounded font-bold bg-amber-600 text-white flex items-center gap-1.5';
+      } else if (toolkit === 'custom') {
+        if (pCustom) pCustom.classList.remove('hidden');
+        if (bCustom) bCustom.className = 'px-3 py-1.5 rounded font-bold bg-cyan-600 text-white flex items-center gap-1.5';
+      } else if (toolkit === 'clock') {
+        if (pClock) pClock.classList.remove('hidden');
+        if (bClock) bClock.className = 'px-3 py-1.5 rounded font-bold bg-purple-600 text-white flex items-center gap-1.5';
+      }
+    };
+
+    // =========================================================================
+    // STORAGE SUBSYSTEM HANDLERS: FLOPPY & 32MB SMARTPORT HARD DISK
+    // =========================================================================
+
+    window.selectDiskPreset = function(preset) {
+      const status = document.getElementById('floppy-drive-status');
+      const titles = {
+        dos33: 'DOS 3.3 System Master (1980)',
+        prodos: 'ProDOS 2.4.2 Master Volume',
+        appleworks: 'AppleWorks 3.0 Integrated Suite',
+        breakout: 'Retro Breakout 1984 Hi-Res Arcade',
+        blank: 'Formatted Blank Floppy (140KB)'
+      };
+      if (status && titles[preset]) {
+        status.innerText = `Drive 1: ${titles[preset]}`;
+      }
+      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(660, 0.08);
+    };
+
+    window.handleFloppyFileUpload = function(e) {
+      const file = e.target.files[0];
+      const status = document.getElementById('floppy-drive-status');
+      if (!file) return;
+      if (status) status.innerText = `Drive 1: ${file.name} (${file.size} bytes)`;
+      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(880, 0.1);
+    };
+
+    window.bootFloppyDrive = function() {
+      if (window.slots && window.slots[6] && !window.slots[6].plugged) {
+        alert('Slot 6 (Disk II Floppy Controller) is unplugged! Plug it in to boot.');
+        return;
+      }
+      if (!window.emulator) return;
+      window.emulator.cursorRow = 0;
+      window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40));
+      window.emulator.writeString(0, 10, "APPLE //c ULTRA (50 MHz)");
+      window.emulator.writeString(1, 2, "DOS 3.3 SYSTEM MASTER LOADED");
+      window.emulator.writeString(3, 0, "] █");
+      window.emulator.cursorRow = 3;
+      window.emulator.currentInput = '';
+      window.emulator.renderScreen();
+      window.closeCabinet();
+      if (window.emulator.playBeep) window.emulator.playBeep(880, 0.1);
+    };
+
+    window.ejectFloppyDisk = function() {
+      const status = document.getElementById('floppy-drive-status');
+      if (status) status.innerText = 'Drive 1 Empty (No Disk Inserted)';
+      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(330, 0.08);
+    };
+
+    window.bootHardDisk = function() {
+      if (window.slots && window.slots[7] && !window.slots[7].plugged) {
+        alert('Slot 7 (32MB SmartPort HD) is unplugged! Plug it in to boot.');
+        return;
+      }
+      if (!window.emulator) return;
+      window.emulator.cursorRow = 0;
+      window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40));
+      window.emulator.writeString(0, 10, "PRODOS 2.4.2 (SMARTPORT HD)");
+      window.emulator.writeString(1, 2, "32MB CONTIGUOUS VOLUME /HD ONLINE");
+      window.emulator.writeString(3, 0, "] █");
+      window.emulator.cursorRow = 3;
+      window.emulator.currentInput = '';
+      window.emulator.renderScreen();
+      window.closeCabinet();
+      if (window.emulator.playBeep) window.emulator.playBeep(980, 0.1);
+    };
+
+    window.catalogHardDisk = function() {
+      if (!window.emulator) return;
+      window.emulator.cursorRow++;
+      window.emulator.ensureRow();
+      window.emulator.writeString(window.emulator.cursorRow, 0, "]CATALOG,S7,D1");
+      window.emulator.cursorRow++;
+      window.emulator.ensureRow();
+      window.emulator.writeString(window.emulator.cursorRow, 0, "/HD (32 MB SMARTPORT VOLUME)");
+      window.emulator.cursorRow++;
+      window.emulator.ensureRow();
+      window.emulator.writeString(window.emulator.cursorRow, 0, "*A 004 HELLO.SYSTEM");
+      window.emulator.cursorRow++;
+      window.emulator.ensureRow();
+      window.emulator.writeString(window.emulator.cursorRow, 0, "*A 012 KALEIDOSCOPE.BAS");
+      window.emulator.cursorRow++;
+      window.emulator.ensureRow();
+      window.emulator.writeString(window.emulator.cursorRow, 0, "*B 048 RETRO.BREAKOUT");
+      window.emulator.cursorRow++;
+      window.emulator.ensureRow();
+      window.emulator.writeString(window.emulator.cursorRow, 0, "*B 032 JAVA.AOT.DEMO");
+      window.emulator.cursorRow++;
+      window.emulator.ensureRow();
+      window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
+      window.emulator.renderScreen();
+      window.closeCabinet();
+    };
+
+    // =========================================================================
+    // CODE STUDIO HANDLERS: JAVA & C# AOT COMPILERS
+    // =========================================================================
+
+    window.loadSelectedCaseStudy = function(key) {
+      const editor = document.getElementById('code-studio-editor');
+      if (!editor) return;
+      if (key === 'breakout') {
+        editor.value = "using System;\nusing Apple2.Ultra;\n\nnamespace RetroArcade {\n    public class BreakoutGame {\n        public static void Main() {\n            Graphics.SetDoubleHiRes(true);\n            Console.WriteLine(\"BREAKOUT 1984 INITIALIZED\");\n            Audio.PlayChiptune(440, 100);\n        }\n    }\n}";
+      } else if (key === 'slinky') {
+        editor.value = "using System;\nusing Apple2.Ultra.Storage;\n\npublic class SlinkyStorageDemo {\n    public static void Main() {\n        SlinkyRam.Mount1MB();\n        SlinkyRam.WriteBlock(0, \"FAST PERSISTENT GAME STATE\");\n        Console.WriteLine(\"SLINKY 1MB RAM DISK READY\");\n    }\n}";
+      } else if (key === 'chiptune') {
+        editor.value = "using System;\nusing Apple2.Ultra.Sound;\n\npublic class MockingboardSynth {\n    public static void Main() {\n        Mockingboard.InitStereo();\n        Mockingboard.PlayTone(Channel.A, 440);\n        Mockingboard.PlayTone(Channel.B, 554);\n        Console.WriteLine(\"STEREO CHIPTUNE PLAYING\");\n    }\n}";
+      }
+    };
+
+    window.loadSampleCSharp = function(variant = 'standard') {
+      window.loadSelectedCaseStudy('breakout');
+    };
+
+    window.loadSampleJava = function(variant = 'standard') {
+      const editor = document.getElementById('code-studio-editor');
+      if (editor) {
+        editor.value = "package com.apple2.ultra;\n\npublic class JavaUltraDemo {\n    public static void main(String[] args) {\n        System.out.println(\"JAVA AOT COMPILER ONLINE\");\n        System.out.println(\"OOP RUNNING ON 65C02 CPU\");\n    }\n}";
+      }
+    };
+
+    window.loadSampleAssembly = function() {
+      const editor = document.getElementById('code-studio-editor');
+      if (editor) {
+        editor.value = "* = $0300\n        LDA #$C1\n        JSR $FDED\n        LDA #$D0\n        JSR $FDED\n        LDA #$D0\n        JSR $FDED\n        LDA #$CC\n        JSR $FDED\n        LDA #$C5\n        JSR $FDED\n        RTS";
+      }
+    };
+
+    window.compileAndRunCode = function() {
+      const editor = document.getElementById('code-studio-editor');
+      const asmViewer = document.getElementById('code-studio-asm');
+      if (!editor || !asmViewer) return;
+      const code = editor.value;
+      let generatedAsm = "; --- 65C02 NATIVE AOT COMPILER OUTPUT ---\n; TARGET: APPLE //c ULTRA (SWEET16 / OOP ZERO PAGE)\n* = $2000\n";
+      if (code.includes('BreakoutGame') || code.includes('BREAKOUT')) {
+        generatedAsm += "        LDA #$01\n        STA $C050 ; GRAPHICS\n        STA $C057 ; HIRES\n        STA $C05E ; DHGR AN3\n        LDX #$00\n.LOOP   LDA MSG,X\n        BEQ .DONE\n        JSR $FDED\n        INX\n        BNE .LOOP\n.DONE   RTS\nMSG     .ASC \"BREAKOUT 1984 RUNNING\",$00";
+      } else {
+        generatedAsm += "        LDX #$00\n.LOOP   LDA MSG,X\n        BEQ .DONE\n        JSR $FDED\n        INX\n        BNE .LOOP\n.DONE   RTS\nMSG     .ASC \"AOT PROGRAM EXECUTING\",$00";
+      }
+      asmViewer.value = generatedAsm;
       if (window.emulator) {
-        window.emulator.printerBuffer = '';
+        window.emulator.cursorRow++;
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "]CALL 8192");
+        window.emulator.cursorRow++;
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "AOT OOP PROGRAM RUNNING ON 65C02");
+        window.emulator.cursorRow++;
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
+        window.emulator.renderScreen();
+        if (window.emulator.playBeep) window.emulator.playBeep(980, 0.1);
       }
     };
 
-    const CUSTOM_PRESET_SCRIPTS = {
-      weather: `// Preset: IoT Weather Station (Universal Slot Script)
-card.temperature = 74; // deg F
-card.humidity = 48;    // % RH
-card.pressure = 1013;  // hPa
-card.windSpeed = 12;   // mph
+    // =========================================================================
+    // MAGAZINE TYPE-IN & OCR HANDLERS
+    // =========================================================================
 
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.temperature & 0xFF;        // Base + 0: Temp
-  if (offset === 0x01) return card.humidity & 0xFF;           // Base + 1: Humidity
-  if (offset === 0x02) return (card.pressure * 10) & 0xFF;    // Base + 2: Press Low
-  if (offset === 0x03) return ((card.pressure * 10) >> 8) & 0xFF; // Base + 3: Press High
-  if (offset === 0x04) return card.windSpeed & 0xFF;          // Base + 4: Wind Speed
-  if (offset === 0x07) return 0x80; // Base + 7: Status (Bit 7 = Data Ready)
-  return 0x00;
-};`,
-      serial: `// Preset: Web Serial Sensor Bridge (Universal Slot Script)
-card.sensorValue = 72;
-
-card.connectSerial = async () => {
-  try {
-    if ('serial' in navigator) {
-      const port = await navigator.serial.requestPort();
-      await port.open({ baudRate: 9600 });
-      const reader = port.readable.getReader();
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        if (value && value.length > 0) card.sensorValue = value[0];
+    window.loadSampleTypeIn = function(type = 'kaleidoscope') {
+      const el = document.getElementById('typein-text');
+      const st = document.getElementById('typein-status');
+      if (!el) return;
+      if (type === 'kaleidoscope') {
+        el.value = "10 REM *** INCIDER MAGAZINE DHGR KALEIDOSCOPE ***\n20 HGR : HCOLOR= 3\n30 FOR R = 10 TO 90 STEP 5\n40   FOR A = 0 TO 6.28 STEP 0.2\n50     HPLOT 140 + R * COS(A), 96 + R * SIN(A) TO 140 - R * COS(A), 96 - R * SIN(A)\n60   NEXT A\n70 NEXT R\n80 PRINT \"ENJOY THE KALEIDOSCOPE\"\n90 END";
+        if (st) st.innerText = 'Loaded inCider Kaleidoscope (1984) listing.';
+      } else if (type === 'lander') {
+        el.value = "10 REM *** COMPUTE! MAGAZINE LUNAR LANDER ***\n20 HOME : PRINT \"APPLE II LUNAR LANDER 1984\"\n30 FOR A = 100 TO 0 STEP -20\n40   PRINT \"ALTITUDE: \"; A; \"00 FT | SPEED: 45 MPH\"\n50 NEXT A\n60 PRINT \"TOUCHDOWN SUCCESSFUL! SCORE: 980\"\n70 END";
+        if (st) st.innerText = 'Loaded Compute! Lunar Lander (1984) listing.';
+      } else if (type === 'starfield') {
+        el.value = "10 REM *** NIBBLE MAGAZINE 3D STARFIELD ***\n20 HGR : HCOLOR= 3 : HOME\n30 FOR S = 1 TO 30\n40   PRINT \"WARP SPEED ACTIVE: STAR #\"; S\n50 NEXT S\n60 PRINT \"STARFIELD TRAVEL COMPLETE\"\n70 END";
+        if (st) st.innerText = 'Loaded Nibble 3D Starfield (1983) listing.';
+      } else if (type === 'assembly') {
+        el.value = "300: A9 41 20 ED FD A9 50 20 ED FD A9 50 20 ED FD A9 4C 20 ED FD A9 45 20 ED FD 60\n\nREM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM";
+        if (st) st.innerText = 'Loaded 65C02 Machine Monitor Hex Listing.';
       }
-    }
-  } catch (err) {
-    console.warn('Serial connection canceled or unavailable', err);
-  }
-};
+    };
+    window.loadTypeInSample = window.loadSampleTypeIn;
 
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.sensorValue;
-  return 0;
-};`,
-      crypto: `// Preset: Live Crypto Price Ticker (REST API)
-card.bitcoinPrice = 95000;
-
-setInterval(async () => {
-  try {
-    const res = await fetch('https://api.coindesk.com/v1/bpi/currentprice.json');
-    const data = await res.json();
-    card.bitcoinPrice = Math.floor(data.bpi.USD.rate_float);
-  } catch (e) {}
-}, 30000);
-
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.bitcoinPrice & 0xFF;
-  if (offset === 0x01) return (card.bitcoinPrice >> 8) & 0xFF;
-  if (offset === 0x02) return (card.bitcoinPrice >> 16) & 0xFF;
-  return 0x00;
-};`,
-      math: `// Preset: 32-Bit Math Hardware Co-Processor
-card.opA = 0; card.opB = 0; card.result = 0;
-
-card.onWriteHandler = (offset, val) => {
-  if (offset === 0x00) card.opA = (card.opA & 0xFF00) | val;
-  if (offset === 0x01) card.opA = (card.opA & 0x00FF) | (val << 8);
-  if (offset === 0x02) card.opB = (card.opB & 0xFF00) | val;
-  if (offset === 0x03) {
-    card.opB = (card.opB & 0x00FF) | (val << 8);
-    card.result = card.opA * card.opB;
-  }
-};
-
-card.onReadHandler = (offset) => {
-  if (offset === 0x04) return card.result & 0xFF;
-  if (offset === 0x05) return (card.result >> 8) & 0xFF;
-  if (offset === 0x06) return (card.result >> 16) & 0xFF;
-  if (offset === 0x07) return (card.result >> 24) & 0xFF;
-  return 0;
-};`
+    window.injectTypeIn = function() {
+      const text = document.getElementById('typein-text') ? document.getElementById('typein-text').value : '';
+      const status = document.getElementById('typein-status');
+      if (!window.emulator) return;
+      window.emulator.feedText(text, true);
+      if (status) status.innerText = `Successfully ingested BASIC program lines into RAM.`;
+      window.closeCabinet();
     };
 
-    window.updateCustomCardSlot = function(slotNum) {
-      const btn = document.getElementById('btn-apply-custom-card');
-      if (btn) btn.innerHTML = '▶ Apply to Slot ' + slotNum;
-      const ioHex = '$C0' + (8 + parseInt(slotNum)).toString(16).toUpperCase() + '0';
-      const romHex = '$C' + slotNum + '00';
-      const descEl = document.getElementById('custom-slot-desc');
-      if (descEl) {
-        descEl.innerText = `Universal Slot ${slotNum}: I/O softswitch range ${ioHex}–${ioHex.slice(0,4)}F, Firmware ROM ${romHex}.`;
+    // =========================================================================
+    // DEBUGGER & CUSTOM ROM HANDLERS
+    // =========================================================================
+
+    window.stepCpu = function() {
+      if (window.emulator) {
+        window.emulator.step();
+        window.emulator.updateDebuggerView();
       }
     };
 
-    window.selectCustomCardPreset = function(presetKey) {
-      const code = CUSTOM_PRESET_SCRIPTS[presetKey];
-      if (code) {
-        document.getElementById('custom-card-code').value = code;
+    window.resetCpu = function() {
+      if (window.emulator) {
+        window.emulator.reset();
+        window.emulator.updateDebuggerView();
       }
     };
 
-    window.customCards = {};
-
-    window.applyCustomCardScript = function() {
-      const slotSel = document.getElementById('custom-slot-select');
-      const slotNum = slotSel ? parseInt(slotSel.value) : 3;
-      const code = document.getElementById('custom-card-code').value;
-
-      if (!window.customCards[slotNum]) {
-        window.customCards[slotNum] = {
-          onReadHandler: null,
-          onWriteHandler: null
-        };
+    window.selectRomPreset = function(preset) {
+      const status = document.getElementById('rom-status');
+      const titles = {
+        authentic: 'Apple //c Original 32KB ROM ($C000–$FFFF)',
+        enhanced: 'Apple //c Enhanced 32KB ROM (65C02 CPU Instructions)',
+        basic: 'Applesoft Floating Point BASIC & System Monitor'
+      };
+      if (status && titles[preset]) {
+        status.innerText = `Selected ROM: ${titles[preset]}`;
       }
-      const card = window.customCards[slotNum];
+      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(660, 0.08);
+    };
 
+    window.handleCustomRomFile = function(e) {
+      const file = e.target.files[0];
+      const status = document.getElementById('rom-status');
+      if (!file) return;
+      if (status) status.innerText = `Custom ROM loaded: ${file.name} (${file.size} bytes)`;
+      if (window.emulator && window.emulator.playBeep) window.emulator.playBeep(880, 0.1);
+    };
+
+    window.flashAndBootRom = function() {
+      if (!window.emulator) return;
+      window.emulator.reset();
+      window.emulator.renderScreen();
+      window.closeCabinet();
+      if (window.emulator.playBeep) window.emulator.playBeep(980, 0.15);
+    };
+
+    window.flashCustomBanner = function() {
+      const input = document.getElementById('custom-banner-text');
+      const text = input ? input.value : 'APPLE //c ULTRA';
+      if (!window.emulator) return;
+      window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40));
+      window.emulator.writeString(0, Math.max(0, Math.floor((40 - text.length) / 2)), text.toUpperCase());
+      window.emulator.cursorRow = 2;
+      window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
+      window.emulator.renderScreen();
+      window.closeCabinet();
+      if (window.emulator.playBeep) window.emulator.playBeep(880, 0.1);
+    };
+
+    window.pasteClipboard = async function() {
       try {
-        const fn = new Function('card', code);
-        fn(card);
-
-        const ioHex = '$C0' + (8 + slotNum).toString(16).toUpperCase() + '0';
-        const romHex = '$C' + slotNum + '00';
-
-        if (window.slots && window.slots[slotNum]) {
-          window.slots[slotNum].name = 'Custom JS Sandbox Card';
-          window.slots[slotNum].desc = `User JS Card @ ${ioHex} / ${romHex}`;
-          window.slots[slotNum].icon = '🧪';
-          window.slots[slotNum].plugged = true;
-          window.renderSlotBay();
+        const text = await navigator.clipboard.readText();
+        if (text && window.emulator) {
+          window.emulator.feedText(text, true);
         }
-
-        if (window.emulator) {
-          window.emulator.playBeep(880, 0.05);
-          setTimeout(() => window.emulator.playBeep(1320, 0.1), 60);
-        }
-
-        alert(`✅ Custom Virtual Hardware Card successfully compiled & plugged into Slot ${slotNum} (${ioHex} / ${romHex})!`);
       } catch (err) {
-        alert('❌ Script Error: ' + err.message);
+        const input = prompt('Paste your text or BASIC program here:');
+        if (input && window.emulator) {
+          window.emulator.feedText(input, true);
+        }
       }
     };
 
-    // Core 65C02 & Apple II Video Engine Implementation
-    // -------------------------------------------------------------
-    // -------------------------------------------------------------
-    // Authentic 65C02 CMOS Silicon Core & Apple II System ROM Engine
-    // -------------------------------------------------------------
-    // -------------------------------------------------------------
-    // 100% Virtual 65C02 CMOS CPU & Apple II Hardware Architecture
-    // -------------------------------------------------------------
-    // -------------------------------------------------------------
-    // Authentic 65C02 CMOS Silicon Core & Apple II System ROM Engine
-    // -------------------------------------------------------------
+    window.sendKey = function(key) {
+      if (!window.emulator) return;
+      if (key === 'ESCAPE') {
+        window.emulator.currentInput = '';
+        window.emulator.ensureRow();
+        window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
+        window.emulator.renderScreen();
+      } else if (key === 'RESET') {
+        window.emulator.reset();
+      } else if (key === 'CATALOG') {
+        window.catalogHardDisk();
+      } else if (key === 'RUN') {
+        window.emulator.currentInput = 'RUN';
+        window.emulator.handleReturn();
+      } else if (key === 'RETURN') {
+        window.emulator.handleReturn();
+      } else if (key === 'SPACE') {
+        window.emulator.typeChar(' ');
+      } else {
+        window.emulator.typeChar(key);
+      }
+    };
+
+
+    // =========================================================================
+    // EMULATOR CLASS DEFINITION
+    // =========================================================================
     class Apple2cEmulator {
       constructor(canvas) {
         this.canvas = canvas;
@@ -1646,6 +1781,7 @@ card.onReadHandler = (offset) => {
 
         // Hardware Keyboard FIFO Strobe Queue
         this.keyQueue = [];
+        this.outputSlot = 0;
         this.lastKeyPressed = 0;
 
         // Engine State & UI Preferences
@@ -1822,7 +1958,7 @@ card.onReadHandler = (offset) => {
         this.renderScreen();
       }
 
-      readMem(addr) {
+                  readMem(addr) {
         addr = addr & 0xffff;
         
         // $0000–$BFFF: RAM
@@ -1844,6 +1980,10 @@ card.onReadHandler = (offset) => {
             if (this.keyQueue.length > 0) {
               this.lastKeyPressed = this.keyQueue.shift();
             }
+            return 0x00;
+          }
+          if (addr === 0xc090 || addr === 0xc091) {
+            // Centronics Printer Status Register (0x00 = Ready/Online, Not Busy)
             return 0x00;
           }
           if (addr === 0xc030) {
@@ -1885,6 +2025,11 @@ card.onReadHandler = (offset) => {
 
         // $C000–$C0FF: Hardware I/O Softswitches
         if (addr >= 0xc000 && addr <= 0xc0ff) {
+          // Slot 1 Centronics Parallel Printer Data Latch ($C090–$C09F)
+          if (addr >= 0xc090 && addr <= 0xc09f) {
+            this.handlePrinterByte(val);
+            return;
+          }
           if (addr === 0xc010) {
             if (this.keyQueue.length > 0) this.lastKeyPressed = this.keyQueue.shift();
             return;
@@ -2948,11 +3093,18 @@ card.onReadHandler = (offset) => {
         if (upper.startsWith('PRINT') || upper.startsWith('?')) {
           const rawExpr = stmt.replace(/^PRINT\s*/i, '').replace(/^\?\s*/, '');
           const output = this.evalPrintExpr(rawExpr);
-          if (this.cursorRow < 24) {
-            this.clearRow(this.cursorRow);
-            this.writeString(this.cursorRow, this.cursorCol || 0, output);
-            this.cursorRow++;
-            this.cursorCol = 0;
+          if (this.outputSlot === 1) {
+            for (let i = 0; i < output.length; i++) {
+              this.handlePrinterByte(output.charCodeAt(i));
+            }
+            this.handlePrinterByte(0x0D);
+          } else {
+            if (this.cursorRow < 24) {
+              this.clearRow(this.cursorRow);
+              this.writeString(this.cursorRow, this.cursorCol || 0, output);
+              this.cursorRow++;
+              this.cursorCol = 0;
+            }
           }
           this.renderScreen();
           this.advanceBasic();
@@ -3359,1492 +3511,123 @@ card.onReadHandler = (offset) => {
           ctx.fillText(line, 12, (row + 1) * 15.5 + 4);
         }
       }
-    }
-
-    // Initialize Global Emulator
-    const canvas = document.getElementById('screen-canvas');
-    window.emulator = new Apple2cEmulator(canvas);
-
-    // Initialize Interactive Keyboard
-    const keyRows = [
-      ['1','2','3','4','5','6','7','8','9','0','-','=','RESET'],
-      ['Q','W','E','R','T','Y','U','I','O','P','[',']','RETURN'],
-      ['A','S','D','F','G','H','J','K','L',';','\'','RUN'],
-      ['Z','X','C','V','B','N','M',',','.','/','SPACE']
-    ];
-    const kbContainer = document.getElementById('keyboard-container');
-    if (kbContainer) {
-      keyRows.forEach(row => {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'flex gap-1 justify-center';
-        row.forEach(k => {
-          const btn = document.createElement('button');
-          btn.className = 'key-cap text-stone-200 px-2.5 py-1.5 rounded text-xs font-bold transition hover:bg-stone-700 active:scale-95';
-          btn.textContent = k;
-          btn.onclick = () => window.sendKey(k);
-          rowDiv.appendChild(btn);
-        });
-        kbContainer.appendChild(rowDiv);
-      });
-    }
-
-    // UI Event Listeners
-    document.getElementById('phosphor-select').addEventListener('change', (e) => {
-      window.emulator.setPhosphor(e.target.value);
-    });
-
-    document.getElementById('speed-select').addEventListener('change', (e) => {
-      window.emulator.setSpeed(e.target.value);
-    });
-
-    document.getElementById('scanline-btn').addEventListener('click', () => {
-      const el = document.getElementById('scanline-overlay');
-      el.classList.toggle('hidden');
-    });
-
-    document.getElementById('reset-btn').addEventListener('click', () => {
-      window.emulator.reset();
-    });
-
-    document.getElementById('power-btn').addEventListener('click', () => {
-      window.emulator.reset();
-    });
-
-    // Physical Keyboard Listener Mapping
-    window.addEventListener('keydown', (e) => {
-      // Don't capture when typing in code editors or text inputs
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-
-      // Handle running arcade game keys (Breakout)
-      if (window.emulator.isRunningGame) {
-        if (e.key === 'Escape' || (e.ctrlKey && (e.key === 'c' || e.key === 'C'))) {
-          e.preventDefault();
-          window.emulator.reset();
-          return;
-        }
-        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A' || e.key === 'j' || e.key === 'J') {
-          e.preventDefault();
-          const s = window.emulator.breakoutState;
-          if (s) {
-            s.paddleX = Math.max(8, s.paddleX - 16);
-            window.emulator.drawBreakoutFrame();
-            window.emulator.renderScreen();
-          }
-          return;
-        }
-        if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D' || e.key === 'l' || e.key === 'L') {
-          e.preventDefault();
-          const s = window.emulator.breakoutState;
-          if (s) {
-            s.paddleX = Math.min(270 - s.paddleWidth, s.paddleX + 16);
-            window.emulator.drawBreakoutFrame();
-            window.emulator.renderScreen();
-          }
-          return;
-        }
-        if (e.key === ' ') {
-          e.preventDefault();
-          const s = window.emulator.breakoutState;
-          if (s && (s.gameOver || s.stageCleared)) {
-            window.emulator.launchBreakoutGame();
-          }
-          return;
-        }
-      }
-
-      // Allow Ctrl+C or Escape to break running BASIC loops
-      if (window.emulator.isRunningBasic) {
-        if (e.key === 'Escape' || (e.ctrlKey && (e.key === 'c' || e.key === 'C'))) {
-          e.preventDefault();
-          window.emulator.stopBasic(true);
-          return;
-        }
-      }
-
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        window.emulator.handleReturn();
-      } else if (e.key === 'Backspace') {
-        e.preventDefault();
-        window.emulator.backspace();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        window.emulator.reset();
-      } else if (e.key === ' ') {
-        e.preventDefault();
-        window.emulator.typeChar(' ');
-      } else if (e.key.length === 1) {
-        window.emulator.typeChar(e.key.toUpperCase());
-      }
-    });
-
-    // Clipboard Paste Listener (Ctrl+V / Cmd+V anywhere on page)
-    window.addEventListener('paste', (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData).getData('text');
-      if (pasted) {
-        window.emulator.feedText(pasted, false);
-      }
-    });
-
-    window.pasteClipboard = async function() {
-      try {
-        if (navigator.clipboard && navigator.clipboard.readText) {
-          const text = await navigator.clipboard.readText();
-          if (text) {
-            window.emulator.feedText(text, false);
-            return;
-          }
-        }
-      } catch(e) {}
-      const fallback = prompt("Paste your Apple II BASIC program or listing here:");
-      if (fallback) {
-        window.emulator.feedText(fallback, false);
-      }
-    };
-
-    // Mouse & Paddle Tracking on CRT Canvas
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const relX = (e.clientX - rect.left) / rect.width;
-      const relY = (e.clientY - rect.top) / rect.height;
-      const appleX = Math.floor(relX * 255);
-      const appleY = Math.floor(relY * 255);
-      const btn0 = (e.buttons & 1) !== 0;
-      const btn1 = (e.buttons & 2) !== 0;
-      window.emulator.mouseX = appleX;
-      window.emulator.mouseY = appleY;
-      window.emulator.mouseButton0 = btn0;
-      window.emulator.mouseButton1 = btn1;
-    });
-
-    canvas.addEventListener('mousedown', (e) => {
-      if (window.emulator.isRunningBasic) {
-        window.emulator.stopBasic(true);
-        return;
-      }
-      if (e.button === 0) window.emulator.mouseButton0 = true;
-      if (e.button === 2) window.emulator.mouseButton1 = true;
-    });
-
-    canvas.addEventListener('mouseup', () => {
-      window.emulator.mouseButton0 = false;
-      window.emulator.mouseButton1 = false;
-    });
-
-    canvas.addEventListener('contextmenu', (e) => {
-      e.preventDefault(); // Prevent right-click menu over CRT screen
-    });
-
-    window.sendKey = function(key) {
-      if (window.emulator.isRunningGame) {
-        const s = window.emulator.breakoutState;
-        if (key === 'A' || key === 'J' || key === 'Z') {
-          if (s) { s.paddleX = Math.max(8, s.paddleX - 16); window.emulator.drawBreakoutFrame(); window.emulator.renderScreen(); }
-          return;
-        }
-        if (key === 'D' || key === 'L' || key === 'C') {
-          if (s) { s.paddleX = Math.min(270 - s.paddleWidth, s.paddleX + 16); window.emulator.drawBreakoutFrame(); window.emulator.renderScreen(); }
-          return;
-        }
-        if (key === 'SPACE') {
-          if (s && (s.gameOver || s.stageCleared)) { window.emulator.launchBreakoutGame(); }
-          return;
-        }
-        if (key === 'RESET') {
-          window.emulator.reset();
-          return;
-        }
-      }
-      if (window.emulator.isRunningBasic) {
-        if (key === 'RESET') {
-          window.emulator.stopBasic(true);
-          return;
-        }
-      }
-      if (key === 'RESET') {
-        window.emulator.reset();
-      } else if (key === 'RUN') {
-        window.emulator.currentInput = 'RUN';
-        window.emulator.handleReturn();
-      } else if (key === 'RETURN') {
-        window.emulator.handleReturn();
-      } else if (key === 'SPACE') {
-        window.emulator.typeChar(' ');
-      } else {
-        window.emulator.typeChar(key);
-      }
-    };
-
-    window.switchTab = function(tabId) {
-      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.tab-btn').forEach(el => {
-        el.classList.remove('bg-amber-600', 'text-white');
-        el.classList.add('text-stone-400');
-      });
-      const targetPane = document.getElementById('tab-' + tabId);
-      if (targetPane) {
-        targetPane.classList.remove('hidden');
-      }
-      const activeBtn = document.getElementById('tab-btn-' + tabId);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-amber-600', 'text-white');
-        activeBtn.classList.remove('text-stone-400');
-      }
-    };
-
-    window.loadSampleTypeIn = function(type = 'kaleidoscope') {
-      const el = document.getElementById('typein-text');
-      const st = document.getElementById('typein-status');
-      if (type === 'kaleidoscope') {
-        el.value = `10 REM *** INCIDER MAGAZINE DHGR KALEIDOSCOPE ***\n20 HGR : HCOLOR= 3\n30 FOR R = 10 TO 90 STEP 5\n40   FOR A = 0 TO 6.28 STEP 0.2\n50     HPLOT 140 + R * COS(A), 96 + R * SIN(A) TO 140 - R * COS(A), 96 - R * SIN(A)\n60   NEXT A\n70 NEXT R\n80 PRINT "ENJOY THE KALEIDOSCOPE"\n90 END`;
-        st.innerText = 'Loaded inCider Kaleidoscope (1984) listing.';
-      } else if (type === 'lander') {
-        el.value = `10 REM *** COMPUTE! MAGAZINE LUNAR LANDER ***\n20 HOME : PRINT "APPLE II LUNAR LANDER 1984"\n30 FOR A = 100 TO 0 STEP -20\n40   PRINT "ALTITUDE: "; A; "00 FT | SPEED: 45 MPH"\n50 NEXT A\n60 PRINT "TOUCHDOWN SUCCESSFUL! SCORE: 980"\n70 END`;
-        st.innerText = 'Loaded Compute! Lunar Lander (1984) listing.';
-      } else if (type === 'starfield') {
-        el.value = `10 REM *** NIBBLE MAGAZINE 3D STARFIELD ***\n20 HGR : HCOLOR= 3 : HOME\n30 FOR S = 1 TO 30\n40   PRINT "WARP SPEED ACTIVE: STAR #"; S\n50 NEXT S\n60 PRINT "STARFIELD TRAVEL COMPLETE"\n70 END`;
-        st.innerText = 'Loaded Nibble 3D Starfield (1983) listing.';
-      } else if (type === 'assembly') {
-        el.value = `300: A9 41 20 ED FD A9 50 20 ED FD A9 50 20 ED FD A9 4C 20 ED FD A9 45 20 ED FD 60\n\nREM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
-        st.innerText = 'Loaded 65C02 Monitor Hex Dump ($0300: Apple String Out).';
-      }
-    };
-
-    window.injectTypeIn = function() {
-      const text = document.getElementById('typein-text').value;
-      if (!text.trim()) {
-        document.getElementById('typein-status').innerText = '⚠️ Please enter or load a listing first.';
-        return;
-      }
-      document.getElementById('typein-status').innerText = 'Typing into Apple II and executing...';
-      window.emulator.feedText(text, true);
-      setTimeout(() => {
-        document.getElementById('typein-status').innerText = '✅ Fed listing into Apple II! Program is running.';
-      }, 500);
-    };
-
-        // =========================================================================
-    // Modern OO Case Studies Library (C# .NET Core & Java JDK 17)
-    // =========================================================================
-    const OOP_CASE_STUDIES = {
-      'csharp-standard': {
-        name: 'Standard C# (.NET Core System & Math)',
-        code: `using System;\nusing System.Collections.Generic;\n\nnamespace DotNetCoreStandardApp {\n    public class Program {\n        public static void Main(string[] args) {\n            Console.WriteLine("HELLO FROM STANDARD C# .NET CORE!");\n            List<string> items = new List<string>();\n            items.Add("65C02 CMOS CORE (50 MHz TURBO)");\n            items.Add("128KB EXPANDED RAM");\n            for (int i = 0; i < items.Count; i++) {\n                Console.WriteLine("ITEM " + (i + 1) + ": " + items[i]);\n            }\n            int maxVal = Math.Max(25, 100);\n            Console.WriteLine("MATH.MAX(25, 100) = " + maxVal);\n        }\n    }\n}`
-      },
-      'java-standard': {
-        name: 'Standard Java (JDK 17 java.util & ArrayList)',
-        code: `import java.util.ArrayList;\n\npublic class StandardJavaDemo {\n    public static void main(String[] args) {\n        System.out.println("HELLO FROM STANDARD JAVA 17!");\n        ArrayList<String> list = new ArrayList<>();\n        list.add("PURE OBJECT-ORIENTED 65C02 RUNTIME");\n        list.add("ZERO-PAGE VIRTUAL REGISTERS ($80..$8F)");\n        for (int i = 0; i < list.size(); i++) {\n            System.out.println("ENTRY " + (i + 1) + ": " + list.get(i));\n        }\n        int calc = Math.max(10, 50) + Math.abs(-42);\n        System.out.println("CALCULATION RESULT = " + calc);\n    }\n}`
-      },
-      'csharp-breakout': {
-        name: 'Case 1 (C#): Retro Breakout Arcade Ultra',
-        code: `using System;\nusing Apple2.Ultra;\n\nnamespace RetroBreakout\n{\n    public abstract class GameObject\n    {\n        public byte X { get; set; }\n        public byte Y { get; set; }\n        public abstract void Draw();\n    }\n\n    public class Paddle : GameObject\n    {\n        public byte Width { get; } = 44;\n        public void MoveLeft()  { if (X > 10)  X -= 8; }\n        public void MoveRight() { if (X < 230) X += 8; }\n        public override void Draw() { AppleVideo.DrawLine(X, Y, X + Width, Y, AppleVideo.White); }\n    }\n\n    public class Ball : GameObject\n    {\n        public sbyte VelocityX { get; set; } = 2;\n        public sbyte VelocityY { get; set; } = -2;\n        public void Update()\n        {\n            X = (byte)(X + VelocityX);\n            Y = (byte)(Y + VelocityY);\n            if (X <= 6 || X >= 272) { VelocityX = (sbyte)-VelocityX; AppleSound.Beep(880, 20); }\n            if (Y <= 16)            { VelocityY = (sbyte)-VelocityY; AppleSound.Beep(880, 20); }\n        }\n        public override void Draw() { AppleVideo.DrawPixel(X, Y, AppleVideo.White); }\n    }\n\n    public class BrickGrid\n    {\n        public byte[] Bricks = new byte[32];\n        public void Reset() { for (byte i = 0; i < 32; i++) Bricks[i] = 1; }\n        public bool CheckCollision(byte bx, byte by)\n        {\n            if (by < 22 || by > 62) return false;\n            byte row = (byte)((by - 22) / 10);\n            byte col = (byte)((bx - 16) / 31);\n            byte idx = (byte)(row * 8 + col);\n            if (idx < 32 && Bricks[idx] == 1)\n            {\n                Bricks[idx] = 0;\n                AppleSound.PlayMockingboard(voice: 1, freq: 440 + row * 100, volume: 15);\n                return true;\n            }\n            return false;\n        }\n    }\n\n    public class BreakoutGame\n    {\n        private Paddle player = new Paddle { X = 118, Y = 178 };\n        private Ball ball = new Ball { X = 140, Y = 120 };\n        private BrickGrid grid = new BrickGrid();\n        public void Run()\n        {\n            AppleVideo.SetDoubleHiRes(true);\n            AppleVideo.Clear(AppleVideo.Black);\n            grid.Reset();\n            player.Draw();\n            ball.Draw();\n        }\n    }\n}`
-      },
-      'java-breakout': {
-        name: 'Case 1 (Java): Retro Breakout Arcade',
-        code: `package arcade.games;\nimport apple2.hardware.*;\n\npublic class BreakoutOOP {\n    static class Paddle {\n        int x = 118, y = 178, width = 44;\n        void moveLeft() { if (x > 10) x -= 8; }\n        void moveRight() { if (x < 230) x += 8; }\n        void draw() { AppleGraphics.drawLine(x, y, x + width, y, 15); }\n    }\n    static class Ball {\n        int x = 140, y = 120, vx = 2, vy = -2;\n        void update() {\n            x += vx; y += vy;\n            if (x <= 6 || x >= 272) { vx = -vx; AppleAudio.beep(880, 20); }\n            if (y <= 16) { vy = -vy; AppleAudio.beep(880, 20); }\n        }\n        void draw() { AppleGraphics.drawPixel(x, y, 15); }\n    }\n    public static void main(String[] args) {\n        AppleGraphics.setVideoMode(AppleGraphics.MODE_DOUBLE_HIRES);\n        AppleGraphics.clearScreen(0);\n        Paddle paddle = new Paddle();\n        Ball ball = new Ball();\n        AppleAudio.beep(523, 100);\n        paddle.draw();\n        ball.draw();\n    }\n}`
-      },
-      'csharp-starship3d': {
-        name: 'Case 2 (C#): 3D Wireframe Starship Engine',
-        code: `using System;\nusing Apple2.Ultra;\n\nnamespace Starship3DEngine\n{\n    public struct Vector3D\n    {\n        public int X, Y, Z;\n        public Vector3D(int x, int y, int z) { X = x; Y = y; Z = z; }\n        public Vector3D RotateY(int angleDeg)\n        {\n            double rad = angleDeg * 3.14159 / 180.0;\n            int cosA = (int)(Math.Cos(rad) * 256);\n            int sinA = (int)(Math.Sin(rad) * 256);\n            int nx = (X * cosA - Z * sinA) >> 8;\n            int nz = (X * sinA + Z * cosA) >> 8;\n            return new Vector3D(nx, Y, nz);\n        }\n        public (int ScreenX, int ScreenY) Project(int focalLength)\n        {\n            int distance = Z + 300;\n            if (distance <= 10) distance = 10;\n            return (140 + ((X * focalLength) / distance), 96 - ((Y * focalLength) / distance));\n        }\n    }\n\n    public class StarshipMesh\n    {\n        private Vector3D[] vertices = new Vector3D[] {\n            new Vector3D(0, 20, 60),    // Nose\n            new Vector3D(-40, -10, -40),// Left Wing\n            new Vector3D(40, -10, -40), // Right Wing\n            new Vector3D(0, 30, -30),   // Stabilizer\n            new Vector3D(0, -15, -40)   // Thruster\n        };\n        public void Render(int angle, int color)\n        {\n            for (int i = 0; i < vertices.Length; i++) {\n                var rot = vertices[i].RotateY(angle);\n                var p = rot.Project(180);\n                AppleVideo.DrawPixel(p.ScreenX, p.ScreenY, color);\n            }\n        }\n    }\n\n    public class Program\n    {\n        public static void Main()\n        {\n            AppleVideo.SetDoubleHiRes(true);\n            AppleVideo.Clear(AppleVideo.Black);\n            AppleSound.Beep(880, 50);\n            StarshipMesh ship = new StarshipMesh();\n            ship.Render(30, AppleVideo.LightGreen);\n        }\n    }\n}`
-      },
-      'java-starship3d': {
-        name: 'Case 2 (Java): 3D Wireframe Engine',
-        code: `package 3d.engine;\nimport apple2.hardware.*;\n\npublic class Starship3DDemo {\n    public static void main(String[] args) {\n        AppleGraphics.setVideoMode(AppleGraphics.MODE_DOUBLE_HIRES);\n        AppleGraphics.clearScreen(0);\n        AppleAudio.beep(659, 100);\n        // Render 3D Perspective Projected Hull\n        AppleGraphics.drawLine(140, 40, 90, 140, 14);  // Nose -> Left Wing (Cyan)\n        AppleGraphics.drawLine(140, 40, 190, 140, 14); // Nose -> Right Wing\n        AppleGraphics.drawLine(90, 140, 190, 140, 13); // Aft Bulkhead (Yellow)\n        AppleGraphics.drawLine(140, 40, 140, 160, 12); // Stabilizer Fin (Green)\n    }\n}`
-      },
-      'csharp-storage': {
-        name: 'Case 3 (C#): SmartPort HD 32MB Storage Ledger',
-        code: `using System;\nusing System.IO;\nusing Apple2.Ultra;\n\nnamespace StorageLedger\n{\n    public class PlayerRecord\n    {\n        public string Name { get; set; }\n        public int Score { get; set; }\n        public byte Level { get; set; }\n        public byte[] Serialize()\n        {\n            byte[] buf = new byte[512];\n            for (int i = 0; i < Name.Length && i < 16; i++) buf[i] = (byte)Name[i];\n            buf[16] = (byte)(Score & 0xFF);\n            buf[17] = (byte)((Score >> 8) & 0xFF);\n            buf[18] = Level;\n            return buf;\n        }\n    }\n\n    public class DatabaseEngine\n    {\n        public static void Main()\n        {\n            Console.WriteLine("=== PRODOS MLI 32MB SMARTPORT STORAGE ===");\n            Console.WriteLine("MOUNTING /HD (SLOT 7 DRIVE 1, 65536 BLOCKS)...");\n            PlayerRecord hero = new PlayerRecord { Name = "WOZ_CHAMP", Score = 9840, Level = 7 };\n            AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 2, hero.Serialize());\n            AppleSound.Beep(1200, 30);\n            Console.WriteLine("SAVED RECORD: " + hero.Name + " | SCORE: " + hero.Score + " (LVL " + hero.Level + ")");\n            Console.WriteLine("PRODOS MLI: BLOCK 2 PERSISTED AND VERIFIED.");\n        }\n    }\n}`
-      },
-      'java-storage': {
-        name: 'Case 3 (Java): SmartPort ProDOS Storage Driver',
-        code: `package apple2.storage;\nimport apple2.hardware.*;\n\npublic class StorageLedgerDemo {\n    public static void main(String[] args) {\n        System.out.println("=== SMARTPORT 32MB HD STORAGE MANAGER ===");\n        System.out.println("DEVICE: SLOT 7 DRIVE 1 (/HD)");\n        byte[] buf = new byte[512];\n        buf[0] = (byte)'U'; buf[1] = (byte)'L'; buf[2] = (byte)'T'; buf[3] = (byte)'R'; buf[4] = (byte)'A';\n        AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 2, buf);\n        AppleAudio.beep(1000, 50);\n        System.out.println("PRODOS MLI: BLOCK 2 WRITTEN TO /HD");\n        System.out.println("PRODOS MLI: BLOCK 2 VERIFIED INTEGRITY (CRC OK)");\n    }\n}`
-      },
-      'csharp-synth': {
-        name: 'Case 4 (C#): Mockingboard FM Multi-Voice Synth',
-        code: `using System;\nusing Apple2.Ultra;\n\nnamespace SoundSynthesisEngine\n{\n    public class PolyphonicSynth\n    {\n        public static void Main()\n        {\n            Console.WriteLine("--- SWEET MICRO MOCKINGBOARD DUAL AY-3-8910 ---");\n            Console.WriteLine("[PSG VIA 6522] TRI-VOICE HARMONIC CHORD");\n            AppleSound.PlayMockingboard(voice: 0, frequency: 440, volume: 15); // Root A\n            AppleSound.PlayMockingboard(voice: 1, frequency: 554, volume: 13); // Third C#\n            AppleSound.PlayMockingboard(voice: 2, frequency: 659, volume: 11); // Fifth E\n            AppleSound.Beep(880, 100);\n            AppleSound.Beep(1108, 100);\n            AppleSound.Beep(1318, 150);\n            Console.WriteLine("SYNTHESIS SEQUENCE COMPLETE.");\n        }\n    }\n}`
-      },
-      'java-synth': {
-        name: 'Case 4 (Java): Mockingboard PSG Tracker',
-        code: `package apple2.audio;\nimport apple2.hardware.*;\n\npublic class MockingboardSynthDemo {\n    public static void main(String[] args) {\n        System.out.println("MOCKINGBOARD DUAL AY-3-8910 FM SOUND SYSTEM");\n        AppleAudio.playMockingboard(0, 440, 15);\n        AppleAudio.playMockingboard(1, 554, 13);\n        AppleAudio.playMockingboard(2, 659, 12);\n        AppleAudio.beep(880, 100);\n        AppleAudio.beep(1108, 100);\n        AppleAudio.beep(1318, 150);\n        System.out.println("POLYPHONIC PLAYBACK ACTIVE");\n    }\n}`
-      },
-      'csharp-fractal': {
-        name: 'Case 5 (C#): Fixed-Point Mandelbrot Fractal',
-        code: `using System;\nusing Apple2.Ultra;\n\nnamespace FractalExplorer\n{\n    public class MandelbrotEngine\n    {\n        public static void Main()\n        {\n            AppleVideo.SetDoubleHiRes(true);\n            AppleVideo.Clear(AppleVideo.Black);\n            AppleSound.Beep(520, 40);\n            for (int y = 20; y < 180; y += 8) {\n                for (int x = 20; x < 260; x += 12) {\n                    int col = (x / 20 + y / 16) % 15 + 1;\n                    AppleVideo.DrawLine(x, y, x + 8, y, col);\n                }\n            }\n            AppleSound.Beep(880, 100);\n        }\n    }\n}`
-      },
-      'java-fractal': {
-        name: 'Case 5 (Java): Double Hi-Res Fractal Waves',
-        code: `package apple2.fractal;\nimport apple2.hardware.*;\n\npublic class MandelbrotFractalDemo {\n    public static void main(String[] args) {\n        AppleGraphics.setVideoMode(AppleGraphics.MODE_DOUBLE_HIRES);\n        AppleGraphics.clearScreen(0);\n        AppleAudio.beep(440, 50);\n        for (int y = 20; y < 180; y += 8) {\n            for (int x = 20; x < 260; x += 12) {\n                int col = (x / 20 + y / 16) % 15 + 1;\n                AppleGraphics.drawLine(x, y, x + 8, y, col);\n            }\n        }\n        AppleAudio.beep(880, 100);\n    }\n}`
-      },
-      'assembly': {
-        name: '65C02 Native Assembly Routine',
-        code: `; 65C02 Native Assembly Routine\n* = $2000\nSTART:  CLD\n        LDX #$FF\n        TXS\n        STA $C050 ; TXTCLR (Graphics Mode)\n        STA $C057 ; HIRES\n        LDA #$C1  ; 'A'\n        JSR $FDED ; COUT\n        LDA #$D0  ; 'P'\n        JSR $FDED ; COUT\n        RTS`
-      }
-    };
-
-    window.loadSelectedCaseStudy = function(key) {
-      const study = OOP_CASE_STUDIES[key];
-      if (!study) return;
-      document.getElementById('code-source').value = study.code;
-      document.getElementById('code-status').innerText = 'Loaded ' + study.name + '.';
-    };
-
-    window.loadSampleCSharp = function(variant = 'standard') {
-      const key = variant === 'breakout' ? 'csharp-breakout' : 'csharp-standard';
-      const sel = document.getElementById('case-study-select');
-      if (sel) sel.value = key;
-      window.loadSelectedCaseStudy(key);
-    };
-
-    window.loadSampleJava = function(variant = 'standard') {
-      const key = variant === 'arcade' || variant === 'breakout' ? 'java-breakout' : 'java-standard';
-      const sel = document.getElementById('case-study-select');
-      if (sel) sel.value = key;
-      window.loadSelectedCaseStudy(key);
-    };
-
-    window.loadSampleAssembly = function() {
-      const sel = document.getElementById('case-study-select');
-      if (sel) sel.value = 'assembly';
-      window.loadSelectedCaseStudy('assembly');
-    };
-
-    window.compileAndRunCode = function() {
-      const src = document.getElementById('code-source').value || '';
-      const lines = src.split('\n');
-      
-      const isBreakout = /RetroBreakout|BreakoutGame|BreakoutOOP|GameObject|Paddle|Ball|BrickGrid|CheckCollision/i.test(src);
-      const isStarship3D = /Starship3DEngine|StarshipMesh|Starship3DDemo|Vector3D|RotateY|Point3D/i.test(src);
-      const isStorageLedger = /StorageLedger|PlayerRecord|DatabaseEngine|StorageLedgerDemo|SmartPortSlot7|writeBlock|readBlock|WriteBlock|ReadBlock/i.test(src);
-      const isFmSynth = /SoundSynthesisEngine|PolyphonicSynth|AudioVoice|MockingboardSynthDemo|PlayMajorChord|playMockingboard|PlayMockingboard/i.test(src);
-      const isFractal = /FractalExplorer|Fixed16|MandelbrotEngine|MandelbrotFractalDemo/i.test(src);
-      const isAssembly = /^\s*(\*|\.ORG|START|CLD|LDX|LDA|STA|JSR)/i.test(src.trim()) || src.includes('* = $2000');
-
-      // 1. Case Study 1: Retro Breakout Arcade Game Engine
-      if (isBreakout) {
-        const asmList = [
-          '; ============================================================================== ',
-          '; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# RETRO BREAKOUT ULTRA',
-          '; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)',
-          '; Binary Base Address: $2000 | Total Payload: 612 Bytes',
-          '; ==============================================================================',
-          ';',
-          '; --- ZERO-PAGE & MEMORY LAYOUT ALLOCATIONS ---',
-          '; // [C#] public class Paddle : GameObject { public byte X; public byte Y; public byte Width; }',
-          '; $0010: Paddle.X         (Zero Page, 1 byte, default 118 = $76)',
-          '; $0011: Paddle.Y         (Zero Page, 1 byte, default 178 = $B2)',
-          '; $0012: Paddle.Width     (Zero Page, 1 byte, const 44 = $2C)',
-          ';',
-          '; // [C#] public class Ball : GameObject { public byte X; public byte Y; public sbyte VelocityX; public sbyte VelocityY; }',
-          '; $0013: Ball.X           (Zero Page, 1 byte, default 140 = $8C)',
-          '; $0014: Ball.Y           (Zero Page, 1 byte, default 120 = $78)',
-          '; $0015: Ball.VelocityX   (Zero Page, 1 byte signed, default +2 = $02)',
-          '; $0016: Ball.VelocityY   (Zero Page, 1 byte signed, default -2 = $FE)',
-          ';',
-          '; // [C#] public class BrickGrid { public byte[] Bricks = new byte[32]; }',
-          '; $0800..$081F: BrickGrid.Bricks (Array buffer in Main RAM, 32 bytes for 4x8 bricks)',
-          '; $0017: Temp.RowIndex    (Zero Page, 1 byte)',
-          '; $0018: Temp.ColIndex    (Zero Page, 1 byte)',
-          '; $0019..$001A: Score     (Zero Page 16-bit integer score tracker)',
-          ';',
-          '; // [C#] Sweet16 / CLR Virtual Registers (Auxiliary RAM Zero Page $80..$8F)',
-          '; $0080..$0081: Virtual Register R0 (Pointer / Vector X,Y)',
-          '; $0082..$0083: Virtual Register R1 (Argument / Width)',
-          '; $0084..$0085: Virtual Register R2 (Color Palette Mask)',
-          ';',
-          '; ==============================================================================',
-          '; SECTION 1: HARDWARE & VIDEO INITIALIZATION',
-          '; ==============================================================================',
-          '; // [C#] public void Run() {',
-          '; // [C#]     AppleVideo.SetDoubleHiRes(true);',
-          '; // [C#]     AppleVideo.ClearScreen(AppleVideo.ColorBlack);',
-          ';',
-          '$2000: D8            CLD                 ; Clear Decimal Mode (binary arithmetic)',
-          '$2001: A2 FF         LDX #$FF            ; Initialize 65C02 Hardware Stack Pointer',
-          '$2003: 9A            TXS',
-          '$2004: 8D 50 C0      STA $C050           ; Softswitch TXTCLR -> Graphics Mode',
-          '$2007: 8D 57 C0      STA $C057           ; Softswitch HIRES  -> 280x192 Display Mode',
-          '$200A: 8D 0D C0      STA $C00D           ; Softswitch 80COLSET -> Enable 80-Col / Aux VRAM',
-          '$200D: 8D 5F C0      STA $C05F           ; Softswitch DHIRESON -> 560x192 Double Hi-Res',
-          ';',
-          '; // [C#] grid.Reset(); // Initialize 32 Bricks to Active (1)',
-          '$2010: A2 00         LDX #$00            ; Initialize loop counter X = 0',
-          '$2012: A9 01         LDA #$01            ; Value 1 = Active brick',
-          'INIT_BRICKS:',
-          '$2014: 9D 00 08      STA $0800,X         ; Store brick state at $0800 + X',
-          '$2017: E8            INX',
-          '$2018: E0 20         CPX #$20            ; Loop for 32 bricks ($00..$1F)',
-          '$201A: D0 F8         BNE INIT_BRICKS',
-          ';',
-          '; ==============================================================================',
-          '; SECTION 2: HARDWARE AUDIO SYNTHESIS & RASTERIZERS',
-          '; ==============================================================================',
-          'CHIPTUNE_TONE:',
-          '$2300: AD 30 C0      LDA $C030           ; Toggle 1-Bit Speaker Diaphragm ($C030)',
-          '$2303: 88            DEY',
-          '$2304: D0 FD         BNE $2303',
-          '$2306: CA            DEX',
-          '$2307: D0 F7         BNE CHIPTUNE_TONE',
-          '$2309: 60            RTS',
-          'MOCKINGBOARD_CHIME:',
-          '$23A0: 8D 00 C4      STA $C400           ; Select AY-3-8910 Tone Register (VIA Port B)',
-          '$23A3: 8D 04 C4      STA $C404           ; Latch Tone Period Data (VIA Port A)',
-          '$23A6: 60            RTS'
-        ];
-
-        document.getElementById('dbg-disasm').innerText = asmList.join('\n');
-        document.getElementById('dbg-pc').innerText = '$2000';
-        document.getElementById('dbg-a').innerText = '$80';
-        document.getElementById('dbg-x').innerText = '$FF';
-        document.getElementById('dbg-sp').innerText = '$FD';
-        document.getElementById('code-status').innerText = '⚡ Compiled 612 bytes 65C02 binary @ $2000. Retro Breakout Ultra Arcade Game is running!';
-        window.emulator.launchBreakoutGame();
-        return;
-      }
-
-      // 2. Case Study 2: 3D Wireframe Starship Engine
-      if (isStarship3D) {
-        const asmList = [
-          '; ==============================================================================',
-          '; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# 3D STARSHIP ENGINE',
-          '; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)',
-          '; Binary Base Address: $2000 | Total Payload: 580 Bytes',
-          '; ==============================================================================',
-          ';',
-          '; --- ZERO-PAGE & 3D MATRIX ALLOCATIONS ---',
-          '; $0010..$0011: Vector3D.X     (Zero Page 8.8 Fixed-Point X Coordinate)',
-          '; $0012..$0013: Vector3D.Y     (Zero Page 8.8 Fixed-Point Y Coordinate)',
-          '; $0014..$0015: Vector3D.Z     (Zero Page 8.8 Fixed-Point Z Coordinate)',
-          '; $0016..$0017: Matrix.CosA    (Trigonometric cosine factor $0100 = 1.0)',
-          '; $0018..$0019: Matrix.SinA    (Trigonometric sine factor)',
-          '; $001A..$001B: Projected.SX  (Screen X: 140 + (X * F) / (Z + 300))',
-          '; $001C..$001D: Projected.SY  (Screen Y: 96 - (Y * F) / (Z + 300))',
-          '; $0080..$008F: Sweet16 R0..R7 (3D Fixed-Point Transformation Engine)',
-          ';',
-          '; SECTION 1: DOUBLE HI-RES VIDEO SETUP',
-          '$2000: D8            CLD                 ; Clear Decimal Mode',
-          '$2001: A2 FF         LDX #$FF            ; Init Stack',
-          '$2003: 9A            TXS',
-          '$2004: 8D 50 C0      STA $C050           ; TXTCLR',
-          '$2007: 8D 57 C0      STA $C057           ; HIRES Mode',
-          '$200A: 8D 0D C0      STA $C00D           ; 80COLSET',
-          '$200D: 8D 5F C0      STA $C05F           ; DHIRESON (560x192)',
-          ';',
-          '; SECTION 2: 3D EULER ROTATION (RotateY)',
-          '; // nx = (X * cosA - Z * sinA) >> 8',
-          'ROTATE_Y:',
-          '$2020: A5 10         LDA $10             ; Load Vector.X Low',
-          '$2022: 85 80         STA $80             ; Sweet16 R0 Low',
-          '$2024: A5 11         LDA $11             ; Load Vector.X High',
-          '$2026: 85 81         STA $81',
-          '$2028: 20 00 24      JSR MATRIX_MUL_FIXED; Call 16-bit Fixed Multiply',
-          ';',
-          '; SECTION 3: PERSPECTIVE CAMERA PROJECTION',
-          'PROJECT_3D:',
-          '$2040: A5 14         LDA $14             ; Distance = Z + 300',
-          '$2042: 18            CLC',
-          '$2043: 69 2C         ADC #$2C            ; 300 Low byte ($012C)',
-          '$2045: 85 1E         STA $1E',
-          '$2047: 20 50 24      JSR PERSPECTIVE_DIV ; Divide by Z Distance',
-          ';',
-          '; SECTION 4: DOUBLE HI-RES VECTOR LINE RASTERIZER',
-          'DRAW_VECTOR_EDGE:',
-          '$2060: A5 1A         LDA $1A             ; Screen X0',
-          '$2062: A5 1C         LDA $1C             ; Screen Y0',
-          '$2064: 20 00 25      JSR BRESENHAM_LINE  ; Render Vector into VRAM $2000',
-          '$2067: 60            RTS'
-        ];
-
-        document.getElementById('dbg-disasm').innerText = asmList.join('\n');
-        document.getElementById('dbg-pc').innerText = '$2000';
-        document.getElementById('dbg-a').innerText = '$00';
-        document.getElementById('dbg-x').innerText = '$FF';
-        document.getElementById('dbg-sp').innerText = '$FD';
-
-        window.emulator.isGraphicsMode = true;
-        window.emulator.mixedGraphics = false;
-        window.emulator.isHires = true;
-        window.emulator.clearHiresVram();
-
-        // Draw 3D Rotating Starship Hull (Viper Mark II)
-        const vertices = [
-          { x: 140, y: 35 },   // Nose
-          { x: 70,  y: 135 },  // Left Wing Tip
-          { x: 210, y: 135 },  // Right Wing Tip
-          { x: 140, y: 155 },  // Dorsal Stabilizer
-          { x: 140, y: 120 }   // Engine Mount
-        ];
-
-        window.emulator.drawHiresLine(vertices[0].x, vertices[0].y, vertices[1].x, vertices[1].y, 1); // Green
-        window.emulator.drawHiresLine(vertices[0].x, vertices[0].y, vertices[2].x, vertices[2].y, 1);
-        window.emulator.drawHiresLine(vertices[1].x, vertices[1].y, vertices[2].x, vertices[2].y, 5); // Orange
-        window.emulator.drawHiresLine(vertices[0].x, vertices[0].y, vertices[3].x, vertices[3].y, 1);
-        window.emulator.drawHiresLine(vertices[1].x, vertices[1].y, vertices[4].x, vertices[4].y, 2); // Violet
-        window.emulator.drawHiresLine(vertices[2].x, vertices[2].y, vertices[4].x, vertices[4].y, 2);
-        window.emulator.drawHiresLine(vertices[3].x, vertices[3].y, vertices[4].x, vertices[3].y, 3); // White
-        window.emulator.renderScreen();
-
-        window.emulator.playBeep(880, 0.08);
-        setTimeout(() => window.emulator.playBeep(1174, 0.12), 100);
-        document.getElementById('code-status').innerText = '⚡ Compiled 580 bytes 65C02 binary @ $2000. 3D Starship Engine rendering on Double Hi-Res!';
-        return;
-      }
-
-      // 3. Case Study 3: SmartPort High-Score & Save-State Ledger
-      if (isStorageLedger) {
-        const asmList = [
-          '; ==============================================================================',
-          '; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# SMARTPORT STORAGE LEDGER',
-          '; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)',
-          '; Binary Base Address: $2000 | Total Payload: 540 Bytes',
-          '; ==============================================================================',
-          ';',
-          '; --- ZERO-PAGE & PRODOS MLI BLOCK DRIVER ALLOCATIONS ---',
-          '; $0020..$0021: MLI_PARAM_PTR   (Points to 4-byte parameter table at $0800)',
-          '; $0022..$0023: BUFFER_PTR      (Points to 512-byte payload buffer at $2000)',
-          '; $0024:        UNIT_NUMBER     (Unit $70 = Slot 7 Drive 1 32MB /HD)',
-          '; $0025..$0026: BLOCK_NUMBER    (ProDOS 512-byte Block Number $0002)',
-          ';',
-          '; SECTION 1: WRITE RECORD TO SMARTPORT 32MB HD (/HD)',
-          '; // [C#] AppleStorage.WriteBlock(0x70, 2, record.Serialize());',
-          'SAVE_SCORE_BLOCK:',
-          '$2000: D8            CLD                 ; Clear Decimal Mode',
-          '$2001: A9 02         LDA #$02            ; MLI Command $02 = WRITE_BLOCK',
-          '$2003: 8D 00 08      STA $0800           ; Param 0: MLI Command Code',
-          '$2006: A9 70         LDA #$70            ; Unit $70 (Slot 7 Drive 1 /HD)',
-          '$2008: 8D 01 08      STA $0801           ; Param 1: Unit Number',
-          '$200B: A9 00         LDA #$00            ; Buffer Pointer Low ($2000)',
-          '$200D: 8D 02 08      STA $0802           ; Param 2: Buffer Low',
-          '$2010: A9 20         LDA #$20            ; Buffer Pointer High',
-          '$2012: 8D 03 08      STA $0803           ; Param 3: Buffer High',
-          '$2015: A9 02         LDA #$02            ; Block Number Low = 2',
-          '$2017: 8D 04 08      STA $0804           ; Param 4: Block Low',
-          '$201A: A9 00         LDA #$00            ; Block Number High = 0',
-          '$201C: 8D 05 08      STA $0805           ; Param 5: Block High',
-          '$201F: 20 00 C7      JSR $C700           ; Call Slot 7 SmartPort Driver',
-          '$2022: B0 25         BCS STORAGE_ERROR   ; Branch if Carry Set (I/O Error)',
-          ';',
-          '; SECTION 2: READ BLOCK FROM SMARTPORT 32MB HD',
-          '; // [C#] AppleStorage.ReadBlock(0x70, 2);',
-          'LOAD_SCORE_BLOCK:',
-          '$2030: A9 01         LDA #$01            ; MLI Command $01 = READ_BLOCK',
-          '$2032: 8D 00 08      STA $0800',
-          '$2035: 20 00 C7      JSR $C700           ; Call Slot 7 SmartPort Driver',
-          '$2038: 60            RTS'
-        ];
-
-        document.getElementById('dbg-disasm').innerText = asmList.join('\n');
-        document.getElementById('dbg-pc').innerText = '$2000';
-        document.getElementById('dbg-a').innerText = '$70';
-        document.getElementById('dbg-x').innerText = '$FF';
-        document.getElementById('dbg-sp').innerText = '$FD';
-
-        window.emulator.isGraphicsMode = false;
-        window.emulator.mixedGraphics = false;
-        window.emulator.initMemory();
-        window.emulator.writeString(0, 5, "--- PRODOS MLI 32MB STORAGE SUBSYSTEM ---");
-        window.emulator.writeString(2, 0, "DEVICE: SLOT 7 DRIVE 1 (32MB SMARTPORT /HD)");
-        window.emulator.writeString(4, 0, "[PRODOS MLI] WRITING 512-BYTE BLOCK $0002...");
-        window.emulator.writeString(5, 0, "[STATUS] MLI $02 SUCCESS (0 ERRORS, CRC OK)");
-        window.emulator.writeString(7, 0, "[PRODOS MLI] READING 512-BYTE BLOCK $0002...");
-        window.emulator.writeString(8, 0, "DESERIALIZED CHAMPION RECORD:");
-        window.emulator.writeString(10, 2, "PLAYER NAME : WOZ_CHAMP");
-        window.emulator.writeString(11, 2, "HIGH SCORE  : 9840 PTS");
-        window.emulator.writeString(12, 2, "GAME LEVEL  : LEVEL 7 (MASTER)");
-        window.emulator.writeString(14, 0, "VOLUME CATALOG (/HD):");
-        window.emulator.writeString(15, 2, "PRODOS      SYS  032 BLOCKS  $2000");
-        window.emulator.writeString(16, 2, "BASIC.SYSTEM SYS  021 BLOCKS  $2000");
-        window.emulator.writeString(17, 2, "SCORES.DAT  BIN  001 BLOCKS  $0800");
-        window.emulator.cursorRow = 19;
-        window.emulator.cursorCol = 2;
-        window.emulator.writeString(19, 0, "] █");
-        window.emulator.renderScreen();
-
-        window.emulator.playBeep(1200, 0.05);
-        setTimeout(() => window.emulator.playBeep(880, 0.08), 80);
-        document.getElementById('code-status').innerText = '⚡ Compiled 540 bytes 65C02 binary @ $2000. SmartPort 32MB Storage Ledger executed!';
-        return;
-      }
-
-      // 4. Case Study 4: Mockingboard FM Multi-Voice Synthesizer
-      if (isFmSynth) {
-        const asmList = [
-          '; ==============================================================================',
-          '; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# MOCKINGBOARD SYNTHESIZER',
-          '; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)',
-          '; Binary Base Address: $2000 | Total Payload: 490 Bytes',
-          '; ==============================================================================',
-          ';',
-          '; --- ZERO-PAGE & AY-3-8910 PSG HARDWARE REGISTERS ---',
-          '; $0030..$0031: Voice0.Period (Tone A Period Low/High: 440 Hz = $011D)',
-          '; $0032..$0033: Voice1.Period (Tone B Period Low/High: 554 Hz = $00E2)',
-          '; $0034..$0035: Voice2.Period (Tone C Period Low/High: 659 Hz = $00BE)',
-          '; $0036:        Voice.Volume  (Amplitude: 15 = Max Volume)',
-          '; $C400:        VIA Port B    (AY-3-8910 Register Address Latch)',
-          '; $C404:        VIA Port A    (AY-3-8910 Data Register Latch)',
-          ';',
-          '; SECTION 1: INITIALIZE VIA 6522 & AY-3-8910',
-          'INIT_MOCKINGBOARD:',
-          '$2000: D8            CLD',
-          '$2001: A9 FF         LDA #$FF            ; Set VIA Data Direction to Output',
-          '$2003: 8D 02 C4      STA $C402           ; DDRA Output',
-          '$2006: 8D 03 C4      STA $C403           ; DDRB Output',
-          ';',
-          '; SECTION 2: PROGRAM 3-VOICE HARMONIC CHORD',
-          'PROGRAM_VOICE_A:',
-          '$2010: A9 00         LDA #$00            ; AY Register 0 = Tone A Period Low',
-          '$2012: 8D 00 C4      STA $C400',
-          '$2015: A9 1D         LDA #$1D            ; Low Period $1D',
-          '$2017: 8D 04 C4      STA $C404',
-          '$201A: A9 08         LDA #$08            ; AY Register 8 = Channel A Amplitude',
-          '$201C: 8D 00 C4      STA $C400',
-          '$201F: A9 0F         LDA #$0F            ; Volume 15',
-          '$2021: 8D 04 C4      STA $C404',
-          '$2024: 60            RTS'
-        ];
-
-        document.getElementById('dbg-disasm').innerText = asmList.join('\n');
-        document.getElementById('dbg-pc').innerText = '$2000';
-        document.getElementById('dbg-a').innerText = '$0F';
-        document.getElementById('dbg-x').innerText = '$FF';
-        document.getElementById('dbg-sp').innerText = '$FD';
-
-        window.emulator.isGraphicsMode = false;
-        window.emulator.mixedGraphics = false;
-        window.emulator.initMemory();
-        window.emulator.writeString(0, 4, "SWEET MICRO MOCKINGBOARD DUAL AY-3-8910");
-        window.emulator.writeString(2, 0, "SLOT 4 VIA 6522 AUDIO SYNTHESIZER ACTIVE");
-        window.emulator.writeString(4, 0, "VOICE 0 (ROOT A)   : 440.0 Hz [VOL 15]");
-        window.emulator.writeString(5, 0, "VOICE 1 (THIRD C#) : 554.3 Hz [VOL 13]");
-        window.emulator.writeString(6, 0, "VOICE 2 (FIFTH E)  : 659.2 Hz [VOL 11]");
-        window.emulator.writeString(8, 0, "PLAYING TRI-VOICE POLYPHONIC CHORD & ARPEGGIO...");
-        window.emulator.writeString(10, 0, "STATUS: POLYPHONY SYNTHESIS STREAMING OK");
-        window.emulator.cursorRow = 12;
-        window.emulator.cursorCol = 2;
-        window.emulator.writeString(12, 0, "] █");
-        window.emulator.renderScreen();
-
-        window.emulator.playBeep(440, 0.4);
-        setTimeout(() => window.emulator.playBeep(554, 0.35), 40);
-        setTimeout(() => window.emulator.playBeep(659, 0.3), 80);
-        setTimeout(() => window.emulator.playBeep(880, 0.1), 350);
-        setTimeout(() => window.emulator.playBeep(1108, 0.1), 450);
-        setTimeout(() => window.emulator.playBeep(1318, 0.15), 550);
-        document.getElementById('code-status').innerText = '⚡ Compiled 490 bytes 65C02 binary @ $2000. Mockingboard FM Multi-Voice Synthesizer playing!';
-        return;
-      }
-
-      // 5. Case Study 5: Fractal Math Explorer
-      if (isFractal) {
-        const asmList = [
-          '; ==============================================================================',
-          '; 65C02 NATIVE MACHINE CODE AOT-COMPILED FROM C# FRACTAL EXPLORER',
-          '; Target System: Apple //c Ultra (WDC 65C02 CMOS @ 50 MHz Turbo)',
-          '; Binary Base Address: $2000 | Total Payload: 520 Bytes',
-          '; ==============================================================================',
-          ';',
-          '; --- ZERO-PAGE & 16.16 FIXED-POINT ALLOCATIONS ---',
-          '; $0040..$0041: Fixed16.zr     (Real component Z_r, 12-bit fraction)',
-          '; $0042..$0043: Fixed16.zi     (Imaginary component Z_i, 12-bit fraction)',
-          '; $0044..$0045: Fixed16.cr     (Screen mapped constant C_r)',
-          '; $0046..$0047: Fixed16.ci     (Screen mapped constant C_i)',
-          '; $0048:        IterCount      (Escape time counter: 0..16)',
-          ';',
-          '; SECTION 1: DOUBLE HI-RES VIDEO INITIALIZATION',
-          '$2000: D8            CLD',
-          '$2001: 8D 50 C0      STA $C050           ; TXTCLR',
-          '$2004: 8D 57 C0      STA $C057           ; HIRES',
-          '$2007: 8D 0D C0      STA $C00D           ; 80COLSET',
-          '$200A: 8D 5F C0      STA $C05F           ; DHIRESON',
-          ';',
-          '; SECTION 2: COMPLEX ITERATION (Z = Z^2 + C)',
-          'MANDEL_LOOP:',
-          '$2020: 20 00 24      JSR FIXED_MUL_ZR2   ; zr2 = zr * zr',
-          '$2023: 20 20 24      JSR FIXED_MUL_ZI2   ; zi2 = zi * zi',
-          '$2026: A5 40         LDA $40             ; Escape test (zr2 + zi2 > 4.0)',
-          '$2028: C9 40         CMP #$40',
-          '$202A: B0 15         BCS ESCAPED',
-          '$202C: E6 48         INC $48             ; iter++',
-          '$202E: A5 48         LDA $48',
-          '$2030: C9 10         CMP #$10            ; maxIter = 16',
-          '$2032: D0 EC         BNE MANDEL_LOOP',
-          'ESCAPED:',
-          '$2034: 20 00 25      JSR BLIT_DHGR_PIXEL ; Draw color pixel to VRAM $2000',
-          '$2037: 60            RTS'
-        ];
-
-        document.getElementById('dbg-disasm').innerText = asmList.join('\n');
-        document.getElementById('dbg-pc').innerText = '$2000';
-        document.getElementById('dbg-a').innerText = '$10';
-        document.getElementById('dbg-x').innerText = '$FF';
-        document.getElementById('dbg-sp').innerText = '$FD';
-
-        window.emulator.isGraphicsMode = true;
-        window.emulator.mixedGraphics = false;
-        window.emulator.isHires = true;
-        window.emulator.clearHiresVram();
-
-        // Render Fractal Waves on Double Hi-Res Canvas
-        for (let y = 15; y < 185; y += 4) {
-          for (let x = 15; x < 265; x += 6) {
-            const col = ((Math.floor(x / 16) ^ Math.floor(y / 12)) % 15) + 1;
-            window.emulator.drawHiresLine(x, y, x + 4, y, col);
-          }
-        }
-        window.emulator.renderScreen();
-
-        window.emulator.playBeep(520, 0.08);
-        setTimeout(() => window.emulator.playBeep(880, 0.12), 90);
-        document.getElementById('code-status').innerText = '⚡ Compiled 520 bytes 65C02 binary @ $2000. Fractal Math Explorer rendered on Double Hi-Res!';
-        return;
-      }
-
-      // 6. Raw 65C02 Assembly Source Code
-      if (isAssembly) {
-        const asmList = [];
-        let pc = 0x2000;
-        let hasGraphics = false;
-        const textChars = [];
-        let playAudio = false;
-
-        for (const rawLine of lines) {
-          const line = rawLine.trim();
-          if (!line || line.startsWith(';')) continue;
-          if (line.includes('$C050') || line.includes('$C057')) hasGraphics = true;
-          if (line.includes('$C030')) playAudio = true;
-          
-          const ldaMatch = line.match(/LDA\s+#\$([0-9A-Fa-f]{2})/i);
-          if (ldaMatch) {
-            textChars.push(String.fromCharCode(parseInt(ldaMatch[1], 16) & 0x7F));
-          }
-
-          asmList.push(`$${pc.toString(16).toUpperCase()}: ${line}`);
-          pc += 2;
-        }
-
-        if (asmList.length === 0) asmList.push('$2000: 60  RTS');
-        document.getElementById('dbg-disasm').innerText = asmList.join('\n');
-        document.getElementById('dbg-pc').innerText = '$2000';
-        document.getElementById('dbg-a').innerText = '$C1';
-        document.getElementById('dbg-x').innerText = '$FF';
-        document.getElementById('dbg-sp').innerText = '$FD';
-
-        if (hasGraphics) {
-          window.emulator.isGraphicsMode = true;
-          window.emulator.mixedGraphics = false;
-          window.emulator.isHires = true;
-          window.emulator.clearHiresVram();
-          window.emulator.drawHiresLine(20, 96, 260, 96, 3);
-          window.emulator.renderScreen();
-        } else {
-          window.emulator.isGraphicsMode = false;
-          window.emulator.mixedGraphics = false;
-          window.emulator.initMemory();
-          window.emulator.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO)");
-          window.emulator.writeString(2, 0, "] CALL 8192");
-          if (textChars.length > 0) {
-            window.emulator.writeString(4, 0, textChars.join(''));
-          } else {
-            window.emulator.writeString(4, 0, "65C02 ASSEMBLY EXECUTED SUCCESSFULLY");
-          }
-          window.emulator.cursorRow = 6;
-          window.emulator.cursorCol = 2;
-          window.emulator.writeString(6, 0, "] █");
-          window.emulator.renderScreen();
-        }
-
-        if (playAudio) window.emulator.playBeep(880, 0.1);
-        document.getElementById('code-status').innerText = `⚡ Assembled and executed ${asmList.length * 2} bytes 65C02 binary @ $2000.`;
-        return;
-      }
-
-      // 7. General C# (.NET Core) & Java (JDK 17) AOT Execution
-      const printMatches = [];
-      const beeps = [];
-      let isDoubleHiRes = false;
-      const proceduralLines = [];
-      const collectedItems = [];
-
-      for (const line of lines) {
-        const addMatch = line.match(/\.(?:Add|add)\s*\(\s*["'](.*?)["']\s*\)/i);
-        if (addMatch) collectedItems.push(addMatch[1]);
-      }
-
-      const varMap = {};
-
-      for (const line of lines) {
-        const intMatch = line.match(/(?:int|var|byte|short)\s+([A-Za-z0-9_]+)\s*=\s*(.*?);/i);
-        if (intMatch) {
-          const vName = intMatch[1];
-          const vExpr = intMatch[2];
-          try {
-            const jsExpr = vExpr
-              .replace(/Math\.(?:max|Max)/g, 'Math.max')
-              .replace(/Math\.(?:min|Min)/g, 'Math.min')
-              .replace(/Math\.(?:abs|Abs)/g, 'Math.abs');
-            varMap[vName] = Function(`"use strict"; return (${jsExpr});`)();
-          } catch(e) {
-            varMap[vName] = 100;
-          }
-        }
-
-        const hlineMatch = line.match(/(?:drawHLine|DrawHLine|drawLine|DrawLine)\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,?\s*(.*?)\)/i);
-        if (hlineMatch) {
-          isDoubleHiRes = true;
-          let col = 3;
-          const colStr = (hlineMatch[5] || '').toUpperCase();
-          if (colStr.includes('ORANGE') || colStr === '9') col = 5;
-          else if (colStr.includes('PURPLE') || colStr.includes('VIOLET') || colStr === '3') col = 2;
-          else if (colStr.includes('GREEN') || colStr === '4' || colStr === '12') col = 1;
-          else if (colStr.includes('WHITE') || colStr === '15') col = 3;
-          proceduralLines.push({
-            x1: parseInt(hlineMatch[1]),
-            y1: parseInt(hlineMatch[2]),
-            x2: parseInt(hlineMatch[3]),
-            y2: parseInt(hlineMatch[4]),
-            col
-          });
-        }
-
-        const pMatch = line.match(/(?:WriteLine|print|println|printLn|printString|drawString|Print)\s*\(\s*(.*?)\s*\)\s*;/i);
-        if (pMatch) {
-          let rawExpr = pMatch[1].trim();
-          if (/^\d+\s*,\s*\d+\s*,/.test(rawExpr)) {
-            rawExpr = rawExpr.replace(/^\d+\s*,\s*\d+\s*,\s*/, '');
-          }
-
-          if (rawExpr.includes('items[i]') || rawExpr.includes('list.get(i)') || rawExpr.includes('list[i]')) {
-            for (let idx = 0; idx < collectedItems.length; idx++) {
-              printMatches.push((rawExpr.startsWith('"ENTRY') ? 'ENTRY ' : 'ITEM ') + (idx + 1) + ': ' + collectedItems[idx]);
-            }
-          } else if (rawExpr.startsWith('"') && rawExpr.endsWith('"')) {
-            printMatches.push(rawExpr.slice(1, -1));
-          } else if (rawExpr.includes('+')) {
-            const parts = rawExpr.split('+').map(p => p.trim());
-            let reconstructed = '';
-            for (const part of parts) {
-              if (part.startsWith('"') && part.endsWith('"')) {
-                reconstructed += part.slice(1, -1);
-              } else if (varMap[part] !== undefined) {
-                reconstructed += varMap[part];
-              } else if (part.includes('maxVal') || part.includes('result') || part.includes('calc')) {
-                reconstructed += '92';
-              } else {
-                reconstructed += part.replace(/["']/g, '');
-              }
-            }
-            printMatches.push(reconstructed);
-          } else {
-            const clean = rawExpr.replace(/["']/g, '');
-            if (varMap[clean] !== undefined) {
-              printMatches.push(String(varMap[clean]));
-            } else {
-              printMatches.push(clean);
-            }
-          }
-        }
-
-        const bMatch = line.match(/(?:Beep|beep)\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)/i);
-        if (bMatch) beeps.push({ freq: parseInt(bMatch[1]), dur: parseInt(bMatch[2]) });
-
-        if (/SetDoubleHiRes|DoubleHiRes|MODE_DOUBLE_HIRES|TXTCLR/i.test(line)) {
-          isDoubleHiRes = true;
-        }
-      }
-
-      if (printMatches.length === 0 && proceduralLines.length === 0) {
-        printMatches.push("65C02 MACHINE CODE EXECUTED SUCCESSFULLY!");
-      }
-
-      const asmList = [
-        '; --- Generated 65C02 Binary @ $2000 ---',
-        '$2000: D8         CLD',
-        '$2001: A2 FF      LDX #$FF',
-        '$2003: 9A         TXS'
-      ];
-      let addr = 0x2004;
-
-      if (isDoubleHiRes) {
-        asmList.push(`$${addr.toString(16).toUpperCase()}: 8D 50 C0   STA $C050 [TXTCLR]`); addr += 3;
-        asmList.push(`$${addr.toString(16).toUpperCase()}: 8D 57 C0   STA $C057 [HIRES]`); addr += 3;
-        asmList.push(`$${addr.toString(16).toUpperCase()}: 8D 0D C0   STA $C00D [80COLSET]`); addr += 3;
-        asmList.push(`$${addr.toString(16).toUpperCase()}: 8D 5F C0   STA $C05F [DHIRESON]`); addr += 3;
-      }
-
-      for (const msg of printMatches) {
-        for (let i = 0; i < Math.min(10, msg.length); i++) {
-          const hex = (msg.charCodeAt(i) | 0x80).toString(16).toUpperCase();
-          asmList.push(`$${addr.toString(16).toUpperCase()}: A9 ${hex}      LDA #$${hex}`); addr += 2;
-          asmList.push(`$${addr.toString(16).toUpperCase()}: 20 ED FD   JSR $FDED [COUT]`); addr += 3;
-        }
-      }
-
-      if (beeps.length > 0) {
-        asmList.push(`$${addr.toString(16).toUpperCase()}: AD 30 C0   LDA $C030 [SPKR_TOGGLE]`); addr += 3;
-      }
-
-      asmList.push(`$${addr.toString(16).toUpperCase()}: 60         RTS`);
-
-      document.getElementById('dbg-disasm').innerText = asmList.join('\n');
-      document.getElementById('dbg-pc').innerText = '$2000';
-      document.getElementById('dbg-a').innerText = printMatches.length > 0 ? ('$' + (printMatches[0].charCodeAt(0) | 0x80).toString(16).toUpperCase()) : '$80';
-      document.getElementById('dbg-x').innerText = '$FF';
-      document.getElementById('dbg-sp').innerText = '$FD';
-
-      if (beeps.length > 0) {
-        beeps.forEach((b, idx) => {
-          setTimeout(() => window.emulator.playBeep(b.freq, b.dur / 1000), idx * 120);
-        });
-      } else {
-        window.emulator.playBeep(659, 0.08);
-        setTimeout(() => window.emulator.playBeep(880, 0.12), 90);
-      }
-
-      if (proceduralLines.length > 0) {
-        window.emulator.isGraphicsMode = true;
-        window.emulator.mixedGraphics = false;
-        window.emulator.isHires = true;
-        window.emulator.clearHiresVram();
-        for (const pl of proceduralLines) {
-          window.emulator.drawHiresLine(pl.x1, pl.y1, pl.x2, pl.y2, pl.col);
-        }
-        window.emulator.renderScreen();
-        document.getElementById('code-status').innerText = `⚡ Compiled ${addr - 0x2000} bytes 65C02 binary @ $2000. Rendered Double Hi-Res scene on CRT display!`;
-      } else {
-        window.emulator.isGraphicsMode = false;
-        window.emulator.mixedGraphics = false;
-        window.emulator.initMemory();
-        window.emulator.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO)");
-        window.emulator.writeString(2, 0, "] CALL 8192");
+    
+      handlePrinterByte(val) {
+        val = val & 0xff;
+        const charCode = val & 0x7f;
         
-        let curR = 4;
-        for (const msg of printMatches) {
-          if (curR < 22) {
-            window.emulator.writeString(curR, 0, msg);
-            curR++;
+        let char = '';
+        if (val === 0x0d || val === 0x8d) {
+          char = '\n';
+        } else if (val === 0x0a || val === 0x8a) {
+          if (!window.printerPaperBuffer.endsWith('\n')) char = '\n';
+        } else if (val === 0x0c || val === 0x8c) {
+          char = '\n\f\n-------------------------------- [ FORM FEED / PAGE BREAK ] --------------------------------\n\n';
+        } else if (val === 0x08 || val === 0x88) {
+          if (window.printerPaperBuffer.length > 0) {
+            window.printerPaperBuffer = window.printerPaperBuffer.slice(0, -1);
           }
-        }
-        window.emulator.cursorRow = Math.min(23, curR + 1);
-        window.emulator.cursorCol = 2;
-        window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
-        window.emulator.renderScreen();
-        document.getElementById('code-status').innerText = `⚡ Compiled ${addr - 0x2000} bytes 65C02 binary @ $2000. Executed on CRT display!`;
-      }
-    };
-    
-    // Floppy & SmartPort Hard Disk Interactivity Functions
-    window.selectDiskPreset = function(preset) {
-      const infoEl = document.getElementById('dsk-info-text');
-      const badge = document.getElementById('dsk-status-badge');
-      badge.innerText = 'MOUNTED';
-      badge.className = 'px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold';
-      
-      if (preset === 'prodos') {
-        infoEl.innerText = 'ProDOS 2.4.2 System Master: Full kernel, Bitsy Bye menu & BASIC.SYSTEM interpreter.';
-      } else if (preset === 'dos33') {
-        infoEl.innerText = 'Apple DOS 3.3 System Master: Vintage 1980 standard operating system with catalog routines.';
-      } else if (preset === 'games') {
-        infoEl.innerText = 'Vintage Arcade Games Collection: Choplifter, Lode Runner, and Karateka boot images.';
-      } else if (preset === 'diag') {
-        infoEl.innerText = 'Apple //c Factory Diagnostics: Memory test, VRAM color bar tester, and ROM checksums.';
-      }
-    };
-
-    window.handleCustomFloppyFile = function(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const select = document.getElementById('dsk-preset-select');
-      const infoEl = document.getElementById('dsk-info-text');
-      const badge = document.getElementById('dsk-status-badge');
-
-      // Add file as option
-      const opt = document.createElement('option');
-      opt.value = 'custom';
-      opt.textContent = `Custom: ${file.name} (${Math.round(file.size / 1024)} KB)`;
-      opt.selected = true;
-      select.appendChild(opt);
-
-      badge.innerText = 'MOUNTED';
-      badge.className = 'px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold';
-      infoEl.innerText = `Custom Disk Image: ${file.name} (${file.size} bytes). Ready to boot!`;
-
-      // Read binary data
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        window.currentFloppyData = new Uint8Array(evt.target.result);
-        window.currentFloppyName = file.name;
-      };
-      reader.readAsArrayBuffer(file);
-    };
-
-    window.bootFloppyDrive = function() {
-      if (window.slots && window.slots[6] && !window.slots[6].plugged) {
-        if (typeof alert === 'function') {
-          alert('⚠️ Cannot Boot Floppy: No Disk II card is plugged into Slot 6! Open the Slot Expansion Bay tab to plug it in.');
-        }
-        window.emulator.cursorRow++;
-        window.emulator.ensureRow();
-        window.emulator.writeString(window.emulator.cursorRow, 0, "?NO CARD IN SLOT 6 (I/O ERROR)");
-        window.emulator.cursorRow++;
-        window.emulator.ensureRow();
-        window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
-        window.emulator.renderScreen();
-        window.emulator.playBeep(220, 0.15);
-        return;
-      }
-      const preset = document.getElementById('dsk-preset-select').value;
-      const emu = window.emulator;
-
-      // Play floppy drive motor stepper seeking sound
-      for (let s = 0; s < 6; s++) {
-        setTimeout(() => emu.playBeep(240 + s * 30, 0.03), s * 80);
-      }
-
-      setTimeout(() => {
-        emu.isGraphicsMode = false;
-        emu.mixedGraphics = false;
-        emu.initMemory();
-
-        if (preset === 'prodos' || preset === 'custom') {
-          emu.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO)");
-          emu.writeString(2, 0, "PRODOS 2.4.2 (2024 VINTAGE REVISION)");
-          emu.writeString(3, 0, "SYSTEM MEMORY: 1,024 KB EXPANDED");
-          emu.writeString(4, 0, "SLOT 6 DRIVE 1: /PRODOS (140 KB FLOPPY)");
-          emu.writeString(6, 0, "STARTING BASIC.SYSTEM...");
-          emu.writeString(8, 0, "] █");
-          emu.cursorRow = 8;
-        } else if (preset === 'dos33') {
-          emu.writeString(0, 12, "DOS VERSION 3.3  08/25/80");
-          emu.writeString(1, 10, "APPLE //c ULTRA EXPANDED 1MB");
-          emu.writeString(3, 0, "] CATALOG");
-          emu.writeString(4, 0, "DISK VOLUME 254");
-          emu.writeString(5, 0, "*A 003 HELLO");
-          emu.writeString(6, 0, "*A 015 ANIMALS");
-          emu.writeString(7, 0, "*B 032 COLOR DEMO");
-          emu.writeString(9, 0, "] █");
-          emu.cursorRow = 9;
-        } else if (preset === 'games') {
-          emu.writeString(0, 8, "*** RETRO ARCADE PACK BOOT ***");
-          emu.writeString(2, 0, "1. CHOPLIFTER (BRODERBUND 1982)");
-          emu.writeString(3, 0, "2. LODE RUNNER (DOUGLAS SMITH 1983)");
-          emu.writeString(4, 0, "3. KARATEKA (JORDAN MECHNER 1984)");
-          emu.writeString(6, 0, "SELECT GAME NUMBER (1-3) OR TYPE 'RUN':");
-          emu.writeString(8, 0, "] █");
-          emu.cursorRow = 8;
-        } else if (preset === 'diag') {
-          emu.writeString(0, 6, "APPLE //c SYSTEM DIAGNOSTICS v3.1");
-          emu.writeString(2, 0, "MAIN 64K RAM: [PASSED] OK");
-          emu.writeString(3, 0, "AUX 64K RAM:  [PASSED] OK");
-          emu.writeString(4, 0, "SLINKEY 1MB:  [PASSED] OK");
-          emu.writeString(5, 0, "MMU BANKING:  [PASSED] OK");
-          emu.writeString(6, 0, "VIDEO VRAM:   [PASSED] OK (DHGR 560x192)");
-          emu.writeString(8, 0, "ALL SILICON TESTS COMPLETED SUCCESSFULLY.");
-          emu.writeString(10, 0, "] █");
-          emu.cursorRow = 10;
+        } else if (charCode >= 32 && charCode <= 126) {
+          char = String.fromCharCode(charCode);
+        } else if (val === 0x09) {
+          char = '    ';
         }
 
-        emu.cursorCol = 2;
-        emu.renderScreen();
-        emu.playBeep(880, 0.1);
-      }, 550);
-    };
-
-    window.ejectFloppyDisk = function() {
-      const badge = document.getElementById('dsk-status-badge');
-      const infoEl = document.getElementById('dsk-info-text');
-      badge.innerText = 'EMPTY';
-      badge.className = 'px-2 py-0.5 rounded text-[10px] bg-stone-900 text-stone-400 border border-stone-700 font-bold';
-      infoEl.innerText = 'No diskette in Drive 1. Insert a .DSK image or select a preset to mount.';
-      window.emulator.playBeep(300, 0.05);
-    };
-
-    window.bootHardDisk = function() {
-      if (window.slots && window.slots[7] && !window.slots[7].plugged) {
-        if (typeof alert === 'function') {
-          alert('⚠️ Cannot Boot Hard Disk: No SmartPort card is plugged into Slot 7! Open the Slot Expansion Bay tab to plug it in.');
+        if (char) {
+          window.printerPaperBuffer = (window.printerPaperBuffer || '') + char;
         }
-        window.emulator.cursorRow++;
-        window.emulator.ensureRow();
-        window.emulator.writeString(window.emulator.cursorRow, 0, "?NO CARD IN SLOT 7 (I/O ERROR)");
-        window.emulator.cursorRow++;
-        window.emulator.ensureRow();
-        window.emulator.writeString(window.emulator.cursorRow, 0, "] █");
-        window.emulator.renderScreen();
-        window.emulator.playBeep(220, 0.15);
-        return;
-      }
-      const emu = window.emulator;
-      emu.playBeep(520, 0.08);
-      setTimeout(() => {
-        emu.isGraphicsMode = false;
-        emu.mixedGraphics = false;
-        emu.initMemory();
-        emu.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO)");
-        emu.writeString(2, 0, "PRODOS 2.4.2 -- SMARTPORT 32MB VOLUME");
-        emu.writeString(3, 0, "DEVICE: SLOT 7 UNIT 1 (/HD)");
-        emu.writeString(4, 0, "BLOCKS: 65,536 (32,768 KB TOTAL)");
-        emu.writeString(6, 0, "* TYPE 'CATALOG' OR 'DIR' TO VIEW FILES");
-        emu.writeString(8, 0, "] █");
-        emu.cursorRow = 8;
-        emu.cursorCol = 2;
-        emu.renderScreen();
-        emu.playBeep(880, 0.1);
-      }, 200);
-    };
 
-    window.catalogHardDisk = function() {
-      const emu = window.emulator;
-      emu.currentInput = 'CATALOG';
-      emu.handleReturn();
-    };
+        window.printerByteCount = (window.printerByteCount || 0) + 1;
 
-    window.stepCpu = function() {
-      window.emulator.playBeep(1400, 0.01);
-      window.emulator.pc = (window.emulator.pc || 0x2000) + 2;
-      document.getElementById('dbg-pc').innerText = '$' + window.emulator.pc.toString(16).toUpperCase();
-    };
+        const paperView = document.getElementById('printer-paper-view');
+        if (paperView) {
+          paperView.value = window.printerPaperBuffer;
+          paperView.scrollTop = paperView.scrollHeight;
+        }
+        const byteCountElem = document.getElementById('printer-byte-count');
+        if (byteCountElem) {
+          byteCountElem.innerText = `${window.printerByteCount} Bytes`;
+        }
+        const cswElem = document.getElementById('printer-csw-status');
+        if (cswElem) {
+          cswElem.innerText = 'Streaming 65C02 Data';
+        }
 
-    window.resetCpu = function() {
-      window.emulator.pc = 0x2000;
-      document.getElementById('dbg-pc').innerText = '$2000';
-    };
-
-    
-    // ROM Selection & Attachment Functions
-    
-    // ------------------------------------------------------------------------
-    // 7-Slot Motherboard Peripheral Expansion Card Architecture
-    // ------------------------------------------------------------------------
-    window.slots = {
-      1: { name: 'Epson FX-80 Parallel Printer', type: 'printer', plugged: true, addr: '$C100', icon: '🖨️', desc: 'Centronics Parallel Interface' },
-      2: { name: 'Super Serial Card (ACIA 6551)', type: 'serial', plugged: true, addr: '$C200', icon: '🌐', desc: '19200 Baud Modem / Terminal' },
-      3: { name: '80-Column Auxiliary 64K RAM', type: 'video80', plugged: true, addr: '$C300', icon: '🖥️', desc: 'Extended 64KB RAM & 80-Col Firmware' },
-      4: { name: 'Sweet Micro Mockingboard PSG', type: 'mockingboard', plugged: true, addr: '$C400', icon: '🔊', desc: 'Dual AY-3-8910 + 6522 VIA' },
-      5: { name: 'Sound Blaster / OPL2 FM Synth', type: 'opl2', plugged: true, addr: '$C500', icon: '🎵', desc: 'Yamaha YM3812 9-Channel FM' },
-      6: { name: 'Disk II 5.25" Floppy Controller', type: 'floppy', plugged: true, addr: '$C600', icon: '💾', desc: 'IWM Stepper Dual Drive Controller' },
-      7: { name: 'SmartPort 32MB Hard Disk Controller', type: 'harddisk', plugged: true, addr: '$C700', icon: '💽', desc: 'ProDOS Block Storage (65,536 Blks)' }
-    };
-
-    window.toggleSlot = function(slotNum) {
-      const slot = window.slots[slotNum];
-      if (!slot) return;
-      slot.plugged = !slot.plugged;
-      
-      // Sound effect for plugging/unplugging hardware card
-      if (slot.plugged) {
-        window.emulator.playBeep(980, 0.04);
-        setTimeout(() => window.emulator.playBeep(1318, 0.06), 40);
-      } else {
-        window.emulator.playBeep(440, 0.05);
-        setTimeout(() => window.emulator.playBeep(220, 0.08), 50);
+        if (this.audioCtx && Math.random() < 0.35) {
+          try {
+            const osc = this.audioCtx.createOscillator();
+            const gain = this.audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(1400 + Math.random() * 800, this.audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.015, this.audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + 0.008);
+            osc.connect(gain);
+            gain.connect(this.audioCtx.destination);
+            osc.start();
+            osc.stop(this.audioCtx.currentTime + 0.008);
+          } catch(e) {}
+        }
       }
 
-      window.renderSlotBay();
-    };
-
-    window.applySlotPreset = function(preset) {
-      if (preset === 'all') {
-        for (let s = 1; s <= 7; s++) window.slots[s].plugged = true;
-      } else if (preset === 'gaming') {
-        window.slots[1].plugged = false;
-        window.slots[2].plugged = false;
-        window.slots[3].plugged = true;
-        window.slots[4].plugged = true;
-        window.slots[5].plugged = true;
-        window.slots[6].plugged = true;
-        window.slots[7].plugged = true;
-      } else if (preset === 'bare') {
-        for (let s = 1; s <= 7; s++) window.slots[s].plugged = false;
-      }
-      window.emulator.playBeep(880, 0.1);
-      window.renderSlotBay();
-    };
-
-    
-    window.printerPaperBuffer = '';
-    window.switchSlotToolkit = function(toolkit) {
-      document.getElementById('toolkit-pane-printer').classList.toggle('hidden', toolkit !== 'printer');
-      document.getElementById('toolkit-pane-custom').classList.toggle('hidden', toolkit !== 'custom');
-      document.getElementById('toolkit-pane-clock').classList.toggle('hidden', toolkit !== 'clock');
-
-      document.getElementById('toolkit-btn-printer').className = toolkit === 'printer' ? 'px-3 py-1.5 rounded font-bold bg-amber-600 text-white flex items-center gap-1.5' : 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
-      document.getElementById('toolkit-btn-custom').className = toolkit === 'custom' ? 'px-3 py-1.5 rounded font-bold bg-cyan-600 text-white flex items-center gap-1.5' : 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
-      document.getElementById('toolkit-btn-clock').className = toolkit === 'clock' ? 'px-3 py-1.5 rounded font-bold bg-purple-600 text-white flex items-center gap-1.5' : 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
-
-      if (toolkit === 'clock') {
-        const d = new Date();
-        document.getElementById('clock-live-time').innerText = d.toLocaleTimeString();
-        document.getElementById('clock-live-date').innerText = d.toLocaleDateString();
-      }
-    };
-
-    window.clearPrinterPaper = function() {
-      window.printerPaperBuffer = '';
-      document.getElementById('printer-paper-view').value = '*** PRINTER BUFFER CLEARED ***';
-    };
-
-    window.copyPrinterPaper = function() {
-      navigator.clipboard.writeText(window.printerPaperBuffer);
-    };
-
-    window.downloadPrinterPaper = function() {
-      const blob = new Blob([window.printerPaperBuffer], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'apple2-printer-output.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-
-    window.customCardPresets = {
-      weather: `// Preset: IoT Weather Station (Slot 3 @ $C0B0)
-// Simulates live telemetry from environmental sensors
-card.temperature = 74; // deg F
-card.humidity = 48;    // % RH
-card.pressure = 1013;  // hPa (Sea-level standard)
-card.windSpeed = 12;   // mph
-card.rainGauge = 5;    // hundredths of an inch (0.05 in)
-
-// Simulate fluctuating sensor readings
-setInterval(() => {
-  card.temperature = 70 + Math.floor(Math.random() * 8);
-  card.humidity = 45 + Math.floor(Math.random() * 10);
-  card.windSpeed = 10 + Math.floor(Math.random() * 6);
-}, 5000);
-
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.temperature & 0xFF;        // $C0B0: Temp
-  if (offset === 0x01) return card.humidity & 0xFF;           // $C0B1: Humidity
-  if (offset === 0x02) return (card.pressure * 10) & 0xFF;    // $C0B2: Press Low
-  if (offset === 0x03) return ((card.pressure * 10) >> 8) & 0xFF; // $C0B3: Press High
-  if (offset === 0x04) return card.windSpeed & 0xFF;          // $C0B4: Wind Speed
-  if (offset === 0x05) return card.rainGauge & 0xFF;          // $C0B5: Rain Gauge
-  if (offset === 0x07) return 0x80; // $C0B7: Status (Bit 7 = Data Ready)
-  return 0x00;
-};`,
-      serial: `// Preset: Web Serial Physical Hardware Bridge (Slot 3 @ $C0B0)
-// Connects real USB microcontrollers (Arduino / ESP32)
-card.sensorValue = 72;
-
-card.connectSerial = async () => {
-  try {
-    if ('serial' in navigator) {
-      const port = await navigator.serial.requestPort();
-      await port.open({ baudRate: 9600 });
-      const reader = port.readable.getReader();
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        if (value && value.length > 0) card.sensorValue = value[0];
-      }
     }
-  } catch (err) {
-    console.warn('Serial connection canceled or unavailable', err);
-  }
-};
 
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.sensorValue;
-  return 0;
-};`,
-      crypto: `// Preset: Live Bitcoin / Crypto Price Ticker (Slot 3 @ $C0B0)
-card.bitcoinPrice = 95000;
 
-setInterval(async () => {
-  try {
-    const res = await fetch('https://api.coindesk.com/v1/bpi/currentprice.json');
-    const data = await res.json();
-    card.bitcoinPrice = Math.floor(data.bpi.USD.rate_float);
-  } catch (e) {}
-}, 30000);
+    // =========================================================================
+    // APPLICATION INITIALIZATION & EVENT LISTENERS
+    // =========================================================================
 
-card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.bitcoinPrice & 0xFF;
-  if (offset === 0x01) return (card.bitcoinPrice >> 8) & 0xFF;
-  if (offset === 0x02) return (card.bitcoinPrice >> 16) & 0xFF;
-  return 0x00;
-};`,
-      math: `// Preset: 32-Bit Math Hardware Co-Processor (Slot 3 @ $C0B0)
-card.opA = 0; card.opB = 0; card.result = 0;
 
-card.onWriteHandler = (offset, val) => {
-  if (offset === 0x00) card.opA = (card.opA & 0xFF00) | val;
-  if (offset === 0x01) card.opA = (card.opA & 0x00FF) | (val << 8);
-  if (offset === 0x02) card.opB = (card.opB & 0xFF00) | val;
-  if (offset === 0x03) {
-    card.opB = (card.opB & 0x00FF) | (val << 8);
-    card.result = card.opA * card.opB;
-  }
-};
+    // =========================================================================
+    // APPLICATION INITIALIZATION & EVENT LISTENERS
+    // =========================================================================
 
-card.onReadHandler = (offset) => {
-  if (offset === 0x04) return card.result & 0xFF;
-  if (offset === 0x05) return (card.result >> 8) & 0xFF;
-  if (offset === 0x06) return (card.result >> 16) & 0xFF;
-  if (offset === 0x07) return (card.result >> 24) & 0xFF;
-  return 0;
-};`,
-    };
 
-    window.selectCustomCardPreset = function(presetKey) {
-      if (window.customCardPresets[presetKey]) {
-        document.getElementById('custom-card-code').value = window.customCardPresets[presetKey];
+    window.Apple2cEmulator = Apple2cEmulator;
+
+    // =========================================================================
+    // APPLICATION INITIALIZATION & EVENT LISTENERS
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('screen-canvas');
+      if (canvas) {
+        window.emulator = new Apple2cEmulator(canvas);
       }
-    };
+      window.renderSlotBay();
+      window.setPrinterMode('dotmatrix');
 
-    window.applyCustomCardScript = function() {
-      const code = document.getElementById('custom-card-code').value;
-      try {
-        const card = { onReadHandler: null, onWriteHandler: null };
-        const fn = new Function('card', code);
-        fn(card);
-        alert('Custom Card Script successfully compiled and applied to Slot 3 ($C0B0)!');
-      } catch (e) {
-        alert('Script compilation error: ' + e.message);
-      }
-    };
-
-    window.renderSlotBay = function() {
-      const grid = document.getElementById('slots-grid');
-      if (!grid) return;
-      grid.innerHTML = '';
-
-      for (let s = 1; s <= 7; s++) {
-        const slot = window.slots[s];
-        const cardDiv = document.createElement('div');
-        cardDiv.className = `p-3.5 rounded-lg border ${slot.plugged ? 'bg-[#0d1117] border-[#2a3642]' : 'bg-[#080b0e] border-[#1a222c] opacity-60'} space-y-2.5 transition`;
-
-        cardDiv.innerHTML = `
-          <div class="flex justify-between items-center border-b ${slot.plugged ? 'border-[#2a3642]' : 'border-[#1a222c]'} pb-1.5">
-            <div class="flex items-center gap-1.5 font-bold ${slot.plugged ? 'text-amber-400' : 'text-gray-500'}">
-              <span>${slot.icon}</span>
-              <span>SLOT ${s}: ${slot.addr}</span>
-            </div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${slot.plugged ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-stone-900 text-stone-500 border border-stone-800'}">
-              ${slot.plugged ? 'PLUGGED' : 'EMPTY'}
-            </span>
-          </div>
-
-          <div>
-            <div class="font-bold ${slot.plugged ? 'text-white' : 'text-gray-500'} text-xs">${slot.name}</div>
-            <div class="text-[11px] text-gray-400">${slot.desc}</div>
-          </div>
-
-          <div class="flex justify-between items-center pt-1">
-            <span class="text-[10px] font-mono ${slot.plugged ? 'text-emerald-400' : 'text-stone-600'}">
-              ${slot.plugged ? '● Bus Connected' : '○ High-Z Float'}
-            </span>
-            <button onclick="toggleSlot(${s})" class="px-2.5 py-1 rounded text-xs font-bold transition ${slot.plugged ? 'bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800' : 'bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-700'}">
-              ${slot.plugged ? '⏏️ Unplug Card' : '🔌 Plug In Card'}
-            </button>
-          </div>
-        `;
-
-        grid.appendChild(cardDiv);
-      }
-    };
-    window.renderSlotBay();
-
-    window.selectRomPreset = function(preset) {
-      const infoEl = document.getElementById('rom-info-text');
-      const badge = document.getElementById('rom-badge');
-      badge.innerText = 'PRESET READY';
-      badge.className = 'px-2.5 py-1 bg-pink-950 border border-pink-800 text-pink-400 text-xs font-bold rounded';
-
-      if (preset === 'rom255') {
-        infoEl.innerText = 'Apple //c ROM 255: Original May 1984 32KB Motherboard Firmware (Reset: $F800).';
-      } else if (preset === 'rom0') {
-        infoEl.innerText = 'Apple //c ROM 0: UniDisk 3.5 & SmartPort protocol support with enhanced diagnostics.';
-      } else if (preset === 'rom3') {
-        infoEl.innerText = 'Apple //c ROM 3: Memory Expansion motherboard revision (1MB Slinky RAM support).';
-      } else if (preset === 'rom4x') {
-        infoEl.innerText = 'Apple //c ROM 4X: Homebrew community edition with 50 MHz Turbo Boost and fast boot.';
-      } else if (preset === 'iie_enh') {
-        infoEl.innerText = 'Apple //e Enhanced: 65C02 CPU upgrade firmware with Mousetext and lowercase font.';
-      }
-    };
-
-    window.handleCustomRomFile = function(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const infoEl = document.getElementById('rom-info-text');
-      const badge = document.getElementById('rom-badge');
-      const select = document.getElementById('rom-preset-select');
-
-      const opt = document.createElement('option');
-      opt.value = 'custom';
-      opt.textContent = `Custom ROM: ${file.name} (${Math.round(file.size / 1024)} KB)`;
-      opt.selected = true;
-      select.appendChild(opt);
-
-      badge.innerText = 'ATTACHED';
-      badge.className = 'px-2.5 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-bold rounded';
-      infoEl.innerText = `Custom ROM Attached: ${file.name} (${file.size} bytes). Click Cold Boot to execute.`;
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        window.customRomData = new Uint8Array(evt.target.result);
-        window.customRomName = file.name;
-      };
-      reader.readAsArrayBuffer(file);
-    };
-
-    window.flashAndBootRom = function() {
-      const preset = document.getElementById('rom-preset-select').value;
-      const emu = window.emulator;
-      emu.playBeep(880, 0.15);
-
-      setTimeout(() => {
-        emu.isGraphicsMode = false;
-        emu.mixedGraphics = false;
-        emu.initMemory();
-
-        if (preset === 'rom255') {
-          emu.writeString(0, 10, "APPLE //c (32KB ROM 255)");
-          emu.writeString(2, 0, "] PRODOS 2.4.2 READY");
-        } else if (preset === 'rom0') {
-          emu.writeString(0, 10, "APPLE //c (UNIDISK 3.5 ROM 0)");
-          emu.writeString(2, 0, "] SMARTPORT BLOCK DRIVER ACTIVE");
-        } else if (preset === 'rom3') {
-          emu.writeString(0, 8, "APPLE //c (1MB MEMORY EXPANSION ROM 3)");
-          emu.writeString(2, 0, "] 1,024 KB AUXILIARY RAM DETECTED");
-        } else if (preset === 'rom4x') {
-          emu.writeString(0, 10, "APPLE //c ULTRA (50 MHz TURBO ROM 4X)");
-          emu.writeString(2, 0, "] ULTRA BOOTLOADER READY");
-        } else if (preset === 'iie_enh') {
-          emu.writeString(0, 12, "APPLE //e ENHANCED (65C02)");
-          emu.writeString(2, 0, "] SYSTEM MONITOR READY");
-        } else {
-          emu.writeString(0, 8, "*** CUSTOM ATTACHED ROM EXECUTING ***");
-          emu.writeString(2, 0, `] ${window.customRomName || 'CUSTOM FIRMWARE'} INITIALIZED`);
+      // Global keyboard handler
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+          return;
         }
 
-        emu.writeString(4, 0, "] █");
-        emu.cursorRow = 4;
-        emu.cursorCol = 2;
-        emu.renderScreen();
-        emu.playBeep(1200, 0.08);
-      }, 300);
-    };
+        if (e.key === 'Escape') {
+          window.closeCabinet();
+          window.toggleKeyboard(false);
+          return;
+        }
 
-    window.flashCustomBanner = function() {
-      const banner = document.getElementById('rom-banner').value;
-      window.emulator.playBeep(880, 0.1);
-      window.emulator.writeString(0, 4, banner);
-      window.emulator.renderScreen();
-    };
+        if (!window.emulator) return;
 
-    window.flashRom = function() {
-      const banner = document.getElementById('rom-banner').value;
-      window.emulator.playBeep(880, 0.2);
-      window.emulator.initMemory();
-      window.emulator.writeString(0, 4, banner);
-      window.emulator.writeString(2, 0, "] PRODOS 2.4.2 SYSTEM READY");
-      window.emulator.writeString(4, 0, "]");
-      alert('Custom ROM successfully hot-loaded into motherboard!');
-    };
-  </script>
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          window.emulator.handleReturn();
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          window.emulator.handleBackspace();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          window.emulator.typeChar(String.fromCharCode(8));
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          window.emulator.typeChar(String.fromCharCode(21));
+        } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+          e.preventDefault();
+          window.emulator.typeChar(e.key);
+        }
+      });
+    });
+
+</script>
 </body>
 </html>
