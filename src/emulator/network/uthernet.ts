@@ -5,7 +5,7 @@ export class UthernetController {
   public currentRxPacket: Uint8Array | null = null;
   public rxPointer: number = 0;
 
-  public connect(url: string = 'wss://bbs.apple2ultra.net/telnet'): void {
+  public connect(url: string = 'wss://bbs.ultra6502.net/telnet'): void {
     if (typeof WebSocket === 'undefined') return;
     try {
       this.ws = new WebSocket(url);

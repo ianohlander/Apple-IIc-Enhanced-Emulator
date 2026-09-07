@@ -1257,7 +1257,7 @@ runner.suite('Desktop Workstation Pro: Offline Licensing, Tauri Scaffolding & DN
   runner.test('Tauri 2.0 Native Configuration: Cargo.toml, tauri.conf.json & Rust Core', () => {
     const tauriConf = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src-tauri', 'tauri.conf.json'), 'utf8'));
     assertEqual(tauriConf.productName, 'Apple //c Ultra Workstation Pro', 'Product Name is Workstation Pro');
-    assertEqual(tauriConf.identifier, 'com.ianohlander.apple2ultra', 'Tauri app bundle identifier matches');
+    assertEqual(tauriConf.identifier, 'com.ianohlander.ultra6502', 'Tauri app bundle identifier matches');
 
     const cargo = fs.readFileSync(path.join(__dirname, '..', 'src-tauri', 'Cargo.toml'), 'utf8');
     assertTrue(cargo.includes('ed25519-dalek'), 'Cargo.toml includes ed25519 cryptographic crate');

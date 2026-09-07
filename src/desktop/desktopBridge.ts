@@ -50,7 +50,7 @@ export class DesktopBridge {
   }
 
   /**
-   * Lists custom expansion cards stored in ~/Documents/Apple2Ultra/Cards/.
+   * Lists custom expansion cards stored in ~/Documents/Ultra6502/Cards/.
    */
   public static async listSavedCards(): Promise<NativeCardMeta[]> {
     if (this.isDesktop()) {
@@ -77,7 +77,7 @@ export class DesktopBridge {
   }
 
   /**
-   * Saves a custom expansion card to disk (~/Documents/Apple2Ultra/Cards/).
+   * Saves a custom expansion card to disk (~/Documents/Ultra6502/Cards/).
    */
   public static async saveCard(name: string, code: string): Promise<boolean> {
     if (this.isDesktop()) {

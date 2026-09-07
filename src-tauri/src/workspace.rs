@@ -15,7 +15,7 @@ pub struct CustomCardMeta {
 
 pub fn get_user_workspace_root() -> PathBuf {
     let mut dir = dirs::document_dir().unwrap_or_else(|| PathBuf::from("./"));
-    dir.push("Apple2Ultra");
+    dir.push("Ultra6502");
     dir
 }
 
