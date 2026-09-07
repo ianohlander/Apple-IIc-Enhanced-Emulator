@@ -1,0 +1,78 @@
+name: "Release Desktop Binaries (Tauri 2.0)"
+
+# Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'windows-latest'
+            args: ''
+          - platform: 'macos-latest'
+            args: '--target universal-apple-darwin'
+          - platform: 'ubuntu-22.04'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Rust Stable Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install Linux Build Dependencies (WebKitGTK & AppIndicator)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev libjavascriptcoregtk-4.1-dev
+
+      - name: Install NPM Dependencies
+        run: npm install
+
+      - name: Build Web Frontend Assets
+        run: npm run build
+
+      - name: Build Tauri Multi-Platform Native Binaries
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v1.0.0
+          releaseName: 'Apple //c Ultra Workstation Pro v1.0.0'
+          releaseBody: |
+            ### Apple //c Ultra Workstation Pro (Desktop Edition)
+            **Author:** Ian Ohlander
+            **Copyright:** © 2026 Ian Ohlander. All rights reserved.
+
+            #### Download Binaries:
+            - **Windows**: `.exe` Standalone & `.msi` Installer
+            - **macOS**: `.dmg` Universal Binary (Apple Silicon M1/M2/M3 & Intel x86_64)
+            - **Linux**: `.AppImage` & `.deb` Package
+
+            #### Features:
+            - 100% Offline execution with zero browser security prompts.
+            - Decoupled user workspace at `~/Documents/Apple2Ultra/`.
+            - Offline Ed25519 cryptographic licensing engine.
+            - Clean-Room Synthesized 65C02 BIOS.
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}

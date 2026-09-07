@@ -37,7 +37,7 @@
       <div>
         <div class="flex items-center gap-2">
           <span class="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">Master Operations Center</span>
-          <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800">Single-Page Unified Edition</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800">Antigravity-Automated Edition</span>
         </div>
         <h1 class="text-base md:text-lg font-extrabold text-white">Apple //c Ultra: Tactical Playbook &amp; Supporting Operations Suite</h1>
       </div>
@@ -84,7 +84,7 @@
           </button>
           <button onclick="switchView('sec-desktop')" id="btn-sec-desktop" class="tab-btn w-full text-left px-3 py-2 rounded-md hover:bg-[#1a2332] text-gray-300 transition flex items-center justify-between">
             <span class="flex items-center gap-2"><span>💻</span> <strong>3. Desktop Pro (Tauri 2.0)</strong></span>
-            <span class="text-[10px] text-purple-400">Offline</span>
+            <span class="text-[10px] text-purple-400">Automated</span>
           </button>
           <button onclick="switchView('sec-tiers')" id="btn-sec-tiers" class="tab-btn w-full text-left px-3 py-2 rounded-md hover:bg-[#1a2332] text-gray-300 transition flex items-center justify-between">
             <span class="flex items-center gap-2"><span>💳</span> <strong>4. Tiers &amp; Lemon Squeezy</strong></span>
@@ -177,7 +177,7 @@
           </label>
           <label class="flex items-start gap-2 cursor-pointer p-1.5 hover:bg-[#151d2a] rounded">
             <input type="checkbox" onchange="updateTracker()" class="mt-0.5 rounded text-emerald-500 bg-gray-900 border-gray-700">
-            <span class="text-[11px]">3. Run <code>npm run tauri build</code></span>
+            <span class="text-[11px]">3. Antigravity / GitHub Actions Builds Binaries</span>
           </label>
           <label class="flex items-start gap-2 cursor-pointer p-1.5 hover:bg-[#151d2a] rounded">
             <input type="checkbox" onchange="updateTracker()" class="mt-0.5 rounded text-emerald-500 bg-gray-900 border-gray-700">
@@ -213,7 +213,7 @@
         </div>
         <h2 class="text-2xl md:text-3xl font-black text-white">Apple //c Ultra: Master Tactical Execution Playbook &amp; Complete Operations Manual</h2>
         <p class="text-gray-300 text-xs leading-relaxed">
-          Welcome to your complete, all-in-one operations manual. This unified single-page interface contains the <strong>Day 0 to Day 90 Tactical Execution Playbook</strong> directly alongside every piece of supporting documentation, step-by-step click guides for GoDaddy and Lemon Squeezy, offline Tauri desktop packaging instructions, legal copyright Form TX filings, battle-tested launch copy, and university outreach kits.
+          Welcome to your complete, all-in-one operations manual. This unified single-page interface contains the <strong>Day 0 to Day 90 Tactical Execution Playbook</strong> directly alongside every piece of supporting documentation, step-by-step click guides for GoDaddy and Lemon Squeezy, automated desktop packaging, legal copyright Form TX filings, battle-tested launch copy, and university outreach kits.
         </p>
       </div>
 
@@ -283,17 +283,36 @@
               </div>
             </div>
 
-            <div class="p-4 bg-[#0f101d] rounded-lg border border-[#2b2144] text-gray-300 space-y-2">
-              <span class="text-purple-300 font-bold font-mono block text-sm">💻 Action 1.2: Build Downloadable Desktop Binaries (Tauri 2.0 + Rust)</span>
+            <div class="p-4 bg-[#0f101d] rounded-lg border border-[#2b2144] text-gray-300 space-y-3">
+              <div class="flex items-center justify-between border-b border-[#3b2759] pb-2">
+                <span class="text-purple-300 font-bold font-mono text-sm">💻 Action 1.2: Build Downloadable Desktop Binaries (Antigravity &amp; Cloud CI/CD Automated)</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800">No IDE Required</span>
+              </div>
               <p class="leading-relaxed">
-                Compile native machine binaries for Windows, macOS, and Linux that bundle and encrypt your web code inside native Rust binaries (<10MB installer):
+                <strong>Zero Local Toolchain Setup:</strong> Because you are building this project with <strong>Antigravity</strong>, you do <em>not</em> need an IDE, Rust, Cargo, MSVC C++, or Xcode installed on your local computer. Multi-platform desktop builds are 100% automated via two simple pathways:
               </p>
-              <pre class="bg-black p-3 rounded text-amber-300 font-mono text-[11px] overflow-x-auto"><code># From the project root in terminal:
-npm run build
-npm run tauri build</code></pre>
-              <p class="text-gray-400 text-[11px]">
-                Installers will be generated in <code>src-tauri/target/release/bundle/</code>: Windows (<code>.exe</code>, <code>.msi</code>), macOS (<code>.dmg</code>), and Linux (<code>.AppImage</code>).
-              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                <!-- Option A: Antigravity Direct Execution -->
+                <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+                  <span class="text-cyan-300 font-bold block">Option A: Prompt Antigravity (Local Build)</span>
+                  <p class="text-gray-400 font-sans text-xs">
+                    Simply ask Antigravity in the chat: <em>"Antigravity, compile the desktop binaries"</em>. Antigravity executes the build tools in the background and organizes the output files for you.
+                  </p>
+                </div>
+
+                <!-- Option B: GitHub Actions Cloud Compilation -->
+                <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-2 font-mono text-[11px]">
+                  <span class="text-emerald-300 font-bold block">Option B: 1-Click GitHub Actions Cloud Build</span>
+                  <p class="text-gray-400 font-sans text-xs">
+                    We configured <code class="text-emerald-400">.github/workflows/release-desktop.yml</code>. In your GitHub repo, click <strong>Actions &rarr; Release Desktop Binaries &rarr; Run Workflow</strong>. GitHub's cloud servers compile Windows <code>.exe</code>, macOS <code>.dmg</code> (Universal), and Linux <code>.AppImage</code> in 3 minutes and publish a ready-to-download Release!
+                  </p>
+                </div>
+              </div>
+
+              <div class="p-2.5 bg-black rounded border border-[#1b2533] text-gray-400 text-[10px] font-mono">
+                <span class="text-purple-400 font-bold">Generated Binaries:</span> Windows (<code class="text-gray-300">Apple2Ultra-Setup.exe</code>, <code class="text-gray-300">.msi</code>), macOS (<code class="text-gray-300">Apple2Ultra.dmg</code> Universal for M1/M2/M3 &amp; Intel), Linux (<code class="text-gray-300">Apple2Ultra.AppImage</code>).
+              </div>
             </div>
           </div>
         </div>
@@ -535,7 +554,7 @@ npm run tauri build</code></pre>
             <span class="w-9 h-9 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center border border-purple-500/40 text-lg">💻</span>
             <div>
               <h3 class="text-xl font-extrabold text-white">3. Downloadable Desktop Workstation Pro (Tauri 2.0)</h3>
-              <p class="text-gray-400 text-xs font-mono">Anti-tamper machine code compilation &amp; asymmetric Ed25519 licensing</p>
+              <p class="text-gray-400 text-xs font-mono">Automated builds via Antigravity / GitHub Actions &amp; asymmetric Ed25519 licensing</p>
             </div>
           </div>
           <span class="px-2.5 py-1 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800">Desktop Pro</span>
@@ -554,11 +573,12 @@ npm run tauri build</code></pre>
             </div>
 
             <div class="p-4 bg-[#080d14] rounded border border-[#1b2533] space-y-2">
-              <span class="text-cyan-300 font-bold font-mono text-sm block">📦 Multi-Platform Packaging:</span>
+              <span class="text-cyan-300 font-bold font-mono text-sm block">📦 Multi-Platform Packaging via GitHub Actions:</span>
               <ul class="list-disc list-inside space-y-1 text-gray-400 text-[11px]">
                 <li><strong>Windows:</strong> <code>Apple2Ultra-Setup.exe</code> and <code>.msi</code> (<10MB installer).</li>
                 <li><strong>macOS:</strong> <code>Apple2Ultra.dmg</code> Universal binary for Apple Silicon (M1/M2/M3) and Intel.</li>
                 <li><strong>Linux:</strong> <code>Apple2Ultra.AppImage</code> and <code>.deb</code> package.</li>
+                <li><strong>Cloud CI/CD:</strong> Triggered in 1-click under GitHub Actions tab or automatically on release tags.</li>
               </ul>
             </div>
           </div>
