@@ -153,23 +153,37 @@
       text-shadow: none !important;
     }
     @media print {
-      body * {
-        visibility: hidden !important;
+      @page {
+        margin: 1.5cm;
+        size: auto;
       }
-      #printable-paper-sheet, #printable-paper-sheet * {
-        visibility: visible !important;
+      html, body {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      header, main, aside, footer, #cabinet-backdrop, #keyboard-backdrop, #toast-container, .rainbow-border, #bottom-keyboard-drawer, #vintage-cabinet-drawer {
+        display: none !important;
       }
       #printable-paper-sheet {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
+        display: block !important;
+        position: static !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 20px !important;
+        padding: 0 !important;
         background: white !important;
         color: black !important;
         box-shadow: none !important;
         border: none !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+      #printable-paper-sheet * {
+        visibility: visible !important;
       }
     }
 
@@ -626,12 +640,7 @@
 
           <!-- Printable Continuous Fanfold Paper Area -->
           <div class="flex-1 p-4 paper-greenbar overflow-x-auto min-h-[300px]" id="printer-paper-surface">
-            <textarea id="printer-paper-view" rows="14" class="w-full bg-transparent border-0 resize-y p-0 focus:outline-none print-font-dotmatrix" spellcheck="false">*** APPLE IMAGEWRITER II PRINTER ONLINE (SLOT 1 @ $C100) ***
------------------------------------------------------------------------------------------
-The simulated 65C02 CPU directly drives this continuous tractor-feed paper feed.
-Any vintage software (Print Shop, Print Master, AppleWorks, BASIC, Assembly) sending
-bytes to Slot 1 ($C090 / $C100 / PR#1) will stream its output directly here.
------------------------------------------------------------------------------------------</textarea>
+            <textarea id="printer-paper-view" rows="14" class="w-full bg-transparent border-0 resize-y p-0 focus:outline-none print-font-dotmatrix" spellcheck="false" placeholder="[ ImageWriter II 9-pin dot-matrix tractor-feed paper is online. Real-time 65C02 printer stream via PR#1 or $C090 will appear here... ]"></textarea>
           </div>
 
           <!-- Right Sprocket Guide Margin -->
@@ -1008,12 +1017,7 @@ namespace RetroArcade {
     // =========================================================================
     window.currentPrinterMode = 'dotmatrix';
     window.printerByteCount = 0;
-    window.printerPaperBuffer = "*** APPLE IMAGEWRITER II PRINTER ONLINE (SLOT 1 @ $C100) ***\n" +
-      "-----------------------------------------------------------------------------------------\n" +
-      "The simulated 65C02 CPU directly drives this continuous tractor-feed paper feed.\n" +
-      "Any vintage software (Print Shop, Print Master, AppleWorks, BASIC, Assembly) sending\n" +
-      "bytes to Slot 1 ($C090 / $C100 / PR#1) will stream its output directly here.\n" +
-      "-----------------------------------------------------------------------------------------\n";
+    window.printerPaperBuffer = '';
 
     // Backward-compatible Print Shop Template Data for automated tests
     window.PRINTSHOP_TEMPLATES = {
@@ -1270,6 +1274,12 @@ namespace RetroArcade {
     };
 
     window.printPhysicalPaper = function() {
+      const textContent = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer || '';
+      if (!textContent.trim()) {
+        window.showToast('⚠️ No printer paper data to print! Send output via PR#1 or disk software first.', 'warning');
+        return;
+      }
+
       let printSheet = document.getElementById('printable-paper-sheet');
       if (!printSheet) {
         printSheet = document.createElement('div');
@@ -1277,20 +1287,20 @@ namespace RetroArcade {
         document.body.appendChild(printSheet);
       }
       const fontClass = window.currentPrinterMode === 'dotmatrix' ? 'print-font-dotmatrix' : 'print-font-clean';
-      const textContent = (document.getElementById('printer-paper-view') || {}).value || window.printerPaperBuffer;
-      printSheet.innerHTML = '<div style="padding: 20px; font-family: monospace; white-space: pre-wrap; font-size: 11pt;" class="' + fontClass + '">' +
+      printSheet.innerHTML = '<pre style="margin: 0; padding: 0; font-family: inherit; white-space: pre-wrap; word-break: break-word; font-size: 11pt; line-height: 1.35;" class="' + fontClass + '">' +
         textContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-        '</div>';
+        '</pre>';
       window.print();
     };
 
     window.clearPrinterPaper = function() {
-      window.printerPaperBuffer = '*** APPLE IMAGEWRITER II PRINTER BUFFER CLEARED ***\n';
+      window.printerPaperBuffer = '';
       window.printerByteCount = 0;
       const el = document.getElementById('printer-paper-view');
-      if (el) el.value = window.printerPaperBuffer;
+      if (el) el.value = '';
       const cnt = document.getElementById('printer-byte-count');
       if (cnt) cnt.innerText = '0 Bytes';
+      window.showToast('🗑️ Printer buffer cleared', 'info');
     };
 
     window.copyPrinterPaper = function() {
@@ -2111,7 +2121,7 @@ namespace RetroArcade {
         this.renderScreen();
       }
 
-                                    readMem(addr) {
+                                          readMem(addr) {
         addr = addr & 0xffff;
         
         // $0000–$BFFF: RAM
