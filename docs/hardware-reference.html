@@ -232,6 +232,17 @@ LOOP: LDA BUFFER,X
           <span class="text-gray-400">SmartPort 32MB Hard Disk Block Controller</span>
         </div>
       </div>
+
+      <!-- Universal Slot Allocation Note -->
+      <div class="p-4 bg-[#0d1117] border border-cyan-500/30 rounded-lg text-xs space-y-2">
+        <div class="flex items-center gap-2 text-cyan-300 font-bold">
+          <span>⚡</span>
+          <span>Slot Universality: Custom JavaScript Virtual Cards can be Assigned to ANY Slot (1–7)</span>
+        </div>
+        <p class="text-gray-300 leading-relaxed">
+          The Apple //c Ultra slot bus is entirely slot-agnostic. While Slot 3 is historically designated as the default example preset in tutorials (to avoid conflicting with Slot 6 Floppy and Slot 7 SmartPort Hard Disk), users and developers can dynamically instantiate and plug custom JavaScript virtual peripheral cards into <strong>any slot from Slot 1 through Slot 7</strong>. I/O softswitch registers decode to <code>$C080 + (Slot * $10)</code> and firmware driver space decodes to <code>$C000 + (Slot * $100)</code>.
+        </p>
+      </div>
     </div>
 
   

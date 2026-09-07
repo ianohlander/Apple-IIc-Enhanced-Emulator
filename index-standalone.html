@@ -84,254 +84,214 @@
     .tooltip-hint:hover::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: calc(100% + 6px);
+      bottom: 125%;
       left: 50%;
       transform: translateX(-50%);
-      background: #080c14;
+      background-color: #161b22;
       color: #fdb827;
-      border: 1px solid #f59e0b;
-      padding: 4px 8px;
+      border: 1px solid #38455a;
+      padding: 5px 9px;
       border-radius: 6px;
       font-size: 11px;
-      font-family: 'Space Mono', monospace;
+      font-family: 'Inter', sans-serif;
       white-space: nowrap;
       pointer-events: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.8);
       z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
     }
-
-    /* High-contrast dark theme styling for all select dropdowns & popup options across all OSes */
-    select {
-      background-color: #121721 !important;
-      color: #fbbf24 !important;
-      border: 1px solid #334155 !important;
-      color-scheme: dark;
-    }
-    select option {
-      background-color: #121721 !important;
-      color: #f1f5f9 !important;
-      padding: 6px 12px;
-    }
-    select option:checked {
-      background-color: #2563eb !important;
-      color: #ffffff !important;
-      font-weight: bold;
-    }
-    select option:hover {
-      background-color: #1e293b !important;
-      color: #fbbf24 !important;
-    }
-
-    /* Screen Sizing Modes */
     .screen-normal {
-      max-width: 680px;
+      max-width: 56rem; /* max-w-4xl */
+      width: 100%;
     }
     .screen-expanded {
       max-width: 94vw !important;
       width: 94vw !important;
     }
-    .screen-expanded .crt-bezel {
-      max-width: 100% !important;
-      width: 100% !important;
-      padding: 1.5rem !important;
-    }
-    .screen-expanded .crt-screen-frame {
-      max-height: 75vh !important;
-      min-height: 520px !important;
+    .screen-expanded #crt-frame {
+      max-height: 75vh;
     }
     .screen-fullscreen {
       position: fixed !important;
       inset: 0 !important;
-      z-index: 9999 !important;
+      width: 100vw !important;
       max-width: 100vw !important;
+      height: 100vh !important;
+      z-index: 9999;
+      background: #000;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+    }
+    .screen-fullscreen #crt-frame {
       width: 100vw !important;
       height: 100vh !important;
-      background: #050608 !important;
-      padding: 1rem !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
+      max-height: 100vh !important;
+      border: none !important;
+      border-radius: 0 !important;
     }
-    .screen-fullscreen .crt-bezel {
-      max-width: 96vw !important;
-      width: 96vw !important;
-      height: 94vh !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .screen-fullscreen .crt-screen-frame {
-      flex: 1 !important;
-      height: 100% !important;
-      max-height: 86vh !important;
-    }
-    canvas {
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
+    select, select option {
+      background-color: #141a24 !important;
+      color: #f1f5f9 !important;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-2 sm:p-4 selection:bg-amber-500 selection:text-black overflow-x-hidden">
+<body class="bg-[#0b0d12] text-gray-100 min-h-screen flex flex-col items-center p-3 sm:p-6 overflow-x-hidden">
 
-  <div class="h-1.5 w-full rainbow-border fixed top-0 left-0 z-50"></div>
+  <!-- Top Rainbow Ribbon Bar -->
+  <div class="fixed top-0 left-0 right-0 h-1.5 rainbow-border z-50"></div>
 
-  <!-- Header Navigation & Status Bar -->
-  <header class="max-w-7xl w-full flex flex-wrap items-center justify-between border-b border-stone-800 pb-3 mb-4 gap-3 mt-2 px-2">
+  <!-- Header & Navigation Bar -->
+  <header class="w-full max-w-6xl mt-2 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-stone-800 pb-3 font-mono text-xs">
     <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 via-amber-600 to-amber-800 flex items-center justify-center shadow-lg border border-amber-400/40 text-stone-900 font-extrabold text-2xl">
-        
+      <div class="w-7 h-7 rounded-full rainbow-border p-0.5 flex items-center justify-center shadow-lg">
+        <div class="w-full h-full bg-[#0b0d12] rounded-full flex items-center justify-center text-white font-black text-sm"></div>
       </div>
       <div>
-        <div class="flex items-center gap-2">
-          <h1 class="text-base sm:text-lg font-black tracking-wider text-amber-400 font-mono">APPLE //c ULTRA</h1>
-          <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-700/60 font-bold">50 MHz W65C02</span>
-        </div>
-        <p class="text-[11px] text-stone-400 hidden sm:block">Enhanced 65C02 Web Computer • 1,024 KB Banked RAM • 32 MB Hard Disk • Double Hi-Res 560x192</p>
+        <h1 class="font-black text-base tracking-wider text-white flex items-center gap-2">
+          <span>APPLE //c ULTRA</span>
+          <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/40">VINTAGE WORKSTATION</span>
+        </h1>
+        <p class="text-[11px] text-stone-400">Authentic 65C02 CMOS Hardware, Slinky 1MB RAM, SmartPort HD, ImageWriter II &amp; Multi-Slot Cards</p>
       </div>
     </div>
 
-    <!-- Hardware Status Badges & Quick Links -->
-    <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-      <div class="flex items-center space-x-1.5 bg-stone-900/90 px-2.5 py-1.5 rounded-lg border border-stone-800 shadow-inner">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span class="text-stone-500 text-[10px]">CPU:</span>
-        <span id="header-speed" class="text-amber-400 font-bold text-[11px]">50.0 MHz</span>
-      </div>
-      <div class="flex items-center space-x-1.5 bg-stone-900/90 px-2.5 py-1.5 rounded-lg border border-stone-800 shadow-inner">
-        <span class="text-stone-500 text-[10px]">RAM:</span>
-        <span class="text-green-400 font-bold text-[11px]">1,024 KB</span>
-      </div>
-      <div class="flex items-center space-x-1.5 bg-stone-900/90 px-2.5 py-1.5 rounded-lg border border-stone-800 shadow-inner">
-        <span class="text-stone-500 text-[10px]">HD:</span>
-        <span class="text-amber-300 font-bold text-[11px]">/HD (32 MB)</span>
-      </div>
-      <a href="strategy/index.html" class="px-3 py-1.5 bg-gradient-to-r from-emerald-900 to-teal-900 hover:from-emerald-800 hover:to-teal-800 text-emerald-300 rounded-lg border border-emerald-700/60 transition shadow flex items-center gap-1 font-bold">
-        <span>🗺️</span> Master Playbook
+    <!-- Quick Navigation & Documentation Links -->
+    <div class="flex flex-wrap items-center gap-2">
+      <a href="docs/index.html" class="px-2.5 py-1.5 rounded-lg bg-[#141a24] hover:bg-[#1e2736] text-stone-300 border border-stone-700 transition flex items-center gap-1">
+        <span>📖</span> Docs Hub
       </a>
-      <a href="manual.html" class="px-3 py-1.5 bg-[#1c222b] hover:bg-[#283240] text-gray-300 rounded-lg border border-[#303d50] transition">
-        📖 Manual
+      <a href="docs/developer/custom-peripheral-cards.html" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-[#141a24] hover:bg-[#1e2736] text-amber-300 border border-stone-700 transition flex items-center gap-1">
+        <span>🎛️</span> Card Dev Guide
+      </a>
+      <a href="docs/tactical-execution-playbook.html" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-[#141a24] hover:bg-[#1e2736] text-emerald-400 border border-stone-700 transition flex items-center gap-1">
+        <span>🚀</span> Deployment Playbook
       </a>
     </div>
   </header>
 
   <!-- ========================================================================= -->
-  <!-- VINTAGE HARDWARE EXPANSION BAY TOOLBAR (ALWAYS VISIBLE & ACCESSIBLE) -->
+  <!-- VINTAGE HARDWARE EXPANSION BAYS TOOLBAR (CLICK TO OPEN PERIPHERAL FLYOUTS) -->
   <!-- ========================================================================= -->
-  <nav class="max-w-7xl w-full mb-4 px-2">
-    <div class="bg-gradient-to-r from-[#141a24] via-[#10141c] to-[#141a24] border border-[#232e42] rounded-xl p-2.5 shadow-xl flex flex-wrap items-center justify-between gap-2">
-      
-      <!-- Hardware Flyout Triggers Group -->
-      <div class="flex flex-wrap items-center gap-1.5">
-        <span class="text-[11px] font-mono text-amber-400 font-bold px-1 hidden md:inline">HARDWARE BAYS:</span>
-
-        <!-- Flyout 1: Floppy & 32MB HD -->
-        <button id="btn-bay-storage" onclick="openCabinet('storage')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-amber-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="Floppy Drive 1/2 ($C0E0) & 32MB SmartPort HD ($C700)">
-          <span>💾</span>
-          <span class="font-bold">Floppy &amp; 32MB HD</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow"></span>
-        </button>
-
-        <!-- Flyout 2: Dot-Matrix Printer -->
-        <button id="btn-bay-printer" onclick="openCabinet('printer')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-emerald-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="ImageWriter II Dot-Matrix Printer (Slot 1 PR#1)">
-          <span>🖨️</span>
-          <span class="font-bold">Printer Feed</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow"></span>
-        </button>
-
-        <!-- Flyout 3: Slot Expansion Bay -->
-        <button id="btn-bay-slots" onclick="openCabinet('slots')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-cyan-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="7-Slot Peripheral Bus & JavaScript IoT Sandbox ($C080..$C0FF)">
-          <span>🔌</span>
-          <span class="font-bold">Slot Bus (1–7)</span>
-          <span class="w-2 h-2 rounded-full bg-cyan-400 shadow"></span>
-        </button>
-
-        <!-- Flyout 4: Modern AOT Compiler -->
-        <button id="btn-bay-code" onclick="openCabinet('code')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-purple-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="C# 10 & Java 17 AOT Compiler with 5 OOP Games">
-          <span>☕</span>
-          <span class="font-bold">C# / Java AOT</span>
-          <span class="w-2 h-2 rounded-full bg-purple-400 shadow"></span>
-        </button>
-
-        <!-- Flyout 5: Magazine Type-In -->
-        <button id="btn-bay-typein" onclick="openCabinet('typein')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-amber-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="Compute!, inCider & Nibble Type-In OCR Studio">
-          <span>📖</span>
-          <span class="font-bold">Type-In OCR</span>
-          <span class="w-2 h-2 rounded-full bg-amber-400 shadow"></span>
-        </button>
-
-        <!-- Flyout 6: CPU Debugger -->
-        <button id="btn-bay-debugger" onclick="openCabinet('debugger')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-red-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="65C02 CPU Register & Disassembly Monitor ($2000)">
-          <span>⚙️</span>
-          <span class="font-bold">CPU Debugger</span>
-          <span class="w-2 h-2 rounded-full bg-red-400 shadow"></span>
-        </button>
-
-        <!-- Flyout 7: Custom ROM Studio -->
-        <button id="btn-bay-rom" onclick="openCabinet('rom')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-pink-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="Clean-Room Synthesized 65C02 BIOS & BYOR ROM Studio">
-          <span>⚡</span>
-          <span class="font-bold">ROM Studio</span>
-          <span class="w-2 h-2 rounded-full bg-pink-400 shadow"></span>
-        </button>
-
-        <!-- Flyout 8: CRT Display & Phosphor -->
-        <button id="btn-bay-crt" onclick="openCabinet('crt')" class="vintage-bay-btn px-2.5 py-1.5 rounded-lg font-mono text-xs text-green-300 flex items-center gap-1.5 tooltip-hint" data-tooltip="CRT Phosphor Filter, Scanlines & Turbo Speed Controller">
-          <span>📺</span>
-          <span class="font-bold">CRT Display</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow"></span>
-        </button>
+  <section class="w-full max-w-6xl mb-4">
+    <div class="bg-gradient-to-r from-[#141923] via-[#10141c] to-[#141923] border border-[#252f40] rounded-2xl p-3 shadow-xl">
+      <div class="flex items-center justify-between mb-2 px-1">
+        <span class="text-[11px] font-mono font-bold text-amber-400 tracking-wider flex items-center gap-1.5">
+          <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          VINTAGE HARDWARE PERIPHERAL BAYS &amp; FLYOUT CABINETS
+        </span>
+        <span class="text-[10px] font-mono text-stone-400 hidden sm:inline">Click any vintage add-on bay to inspect, configure, or script custom hardware</span>
       </div>
 
-      <!-- CRT Viewport Size Modes (Full Screen / Expand / Normal) -->
-      <div class="flex items-center gap-1.5">
-        <span class="text-[10px] font-mono text-gray-400 hidden xl:inline">SCREEN:</span>
-        <button onclick="setScreenSize('normal')" id="btn-screen-normal" class="px-2.5 py-1 rounded bg-[#1b2330] text-gray-300 text-xs font-mono border border-[#2d384d] hover:text-white transition tooltip-hint" data-tooltip="Classic 4:3 Desktop Scale">
-          ◱ 4:3
-        </button>
-        <button onclick="setScreenSize('expanded')" id="btn-screen-expanded" class="px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 text-xs font-mono font-bold border border-amber-500/40 hover:bg-amber-500/30 transition tooltip-hint" data-tooltip="Expand CRT Monitor to 90% Viewport (Theater Mode)">
-          🗖 Expand
-        </button>
-        <button onclick="toggleFullscreen()" id="btn-screen-fullscreen" class="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-black text-xs font-mono font-black shadow transition flex items-center gap-1 tooltip-hint" data-tooltip="Full Screen Immersion Mode (F11 / Alt+Enter)">
-          <span>⛶</span> Fullscreen
-        </button>
-      </div>
-
-    </div>
-  </nav>
-
-  <!-- ========================================================================= -->
-  <!-- MAIN WORKSTATION VIEWPORT: CRT MONITOR & APPLE //c CHASSIS -->
-  <!-- ========================================================================= -->
-  <main id="monitor-container" class="w-full flex flex-col items-center justify-center space-y-4 transition-all duration-300 screen-normal">
-
-    <!-- CRT Monitor Unit -->
-    <div id="crt-bezel-box" class="crt-bezel p-4 sm:p-6 rounded-3xl w-full transition-all duration-300">
-      
-      <!-- Display Controls Header Strip -->
-      <div class="flex flex-wrap items-center justify-between mb-3 text-xs font-mono text-stone-400 gap-2 border-b border-stone-700/60 pb-2">
-        <div class="flex items-center space-x-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-stone-200 font-bold tracking-wider">APPLE MONITOR //c</span>
-          <span class="text-[10px] text-stone-500 hidden sm:inline">• 12" CRT High-Contrast Tube</span>
-        </div>
+      <!-- Peripheral Bay Buttons Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 font-mono text-xs">
         
-        <div class="flex flex-wrap items-center gap-2">
-          <!-- Phosphor Color Selector -->
-          <div class="flex items-center gap-1.5 bg-[#0e1219] px-2.5 py-1 rounded-lg border border-stone-700 text-xs shadow-inner">
-            <span class="text-[10px] text-amber-400 font-bold">PHOSPHOR:</span>
-            <select id="phosphor-select" class="bg-[#141a24] text-amber-300 font-bold font-mono px-2 py-0.5 rounded border border-stone-600 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer">
-              <option value="color" class="bg-[#141a24] text-stone-100 font-mono font-bold">🎨 Color NTSC Composite</option>
-              <option value="green" class="bg-[#141a24] text-emerald-400 font-mono font-bold" selected>🟢 P1 Green (525nm High-Contrast)</option>
-              <option value="amber" class="bg-[#141a24] text-amber-400 font-mono font-bold">🟡 P3 Amber (600nm High-Persistence)</option>
-              <option value="white" class="bg-[#141a24] text-stone-100 font-mono font-bold">⚪ P4 B&amp;W Monochrome</option>
-            </select>
-          </div>
+        <!-- Bay 1: Floppy & SmartPort Storage -->
+        <button id="btn-bay-storage" onclick="openCabinet('storage')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Slot 6 Dual 5.25 Floppies + Slot 7 SmartPort 32MB HD">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">💾</span>
+          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">Storage Bay</span>
+          <span class="text-[9px] text-stone-400">Floppy &amp; 32MB HD</span>
+        </button>
 
-          <!-- Scanline Filter Toggle -->
-          <button id="scanline-btn" class="px-2.5 py-1 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded border border-stone-700 transition">
-            Scanlines
+        <!-- Bay 2: ImageWriter II Printer -->
+        <button id="btn-bay-printer" onclick="openCabinet('printer')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Slot 1 ImageWriter II Continuous Tractor-Feed Paper">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">🖨️</span>
+          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">Printer Bay</span>
+          <span class="text-[9px] text-emerald-400">ImageWriter II</span>
+        </button>
+
+        <!-- Bay 3: 7-Slot Motherboard Bus -->
+        <button id="btn-bay-slots" onclick="openCabinet('slots')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Motherboard Slots 1-7: Plug, Unplug, or Script Custom Cards">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">🎛️</span>
+          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">Slot Bay</span>
+          <span class="text-[9px] text-cyan-400">Universal Slots 1–7</span>
+        </button>
+
+        <!-- Bay 4: Modern Java & C# AOT Studio -->
+        <button id="btn-bay-code" onclick="openCabinet('code')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Modern C# and Java AOT Compiler to 65C02 Assembly">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">☕</span>
+          <span class="font-bold text-stone-200 group-hover:text-cyan-300 text-[11px]">AOT Studio</span>
+          <span class="text-[9px] text-purple-400">Java &amp; C# .NET</span>
+        </button>
+
+        <!-- Bay 5: Magazine Type-In Transcriber -->
+        <button id="btn-bay-typein" onclick="openCabinet('typein')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Type-In Listings from Compute!, inCider &amp; Nibble">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">📖</span>
+          <span class="font-bold text-stone-200 group-hover:text-emerald-300 text-[11px]">Type-In Bay</span>
+          <span class="text-[9px] text-yellow-400">Magazine Transcriber</span>
+        </button>
+
+        <!-- Bay 6: CPU Register & Disassembler -->
+        <button id="btn-bay-debugger" onclick="openCabinet('debugger')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Live 65C02 Registers (A, X, Y, SP, PC) & Disassembly Trace">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">⚙️</span>
+          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">CPU Monitor</span>
+          <span class="text-[9px] text-stone-400">Registers &amp; ASM</span>
+        </button>
+
+        <!-- Bay 7: Custom ROM Firmware Studio -->
+        <button id="btn-bay-rom" onclick="openCabinet('rom')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Hot-Swap 32KB System ROMs or BYOR (Bring Your Own ROM)">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">⚡</span>
+          <span class="font-bold text-stone-200 group-hover:text-pink-300 text-[11px]">ROM Studio</span>
+          <span class="text-[9px] text-pink-400">Firmware &amp; BYOR</span>
+        </button>
+
+        <!-- Bay 8: CRT Display & Phosphor Selector -->
+        <button id="btn-bay-crt" onclick="openCabinet('crt')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Select CRT Phosphor (Green, Amber, B&W, Color) & Screen Sizing">
+          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">📺</span>
+          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">CRT Controls</span>
+          <span class="text-[9px] text-emerald-400">Phosphor &amp; Sizing</span>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WORKSPACE: CRT MONITOR & EXPANDABLE VIEWPORT -->
+  <!-- ========================================================================= -->
+  <main id="monitor-container" class="screen-normal flex flex-col items-center gap-4 transition-all duration-300">
+    
+    <!-- Heavy CRT Bezel Enclosure -->
+    <div id="crt-bezel-box" class="crt-bezel p-4 sm:p-6 rounded-3xl w-full border border-stone-700 shadow-2xl relative">
+      
+      <!-- Bezel Top Bar: Phosphor Selector, Sizing Controls & Fullscreen -->
+      <div class="flex flex-wrap items-center justify-between pb-3 mb-2 border-b border-stone-700/60 gap-2 font-mono text-xs">
+        
+        <!-- Left: Status LEDs & Model -->
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50 animate-pulse" title="System Power & Video Clock Online"></div>
+          <span class="font-black text-xs tracking-wider text-stone-300">MONITOR //c</span>
+          <span class="text-[10px] text-stone-500 hidden sm:inline">HIGH-RESOLUTION CRT</span>
+        </div>
+
+        <!-- Center: Phosphor Selector -->
+        <div class="flex items-center space-x-1.5">
+          <span class="text-stone-400 text-[10px] font-bold">PHOSPHOR:</span>
+          <select id="phosphor-select" class="bg-[#141a24] text-emerald-400 font-bold px-2 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none">
+            <option value="color" class="bg-[#141a24] text-amber-300">🎨 Color NTSC Composite</option>
+            <option value="green" class="bg-[#141a24] text-emerald-400" selected>🟢 P1 High-Persistence Green</option>
+            <option value="amber" class="bg-[#141a24] text-amber-400">🟡 P3 Amber Display</option>
+            <option value="white" class="bg-[#141a24] text-stone-200">⚪ P4 Monochrome B&amp;W</option>
+          </select>
+        </div>
+
+        <!-- Right: Screen Sizing & Fullscreen Controls -->
+        <div class="flex items-center space-x-1.5">
+          <!-- Normal 4:3 -->
+          <button id="btn-screen-normal" onclick="setScreenSize('normal')" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold rounded border border-amber-500/40 transition text-xs tooltip-hint" data-tooltip="Standard 4:3 Desktop Viewport">
+            Normal
+          </button>
+          
+          <!-- Expanded Theater Mode -->
+          <button id="btn-screen-expanded" onclick="setScreenSize('expanded')" class="px-2.5 py-1 bg-[#1c2330] hover:bg-[#283244] text-stone-300 font-bold rounded border border-stone-600 transition text-xs tooltip-hint" data-tooltip="Theater Mode: Expands CRT across browser width">
+            Expanded
           </button>
 
-          <!-- Clipboard Ingestion Paste -->
+          <!-- Fullscreen Mode -->
+          <button id="btn-screen-fullscreen" onclick="toggleFullscreen()" class="px-2.5 py-1 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 font-bold rounded border border-emerald-800 transition text-xs tooltip-hint" data-tooltip="HTML5 True Fullscreen (Alt+Enter / F11)">
+            ⛶ Fullscreen
+          </button>
+
+          <!-- Clipboard Paste -->
           <button id="paste-btn" onclick="pasteClipboard()" class="px-2.5 py-1 bg-amber-700 hover:bg-amber-600 text-white font-bold rounded border border-amber-800 transition flex items-center gap-1 shadow tooltip-hint" data-tooltip="Paste Text from Clipboard directly into Keyboard Strobe ($C000)">
             <span>📋</span> Paste
           </button>
@@ -579,7 +539,7 @@
               🖨️ Virtual Printer Paper Console (Slot 1)
             </button>
             <button onclick="switchSlotToolkit('custom')" id="toolkit-btn-custom" class="px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5">
-              🧪 Custom JS Card Sandbox (Slot 3)
+              🧪 Custom JS Card Sandbox (Slots 1–7)
             </button>
             <button onclick="switchSlotToolkit('clock')" id="toolkit-btn-clock" class="px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5">
               ⏰ ProDOS Clock &amp; Web MIDI (Slots 2 &amp; 4)
@@ -613,35 +573,47 @@
           <div id="toolkit-pane-custom" class="hidden p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
             <div class="flex flex-wrap justify-between items-center gap-2">
               <div>
-                <span class="text-cyan-400 font-bold block">JavaScript Custom Card Sandbox (Slot 3):</span>
-                <span class="text-gray-400 text-[11px]">Script custom I/O registers ($C0B0-$C0BF) and slot ROM ($C300).</span>
+                <span class="text-cyan-400 font-bold block">JavaScript Custom Card Sandbox (Universal Slots 1–7):</span>
+                <span id="custom-slot-desc" class="text-gray-400 text-[11px]">Script custom I/O registers ($C080 + Slot*16) and slot ROM ($CS00). Assignable to ANY slot!</span>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <div class="flex items-center gap-1">
+                  <label for="custom-slot-select" class="text-stone-400 text-[11px] font-bold">Target Slot:</label>
+                  <select id="custom-slot-select" onchange="updateCustomCardSlot(this.value)" class="bg-[#141a24] text-cyan-300 border border-[#2a3642] rounded px-2 py-1 text-xs font-mono focus:outline-none">
+                    <option value="1">Slot 1 ($C090 / $C100)</option>
+                    <option value="2">Slot 2 ($C0A0 / $C200)</option>
+                    <option value="3" selected>Slot 3 ($C0B0 / $C300) [Default]</option>
+                    <option value="4">Slot 4 ($C0C0 / $C400)</option>
+                    <option value="5">Slot 5 ($C0D0 / $C500)</option>
+                    <option value="6">Slot 6 ($C0E0 / $C600)</option>
+                    <option value="7">Slot 7 ($C0F0 / $C700)</option>
+                  </select>
+                </div>
                 <select id="custom-preset-select" onchange="selectCustomCardPreset(this.value)" class="bg-[#141a24] text-amber-300 border border-[#2a3642] rounded px-2.5 py-1 text-xs font-mono focus:outline-none">
                   <option value="weather" class="bg-[#141a24] text-stone-200 font-mono">🌤️ IoT Weather Station (Temp, Humidity, Pressure, Wind)</option>
                   <option value="serial" class="bg-[#141a24] text-stone-200 font-mono">🔌 Web Serial Arduino / ESP32 Sensor Bridge</option>
                   <option value="crypto" class="bg-[#141a24] text-stone-200 font-mono">📈 Live Bitcoin / Crypto Price Ticker (REST API)</option>
                   <option value="math" class="bg-[#141a24] text-stone-200 font-mono">🧮 32-Bit Math Hardware Co-Processor (Multiply/Divide)</option>
                 </select>
-                <button onclick="applyCustomCardScript()" class="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow flex items-center gap-1">
+                <button id="btn-apply-custom-card" onclick="applyCustomCardScript()" class="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow flex items-center gap-1">
                   ▶ Apply to Slot 3
                 </button>
               </div>
             </div>
 
-            <textarea id="custom-card-code" rows="9" class="w-full bg-[#05070a] border border-[#161f2c] rounded p-3 text-xs text-cyan-300 font-mono focus:outline-none">// Preset: IoT Weather Station (Slot 3 @ $C0B0)
+            <textarea id="custom-card-code" rows="9" class="w-full bg-[#05070a] border border-[#161f2c] rounded p-3 text-xs text-cyan-300 font-mono focus:outline-none">// Preset: IoT Weather Station (Universal Slot Script)
 card.temperature = 74; // deg F
 card.humidity = 48;    // % RH
 card.pressure = 1013;  // hPa
 card.windSpeed = 12;   // mph
 
 card.onReadHandler = (offset) => {
-  if (offset === 0x00) return card.temperature & 0xFF;        // $C0B0: Temp
-  if (offset === 0x01) return card.humidity & 0xFF;           // $C0B1: Humidity
-  if (offset === 0x02) return (card.pressure * 10) & 0xFF;    // $C0B2: Press Low
-  if (offset === 0x03) return ((card.pressure * 10) >> 8) & 0xFF; // $C0B3: Press High
-  if (offset === 0x04) return card.windSpeed & 0xFF;          // $C0B4: Wind Speed
-  if (offset === 0x07) return 0x80; // $C0B7: Status (Bit 7 = Data Ready)
+  if (offset === 0x00) return card.temperature & 0xFF;        // Base + 0: Temp
+  if (offset === 0x01) return card.humidity & 0xFF;           // Base + 1: Humidity
+  if (offset === 0x02) return (card.pressure * 10) & 0xFF;    // Base + 2: Press Low
+  if (offset === 0x03) return ((card.pressure * 10) >> 8) & 0xFF; // Base + 3: Press High
+  if (offset === 0x04) return card.windSpeed & 0xFF;          // Base + 4: Wind Speed
+  if (offset === 0x07) return 0x80; // Base + 7: Status (Bit 7 = Data Ready)
   return 0x00;
 };</textarea>
           </div>
@@ -832,7 +804,6 @@ namespace DotNetCoreStandardApp {
       if (!document.fullscreenElement) {
         if (container.requestFullscreen) {
           container.requestFullscreen().catch(err => {
-            // Fallback to CSS fullscreen
             setScreenMode('fullscreen');
           });
         } else {
@@ -957,6 +928,201 @@ namespace DotNetCoreStandardApp {
         toggleFullscreen();
       }
     });
+
+    // -------------------------------------------------------------
+    // Peripheral Bays & Toolkits (Printer, Universal Custom Cards, Clock)
+    // -------------------------------------------------------------
+    window.switchSlotToolkit = function(toolkitId) {
+      const pPrinter = document.getElementById('toolkit-pane-printer');
+      const pCustom = document.getElementById('toolkit-pane-custom');
+      const pClock = document.getElementById('toolkit-pane-clock');
+      if (pPrinter) pPrinter.classList.add('hidden');
+      if (pCustom) pCustom.classList.add('hidden');
+      if (pClock) pClock.classList.add('hidden');
+
+      const btnPrinter = document.getElementById('toolkit-btn-printer');
+      const btnCustom = document.getElementById('toolkit-btn-custom');
+      const btnClock = document.getElementById('toolkit-btn-clock');
+
+      if (btnPrinter) btnPrinter.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
+      if (btnCustom) btnCustom.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
+      if (btnClock) btnClock.className = 'px-3 py-1.5 rounded font-bold bg-[#161b22] text-gray-400 hover:text-white flex items-center gap-1.5';
+
+      const targetPane = document.getElementById('toolkit-pane-' + toolkitId);
+      if (targetPane) targetPane.classList.remove('hidden');
+
+      const activeBtn = document.getElementById('toolkit-btn-' + toolkitId);
+      if (activeBtn) {
+        if (toolkitId === 'printer') activeBtn.className = 'px-3 py-1.5 rounded font-bold bg-amber-600 text-white flex items-center gap-1.5';
+        else if (toolkitId === 'custom') activeBtn.className = 'px-3 py-1.5 rounded font-bold bg-cyan-600 text-white flex items-center gap-1.5';
+        else if (toolkitId === 'clock') activeBtn.className = 'px-3 py-1.5 rounded font-bold bg-purple-600 text-white flex items-center gap-1.5';
+      }
+    };
+
+    window.copyPrinterPaper = function() {
+      const el = document.getElementById('printer-paper-view');
+      const text = el ? el.value : '';
+      navigator.clipboard.writeText(text);
+      alert('Printer paper buffer copied to clipboard!');
+    };
+
+    window.downloadPrinterPaper = function() {
+      const el = document.getElementById('printer-paper-view');
+      const text = el ? el.value : '';
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'apple2-imagewriter-output.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    window.clearPrinterPaper = function() {
+      const el = document.getElementById('printer-paper-view');
+      if (el) el.value = '*** IMAGEWRITER II ONLINE: Type PR#1 in BASIC and print text to capture paper output ***';
+      if (window.emulator) {
+        window.emulator.printerBuffer = '';
+      }
+    };
+
+    const CUSTOM_PRESET_SCRIPTS = {
+      weather: `// Preset: IoT Weather Station (Universal Slot Script)
+card.temperature = 74; // deg F
+card.humidity = 48;    // % RH
+card.pressure = 1013;  // hPa
+card.windSpeed = 12;   // mph
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.temperature & 0xFF;        // Base + 0: Temp
+  if (offset === 0x01) return card.humidity & 0xFF;           // Base + 1: Humidity
+  if (offset === 0x02) return (card.pressure * 10) & 0xFF;    // Base + 2: Press Low
+  if (offset === 0x03) return ((card.pressure * 10) >> 8) & 0xFF; // Base + 3: Press High
+  if (offset === 0x04) return card.windSpeed & 0xFF;          // Base + 4: Wind Speed
+  if (offset === 0x07) return 0x80; // Base + 7: Status (Bit 7 = Data Ready)
+  return 0x00;
+};`,
+      serial: `// Preset: Web Serial Sensor Bridge (Universal Slot Script)
+card.sensorValue = 72;
+
+card.connectSerial = async () => {
+  try {
+    if ('serial' in navigator) {
+      const port = await navigator.serial.requestPort();
+      await port.open({ baudRate: 9600 });
+      const reader = port.readable.getReader();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        if (value && value.length > 0) card.sensorValue = value[0];
+      }
+    }
+  } catch (err) {
+    console.warn('Serial connection canceled or unavailable', err);
+  }
+};
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.sensorValue;
+  return 0;
+};`,
+      crypto: `// Preset: Live Crypto Price Ticker (REST API)
+card.bitcoinPrice = 95000;
+
+setInterval(async () => {
+  try {
+    const res = await fetch('https://api.coindesk.com/v1/bpi/currentprice.json');
+    const data = await res.json();
+    card.bitcoinPrice = Math.floor(data.bpi.USD.rate_float);
+  } catch (e) {}
+}, 30000);
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x00) return card.bitcoinPrice & 0xFF;
+  if (offset === 0x01) return (card.bitcoinPrice >> 8) & 0xFF;
+  if (offset === 0x02) return (card.bitcoinPrice >> 16) & 0xFF;
+  return 0x00;
+};`,
+      math: `// Preset: 32-Bit Math Hardware Co-Processor
+card.opA = 0; card.opB = 0; card.result = 0;
+
+card.onWriteHandler = (offset, val) => {
+  if (offset === 0x00) card.opA = (card.opA & 0xFF00) | val;
+  if (offset === 0x01) card.opA = (card.opA & 0x00FF) | (val << 8);
+  if (offset === 0x02) card.opB = (card.opB & 0xFF00) | val;
+  if (offset === 0x03) {
+    card.opB = (card.opB & 0x00FF) | (val << 8);
+    card.result = card.opA * card.opB;
+  }
+};
+
+card.onReadHandler = (offset) => {
+  if (offset === 0x04) return card.result & 0xFF;
+  if (offset === 0x05) return (card.result >> 8) & 0xFF;
+  if (offset === 0x06) return (card.result >> 16) & 0xFF;
+  if (offset === 0x07) return (card.result >> 24) & 0xFF;
+  return 0;
+};`
+    };
+
+    window.updateCustomCardSlot = function(slotNum) {
+      const btn = document.getElementById('btn-apply-custom-card');
+      if (btn) btn.innerHTML = '▶ Apply to Slot ' + slotNum;
+      const ioHex = '$C0' + (8 + parseInt(slotNum)).toString(16).toUpperCase() + '0';
+      const romHex = '$C' + slotNum + '00';
+      const descEl = document.getElementById('custom-slot-desc');
+      if (descEl) {
+        descEl.innerText = `Universal Slot ${slotNum}: I/O softswitch range ${ioHex}–${ioHex.slice(0,4)}F, Firmware ROM ${romHex}.`;
+      }
+    };
+
+    window.selectCustomCardPreset = function(presetKey) {
+      const code = CUSTOM_PRESET_SCRIPTS[presetKey];
+      if (code) {
+        document.getElementById('custom-card-code').value = code;
+      }
+    };
+
+    window.customCards = {};
+
+    window.applyCustomCardScript = function() {
+      const slotSel = document.getElementById('custom-slot-select');
+      const slotNum = slotSel ? parseInt(slotSel.value) : 3;
+      const code = document.getElementById('custom-card-code').value;
+
+      if (!window.customCards[slotNum]) {
+        window.customCards[slotNum] = {
+          onReadHandler: null,
+          onWriteHandler: null
+        };
+      }
+      const card = window.customCards[slotNum];
+
+      try {
+        const fn = new Function('card', code);
+        fn(card);
+
+        const ioHex = '$C0' + (8 + slotNum).toString(16).toUpperCase() + '0';
+        const romHex = '$C' + slotNum + '00';
+
+        if (window.slots && window.slots[slotNum]) {
+          window.slots[slotNum].name = 'Custom JS Sandbox Card';
+          window.slots[slotNum].desc = `User JS Card @ ${ioHex} / ${romHex}`;
+          window.slots[slotNum].icon = '🧪';
+          window.slots[slotNum].plugged = true;
+          window.renderSlotBay();
+        }
+
+        if (window.emulator) {
+          window.emulator.playBeep(880, 0.05);
+          setTimeout(() => window.emulator.playBeep(1320, 0.1), 60);
+        }
+
+        alert(`✅ Custom Virtual Hardware Card successfully compiled & plugged into Slot ${slotNum} (${ioHex} / ${romHex})!`);
+      } catch (err) {
+        alert('❌ Script Error: ' + err.message);
+      }
+    };
 
     // Core 65C02 & Apple II Video Engine Implementation
     // -------------------------------------------------------------

@@ -184,16 +184,16 @@
           <div class="text-[10px] text-cyan-300 bg-black/40 p-1.5 rounded">BASIC / ASM: <code>IN#2 / PR#2 / $C0A1</code></div>
         </div>
 
-        <!-- Slot 3 -->
+        <!-- Slot 3 / Universal Slots 1-7 -->
         <div class="p-3.5 bg-[#0d1219] border border-[#212d3d] rounded-xl space-y-2">
           <div class="flex justify-between items-center text-emerald-400">
-            <span class="font-bold">Slot 3: JS Sandbox</span>
+            <span class="font-bold">Slot 3 (or Any Slot 1–7): JS Sandbox</span>
             <span class="text-[10px] px-1.5 py-0.5 bg-emerald-950/60 rounded border border-emerald-800">$C0B0</span>
           </div>
           <p class="text-[11px] text-gray-300 font-sans">
-            <strong>Scriptable Card:</strong> Write custom JavaScript handlers for <code>ioRead()</code>, <code>ioWrite()</code>, and <code>romRead()</code> to build your own virtual hardware!
+            <strong>Scriptable Card:</strong> Universal slot support! Write custom JavaScript handlers for <code>ioRead()</code>, <code>ioWrite()</code>, and <code>romRead()</code> and plug into ANY slot from 1 to 7.
           </p>
-          <div class="text-[10px] text-emerald-300 bg-black/40 p-1.5 rounded">I/O: <code>PEEK(49328) / POKE</code></div>
+          <div class="text-[10px] text-emerald-300 bg-black/40 p-1.5 rounded">I/O: <code>$C080+(Slot*$10) / PEEK / POKE</code></div>
         </div>
 
         <!-- Slot 4 -->

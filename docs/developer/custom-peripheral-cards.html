@@ -86,9 +86,10 @@
       </div>
 
       <!-- Quick Jump Navigation -->
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-2 pt-4 border-t border-[#2a3642] font-mono text-[11px]">
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-2 pt-4 border-t border-[#2a3642] font-mono text-[11px]">
         <a href="#ui-guide" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-amber-400 font-bold text-center">📍 Application UI Map</a>
         <a href="#domain-framework" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-cyan-400 font-bold text-center">📐 3-Domain Framework</a>
+        <a href="#slot-universality" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-purple-400 font-bold text-center">🔌 Slot Universality (1–7)</a>
         <a href="#security-permissions" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-red-400 font-bold text-center">🛡️ Security &amp; Permissions</a>
         <a href="#stepper-motor-case-study" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-emerald-400 font-bold text-center">⚙️ Stepper Motor Study</a>
         <a href="#weather-case-study" class="p-2 bg-[#0c1017] hover:bg-[#161f2c] rounded border border-[#1f2a3a] text-pink-400 font-bold text-center">🌤️ Weather Station Study</a>
@@ -103,7 +104,7 @@
         <span class="step-pill bg-amber-500/20 text-amber-400 border border-amber-500/40">1</span>
         <div>
           <h3 class="text-base font-bold text-amber-400 font-mono uppercase">Where Is Everything in the Application UI?</h3>
-          <p class="text-gray-400 text-xs">Clear instructions so you know exactly which tab and textbox to use for each code snippet</p>
+          <p class="text-gray-400 text-xs">Clear instructions so you know exactly which tab, slot, and textbox to use for each code snippet</p>
         </div>
       </div>
 
@@ -120,18 +121,18 @@
           </div>
 
           <p class="text-gray-300 text-xs font-sans leading-relaxed">
-            The <strong>Custom Card JavaScript Sandbox</strong> is a built-in feature of the Apple //c Ultra emulator. It allows you to write custom hardware logic for <strong>Slot 3</strong> (I/O registers at <code class="text-cyan-300">$C0B0–$C0BF</code>) directly in the browser with real-time compilation:
+            The <strong>Custom Card JavaScript Sandbox</strong> is a built-in feature of the Apple //c Ultra emulator. It allows you to write custom hardware logic for <strong>ANY Slot (1 through 7)</strong> directly in the browser with real-time compilation:
           </p>
 
           <div class="bg-[#06090e] p-4 rounded-lg border border-[#1a2332] space-y-2 font-mono text-xs">
             <span class="text-amber-400 font-bold block">Step-by-Step Navigation to Open the Sandbox:</span>
             <ol class="list-decimal list-inside space-y-1.5 text-gray-300 pl-1">
               <li>Launch the emulator: open <a href="../../index-standalone.html" class="text-amber-400 underline font-bold" target="_blank">index-standalone.html</a> in any modern browser.</li>
-              <li>Scroll down below the CRT screen to the <strong>"Under the Hood"</strong> workbench area.</li>
-              <li>Click the <strong>🎛️ Slot &amp; Card Studio</strong> workbench tab (Tab 9).</li>
-              <li>Inside the studio, click the <strong>🧪 Custom JS Card Sandbox (Slot 3)</strong> button.</li>
+              <li>Click the <strong>🔌 Slot Bus (1–7)</strong> flyout icon in the top toolbar or scroll to the <strong>Under the Hood</strong> workbench.</li>
+              <li>Inside the studio, click the <strong>🧪 Custom JS Card Sandbox</strong> button.</li>
+              <li>Select your target slot from the <strong>Target Slot Dropdown</strong> (defaults to <strong>Slot 3</strong> at <code class="text-amber-300">$C0B0</code>, but can be set to <strong>any slot from 1 to 7</strong>).</li>
               <li>Paste or edit your JavaScript card script in the <strong>Sandbox Code Textarea</strong>.</li>
-              <li>Click the blue <strong>▶ Apply to Slot 3</strong> button. Your virtual hardware card is immediately active on the 65C02 bus!</li>
+              <li>Click the blue <strong>▶ Apply to Slot &lt;N&gt;</strong> button. Your virtual hardware card is immediately active on the 65C02 bus!</li>
             </ol>
           </div>
         </div>
@@ -247,6 +248,173 @@
       </div>
     </section>
 
+    <!-- ========================================================================= -->
+    <!-- SECTION 1.5: SLOT UNIVERSALITY & MULTI-SLOT ALLOCATION (SLOTS 1 THROUGH 7) -->
+    <!-- ========================================================================= -->
+    <section id="slot-universality" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
+        <span class="step-pill bg-purple-500/20 text-purple-400 border border-purple-500/40">2.5</span>
+        <div>
+          <h3 class="text-base font-bold text-purple-400 font-mono uppercase">Slot Universality: Can Virtual Cards Be Plugged Into Any Slot?</h3>
+          <p class="text-gray-400 text-xs">Complete explanation of slot independence, address decoding formulas, and the 7-slot peripheral matrix</p>
+        </div>
+      </div>
+
+      <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
+        
+        <!-- Direct Answer Callout -->
+        <div class="p-4 bg-[#140f24] rounded-xl border border-purple-500/40 space-y-2">
+          <div class="flex items-center gap-2 font-bold text-purple-300 text-sm">
+            <span>🔌</span>
+            <span>The Direct Answer: YES, Virtual Cards Are 100% Slot-Agnostic!</span>
+          </div>
+          <p class="text-gray-300 font-sans">
+            <strong>Custom JavaScript virtual cards can be assigned to ANY of the 7 slots (Slot 1 through Slot 7).</strong> There is no hardware restriction requiring custom cards to live in Slot 3.
+          </p>
+          <p class="text-gray-300 font-sans">
+            The Apple //c Ultra's <code class="text-purple-300 font-bold">SlotManager</code> dynamically routes 65C02 CPU bus reads and writes according to standard Apple II address decoding rules. When you plug a card into Slot $N$, the emulator automatically binds your card's <code class="text-cyan-300">onReadHandler</code> and <code class="text-cyan-300">onWriteHandler</code> to that slot's dedicated 16-byte I/O register range and 256-byte firmware ROM space.
+          </p>
+        </div>
+
+        <!-- Historical Context vs Ultra Architecture -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-[#0d1219] rounded-xl border border-[#212d3d] space-y-2">
+            <span class="text-amber-400 font-bold font-mono text-xs block">🏛️ Why Slot 3 is Used as the Default Example:</span>
+            <p class="text-gray-400 font-sans text-[11px] leading-relaxed">
+              On the vintage 1984 Apple //e and Apple //c, Slot 3 was historically designated for the 80-Column Display Card (or Aux RAM), Slot 6 was the Disk II 5.25" floppy controller, and Slot 7 was the ProDOS SmartPort hard disk.
+            </p>
+            <p class="text-gray-400 font-sans text-[11px] leading-relaxed">
+              Our cookbook examples and tutorial presets default to <strong>Slot 3</strong> so that beginners can experiment with custom IoT hardware immediately without disabling their floppy drive (Slot 6) or hard disk (Slot 7).
+            </p>
+          </div>
+
+          <div class="p-4 bg-[#0d1219] rounded-xl border border-[#212d3d] space-y-2">
+            <span class="text-cyan-400 font-bold font-mono text-xs block">🚀 Ultra Reconfigurability: Replace Any Peripheral:</span>
+            <p class="text-gray-400 font-sans text-[11px] leading-relaxed">
+              In the Apple //c Ultra, all 7 slots are fully reconfigurable! You can hot-swap or replace any slot:
+            </p>
+            <ul class="list-disc list-inside text-gray-400 text-[11px] font-sans space-y-1 pl-1">
+              <li><strong>Slot 1:</strong> Replace ImageWriter Printer with a 32-Bit Math Co-Processor.</li>
+              <li><strong>Slot 2:</strong> Replace MIDI/Serial with a Live Bitcoin Ticker or Weather Station.</li>
+              <li><strong>Slot 4:</strong> Replace Thunderclock with an Arduino Stepper Motor Controller.</li>
+              <li><strong>Slot 5:</strong> Replace Uthernet with an AI Neural Inference Accelerator.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Master 7-Slot Memory Map Table -->
+        <div class="space-y-3 font-mono text-xs">
+          <div class="flex justify-between items-center border-b border-[#212d3d] pb-2">
+            <span class="font-bold text-white uppercase tracking-wider">Master 7-Slot Memory Map &amp; Softswitch Decoding Table</span>
+            <span class="text-[10px] text-gray-500">Formula: $C080 + (Slot &times; $10)</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse font-mono text-xs">
+              <thead>
+                <tr class="border-b border-[#30363d] bg-[#0d1117] text-amber-400">
+                  <th class="p-2.5">Slot #</th>
+                  <th class="p-2.5">Default Factory Device</th>
+                  <th class="p-2.5">16 I/O Registers (Hex)</th>
+                  <th class="p-2.5">I/O Registers (Decimal PEEK/POKE)</th>
+                  <th class="p-2.5">Slot ROM (256 B)</th>
+                  <th class="p-2.5">PR# / IN# Hook</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#212d3d] text-gray-300">
+                <tr class="hover:bg-[#161f2c]">
+                  <td class="p-2.5 text-amber-400 font-bold">Slot 1</td>
+                  <td class="p-2.5 text-stone-200">ImageWriter II Printer</td>
+                  <td class="p-2.5 text-cyan-300 font-bold">$C090 – $C09F</td>
+                  <td class="p-2.5 text-stone-400">49296 – 49311</td>
+                  <td class="p-2.5 text-purple-300">$C100 – $C1FF</td>
+                  <td class="p-2.5 text-emerald-400">PR#1 / IN#1</td>
+                </tr>
+                <tr class="hover:bg-[#161f2c]">
+                  <td class="p-2.5 text-amber-400 font-bold">Slot 2</td>
+                  <td class="p-2.5 text-stone-200">Passport Web MIDI / Serial</td>
+                  <td class="p-2.5 text-cyan-300 font-bold">$C0A0 – $C0AF</td>
+                  <td class="p-2.5 text-stone-400">49312 – 49327</td>
+                  <td class="p-2.5 text-purple-300">$C200 – $C2FF</td>
+                  <td class="p-2.5 text-emerald-400">PR#2 / IN#2</td>
+                </tr>
+                <tr class="hover:bg-[#161f2c] bg-purple-950/20">
+                  <td class="p-2.5 text-purple-300 font-bold">Slot 3 ⭐</td>
+                  <td class="p-2.5 text-white font-bold">80-Column Display / Custom Sandbox (Default)</td>
+                  <td class="p-2.5 text-purple-300 font-bold">$C0B0 – $C0BF</td>
+                  <td class="p-2.5 text-purple-200 font-bold">49328 – 49343</td>
+                  <td class="p-2.5 text-purple-300">$C300 – $C3FF</td>
+                  <td class="p-2.5 text-emerald-400">PR#3 / IN#3</td>
+                </tr>
+                <tr class="hover:bg-[#161f2c]">
+                  <td class="p-2.5 text-amber-400 font-bold">Slot 4</td>
+                  <td class="p-2.5 text-stone-200">Thunderclock Plus &amp; Mockingboard A</td>
+                  <td class="p-2.5 text-cyan-300 font-bold">$C0C0 – $C0CF</td>
+                  <td class="p-2.5 text-stone-400">49344 – 49359</td>
+                  <td class="p-2.5 text-purple-300">$C400 – $C4FF</td>
+                  <td class="p-2.5 text-emerald-400">PR#4 / IN#4</td>
+                </tr>
+                <tr class="hover:bg-[#161f2c]">
+                  <td class="p-2.5 text-amber-400 font-bold">Slot 5</td>
+                  <td class="p-2.5 text-stone-200">Uthernet II Ethernet &amp; Mockingboard B</td>
+                  <td class="p-2.5 text-cyan-300 font-bold">$C0D0 – $C0DF</td>
+                  <td class="p-2.5 text-stone-400">49360 – 49375</td>
+                  <td class="p-2.5 text-purple-300">$C500 – $C5FF</td>
+                  <td class="p-2.5 text-emerald-400">PR#5 / IN#5</td>
+                </tr>
+                <tr class="hover:bg-[#161f2c]">
+                  <td class="p-2.5 text-amber-400 font-bold">Slot 6</td>
+                  <td class="p-2.5 text-stone-200">Disk II Dual 140KB Floppy Controller</td>
+                  <td class="p-2.5 text-cyan-300 font-bold">$C0E0 – $C0EF</td>
+                  <td class="p-2.5 text-stone-400">49376 – 49391</td>
+                  <td class="p-2.5 text-purple-300">$C600 – $C6FF</td>
+                  <td class="p-2.5 text-emerald-400">PR#6 (Boot Floppy)</td>
+                </tr>
+                <tr class="hover:bg-[#161f2c]">
+                  <td class="p-2.5 text-amber-400 font-bold">Slot 7</td>
+                  <td class="p-2.5 text-stone-200">SmartPort 32MB ProDOS Hard Disk</td>
+                  <td class="p-2.5 text-cyan-300 font-bold">$C0F0 – $C0FF</td>
+                  <td class="p-2.5 text-stone-400">49392 – 49407</td>
+                  <td class="p-2.5 text-purple-300">$C700 – $C7FF</td>
+                  <td class="p-2.5 text-emerald-400">PR#7 (Boot HD)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Universal Multi-Slot Code Examples -->
+        <div class="space-y-3 font-mono text-xs">
+          <span class="font-bold text-amber-400 uppercase tracking-wider block">Universal Formula for Reading/Writing Any Slot in Code:</span>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- BASIC Example -->
+            <div class="p-3 bg-[#0d1219] rounded-lg border border-[#212d3d] space-y-1.5">
+              <span class="text-amber-300 font-bold block">Applesoft BASIC (Any Slot S, Offset O):</span>
+              <pre><code class="text-amber-300">10 REM SET TARGET SLOT (1 TO 7)
+20 S = 2 : REM TARGET SLOT 2
+30 BASE = 49152 + 128 + S * 16
+40 POKE BASE + 0, 100 : REM WRITE TO REG 0
+50 STATUS = PEEK(BASE + 7) : REM READ REG 7
+60 PRINT "SLOT "; S; " STATUS = "; STATUS</code></pre>
+            </div>
+
+            <!-- C# .NET Example -->
+            <div class="p-3 bg-[#0d1219] rounded-lg border border-[#212d3d] space-y-1.5">
+              <span class="text-cyan-300 font-bold block">Modern C# AOT (Any Slot):</span>
+              <pre><code class="text-cyan-300">// Access any slot dynamically
+int slot = 4; // Slot 4 ($C0C0)
+int ioBase = 0xC080 + (slot * 16);
+
+AppleMemory.Write((ushort)(ioBase + 0), 0x55);
+byte result = AppleMemory.Read((ushort)(ioBase + 1));
+Console.WriteLine($"Slot {slot} Reg 1: {result}");</code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <!-- ========================================================================= -->
     <!-- SECTION: BROWSER SECURITY, PRIVACY SANDBOXING & PERMISSION MODEL -->

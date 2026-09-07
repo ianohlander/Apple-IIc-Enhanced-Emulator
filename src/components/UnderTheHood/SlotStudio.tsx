@@ -130,6 +130,7 @@ export const SlotStudio: React.FC<SlotStudioProps> = ({ emulator }) => {
   const triggerRefresh = () => setTick(t => t + 1);
 
   const [printerPaper, setPrinterPaper] = useState('');
+  const [targetSlot, setTargetSlot] = useState<number>(3);
   const [selectedPreset, setSelectedPreset] = useState('weather');
   const [customJsCode, setCustomJsCode] = useState(PRESET_SCRIPTS.weather.code);
 
@@ -180,15 +181,20 @@ export const SlotStudio: React.FC<SlotStudioProps> = ({ emulator }) => {
   };
 
   const handleApplyCustomCard = () => {
-    const card = emulator.slotManager.getCard(3) as CustomScriptableCard;
-    if (card) {
-      try {
-        const fn = new Function('card', customJsCode);
-        fn(card);
-        alert('Custom Card Script successfully applied to Slot 3 ($C0B0)!');
-      } catch (err: any) {
-        alert('Script Error: ' + err.message);
-      }
+    let card = emulator.slotManager.getCard(targetSlot) as CustomScriptableCard;
+    if (!card || !(card instanceof CustomScriptableCard)) {
+      card = new CustomScriptableCard();
+      emulator.slotManager.plugCard(targetSlot, card);
+    }
+    try {
+      const fn = new Function('card', customJsCode);
+      fn(card);
+      const ioHex = (0xC080 + targetSlot * 0x10).toString(16).toUpperCase();
+      const romHex = (0xC000 + targetSlot * 0x100).toString(16).toUpperCase();
+      alert(`Custom Card Script successfully applied to Slot ${targetSlot} ($${ioHex} / $${romHex})!`);
+      triggerRefresh();
+    } catch (err: any) {
+      alert('Script Error: ' + err.message);
     }
   };
 
@@ -306,7 +312,7 @@ export const SlotStudio: React.FC<SlotStudioProps> = ({ emulator }) => {
             }`}
           >
             <Code className="w-3.5 h-3.5" />
-            Custom JS Card Sandbox (Slot 3)
+            Custom JS Card Sandbox (Slots 1–7)
           </button>
           <button
             onClick={() => setActiveToolkit('clock')}
@@ -363,10 +369,28 @@ export const SlotStudio: React.FC<SlotStudioProps> = ({ emulator }) => {
           <div className="p-4 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-3">
             <div className="flex flex-wrap justify-between items-center gap-2">
               <div>
-                <span className="text-cyan-400 font-bold block">JavaScript Custom Card Sandbox (Slot 3):</span>
-                <span className="text-gray-400 text-[11px]">Script custom I/O registers ($C0B0-$C0BF) and slot ROM ($C300).</span>
+                <span className="text-cyan-400 font-bold block">JavaScript Custom Card Sandbox (Universal Slots 1–7):</span>
+                <span className="text-gray-400 text-[11px]">
+                  Script custom I/O registers ($C0{(8 + targetSlot).toString(16).toUpperCase()}0–$C0{(8 + targetSlot).toString(16).toUpperCase()}F) and slot ROM ($C{targetSlot}00). Assignable to ANY slot!
+                </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <label className="text-stone-400 text-[11px] font-bold">Target Slot:</label>
+                  <select
+                    value={targetSlot}
+                    onChange={e => setTargetSlot(Number(e.target.value))}
+                    className="bg-[#161b22] text-cyan-300 border border-[#2a3642] rounded px-2 py-1 text-xs font-mono"
+                  >
+                    <option value={1}>Slot 1 ($C090 / $C100)</option>
+                    <option value={2}>Slot 2 ($C0A0 / $C200)</option>
+                    <option value={3}>Slot 3 ($C0B0 / $C300) [Default]</option>
+                    <option value={4}>Slot 4 ($C0C0 / $C400)</option>
+                    <option value={5}>Slot 5 ($C0D0 / $C500)</option>
+                    <option value={6}>Slot 6 ($C0E0 / $C600)</option>
+                    <option value={7}>Slot 7 ($C0F0 / $C700)</option>
+                  </select>
+                </div>
                 <select
                   value={selectedPreset}
                   onChange={e => handleSelectPreset(e.target.value)}
@@ -380,7 +404,7 @@ export const SlotStudio: React.FC<SlotStudioProps> = ({ emulator }) => {
                   onClick={handleApplyCustomCard}
                   className="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded shadow flex items-center gap-1"
                 >
-                  <Play className="w-3 h-3" /> Apply to Slot 3
+                  <Play className="w-3 h-3" /> Apply to Slot {targetSlot}
                 </button>
               </div>
             </div>
