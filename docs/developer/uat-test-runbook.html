@@ -270,14 +270,14 @@
       </div>
     </section>
 
-    <!-- Station 3: Docked 63-Key Mechanical Keyboard & Strobe Input -->
+    <!-- Station 3: Fly-Up 63-Key Mechanical Keyboard & Strobe Input -->
     <section class="uat-card p-6 md:p-8 space-y-4">
       <div class="flex flex-wrap items-center justify-between border-b border-[#232f42] pb-3 gap-2">
         <div class="flex items-center space-x-3">
           <span class="step-number">3</span>
           <div>
-            <h3 class="text-base font-bold text-white">Station 3: Docked 63-Key Keyboard &amp; Strobe Input</h3>
-            <span class="text-xs text-stone-400">Validates physical key strokes, on-screen matrix, immediate math &amp; clipboard paste.</span>
+            <h3 class="text-base font-bold text-white">Station 3: Fly-Up 63-Key Keyboard &amp; Strobe Input</h3>
+            <span class="text-xs text-stone-400">Validates physical keystrokes, bottom fly-up matrix drawer, immediate math &amp; clipboard paste.</span>
           </div>
         </div>
         <span class="px-2.5 py-1 rounded badge-uat-scenario text-xs font-mono font-bold">KEYBOARD &amp; I/O</span>
@@ -295,27 +295,34 @@
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-3-2" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-3-2">
-              <strong>3.2 Docked Keyboard Matrix Clicks:</strong> Click keys on the bottom mechanical keyboard dock (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Verify the screen clears and moves the cursor to row 0.
+              <strong>3.2 Fly-Up Bottom Keyboard Drawer:</strong> Click the <strong>⌨️</strong> button on the CRT bezel quick-access icon bar. Confirm the 63-key matrix slides UP smoothly from the bottom of the screen with zero page scrolling.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-3-3" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-3-3">
-              <strong>3.3 Clipboard Paste Button:</strong> Copy a multi-line BASIC snippet to your clipboard and click <strong>📋 Paste</strong>. Confirm the characters stream into the keyboard FIFO strobe ($C000).
+              <strong>3.3 Matrix Key Clicks &amp; Screen Clear:</strong> Click keys on the bottom keyboard matrix (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Verify the screen clears and moves the cursor to row 0.
             </label>
           </div>
 
           <div class="flex items-start gap-2 font-sans text-stone-300">
             <input type="checkbox" id="uat-chk-3-4" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
             <label for="uat-chk-3-4">
-              <strong>3.4 Keyboard Hide / Show Toggle:</strong> Click <strong>Hide / Show</strong> on the keyboard header. Confirm the keyboard matrix collapses to give extra screen real estate, and expands upon clicking again.
+              <strong>3.4 Clipboard Paste Button:</strong> Copy a multi-line BASIC snippet to your clipboard and click <strong>📋 Paste</strong>. Confirm the characters stream into the keyboard FIFO strobe ($C000).
+            </label>
+          </div>
+
+          <div class="flex items-start gap-2 font-sans text-stone-300">
+            <input type="checkbox" id="uat-chk-3-5" class="mt-0.5 rounded bg-stone-800 border-stone-600 text-amber-500 focus:ring-0">
+            <label for="uat-chk-3-5">
+              <strong>3.5 Keyboard Drawer Dismissal:</strong> Press <strong>Esc</strong>, click outside on the backdrop, or click <strong>✕ Close Keyboard</strong>. Confirm the drawer slides down and is cleanly hidden.
             </label>
           </div>
         </div>
 
         <div class="p-3 bg-[#0a0d13] rounded-lg border border-[#1b2535] text-[11px] text-gray-400 font-mono">
-          <strong class="text-amber-400">Expected Result:</strong> Responsive typing with audible click feedback; full alphanumeric and control key coverage.
+          <strong class="text-amber-400">Expected Result:</strong> Responsive typing with audible click feedback, smooth slide-up animation, and zero vertical spilling.
         </div>
       </div>
     </section>

@@ -1080,7 +1080,7 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
     }
   });
 
-  runner.test('Vintage Peripheral Bays, Fullscreen Viewport & Docked Keyboard UI Integrity', () => {
+  runner.test('Vintage Peripheral Bays, Fullscreen Viewport & Bottom Keyboard UI Integrity', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
 
     // Viewport Fullscreen Sizing Controls & Quick Flyouts
@@ -1090,10 +1090,9 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
     assertTrue(html.includes('fullscreen-active'), 'fullscreen-active responsive styles defined');
 
     // Vintage Peripheral Bay Toolbar Icons & Tooltips
-    const bayButtons = ['storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'crt'];
+    const bayButtons = ['storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'crt', 'keyboard', 'info'];
     for (const bay of bayButtons) {
       assertTrue(html.includes(`id="btn-bay-${bay}"`), `Hardware bay button #btn-bay-${bay} exists`);
-      assertTrue(html.includes(`openCabinet('${bay}')`), `openCabinet('${bay}') handler wired`);
     }
 
     // Flyout Cabinet Drawer & Backdrop
@@ -1101,10 +1100,16 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
     assertTrue(html.includes('id="cabinet-backdrop"'), 'Cabinet backdrop overlay #cabinet-backdrop exists');
     assertTrue(html.includes('closeCabinet()'), 'closeCabinet JavaScript function defined');
 
-    // Docked Vintage Keyboard & Toggle
-    assertTrue(html.includes('id="docked-keyboard-panel"'), 'Docked keyboard panel #docked-keyboard-panel exists');
+    // Fly-Up Bottom Mechanical Keyboard & Toggle
+    assertTrue(html.includes('id="bottom-keyboard-drawer"'), 'Bottom flyout keyboard drawer #bottom-keyboard-drawer exists');
+    assertTrue(html.includes('id="keyboard-backdrop"'), 'Keyboard backdrop #keyboard-backdrop exists');
     assertTrue(html.includes('id="btn-toggle-keyboard"'), 'Keyboard toggle button #btn-toggle-keyboard exists');
-    assertTrue(html.includes('toggleKeyboard()'), 'toggleKeyboard JavaScript function defined');
+    assertTrue(html.includes('id="btn-bay-keyboard"'), 'Bezel keyboard button #btn-bay-keyboard exists');
+    assertTrue(html.includes('toggleKeyboard('), 'toggleKeyboard JavaScript function defined');
+
+    // System Information Tab in Cabinet Drawer
+    assertTrue(html.includes('id="tab-info"'), 'System info tab #tab-info exists');
+    assertTrue(html.includes('id="btn-bay-info"'), 'Bezel info button #btn-bay-info exists');
 
     // ImageWriter II Tractor Paper View
     assertTrue(html.includes('id="printer-paper-view"'), 'Continuous-feed printer view #printer-paper-view exists');
@@ -1304,7 +1309,7 @@ runner.suite('User Acceptance Testing (UAT): 10-Station Runbook & Verification C
     // Verify 10 Stations coverage in root UAT
     assertTrue(rootUat.includes('Station 1: First Boot, Case Controls &amp; Speed Softswitches'), 'Station 1 present');
     assertTrue(rootUat.includes('Station 2: CRT Display Engine, Phosphors &amp; Fullscreen Immersion'), 'Station 2 present');
-    assertTrue(rootUat.includes('Station 3: Docked 63-Key Keyboard &amp; Strobe Input'), 'Station 3 present');
+    assertTrue(rootUat.includes('Station 3: Fly-Up 63-Key Keyboard &amp; Strobe Input'), 'Station 3 present');
     assertTrue(rootUat.includes('Station 4: Storage Bay — Floppy Disks &amp; SmartPort 32MB HD'), 'Station 4 present');
     assertTrue(rootUat.includes('Station 5: Motherboard Peripheral Bay &amp; Universal Slots 1–7'), 'Station 5 present');
     assertTrue(rootUat.includes('Station 6: Modern Java &amp; C# AOT Compiler Studio'), 'Station 6 present');

@@ -100,12 +100,28 @@
       z-index: 100;
     }
     .screen-normal {
-      max-width: 56rem; /* max-w-4xl */
+      max-width: 54rem; /* max-w-4xl */
       width: 100%;
     }
+    #crt-frame {
+      max-height: calc(100vh - 210px);
+      aspect-ratio: 4 / 3;
+      width: auto;
+      margin: 0 auto;
+    }
+    select, select option, #phosphor-select, #phosphor-select option, #speed-select, #speed-select option {
+      background-color: #141a24 !important;
+      color: #34d399 !important;
+    }
+    #phosphor-select option[value="amber"], #phosphor-select option[value="color"] {
+      color: #fbbf24 !important;
+    }
+    #phosphor-select option[value="white"] {
+      color: #e5e5e5 !important;
+    }
     .fullscreen-active {
-      padding: 0.5rem !important;
-      overflow-y: auto !important;
+      padding: 0.25rem !important;
+      overflow: hidden !important;
     }
     .fullscreen-active #monitor-container {
       max-width: 96vw !important;
@@ -113,18 +129,19 @@
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
-      justify-content: flex-start !important;
-      gap: 0.75rem !important;
+      justify-content: center !important;
+      height: 100vh !important;
+      gap: 0.5rem !important;
       margin: 0 auto !important;
     }
     .fullscreen-active #crt-bezel-box {
       max-width: 95vw !important;
       width: 100% !important;
-      padding: 0.75rem 1rem !important;
+      padding: 0.5rem 1rem !important;
     }
     .fullscreen-active #crt-frame {
-      max-height: calc(100vh - 220px) !important;
-      height: calc(100vh - 220px) !important;
+      max-height: calc(100vh - 170px) !important;
+      height: calc(100vh - 170px) !important;
       width: auto !important;
       aspect-ratio: 4 / 3 !important;
       margin: 0 auto !important;
@@ -132,11 +149,7 @@
     .fullscreen-active #apple-case-chassis {
       max-width: 95vw !important;
       width: 100% !important;
-      padding: 0.75rem 1.25rem !important;
-    }
-    .fullscreen-active #docked-keyboard-panel {
-      max-width: 95vw !important;
-      width: 100% !important;
+      padding: 0.5rem 1rem !important;
     }
     select, select option {
       background-color: #141a24 !important;
@@ -178,81 +191,7 @@
     </div>
   </header>
 
-  <!-- ========================================================================= -->
-  <!-- VINTAGE HARDWARE EXPANSION BAYS TOOLBAR (CLICK TO OPEN PERIPHERAL FLYOUTS) -->
-  <!-- ========================================================================= -->
-  <section class="w-full max-w-6xl mb-4">
-    <div class="bg-gradient-to-r from-[#141923] via-[#10141c] to-[#141923] border border-[#252f40] rounded-2xl p-3 shadow-xl">
-      <div class="flex items-center justify-between mb-2 px-1">
-        <span class="text-[11px] font-mono font-bold text-amber-400 tracking-wider flex items-center gap-1.5">
-          <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          VINTAGE HARDWARE PERIPHERAL BAYS &amp; FLYOUT CABINETS
-        </span>
-        <span class="text-[10px] font-mono text-stone-400 hidden sm:inline">Click any vintage add-on bay to inspect, configure, or script custom hardware</span>
-      </div>
-
-      <!-- Peripheral Bay Buttons Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 font-mono text-xs">
-        
-        <!-- Bay 1: Floppy & SmartPort Storage -->
-        <button id="btn-bay-storage" onclick="openCabinet('storage')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Slot 6 Dual 5.25 Floppies + Slot 7 SmartPort 32MB HD">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">💾</span>
-          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">Storage Bay</span>
-          <span class="text-[9px] text-stone-400">Floppy &amp; 32MB HD</span>
-        </button>
-
-        <!-- Bay 2: ImageWriter II Printer -->
-        <button id="btn-bay-printer" onclick="openCabinet('printer')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Slot 1 ImageWriter II Continuous Tractor-Feed Paper">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">🖨️</span>
-          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">Printer Bay</span>
-          <span class="text-[9px] text-emerald-400">ImageWriter II</span>
-        </button>
-
-        <!-- Bay 3: 7-Slot Motherboard Bus -->
-        <button id="btn-bay-slots" onclick="openCabinet('slots')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Motherboard Slots 1-7: Plug, Unplug, or Script Custom Cards">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">🎛️</span>
-          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">Slot Bay</span>
-          <span class="text-[9px] text-cyan-400">Universal Slots 1–7</span>
-        </button>
-
-        <!-- Bay 4: Modern Java & C# AOT Studio -->
-        <button id="btn-bay-code" onclick="openCabinet('code')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Modern C# and Java AOT Compiler to 65C02 Assembly">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">☕</span>
-          <span class="font-bold text-stone-200 group-hover:text-cyan-300 text-[11px]">AOT Studio</span>
-          <span class="text-[9px] text-purple-400">Java &amp; C# .NET</span>
-        </button>
-
-        <!-- Bay 5: Magazine Type-In Transcriber -->
-        <button id="btn-bay-typein" onclick="openCabinet('typein')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Type-In Listings from Compute!, inCider &amp; Nibble">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">📖</span>
-          <span class="font-bold text-stone-200 group-hover:text-emerald-300 text-[11px]">Type-In Bay</span>
-          <span class="text-[9px] text-yellow-400">Magazine Transcriber</span>
-        </button>
-
-        <!-- Bay 6: CPU Register & Disassembler -->
-        <button id="btn-bay-debugger" onclick="openCabinet('debugger')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Live 65C02 Registers (A, X, Y, SP, PC) & Disassembly Trace">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">⚙️</span>
-          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">CPU Monitor</span>
-          <span class="text-[9px] text-stone-400">Registers &amp; ASM</span>
-        </button>
-
-        <!-- Bay 7: Custom ROM Firmware Studio -->
-        <button id="btn-bay-rom" onclick="openCabinet('rom')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Hot-Swap 32KB System ROMs or BYOR (Bring Your Own ROM)">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">⚡</span>
-          <span class="font-bold text-stone-200 group-hover:text-pink-300 text-[11px]">ROM Studio</span>
-          <span class="text-[9px] text-pink-400">Firmware &amp; BYOR</span>
-        </button>
-
-        <!-- Bay 8: CRT Display & Phosphor Selector -->
-        <button id="btn-bay-crt" onclick="openCabinet('crt')" class="vintage-bay-btn p-2.5 rounded-xl flex flex-col items-center text-center group tooltip-hint" data-tooltip="Select CRT Phosphor (Green, Amber, B&W, Color) & Screen Sizing">
-          <span class="text-xl mb-1 group-hover:scale-110 transition-transform">📺</span>
-          <span class="font-bold text-stone-200 group-hover:text-amber-300 text-[11px]">CRT Controls</span>
-          <span class="text-[9px] text-emerald-400">Phosphor &amp; Sizing</span>
-        </button>
-
-      </div>
-    </div>
-  </section>
+  
 
   <!-- ========================================================================= -->
   <!-- MAIN WORKSPACE: CRT MONITOR & EXPANDABLE VIEWPORT -->
@@ -283,17 +222,20 @@
           </select>
         </div>
 
-        <!-- Right: Hardware Quick Flyouts, Fullscreen & Paste -->
+        <!-- Right: Hardware Quick Flyouts, Keyboard Flyout, Info Guide, Fullscreen & Paste -->
         <div class="flex items-center space-x-1.5">
           <!-- Quick Hardware Flyouts Group (Available in Fullscreen & Normal) -->
           <div class="flex items-center bg-[#10141d] rounded-lg p-0.5 border border-stone-700 space-x-0.5">
-            <button onclick="openCabinet('storage')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Floppy & 32MB HD Storage Bay">💾</button>
-            <button onclick="openCabinet('printer')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="ImageWriter II Printer">🖨️</button>
-            <button onclick="openCabinet('slots')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="7-Slot Expansion Bus">🎛️</button>
-            <button onclick="openCabinet('code')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Modern Java & C# AOT Compiler">☕</button>
-            <button onclick="openCabinet('typein')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Magazine Type-In Transcriber">📖</button>
-            <button onclick="openCabinet('debugger')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="65C02 CPU Register & Disassembler">⚙️</button>
-            <button onclick="openCabinet('rom')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Custom ROM & Firmware Studio">⚡</button>
+            <button id="btn-bay-storage" onclick="openCabinet('storage')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Floppy &amp; 32MB HD Storage Bay">💾</button>
+            <button id="btn-bay-printer" onclick="openCabinet('printer')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="ImageWriter II Printer">🖨️</button>
+            <button id="btn-bay-slots" onclick="openCabinet('slots')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="7-Slot Expansion Bus">🎛️</button>
+            <button id="btn-bay-code" onclick="openCabinet('code')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Modern Java &amp; C# AOT Compiler">☕</button>
+            <button id="btn-bay-typein" onclick="openCabinet('typein')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Magazine Type-In Transcriber">📖</button>
+            <button id="btn-bay-debugger" onclick="openCabinet('debugger')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="65C02 CPU Register &amp; Disassembler">⚙️</button>
+            <button id="btn-bay-rom" onclick="openCabinet('rom')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="Custom ROM &amp; Firmware Studio">⚡</button>
+            <button id="btn-bay-crt" onclick="openCabinet('crt')" class="px-1.5 py-0.5 hover:bg-amber-500/20 text-stone-300 hover:text-amber-300 rounded text-xs transition tooltip-hint" data-tooltip="CRT Phosphor &amp; Display Settings">📺</button>
+            <button id="btn-bay-keyboard" onclick="toggleKeyboard()" class="px-1.5 py-0.5 bg-amber-500/10 hover:bg-amber-500/30 text-amber-300 hover:text-amber-200 rounded text-xs transition tooltip-hint border border-amber-500/30" data-tooltip="Fly-Up 63-Key Mechanical Keyboard (Bottom Drawer)">⌨️</button>
+            <button id="btn-bay-info" onclick="openCabinet('info')" class="px-1.5 py-0.5 bg-cyan-500/10 hover:bg-cyan-500/30 text-cyan-300 hover:text-cyan-200 rounded text-xs transition tooltip-hint border border-cyan-500/30" data-tooltip="Hardware Quick Guide &amp; Flyout Map">ⓘ</button>
           </div>
 
           <!-- Fullscreen Mode -->
@@ -357,30 +299,7 @@
 
   </main>
 
-  <!-- ========================================================================= -->
-  <!-- DOCKED BOTTOM MECHANICAL KEYBOARD (63-KEY APPLE MATRIX) -->
-  <!-- ========================================================================= -->
-  <section id="docked-keyboard-panel" class="max-w-4xl w-full mt-6 transition-all duration-300 px-2">
-    <div class="bg-[#14181f] p-4 rounded-2xl border border-stone-800 shadow-2xl space-y-2 font-mono text-xs">
-      
-      <!-- Keyboard Header Controls -->
-      <div class="flex items-center justify-between text-[11px] text-stone-400 border-b border-stone-800 pb-2 px-1">
-        <div class="flex items-center gap-2">
-          <span class="text-amber-400 font-bold">⌨️ KEYBOARD:</span>
-          <span>Apple //c Standard 63-Key Matrix (Click keys or type on physical keyboard)</span>
-        </div>
-        
-        <div class="flex items-center gap-2">
-          <button id="btn-toggle-keyboard" onclick="toggleKeyboard()" class="px-2 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 text-[10px] border border-stone-700">
-            Hide / Show
-          </button>
-        </div>
-      </div>
-
-      <!-- Interactive Key Matrix Rows Container -->
-      <div id="keyboard-container" class="space-y-1 pt-1"></div>
-    </div>
-  </section>
+  
 
   <!-- ========================================================================= -->
   <!-- SLIDING HARDWARE CABINET DRAWER (FLYOUT BAY FOR ALL EXPANDED HARDWARE) -->
@@ -388,6 +307,36 @@
   
   <!-- Dimmed Drawer Backdrop -->
   <div id="cabinet-backdrop" onclick="closeCabinet()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[99998] hidden transition-opacity duration-300"></div>
+
+  
+  <!-- ========================================================================= -->
+  <!-- FLY-UP BOTTOM MECHANICAL KEYBOARD DRAWER (63-KEY APPLE MATRIX) -->
+  <!-- ========================================================================= -->
+  
+  <!-- Dimmed Keyboard Drawer Backdrop -->
+  <div id="keyboard-backdrop" onclick="toggleKeyboard(false)" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[99980] hidden transition-opacity duration-300"></div>
+
+  <!-- Fly-Up Mechanical Keyboard Drawer -->
+  <aside id="bottom-keyboard-drawer" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl bg-[#14181f] border-t-2 border-x-2 border-stone-700 rounded-t-2xl shadow-[0_-15px_40px_rgba(0,0,0,0.85)] p-4 z-[99990] translate-y-full transition-transform duration-300 ease-out font-mono text-xs flex flex-col space-y-2">
+    <!-- Keyboard Header Controls -->
+    <div class="flex items-center justify-between text-[11px] text-stone-300 border-b border-stone-800 pb-2 px-1">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400 font-bold text-sm">⌨️</span>
+        <span class="font-bold text-amber-300">Apple //c Standard 63-Key Matrix</span>
+        <span class="text-[10px] text-stone-400 hidden sm:inline">• Click keys or type on physical keyboard • Strobe $C000</span>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] text-stone-400 font-mono hidden md:inline">Press Esc or ⌨️ to close</span>
+        <button id="btn-toggle-keyboard" onclick="toggleKeyboard(false)" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-red-900 text-stone-300 hover:text-white text-xs border border-stone-700 transition flex items-center gap-1 font-bold">
+          ✕ Close Keyboard
+        </button>
+      </div>
+    </div>
+
+    <!-- Interactive Key Matrix Rows Container -->
+    <div id="keyboard-container" class="space-y-1 pt-1"></div>
+  </aside>
 
   <!-- Hardware Drawer Container -->
   <aside id="vintage-cabinet-drawer" class="fixed top-0 right-0 h-full w-full max-w-2xl bg-[#0f141d] cabinet-drawer z-[99999] translate-x-full transition-transform duration-300 flex flex-col font-mono text-xs overflow-hidden">
@@ -419,6 +368,7 @@
       <button onclick="switchTab('typein')" id="tab-btn-typein" class="tab-btn px-2.5 py-1.5 rounded-lg font-bold text-stone-400 hover:text-white flex items-center gap-1">📖 Magazine Type-In</button>
       <button onclick="switchTab('debugger')" id="tab-btn-debugger" class="tab-btn px-2.5 py-1.5 rounded-lg font-bold text-stone-400 hover:text-white flex items-center gap-1">⚙️ CPU Debugger</button>
       <button onclick="switchTab('rom')" id="tab-btn-rom" class="tab-btn px-2.5 py-1.5 rounded-lg font-bold text-stone-400 hover:text-white flex items-center gap-1">⚡ Custom ROM</button>
+      <button onclick="switchTab('info')" id="tab-btn-info" class="tab-btn px-2.5 py-1.5 rounded-lg font-bold text-stone-400 hover:text-white flex items-center gap-1">ⓘ System Info &amp; Map</button>
     </div>
 
     <!-- Cabinet Scrollable Content Body -->
@@ -765,6 +715,109 @@ namespace DotNetCoreStandardApp {
 ; $200D: 8D 5F C0      STA $C05F           ; Softswitch $C05F: DHIRESON</pre>
       </div>
 
+      
+      <!-- ========================================================================= -->
+      <!-- TAB 7: HARDWARE ARCHITECTURE GUIDE & FLYOUT MAP -->
+      <!-- ========================================================================= -->
+      <div id="tab-info" class="tab-pane hidden bg-[#12161a] border border-[#2a3642] rounded-lg p-5 font-mono text-gray-200 space-y-5">
+        <div class="flex justify-between items-center border-b border-[#2a3642] pb-3">
+          <div>
+            <h4 class="text-sm font-bold text-cyan-400">APPLE //c ULTRA HARDWARE &amp; FLYOUT MAP</h4>
+            <p class="text-xs text-gray-400">Quick architectural guide to all simulated add-on subsystems and vintage peripherals.</p>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">SYSTEM GUIDE</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <!-- Item 1 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-amber-400 font-bold">
+              <span>💾</span> <span>Storage Bay (Slot 6 &amp; Slot 7)</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Emulates dual Disk II 140KB 5.25" floppy drives with genuine GCR nibble encoding ($C0E0..$C0EF) plus a 32MB SmartPort Block Hard Disk (/HD) and 1MB Slinky Aux RAM disk ($C071..$C073).
+            </p>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold">
+              <span>🖨️</span> <span>ImageWriter II Printer (Slot 1)</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Continuous tractor-feed paper simulation capturing PR#1 text and JSR $C100 driver calls. Includes one-click text copy, raw download, and live paper clear.
+            </p>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-cyan-400 font-bold">
+              <span>🎛️</span> <span>Motherboard 7-Slot Bus (Universal Slots 1–7)</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Pluggable 50-pin Apple bus. Script custom JavaScript virtual peripheral cards with arbitrary I/O registers ($C080+s*16) and slot ROM ($Cs00) on <strong>ANY slot 1–7</strong>.
+            </p>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-purple-400 font-bold">
+              <span>☕</span> <span>Modern Java &amp; C# AOT Studio</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Ahead-Of-Time compiler lowering standard C# .NET and Java 17 OOP bytecode directly into native 65C02 machine code, featuring Retro Breakout, 3D starships, and Mockingboard PSG.
+            </p>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-yellow-400 font-bold">
+              <span>📖</span> <span>Magazine Type-In Transcriber</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Historical OCR and type-in parser supporting inCider, Compute!, and Nibble listings. Feeds tokens directly into the Applesoft BASIC program buffer ($0801) and 65C02 monitor.
+            </p>
+          </div>
+
+          <!-- Item 6 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-stone-300 font-bold">
+              <span>⚙️</span> <span>65C02 CPU Register &amp; Disassembly Monitor</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Live inspection of Accumulator (A), X, Y, Stack Pointer (SP), Program Counter (PC), processor status flags, and cycle-by-cycle disassembly memory traces.
+            </p>
+          </div>
+
+          <!-- Item 7 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-pink-400 font-bold">
+              <span>⚡</span> <span>Custom ROM &amp; Firmware Studio</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Hot-swap 32KB System BIOS (ROM 255, ROM 0, ROM 3, ROM 4X, Apple //e Enhanced) or upload custom 32KB binary images with instant hot-patching.
+            </p>
+          </div>
+
+          <!-- Item 8 -->
+          <div class="p-3.5 bg-[#0d1117] rounded-lg border border-[#2a3642] space-y-1.5">
+            <div class="flex items-center gap-2 text-amber-300 font-bold">
+              <span>⌨️</span> <span>Fly-Up 63-Key Mechanical Matrix</span>
+            </div>
+            <p class="text-[11px] text-stone-300 leading-relaxed">
+              Click the ⌨️ icon on the bezel quick-access bar to slide up the full physical Apple //c keyboard matrix. Mapped directly to hardware keyboard strobe $C000.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-[#06080c] rounded-lg border border-[#1b2433] flex items-center justify-between">
+          <span class="text-stone-400 text-xs">For in-depth programming manuals and hardware specs:</span>
+          <a href="docs/index.html" class="px-3 py-1.5 rounded bg-cyan-600 hover:bg-cyan-500 text-black font-bold transition flex items-center gap-1 text-xs">
+            📖 Open Docs Hub
+          </a>
+        </div>
+      </div>
+
       <!-- ========================================================================= -->
       <!-- TAB 6: CUSTOM ROM STUDIO -->
       <!-- ========================================================================= -->
@@ -878,7 +931,8 @@ namespace DotNetCoreStandardApp {
         typein: 'Magazine Type-In Transcriber & OCR',
         debugger: '65C02 CPU Register & Disasm Monitor',
         rom: 'Custom Firmware & ROM Studio',
-        crt: 'CRT Display & Phosphor Controller'
+        crt: 'CRT Display & Phosphor Controller',
+        info: 'Apple //c Ultra System Guide & Peripheral Architecture'
       };
 
       if (title && titles[cabinetId]) {
@@ -892,6 +946,8 @@ namespace DotNetCoreStandardApp {
         const crt = document.getElementById('crt-bezel-box');
         if (crt) crt.scrollIntoView({ behavior: 'smooth' });
         closeCabinet();
+      } else if (cabinetId === 'info') {
+        switchTab('info');
       } else {
         switchTab(cabinetId);
       }
@@ -904,10 +960,18 @@ namespace DotNetCoreStandardApp {
       if (backdrop) backdrop.classList.add('hidden');
     };
 
-    window.toggleKeyboard = function() {
-      const container = document.getElementById('keyboard-container');
-      if (container) {
-        container.classList.toggle('hidden');
+    window.toggleKeyboard = function(forceState) {
+      const drawer = document.getElementById('bottom-keyboard-drawer');
+      const backdrop = document.getElementById('keyboard-backdrop');
+      if (!drawer) return;
+      const isClosed = drawer.classList.contains('translate-y-full');
+      const shouldOpen = (typeof forceState === 'boolean') ? forceState : isClosed;
+      if (shouldOpen) {
+        drawer.classList.remove('translate-y-full');
+        if (backdrop) backdrop.classList.remove('hidden');
+      } else {
+        drawer.classList.add('translate-y-full');
+        if (backdrop) backdrop.classList.add('hidden');
       }
     };
 
@@ -915,6 +979,7 @@ namespace DotNetCoreStandardApp {
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeCabinet();
+        toggleKeyboard(false);
         if (currentScreenMode === 'fullscreen') setScreenMode('normal');
       } else if (e.altKey && e.key === 'Enter') {
         e.preventDefault();
