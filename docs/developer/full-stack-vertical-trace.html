@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Full Vertical Stack Trace: C# to 65C02 to Browser — Apple //c Ultra</title>
+  <title>Full Vertical Stack Trace: C# to 65C02 to Browser — 6502 Ultra</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -258,7 +258,7 @@ START:
   $200A: 8D 0D C0   STA $C00D               ; Softswitch: 80COLSET (80-column video on)
   $200D: 8D 5F C0   STA $C05F               ; Softswitch: DHIRESON (Double Hi-Res on)
 
-; --- Step 2: Output Banner String via Apple Monitor ROM ($FDED: COUT) ---
+; --- Step 2: Output Banner String via 65C02 System Monitor ROM ($FDED: COUT) ---
   $2010: A9 D0      LDA #$D0                ; ASCII 'P' | 0x80
   $2012: 20 ED FD   JSR $FDED               ; Call Monitor ROM COUT routine
   $2015: A9 C1      LDA #$C1                ; ASCII 'A' | 0x80
@@ -380,7 +380,7 @@ osc.start(); osc.stop(audioCtx.currentTime + 0.06);</code></pre>
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-cyan-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Full-Stack Vertical Trace
+    <a href="index.html" class="text-cyan-400 hover:underline">← Back to Developer Hub</a> • 6502 Ultra Full-Stack Vertical Trace
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

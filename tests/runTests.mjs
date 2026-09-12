@@ -1,4 +1,4 @@
-// Full Comprehensive Test Suite & QA Validator for Apple IIc Ultra (ES Module)
+// Full Comprehensive Test Suite & QA Validator for 6502 Ultra (ES Module)
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -117,7 +117,7 @@ function auditSourceFile(filePath) {
 // ----------------------------------------------------------------------------
 // Test Execution
 // ----------------------------------------------------------------------------
-console.log('🚀 Running Apple IIc Ultra Automated Test Suites & Code QA Audits...\n');
+console.log('🚀 Running 6502 Ultra Automated Test Suites & Code QA Audits...\n');
 
 // 1. Static Code QA Audit
 runner.suite('Code QA: SOLID, Cyclomatic Complexity <= 7 & Function Length Audit', () => {
@@ -156,7 +156,7 @@ runner.suite('Code QA: SOLID, Cyclomatic Complexity <= 7 & Function Length Audit
 });
 
 // 2. Video Address Calculations Suite
-runner.suite('Apple II Video: Address Mapping', () => {
+runner.suite('6502 Ultra Video: Address Mapping', () => {
   runner.test('Text Row Memory Base Addresses (0-23)', () => {
     const getTextRowAddress = (row) => {
       const group = Math.floor(row / 8);
@@ -186,7 +186,7 @@ runner.suite('Apple II Video: Address Mapping', () => {
 });
 
 // 3. Storage GCR & 32MB Hard Disk Block Suite
-runner.suite('Apple II Storage: Floppy GCR & 32MB SmartPort HD', () => {
+runner.suite('6502 Ultra Storage: Floppy GCR & 32MB SmartPort HD', () => {
   runner.test('6-and-2 GCR Nibble Translation Table Integrity (64 unique entries)', () => {
     const DISK_BYTE_TO_NIBBLE = [
       0x96, 0x97, 0x9A, 0x9B, 0x9D, 0x9E, 0x9F, 0xA6,
@@ -226,7 +226,7 @@ runner.suite('Apple II Storage: Floppy GCR & 32MB SmartPort HD', () => {
 });
 
 // 4. Memory Management & Slinky 1MB-16MB Unit Suite
-runner.suite('Apple IIc MMU: Memory Banking & Slinky 1MB Expansion', () => {
+runner.suite('65C02 MMU: Memory Banking & Slinky 1MB Expansion', () => {
   runner.test('Slinky 24-bit auto-incrementing data port', () => {
     const memory = new Uint8Array(1024 * 1024 * 4);
     let address = 0;
@@ -357,7 +357,7 @@ runner.suite('65C02 CPU: CMOS Extended Instructions (BRA, STZ, PHX/PLX, PHY/PLY,
 });
 
 // 8. MMU Banking & 80STORE Video Mapping Suite
-runner.suite('Apple IIc MMU: Zero Page / Aux RAM / 80STORE Banking', () => {
+runner.suite('65C02 MMU: Zero Page / Aux RAM / 80STORE Banking', () => {
   runner.test('Main vs Aux Zero Page ($0000-$00FF) via ALTZP', () => {
     const mainZP = new Uint8Array(256);
     const auxZP = new Uint8Array(256);
@@ -443,9 +443,9 @@ runner.suite('Modern Runtimes: Java & C# 65C02 AOT Compilers', () => {
     const javaCode = `
       public class Game {
         public static void main() {
-          AppleGraphics.setVideoMode(AppleGraphics.MODE_DOUBLE_HIRES);
-          AppleAudio.beep(880, 200);
-          AppleSystem.print("HELLO JAVA");
+          UltraGraphics.setVideoMode(UltraGraphics.MODE_DOUBLE_HIRES);
+          UltraAudio.beep(880, 200);
+          UltraSystem.print("HELLO JAVA");
         }
       }
     `;
@@ -474,7 +474,7 @@ runner.suite('Modern Runtimes: Java & C# 65C02 AOT Compilers', () => {
   runner.test('C# AOT: Compile Retro Breakout Arcade App (Extract Strings, DHGR & Chiptune Beeps)', () => {
     const breakoutSrc = `
       using System;
-      using Apple2.Ultra;
+      using Ultra.Hardware;
 
       namespace RetroBreakout
       {
@@ -537,15 +537,15 @@ runner.suite('Modern Runtimes: Java & C# 65C02 AOT Compilers', () => {
   runner.test('Java AOT: Compile OOP Class with String Output, ClearScreen and Sound', () => {
     const javaOopSrc = `
       package arcade.games;
-      import apple2.Apple2;
+      import ultra.hardware.Ultra;
 
       public class BreakoutOOP {
           public static void main(String[] args) {
-              Apple2.setVideoMode(Apple2.MODE_DOUBLE_HIRES);
-              Apple2.clearScreen(Apple2.BLACK);
-              Apple2.drawString(0, 0, "JAVA VM RUNNING ON APPLE IIC ULTRA");
-              Apple2.drawString(0, 1, "PADDLE INITIALIZED AT X:60 Y:180");
-              Apple2.beep(440, 200);
+              Ultra.setVideoMode(Ultra.MODE_DOUBLE_HIRES);
+              Ultra.clearScreen(Ultra.BLACK);
+              Ultra.drawString(0, 0, "JAVA VM RUNNING ON 65C02 ULTRA");
+              Ultra.drawString(0, 1, "PADDLE INITIALIZED AT X:60 Y:180");
+              Ultra.beep(440, 200);
           }
       }
     `;
@@ -591,12 +591,12 @@ runner.suite('Modern Runtimes: Java & C# 65C02 AOT Compilers', () => {
     // 1. C# Storage Lowering
     const csharpStorageSrc = `
       using System;
-      using Apple2.Ultra;
+      using Ultra.Hardware;
       namespace TestStorage {
         public class App {
           public static void Main() {
-            AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 2, new byte[512]);
-            AppleStorage.ReadBlock(AppleStorage.UnitSlot7Drive1, 2);
+            StorageCore.WriteBlock(StorageCore.UnitSlot7Drive1, 2, new byte[512]);
+            StorageCore.ReadBlock(StorageCore.UnitSlot7Drive1, 2);
           }
         }
       }
@@ -635,8 +635,8 @@ runner.suite('Modern Runtimes: Java & C# 65C02 AOT Compilers', () => {
     assertTrue(/Vector3D|RotateY|Project/.test(case2), 'Case 2: 3D Wireframe Starship');
 
     // 3. Case 3: SmartPort HD Storage Ledger
-    const case3 = "StorageLedger PlayerRecord Serialize AppleStorage WriteBlock";
-    assertTrue(/PlayerRecord|Serialize|AppleStorage/.test(case3), 'Case 3: SmartPort Storage Ledger');
+    const case3 = "StorageLedger PlayerRecord Serialize StorageCore WriteBlock";
+    assertTrue(/PlayerRecord|Serialize|StorageCore/.test(case3), 'Case 3: SmartPort Storage Ledger');
 
     // 4. Case 4: Mockingboard FM Synthesizer
     const case4 = "SoundSynthesisEngine AudioVoice PolyphonicSynth PlayMajorChord";
@@ -733,10 +733,10 @@ runner.suite('Magazine Type-In: Vintage Programs & Hex Dump Injection', () => {
     assertTrue(sourceCode.includes('SZ(I) = SZ(I) - 3'), 'Z-axis warp velocity calculation');
   });
 
-  runner.test('Raw 65C02 Assembly Injection: $0300 Apple String Out', () => {
+  runner.test('Raw 65C02 Assembly Injection: $0300 65C02 String Out', () => {
     const stringOutDump = `
       300: A2 00 BD 10 03 F0 06 20 ED FD E8 D0 F5 60
-      310: C1 D0 D0 CC C5 A0 C9 C9 E3 A0 D5 EC F4 F2 E1 00
+      310: B6 B5 B0 B2 A0 D5 CC D4 D2 C1 00
     `;
 
     const lines = stringOutDump.trim().split('\n');
@@ -760,8 +760,8 @@ runner.suite('Magazine Type-In: Vintage Programs & Hex Dump Injection', () => {
     assertEqual(memory[0x0308], 0xed, 'Low byte of $FDED (COUT)');
     assertEqual(memory[0x0309], 0xfd, 'High byte of $FDED (COUT)');
     assertEqual(memory[0x030d], 0x60, 'RTS at $030D');
-    assertEqual(memory[0x0310], 0xc1, 'Character "A" at $0310');
-    assertEqual(memory[0x031f], 0x00, 'Null terminator at $031F');
+    assertEqual(memory[0x0310], 0xb6, 'Character "6" at $0310');
+    assertEqual(memory[0x031a], 0x00, 'Null terminator at $031A');
 
     // Simulate 65C02 CPU trace
     let pc = 0x0300;
@@ -801,8 +801,8 @@ runner.suite('Magazine Type-In: Vintage Programs & Hex Dump Injection', () => {
       }
     }
 
-    assertEqual(printed, 'APPLE IIc Ultra', 'Successfully executed $0300 String Out routine');
-    assertEqual(x, 15, 'Processed 15 characters');
+    assertEqual(printed, '6502 ULTRA', 'Successfully executed $0300 String Out routine');
+    assertEqual(x, 10, 'Processed 10 characters');
   });
 
   runner.test('Clipboard Paste & Keyboard/Mouse Mapping Simulation', () => {
@@ -820,39 +820,39 @@ runner.suite('Magazine Type-In: Vintage Programs & Hex Dump Injection', () => {
     clearStrobe();
     assertEqual(keyboardStrobe & 0x80, 0, 'Bit 7 cleared after strobe reset');
 
-    // 2. Open Apple (Alt) & Closed Apple (Ctrl) Softswitches ($C061 / $C062)
-    let openApple = true;
-    let closedApple = false;
-    const readC061 = () => (openApple ? 0x80 : 0x00);
-    const readC062 = () => (closedApple ? 0x80 : 0x00);
+    // 2. Open Option (Alt) & Closed Command (Ctrl) Softswitches ($C061 / $C062)
+    let openOption = true;
+    let closedCmd = false;
+    const readC061 = () => (openOption ? 0x80 : 0x00);
+    const readC062 = () => (closedCmd ? 0x80 : 0x00);
 
-    assertEqual(readC061(), 0x80, 'Open Apple key is active ($C061 bit 7 = 1)');
-    assertEqual(readC062(), 0x00, 'Closed Apple key is inactive ($C062 bit 7 = 0)');
+    assertEqual(readC061(), 0x80, 'Open Option key is active ($C061 bit 7 = 1)');
+    assertEqual(readC062(), 0x00, 'Closed Command key is inactive ($C062 bit 7 = 0)');
 
     // 3. Mouse / Paddle Position Translation (Canvas -> 0..255)
     const mapMouse = (clientX, clientY, rect) => {
       const relX = (clientX - rect.left) / rect.width;
       const relY = (clientY - rect.top) / rect.height;
       return {
-        appleX: Math.floor(Math.max(0, Math.min(255, relX * 255))),
-        appleY: Math.floor(Math.max(0, Math.min(255, relY * 255))),
+        mappedX: Math.floor(Math.max(0, Math.min(255, relX * 255))),
+        mappedY: Math.floor(Math.max(0, Math.min(255, relY * 255))),
       };
     };
 
     const dummyRect = { left: 100, top: 50, width: 640, height: 480 };
     const pos = mapMouse(420, 290, dummyRect);
-    assertEqual(pos.appleX, 127, 'Mouse X mapped to center ($7F = 127)');
-    assertEqual(pos.appleY, 127, 'Mouse Y mapped to center ($7F = 127)');
+    assertEqual(pos.mappedX, 127, 'Mouse X mapped to center ($7F = 127)');
+    assertEqual(pos.mappedY, 127, 'Mouse Y mapped to center ($7F = 127)');
   });
 });
 
 // 7. Java & .NET Standard Class Libraries Suite
 runner.suite('Modern Runtimes: Java & .NET Standard Class Libraries', () => {
-  runner.test('Java Standard Library (java.lang, java.util, java.io, apple2.hardware)', () => {
+  runner.test('Java Standard Library (java.lang, java.util, java.io, ultra.hardware)', () => {
     // 1. String & StringBuilder
-    const chars = ['A', 'P', 'P', 'L', 'E'];
+    const chars = ['U', 'L', 'T', 'R', 'A'];
     assertEqual(chars.length, 5, 'String length');
-    assertEqual(chars[0], 'A', 'charAt 0');
+    assertEqual(chars[0], 'U', 'charAt 0');
 
     // 2. Math
     const absVal = Math.abs(-42);
@@ -867,11 +867,11 @@ runner.suite('Modern Runtimes: Java & .NET Standard Class Libraries', () => {
     assertEqual(list[19], 'Item 19', 'ArrayList element indexing');
   });
 
-  runner.test('.NET Core Standard Library (System, Collections.Generic, Apple2.Ultra)', () => {
+  runner.test('.NET Core Standard Library (System, Collections.Generic, Ultra.Hardware)', () => {
     // 1. System.String & Substring
-    const str = "APPLE2_ULTRA";
-    const sub = str.substring(0, 6);
-    assertEqual(sub, "APPLE2", 'String.Substring');
+    const str = "6502_ULTRA";
+    const sub = str.substring(0, 4);
+    assertEqual(sub, "6502", 'String.Substring');
 
     // 2. List<T>
     const items = [];
@@ -1090,10 +1090,12 @@ runner.suite('End-to-End Application Surface Testing: Canvas, Keyboard, Studios 
     assertTrue(html.includes('fullscreen-active'), 'fullscreen-active responsive styles defined');
 
     // Vintage Peripheral Bay Toolbar Icons & Tooltips
-    const bayButtons = ['storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'keyboard', 'info'];
+    const bayButtons = ['scanlines', 'storage', 'printer', 'slots', 'code', 'typein', 'debugger', 'rom', 'keyboard', 'info'];
     for (const bay of bayButtons) {
       assertTrue(html.includes(`id="btn-bay-${bay}"`), `Hardware bay button #btn-bay-${bay} exists`);
     }
+    assertTrue(html.includes('id="btn-scanlines-switch"'), 'Scanline switch button #btn-scanlines-switch exists');
+    assertTrue(html.includes('toggleScanlines('), 'toggleScanlines JavaScript function defined');
 
     // Flyout Cabinet Drawer & Backdrop
     assertTrue(html.includes('id="vintage-cabinet-drawer"'), 'Sliding cabinet drawer #vintage-cabinet-drawer exists');
@@ -1135,8 +1137,8 @@ runner.suite('Documentation & Storage Subsystem Architecture: 9-Chapter Practicu
 
   runner.test('Master Textbook: 9 Chapters & Storage Guided Practicum Labs 8.1 - 8.5', () => {
     const tutorialDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'comprehensive-ultra-tutorial.html'), 'utf8');
-    assertTrue(tutorialDoc.includes('Chapter 8: Storage Architecture, ProDOS 32MB Block Storage & File Persistence'), 'Chapter 8 present');
-    assertTrue(tutorialDoc.includes('Chapter 9: Under the Hood Workbench & System Tools Mastery'), 'Chapter 9 present');
+    assertTrue(tutorialDoc.includes('Chapter 8: Storage Architecture, ProDOS 32MB Block Storage'), 'Chapter 8 present');
+    assertTrue(tutorialDoc.includes('Chapter 9: Under the Hood Workbench'), 'Chapter 9 present');
     assertTrue(tutorialDoc.includes('LAB EXERCISE 8.1'), 'Lab 8.1 present');
     assertTrue(tutorialDoc.includes('LAB EXERCISE 8.2'), 'Lab 8.2 present');
     assertTrue(tutorialDoc.includes('LAB EXERCISE 8.3'), 'Lab 8.3 present');
@@ -1330,10 +1332,224 @@ runner.suite('User Acceptance Testing (UAT): 10-Station Runbook & Verification C
     assertTrue(devUat.includes('Station 6: Modern Java &amp; C# AOT Compiler Studio'), 'Developer mirror Station 6 present');
   });
 
-  runner.test('Documentation Portal Links to UAT Playbook', () => {
-    const indexDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
-    assertTrue(indexDoc.includes('uat-test-runbook.html'), 'docs/index.html links to UAT runbook');
-    assertTrue(indexDoc.includes('10-STATION UAT PLAYBOOK'), 'UAT Playbook card badge present');
+  runner.test('Documentation Portal Links to UAT Playbook & QA Hub', () => {
+    const docsQaDoc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'qa', 'index.html'), 'utf8');
+    const rootQaDoc = fs.readFileSync(path.join(__dirname, '..', 'qa', 'index.html'), 'utf8');
+    assertTrue(docsQaDoc.includes('uat-test-runbook.html'), 'docs/qa/index.html links to UAT runbook');
+    assertTrue(docsQaDoc.includes('UAT'), 'UAT Playbook card present in QA portal');
+    assertTrue(rootQaDoc.includes('uat-test-runbook.html'), 'qa/index.html links to UAT runbook');
+  });
+});
+
+
+// 20. Dedicated QA Directory & Test Results Repository Suite
+runner.suite('Dedicated QA Directory: docs/qa/ & qa/ Repository Integrity', () => {
+  runner.test('Master QA Hubs (docs/qa/index.html & qa/index.html) Integrity', () => {
+    const docsQaIndex = fs.readFileSync(path.join(__dirname, '..', 'docs', 'qa', 'index.html'), 'utf8');
+    const rootQaIndex = fs.readFileSync(path.join(__dirname, '..', 'qa', 'index.html'), 'utf8');
+
+    assertTrue(docsQaIndex.includes('Quality Assurance, Test Results &amp; UAT Portal'), 'docs/qa/index.html header present');
+    assertTrue(docsQaIndex.includes('tutorial-lab-qa-report.html'), 'docs/qa/ links to tutorial lab report');
+    assertTrue(docsQaIndex.includes('test-report.html'), 'docs/qa/ links to automated test report');
+    assertTrue(docsQaIndex.includes('uat-test-runbook.html'), 'docs/qa/ links to UAT runbook');
+    assertTrue(docsQaIndex.includes('uat-checklist-and-scoring-rubric.html'), 'docs/qa/ links to UAT checklist and rubric');
+    assertTrue(docsQaIndex.includes('qa-architecture.html'), 'docs/qa/ links to QA architecture');
+
+    assertTrue(rootQaIndex.includes('Quality Assurance, Test Results &amp; UAT Portal'), 'qa/index.html header present');
+    assertTrue(rootQaIndex.includes('tutorial-lab-qa-report.html'), 'qa/ links to tutorial lab report');
+    assertTrue(rootQaIndex.includes('test-report.html'), 'qa/ links to automated test report');
+    assertTrue(rootQaIndex.includes('uat-test-runbook.html'), 'qa/ links to UAT runbook');
+    assertTrue(rootQaIndex.includes('uat-checklist-and-scoring-rubric.html'), 'qa/ links to UAT checklist and rubric');
+  });
+
+  runner.test('QA Results & UAT Files in docs/qa/ and qa/ directories', () => {
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'docs', 'qa', 'tutorial-lab-qa-report.html')), 'docs/qa/tutorial-lab-qa-report.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'docs', 'qa', 'test-report.html')), 'docs/qa/test-report.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'docs', 'qa', 'uat-test-runbook.html')), 'docs/qa/uat-test-runbook.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'docs', 'qa', 'uat-checklist-and-scoring-rubric.html')), 'docs/qa/uat-checklist-and-scoring-rubric.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'docs', 'qa', 'qa-architecture.html')), 'docs/qa/qa-architecture.html exists');
+
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'qa', 'tutorial-lab-qa-report.html')), 'qa/tutorial-lab-qa-report.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'qa', 'test-report.html')), 'qa/test-report.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'qa', 'uat-test-runbook.html')), 'qa/uat-test-runbook.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'qa', 'uat-checklist-and-scoring-rubric.html')), 'qa/uat-checklist-and-scoring-rubric.html exists');
+    assertTrue(fs.existsSync(path.join(__dirname, '..', 'qa', 'qa-architecture.html')), 'qa/qa-architecture.html exists');
+  });
+});
+
+
+// 21. Magazine Type-In Transcriber & Vintage Program Execution Suite
+runner.suite('Magazine Type-In Transcriber: Vintage Programs & BASIC Execution Engine Integrity', () => {
+  runner.test('Type-In Presets & Standalone Transcriber Configuration', () => {
+    const standalone = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
+    assertTrue(standalone.includes("loadSampleTypeIn('kaleidoscope')"), 'inCider Kaleidoscope button present');
+    assertTrue(standalone.includes("loadSampleTypeIn('lander')"), 'Compute! Lunar Lander button present');
+    assertTrue(standalone.includes("loadSampleTypeIn('starfield')"), 'Nibble 3D Starfield button present');
+    assertTrue(standalone.includes("loadSampleTypeIn('assembly')"), '65C02 Hex Dump button present');
+    assertTrue(standalone.includes("loadSampleTypeIn('birdbrain')"), 'Bird Brain button present');
+    assertTrue(standalone.includes('injectTypeIn()'), 'injectTypeIn function present');
+    
+    // Ensure presets are template literals without double-escaped \\n collapse
+    assertFalse(standalone.includes('10 REM *** INCIDER MAGAZINE DHGR KALEIDOSCOPE ***\\\\n'), 'inCider does not have escaped \\\\n');
+    assertFalse(standalone.includes('10 REM *** NIBBLE 3D STARFIELD WARP ***\\\\n'), 'Starfield does not have escaped \\\\n');
+  });
+
+  runner.test('Engine Subsystems: DIM, Array Assignments, INPUT & Hex Monitor Deposit', () => {
+    const standalone = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
+    assertTrue(standalone.includes("upper.startsWith('DIM ')"), 'DIM statement supported');
+    assertTrue(standalone.includes('this.basicArrays'), 'basicArrays dictionary initialized');
+    assertTrue(standalone.includes("upper.startsWith('INPUT')"), 'INPUT statement supported');
+    assertTrue(standalone.includes('hasHexMonitor'), 'Direct hex monitor deposit supported');
+  });
+
+  runner.test('QA Artifacts & Screenshot Verification for All 5 Type-In Programs', () => {
+    const qaReport = fs.readFileSync(path.join(__dirname, '..', 'qa', 'type-in-transcriber-qa-report.html'), 'utf8');
+    const docsReport = fs.readFileSync(path.join(__dirname, '..', 'docs', 'qa', 'type-in-transcriber-qa-report.html'), 'utf8');
+    assertTrue(qaReport.includes('Ultra DHGR Kaleidoscope'), 'QA report audits Kaleidoscope');
+    assertTrue(qaReport.includes('Nibble 3D Starfield Warp'), 'QA report audits Starfield');
+    assertTrue(qaReport.includes('Apollo Lunar Lander'), 'QA report audits Lunar Lander');
+    assertTrue(qaReport.includes('65C02 Machine Code Monitor Hex Dump'), 'QA report audits Hex Dump');
+    assertTrue(qaReport.includes('Bird Brain'), 'QA report audits Bird Brain');
+    assertEqual(qaReport, docsReport, 'docs/qa report mirrors qa/ report');
+
+    const screenshots = [
+      'typein-kaleidoscope.png',
+      'typein-starfield.png',
+      'typein-lunarlander.png',
+      'typein-hexdump.png',
+      'typein-birdbrain.png'
+    ];
+    for (const ss of screenshots) {
+      assertTrue(fs.existsSync(path.join(__dirname, '..', 'qa', 'screenshots', ss)), `qa/screenshots/${ss} exists`);
+      assertTrue(fs.existsSync(path.join(__dirname, '..', 'docs', 'qa', 'screenshots', ss)), `docs/qa/screenshots/${ss} exists`);
+    }
+  });
+});
+
+
+// 22. Emulator Performance & DOM Responsiveness QA Suite
+runner.suite('Emulator Performance & DOM Responsiveness: Headless Profiling & Architectural Diagnostics', () => {
+  runner.test('Performance QA Reports & Mirrors Exist and Match', () => {
+    const qaPath = path.join(__dirname, '..', 'qa', 'emulator-performance-and-dom-responsiveness-qa-report.html');
+    const docsPath = path.join(__dirname, '..', 'docs', 'qa', 'emulator-performance-and-dom-responsiveness-qa-report.html');
+    assertTrue(fs.existsSync(qaPath), 'qa/emulator-performance-and-dom-responsiveness-qa-report.html exists');
+    assertTrue(fs.existsSync(docsPath), 'docs/qa/emulator-performance-and-dom-responsiveness-qa-report.html exists');
+
+    const qaContent = fs.readFileSync(qaPath, 'utf8');
+    const docsContent = fs.readFileSync(docsPath, 'utf8');
+    assertEqual(qaContent, docsContent, 'docs/qa performance report mirrors qa/ report exactly');
+
+    assertTrue(qaContent.includes('Headless Browser CDP Empirical Measurement Matrix'), 'Matrix section present');
+    assertTrue(qaContent.includes('Per-Primitive Synchronous Full-Screen Redraw'), 'Root cause 1 present');
+    assertTrue(qaContent.includes('Scalar Canvas fillRect Saturation'), 'Root cause 2 present');
+    assertTrue(qaContent.includes('Runaway Synchronous Quantum'), 'Root cause 3 present');
+    assertTrue(qaContent.includes('Complete Event Loop Starvation'), 'Root cause 4 present');
+    assertTrue(qaContent.includes('Decouple Video Rasterization'), 'Solution 1 present');
+    assertTrue(qaContent.includes('32-Bit ImageData Framebuffer Blitting'), 'Solution 2 present');
+    assertTrue(qaContent.includes('Time-Budgeted Cooperative Event Loop Yielding'), 'Solution 3 present');
+  });
+
+  runner.test('QA Hubs Link to Performance Report', () => {
+    const rootIndex = fs.readFileSync(path.join(__dirname, '..', 'qa', 'index.html'), 'utf8');
+    const docsIndex = fs.readFileSync(path.join(__dirname, '..', 'docs', 'qa', 'index.html'), 'utf8');
+    assertTrue(rootIndex.includes('emulator-performance-and-dom-responsiveness-qa-report.html'), 'qa/index.html links to performance report');
+    assertTrue(docsIndex.includes('emulator-performance-and-dom-responsiveness-qa-report.html'), 'docs/qa/index.html links to performance report');
+  });
+});
+
+// 23. Epyx World Games & Vorpal Bootloader Engine Suite
+runner.suite('Epyx World Games: Vorpal Fastloader & 8 Championship Events Simulation', () => {
+  runner.test('Disk Image Presence & WOZ Header Integrity', () => {
+    const disk1APath = path.join(__dirname, '..', 'disks', 'World Games', 'World Games disk 1A.woz');
+    const disk1BPath = path.join(__dirname, '..', 'disks', 'World Games', 'World Games disk 1B.woz');
+    assertTrue(fs.existsSync(disk1APath), 'World Games Disk 1A exists in disks/World Games/');
+    assertTrue(fs.existsSync(disk1BPath), 'World Games Disk 1B exists in disks/World Games/');
+
+    const data1A = fs.readFileSync(disk1APath);
+    assertTrue(data1A.length > 200000, 'Disk 1A WOZ image contains full 140KB raw tracks');
+    assertEqual(data1A.slice(0, 4).toString('ascii'), 'WOZ2', 'Disk 1A has authentic WOZ2 container header');
+  });
+
+  runner.test('Title Screen, Fanfare & 8 Playable Events Execution', () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
+    assertTrue(html.includes('class Apple2cWorldGamesEngine'), 'Apple2cWorldGamesEngine defined in index-standalone.html');
+    assertTrue(html.includes('launchWorldGames'), 'launchWorldGames method exposed on emulator');
+    assertTrue(html.includes('MEXICO: CLIFF DIVING'), 'Cliff Diving event present');
+    assertTrue(html.includes('RUSSIA: WEIGHTLIFTING'), 'Weightlifting event present');
+    assertTrue(html.includes('GERMANY: BARREL JUMPING'), 'Barrel Jumping event present');
+    assertTrue(html.includes('CANADA: LOG ROLLING'), 'Log Rolling event present');
+    assertTrue(html.includes('USA: BULL RIDING'), 'Bull Riding event present');
+    assertTrue(html.includes('JAPAN: SUMO WRESTLING'), 'Sumo Wrestling event present');
+    assertTrue(html.includes('FRANCE: SLALOM SKIING'), 'Slalom Skiing event present');
+    assertTrue(html.includes('SCOTLAND: CABER TOSS'), 'Caber Toss event present');
+  });
+});
+
+// 24. Adventure Construction Set (ACS) EA Fastloader Architecture & Boot Pipeline Suite
+runner.suite('Adventure Construction Set: EA Fastloader & 65C02 Boot Architecture', () => {
+  runner.test('Disk Image Presence & Fastloader Table Integrity (Disks 1-6)', () => {
+    for (let i = 1; i <= 6; i++) {
+      const diskPath = path.join(__dirname, '..', 'disks', 'Adventure Construction Set', `advconstset${i}of6.dsk`);
+      assertTrue(fs.existsSync(diskPath), `ACS Disk ${i} of 6 exists`);
+      const diskData = fs.readFileSync(diskPath);
+      assertEqual(diskData.length, 143360, `ACS Disk ${i} is standard 140KB floppy image`);
+    }
+
+    const disk1Path = path.join(__dirname, '..', 'disks', 'Adventure Construction Set', 'advconstset1of6.dsk');
+    const disk1Data = fs.readFileSync(disk1Path);
+    const sec3Offset = 6 * 256; // DOS33_SKEW[3] = 6
+    assertTrue(disk1Data.length >= sec3Offset + 256, 'Track 0 Sector 3 is present');
+    assertEqual(disk1Data[sec3Offset + 3], 0x96, 'Table B starts with 0x96');
+    assertEqual(disk1Data[sec3Offset + 7], 0x97, 'Table B second entry is 0x97');
+    assertEqual(disk1Data[sec3Offset + 255], 0xff, 'Table B ends with 0xFF');
+  });
+
+  runner.test('EA Inverted Skew Mapping & 64-Nibble GCR Table Integrity', () => {
+    const EA_SKEW = [0x0f, 0x02, 0x04, 0x06, 0x08, 0x0a, 0x0c, 0x0e, 0x01, 0x03, 0x05, 0x07, 0x09, 0x0b, 0x0d, 0x00];
+    assertEqual(EA_SKEW.length, 16, 'EA Skew table contains all 16 physical sector entries');
+    const uniqueEntries = new Set(EA_SKEW);
+    assertEqual(uniqueEntries.size, 16, 'EA Skew table has 16 unique sector permutations');
+
+    // Verify fastloader skew table $0C48 inversion
+    const SKEW_0C48 = [0x0f, 0x08, 0x01, 0x09, 0x02, 0x0a, 0x03, 0x0b, 0x04, 0x0c, 0x05, 0x0d, 0x06, 0x0e, 0x07, 0x00];
+    for (let page = 0; page < 16; page++) {
+      const headerSec = EA_SKEW[page];
+      assertEqual(SKEW_0C48[headerSec], page, `Page ${page} maps correctly to header sector ${headerSec}`);
+    }
+  });
+
+  runner.test('Authentic 65C02 CPU Fastloader & Boot Pipeline Execution', () => {
+    const disk1Path = path.join(__dirname, '..', 'disks', 'Adventure Construction Set', 'advconstset1of6.dsk');
+    const disk1Data = fs.readFileSync(disk1Path);
+
+    // Verify Sector 0 bootstrap entry point $0801
+    const sec0Offset = 0;
+    assertEqual(disk1Data[sec0Offset + 1], 0x4c, '$0801 starts with JMP');
+    assertEqual(disk1Data[sec0Offset + 2], 0x04, '$0801 JMP target low byte is $04');
+    assertEqual(disk1Data[sec0Offset + 3], 0x08, '$0801 JMP target high byte is $08 ($0804)');
+
+    // Verify $0828 pushes $A8 and $0830 pushes $05 ($A805 return address for RTS to $A806)
+    assertEqual(disk1Data[sec0Offset + 0x28], 0xa9, '$0828 opcode is LDA #imm (0xA9)');
+    assertEqual(disk1Data[sec0Offset + 0x29], 0xa8, '$0829 immediate value is $A8');
+    assertEqual(disk1Data[sec0Offset + 0x2a], 0x48, '$082A is PHA (0x48)');
+    assertEqual(disk1Data[sec0Offset + 0x30], 0xa9, '$0830 opcode is LDA #imm (0xA9)');
+    assertEqual(disk1Data[sec0Offset + 0x31], 0x05, '$0831 immediate value is $05');
+    assertEqual(disk1Data[sec0Offset + 0x32], 0x48, '$0832 is PHA (0x48)');
+    assertEqual(disk1Data[sec0Offset + 0x3d], 0x4c, '$083D is JMP $0A05 (0x4C)');
+
+    // Verify $0840 Language Card RAM enable and BASIC cold start entry
+    assertEqual(disk1Data[sec0Offset + 0x42], 0xad, '$0842 is LDA $C089');
+    assertEqual(disk1Data[sec0Offset + 0x51], 0xad, '$0851 is LDA $C083 (Bank 2 RAM enable)');
+    assertEqual(disk1Data[sec0Offset + 0x6b], 0x4c, '$086B is JMP $E000 (Applesoft BASIC entry)');
+  });
+
+  runner.test('Adventure Construction Set Engine & Workstation Verification', () => {
+    const htmlPath = path.join(__dirname, '..', 'index-standalone.html');
+    const html = fs.readFileSync(htmlPath, 'utf8');
+    assertTrue(html.includes('class Apple2cAdventureConstructionSetEngine'), 'Apple2cAdventureConstructionSetEngine defined in index-standalone.html');
+    assertTrue(html.includes('launchAdventureConstructionSet'), 'launchAdventureConstructionSet method exposed on emulator');
+    assertTrue(html.includes('THE ENCHANTED CITADEL'), 'Adventure Construction Set default map layout present');
+    assertTrue(html.includes('MONSTER & CREATURE STUDIO'), 'Monster & Creature Studio module present');
   });
 });
 

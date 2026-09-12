@@ -4,10 +4,279 @@
 
 @layer base {
   body {
-    background-color: #121316;
-    color: #e5e5e5;
-    font-family: 'Share Tech Mono', monospace, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: radial-gradient(circle at 50% 25%, #2a241f 0%, #14110f 100%);
+    background-color: #14110f;
+    color: #e6edf3;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    user-select: none;
+    min-height: 100vh;
   }
+}
+
+.font-mono-code { font-family: 'Space Mono', monospace; }
+.font-retro { font-family: 'VT323', monospace; }
+
+.rainbow-border {
+  background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+}
+
+/* 1984 Snow White Frogdesign Workstation Chassis Styling */
+.snow-white-workstation {
+  background: linear-gradient(180deg, #eee9df 0%, #e3ddd1 45%, #d5cec0 100%);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.85), inset 0 2px 3px rgba(255,255,255,0.95), inset 0 -3px 8px rgba(0,0,0,0.25);
+  border: 1px solid #bfb8a7;
+}
+
+.snow-white-panel {
+  background: linear-gradient(180deg, #ede8dc 0%, #dfd9cb 100%);
+  border: 1px solid #c0b9a8;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.9), 0 3px 8px rgba(0,0,0,0.12);
+}
+
+.snow-white-crt-bezel {
+  background: linear-gradient(180deg, #eae5db 0%, #ded8cb 55%, #cfc8ba 100%);
+  border: 1px solid #bcb4a3;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.9), 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.frog-louvers-h {
+  background: repeating-linear-gradient(180deg, #ded8ca 0px, #ded8ca 3px, #9e9786 3px, #9e9786 5px);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+  border-radius: 3px;
+}
+
+.frog-louvers-v {
+  background: repeating-linear-gradient(90deg, #ded8ca 0px, #ded8ca 3px, #9e9786 3px, #9e9786 5px);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+  border-radius: 3px;
+}
+
+/* Authentic 5.25" Disk II Drive Faceplate Styling */
+.floppy-525-bezel {
+  background: linear-gradient(180deg, #383c44 0%, #1e2126 100%);
+  border: 2px solid #111317;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.12), inset 0 -2px 6px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.35);
+}
+
+.floppy-slot-bay {
+  background: #0a0c10;
+  border: 1px solid #252a35;
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.95);
+}
+
+.metal-latch {
+  background: linear-gradient(180deg, #f3f4f6 0%, #9ca3af 50%, #4b5563 100%);
+  border: 1px solid #374151;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.rocker-power-on {
+  background: linear-gradient(180deg, #059669 0%, #047857 100%);
+  border: 2px solid #064e3b;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.7), inset 0 2px 4px rgba(255,255,255,0.4);
+}
+
+.rocker-power-off {
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border: 2px solid #111827;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.tactile-reset {
+  background: radial-gradient(circle at 35% 35%, #ef4444 0%, #b91c1c 70%, #7f1d1d 100%);
+  border: 2px solid #450a0a;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.5);
+}
+
+.tactile-reset:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+.tooltip-hint {
+  position: relative;
+}
+
+.tooltip-hint:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #161b22;
+  color: #fdb827;
+  border: 1px solid #38455a;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+  z-index: 100;
+}
+
+.frog-louvers-h {
+  background: repeating-linear-gradient(180deg, #dbd5c6 0px, #dbd5c6 3px, #b8b1a0 3px, #b8b1a0 6px);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.frog-louvers-v {
+  background: repeating-linear-gradient(90deg, #dbd5c6 0px, #dbd5c6 3px, #b8b1a0 3px, #b8b1a0 6px);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.recessed-groove {
+  background-color: #cac3b2;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.floppy-drive-bezel {
+  background: linear-gradient(180deg, #dfd9cc 0%, #cbc4b3 100%);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.4);
+  border: 1px solid #b3ac9b;
+}
+
+.floppy-door-latch {
+  background: linear-gradient(180deg, #2a2e36 0%, #17191d 100%);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.2);
+  border: 1px solid #0d0f12;
+}
+
+.led-lamp-red {
+  background-color: #ef4444;
+  box-shadow: 0 0 10px #ef4444, 0 0 20px #dc2626;
+}
+
+.led-lamp-amber {
+  background-color: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b, 0 0 20px #d97706;
+}
+
+.led-lamp-green {
+  background-color: #10b981;
+  box-shadow: 0 0 10px #10b981, 0 0 20px #059669;
+}
+
+.vintage-pcb {
+  background: #143820;
+  background-image: 
+    radial-gradient(rgba(212, 175, 55, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 197, 94, 0.05) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(34, 197, 94, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px, 12px 12px, 12px 12px;
+  border: 2px solid #235c34;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+}
+
+.vintage-nixie {
+  background-color: #0d0905;
+  color: #ff9d00;
+  text-shadow: 0 0 8px rgba(255, 157, 0, 0.8), 0 0 16px rgba(255, 120, 0, 0.4);
+  font-family: 'Space Mono', monospace;
+  border: 1px solid #332010;
+  box-shadow: inset 0 0 8px rgba(255, 100, 0, 0.3);
+}
+
+.vintage-typewriter-paper {
+  background: linear-gradient(180deg, #fbf7ee 0%, #f4eee0 100%);
+  color: #1a2214;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.1), 0 4px 15px rgba(0,0,0,0.35);
+  border: 1px solid #d5cebc;
+}
+
+.hardware-cabinet-header {
+  background: linear-gradient(180deg, #28303e 0%, #151a22 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 4px 15px rgba(0,0,0,0.7);
+}
+
+.cabinet-drawer {
+  box-shadow: -15px 0 45px rgba(0, 0, 0, 0.9);
+  border-left: 3px solid #38455a;
+}
+
+.tractor-container {
+  position: relative;
+  background-color: #fcfbfa;
+  border: 1px solid #c9c4b7;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.12), 0 4px 15px rgba(0,0,0,0.4);
+  display: flex;
+  overflow: hidden;
+}
+
+.sprocket-margin {
+  width: 28px;
+  background-color: #f3f0e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.sprocket-left {
+  border-right: 1px dashed #b8b19e;
+}
+
+.sprocket-right {
+  border-left: 1px dashed #b8b19e;
+}
+
+.sprocket-pin {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #121820;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.paper-blank {
+  background-color: #ffffff;
+  background-image: none !important;
+}
+
+.paper-plain-ivory {
+  background-color: #fbf8f0;
+  background-image: none !important;
+}
+
+.paper-greenbar {
+  background-color: #faf9f5;
+  background-image: linear-gradient(rgba(215, 238, 220, 0.45) 50%, transparent 50%);
+  background-size: 100% 32px;
+}
+
+.paper-white {
+  background-color: #ffffff;
+  background-image: linear-gradient(#f0f0f0 1px, transparent 1px);
+  background-size: 100% 24px;
+}
+
+.paper-ivory {
+  background-color: #fbf6ec;
+  background-image: linear-gradient(rgba(235, 225, 200, 0.35) 50%, transparent 50%);
+  background-size: 100% 28px;
+}
+
+.print-font-dotmatrix {
+  font-family: 'VT323', monospace !important;
+  color: #141b24 !important;
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.07em !important;
+  text-shadow: 0.5px 0 0 rgba(10, 20, 30, 0.6), 0 0.5px 0 rgba(10, 20, 30, 0.4) !important;
+}
+
+.print-font-clean {
+  font-family: 'Space Mono', monospace !important;
+  color: #0f141c !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  letter-spacing: normal !important;
+  text-shadow: none !important;
 }
 
 /* Custom Scrollbar for Retro Panels */
@@ -28,3 +297,4 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #55575e;
 }
+

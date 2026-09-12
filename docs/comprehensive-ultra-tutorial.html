@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>65C02 Ultra Workstation — Systems Architecture & Engineering Textbook (Compatible with Apple //c Architecture)</title>
+  <title>65C02 Ultra Workstation — Systems Architecture & Engineering Textbook (Compatible with 6502 Ultra Architecture)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
   <style>
@@ -111,7 +111,7 @@
         The 65C02 Ultra Systems Engineering Textbook
       </h2>
       <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
-        This volume provides an exhaustive, university-level breakdown of the 65C02 CMOS microprocessor (Compatible with Apple //c Architecture), memory-mapped I/O multiplexers, dual-phase clock timing, video scanline interleaving mathematics, ImageWriter II continuous tractor printing (with 5 paper stocks, dot-matrix vs clean fonts, form feed, clean buffer clearing, and zero-blank-page PDF export), dual AY-3-8910 Mockingboard synthesis, custom ROM creation, fly-up 63-key matrix keyboard, top bezel controls, and modern Ahead-Of-Time (AOT) compiler engineering. Every chapter includes rigorous theory, mathematical derivations, timing diagrams, and concrete hands-on laboratory exercises.
+        This volume provides an exhaustive, university-level breakdown of the 65C02 CMOS microprocessor (Compatible with 6502 Ultra Architecture), memory-mapped I/O multiplexers, dual-phase clock timing, video scanline interleaving mathematics, ImageWriter II continuous tractor printing (with 5 paper stocks, dot-matrix vs clean fonts, form feed, clean buffer clearing, and zero-blank-page PDF export), dual AY-3-8910 Mockingboard synthesis, custom ROM creation, fly-up 63-key matrix keyboard, top bezel controls, and modern Ahead-Of-Time (AOT) compiler engineering. Every chapter includes rigorous theory, mathematical derivations, timing diagrams, and concrete hands-on laboratory exercises.
       </p>
 
       <!-- Chapter Directory -->
@@ -203,19 +203,61 @@
         </div>
 
         <!-- Guided Task 1.1 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 1.1</span>
-            <span class="font-bold text-white text-xs">Testing CMOS Extension Instructions: STZ &amp; BRA</span>
+            <span class="font-bold text-white text-xs">Entering the 65C02 System Monitor, Depositing CMOS Instructions &amp; Memory Inspection</span>
           </div>
-          <p class="text-xs text-gray-300">
-            Verify the 65C02 extended opcode <code>STZ</code> ($64 Zero Page / $9C Absolute) by zeroing memory directly in machine code:
-          </p>
-          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] CALL -151
-* 0300: 64 06 9C 00 08 60
-* 0300G
-* 06.06
-0006: 00  <-- Successfully zeroed via STZ!</code></pre>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-amber-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              In this lab, you will leave Applesoft BASIC and enter the machine's low-level <strong>65C02 System Monitor</strong>. The System Monitor is a built-in ROM utility that gives you raw, unmediated access to physical memory ($0000–$FFFF) and CPU execution.
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              You will deposit a short machine code program into Page 3 user staging RAM ($0300) that exercises the CMOS-exclusive <code class="text-amber-300">STZ</code> (Store Zero) instruction to clear Zero Page address $06 and absolute address $0800 without altering CPU registers, execute it, and inspect memory to verify the zeroed bytes.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>
+                At the Applesoft BASIC prompt (<code class="text-emerald-400">] █</code>), type <code class="text-amber-300 font-bold">CALL -151</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.<br>
+                <em class="text-gray-400 text-[11px] ml-5">Rationale: Decimal -151 maps to address $FF69 (65536 - 151 = 65385), the standard ROM entry point for the System Monitor. The prompt changes from <code class="text-emerald-400">]</code> to <code class="text-amber-400">*</code>.</em>
+              </li>
+              <li>
+                At the <code class="text-amber-400">*</code> prompt, type <code class="text-amber-300 font-bold">0300: 64 06 9C 00 08 60</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.<br>
+                <em class="text-gray-400 text-[11px] ml-5">Rationale: Memory address $0300 is the start of Page 3 user RAM. This deposits 6 machine code bytes into memory.</em>
+              </li>
+              <li>
+                Type <code class="text-amber-300 font-bold">0300G</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.<br>
+                <em class="text-gray-400 text-[11px] ml-5">Rationale: The <code class="text-amber-400">G</code> (Go) command sets the CPU Program Counter (PC) to $0300 and executes the routine until <code class="text-amber-400">RTS</code> returns control to the Monitor.</em>
+              </li>
+              <li>
+                Type <code class="text-amber-300 font-bold">06.06</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.<br>
+                <em class="text-gray-400 text-[11px] ml-5">Rationale: The range format <code class="text-amber-400">START.END</code> inspects memory. Address $0006 now holds $00!</em>
+              </li>
+              <li>
+                Type <code class="text-amber-300 font-bold">3D0G</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.<br>
+                <em class="text-gray-400 text-[11px] ml-5">Rationale: Jumps to the BASIC warm restart vector at $03D0, safely returning to the Applesoft <code class="text-emerald-400">]</code> prompt with your program intact.</em>
+              </li>
+            </ol>
+          </div>
+
+          <div class="bg-[#061008] p-4 rounded-lg border border-[#1a3820] font-mono text-xs space-y-2">
+            <span class="font-bold text-emerald-400 block">Terminal Session &amp; Annotated Code Breakdown:</span>
+            <pre class="text-emerald-300"><code>] CALL -151                     ; Enter 65C02 System Monitor (* prompt)
+* 0300: 64 06 9C 00 08 60       ; Deposit Hex Opcodes into Page 3 RAM:
+                                ;   $0300: 64 06     -> STZ $06    (Store Zero in Zero Page $06)
+                                ;   $0302: 9C 00 08  -> STZ $0800  (Store Zero in Absolute $0800)
+                                ;   $0305: 60        -> RTS        (Return from Subroutine to Monitor)
+* 0300G                         ; Go: Execute machine code routine at $0300
+* 06.06                         ; Inspect Zero Page address $0006
+0006: 00                        ; Output: Value at $0006 is 00 (Successfully cleared!)
+* 3D0G                          ; Exit Monitor: Jump to $03D0 (Applesoft BASIC warm start)
+] █                             ; Returned to Applesoft BASIC prompt</code></pre>
+          </div>
         </div>
       </div>
     </section>
@@ -233,7 +275,7 @@
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
         <h4 class="text-lg font-bold text-cyan-400">2.1 Wozniak's Interleaved Video Addressing Derivation</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          The Apple II Video Generation circuitry avoids hardware multipliers by sharing the DRAM row counter with video refresh cycles. For scanline \( Y \in [0, 191] \), the base address \( \text{Addr}(Y) \) is computed as:
+          The 6502 Ultra Video Generation circuitry avoids hardware multipliers by sharing the DRAM row counter with video refresh cycles. For scanline <span class="font-mono text-cyan-300">Y &isin; [0, 191]</span>, the base address <span class="font-mono text-cyan-300">Addr(Y)</span> is computed as:
         </p>
 
         <div class="formula-card text-xs text-amber-300">
@@ -241,16 +283,45 @@
         </div>
 
         <!-- Guided Task 2.1 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 2.1</span>
-            <span class="font-bold text-white text-xs">Plotting Hi-Res Scanline Points via Direct VRAM Injection</span>
+            <span class="font-bold text-white text-xs">Plotting Hi-Res Scanline Points via Direct VRAM Memory Injection</span>
           </div>
-          <p class="text-xs text-gray-300">
-            Switch to Hi-Res Page 1 ($2000) and plot a continuous line across scanlines 0 through 7 by writing directly to calculated offsets:
-          </p>
-          <pre class="text-cyan-400 p-3 bg-[#081520] rounded border border-[#1b3d52]"><code>] HGR : HCOLOR=3
-] FOR Y = 0 TO 7 : POKE 8192 + Y * 1024 + 20, 255 : NEXT Y</code></pre>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-cyan-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              In 6502 Ultra graphics, High-Resolution Graphics Page 1 occupies 8,192 bytes of memory from <code class="text-cyan-300">$2000 to $3FFF</code> (decimal 8192 to 16383). The video circuitry does not lay scanlines out sequentially in memory; instead, scanlines are interleaved in 8-line boxes.
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              Writing a byte with all 7 data bits set (<code class="text-amber-300">255</code> = binary <code>11111111</code>) lights up 7 continuous pixels on that horizontal scanline. Because each subsequent sub-scanline within an 8-line box is offset by exactly 1,024 bytes ($0400), looping <code class="text-cyan-300">Y = 0 TO 7</code> plots a vertical line segment directly in VRAM without calling graphics ROM subroutines!
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>
+                Type <code class="text-cyan-300 font-bold">HGR : HCOLOR=3</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.<br>
+                <em class="text-gray-400 text-[11px] ml-5">Rationale: <code class="text-cyan-300">HGR</code> triggers video softswitches $C050 (graphics), $C057 (hires), and $C053 (mixed 4-line text), clearing Hi-Res Page 1 to black.</em>
+              </li>
+              <li>
+                Type <code class="text-cyan-300 font-bold">FOR Y = 0 TO 7 : POKE 8192 + Y * 1024 + 20, 255 : NEXT Y</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.<br>
+                <em class="text-gray-400 text-[11px] ml-5">Rationale: Directly injects byte 255 into column 20 across scanlines 0 through 7. Observe the solid vertical bar rendered on the CRT!</em>
+              </li>
+              <li>
+                Type <code class="text-cyan-300 font-bold">TEXT</code> to return to full 24-row text mode.
+              </li>
+            </ol>
+          </div>
+
+          <div class="bg-[#061008] p-4 rounded-lg border border-[#1a3820] font-mono text-xs space-y-2">
+            <span class="font-bold text-cyan-400 block">Terminal Session &amp; Annotated Code Breakdown:</span>
+            <pre class="text-cyan-300"><code>] HGR : HCOLOR=3                                             ; Activate Hi-Res Page 1 ($2000-$3FFF)
+] FOR Y = 0 TO 7 : POKE 8192 + Y * 1024 + 20, 255 : NEXT Y   ; Direct VRAM POKEs to scanlines 0..7
+] TEXT                                                       ; Restore standard 24-row text mode</code></pre>
+          </div>
         </div>
       </div>
     </section>
@@ -268,17 +339,38 @@
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
         <h4 class="text-lg font-bold text-purple-400">3.1 1-Bit Speaker vs. 6-Channel Polyphonic Audio</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          Reading or writing to <code>$C030</code> pulses the built-in speaker cone. In contrast, the Mockingboard card in Slot 4/5 houses dual AY-3-8910 chips driven by 6522 VIAs, yielding 6 hardware voices with software envelopes and noise channels.
+          Reading or writing to <code>$C030</code> (decimal 49200) pulses the built-in speaker cone. In contrast, the Mockingboard card in Slot 4/5 houses dual AY-3-8910 chips driven by 6522 VIAs, yielding 6 hardware voices with software envelopes and noise channels.
         </p>
 
         <!-- Guided Task 3.1 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-purple-500/20 text-purple-400 font-bold border border-purple-500/40">LAB EXERCISE 3.1</span>
-            <span class="font-bold text-white text-xs">Generating 1-Bit Square Wave Audio via Machine Language</span>
+            <span class="font-bold text-white text-xs">Generating 1-Bit Square Wave Audio via Softswitch Clocking ($C030)</span>
           </div>
-          <pre class="text-purple-400 p-3 bg-[#150921] rounded border border-[#3b195c]"><code>] 10 FOR I = 1 TO 200 : S = PEEK(49200) : FOR D = 1 TO 20 : NEXT D : NEXT I : GOTO 10
-] RUN  <-- Emits continuous square wave chime on $C030!</code></pre>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-purple-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              The 1-bit audio speaker has no DAC; it is a single 1-bit transducer. Accessing address <code>$C030</code> flips the electromagnetic coil. By alternating cone positions at calibrated intervals in a loop, you synthesize audible square wave frequencies.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>Type <code class="text-purple-300 font-bold">10 FOR I = 1 TO 100 : S = PEEK(49200) : FOR D = 1 TO 15 : NEXT D : NEXT I</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.</li>
+              <li>Type <code class="text-purple-300 font-bold">RUN</code> and listen to the clean acoustic pulse generated by physical softswitch access!</li>
+            </ol>
+          </div>
+
+          <div class="bg-[#061008] p-4 rounded-lg border border-[#1a3820] font-mono text-xs space-y-2">
+            <pre class="text-purple-300"><code>] 10 FOR I = 1 TO 100          ; Loop 100 audio wave cycles
+] 20 S = PEEK(49200)           ; Softswitch $C030: toggles physical speaker cone
+] 30 FOR D = 1 TO 15 : NEXT D  ; Calibrated cycle delay to establish square wave pitch
+] 40 NEXT I                    ; Next audio pulse
+] RUN                          ; Executes tone chime on $C030!</code></pre>
+          </div>
         </div>
       </div>
     </section>
@@ -322,61 +414,68 @@
         </div>
 
         <!-- Guided Task 4.1 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-3">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">LAB EXERCISE 4.1</span>
-            <span class="font-bold text-white text-xs">Transcribing &amp; Executing Nibble 3D Starfield</span>
+            <span class="font-bold text-white text-xs">Transcribing &amp; Executing Nibble 3D Starfield (1983)</span>
           </div>
+          <p class="text-xs text-gray-300">
+            <strong>Context &amp; Architecture:</strong> The Magazine Type-In Studio transcribes vintage program listings published in 1980s magazines (<em>Nibble</em>, <em>Compute!</em>, <em>inCider</em>), automatically correcting common OCR typographic errors (such as numeral <code>0</code> scanned as letter <code>O</code>).
+          </p>
           <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
-            <li>Click the <strong>📖 Type-In Bay</strong> button or tab in the workstation.</li>
-            <li>Click the <strong>Nibble 3D Starfield (1983)</strong> preset.</li>
-            <li>Click <strong>⚡ Feed into Apple II &amp; Run</strong>.</li>
-            <li>Observe starfield vector loops rendered to the CRT in real time!</li>
+            <li>Click the <strong>📖 Type-In Bay</strong> button in the cabinet drawer.</li>
+            <li>Select the <strong>Nibble 3D Starfield (1983)</strong> sample preset.</li>
+            <li>Click <strong>⚡ Feed into 6502 Ultra &amp; Run</strong>.</li>
+            <li>Watch the starfield vector loops render to the CRT in real time!</li>
           </ol>
         </div>
 
         <!-- Guided Task 4.2 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-3">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">LAB EXERCISE 4.2</span>
-            <span class="font-bold text-white text-xs">Transcribing &amp; Executing Compute! Apollo Lunar Lander</span>
+            <span class="font-bold text-white text-xs">Transcribing &amp; Executing Compute! Apollo Lunar Lander (1984)</span>
           </div>
           <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
             <li>Select <strong>Compute! Lunar Lander (1984)</strong> in the Type-In Studio.</li>
-            <li>Click <strong>⚡ Feed into Apple II &amp; Run</strong> to run altitude calculations and score verification.</li>
+            <li>Click <strong>⚡ Feed into 6502 Ultra &amp; Run</strong>.</li>
+            <li>Observe the real-time numerical integration equations calculating descent velocity, retro-rocket burn, and touch-down impact.</li>
           </ol>
         </div>
 
         <!-- Guided Task 4.3 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-3">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 4.3</span>
             <span class="font-bold text-white text-xs">Clipboard Ingestion via Top Bezel Paste with Character Toast Feedback</span>
           </div>
+          <p class="text-xs text-gray-300">
+            <strong>Context:</strong> The <code class="text-amber-300">📋 Paste to Screen ($C000)</code> button reads clipboard text and directly streams it into the 65C02 Keyboard Data Strobe register ($C000) and keyboard queue.
+          </p>
           <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
-            <li>Copy the following one-liner to your clipboard: <code>10 FOR I=1 TO 10: PRINT "HELLO APPLE //c ULTRA #";I: NEXT I: RUN</code></li>
+            <li>Copy the following one-liner: <code>10 FOR I=1 TO 5: PRINT "6502 ULTRA RECORD #";I: NEXT I: RUN</code></li>
             <li>Click <strong>📋 Paste to Screen ($C000)</strong> on the top monitor bezel.</li>
-            <li>Verify that a toast notification appears confirming the exact character count, and the program executes on the CRT!</li>
+            <li>Verify the toast confirmation with exact character count, and observe the program running on the CRT!</li>
           </ol>
         </div>
 
         <!-- Guided Task 4.4 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-3">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 4.4</span>
             <span class="font-bold text-white text-xs">65C02 Centronics Hardware Redirection (PR#1 &amp; JSR $C100)</span>
           </div>
           <p class="text-xs text-gray-300">
-            Redirect screen characters directly to the Slot 1 Centronics printer latch:
+            <strong>Context:</strong> Typing <code class="text-amber-300">PR#1</code> hooks output to Slot 1 ($C100), streaming all subsequent characters into the Centronics printer latch.
           </p>
-          <pre class="text-amber-400 p-3 bg-[#130f07] rounded border border-[#3b2d13]"><code>] PR#1
-] PRINT "CENTRONICS HARDWARE STREAMING ACTIVE"
-] PR#0</code></pre>
+          <pre class="text-amber-400 p-3 bg-[#130f07] rounded border border-[#3b2d13]"><code>] PR#1                                         ; Redirect character stream to Slot 1 Printer
+] PRINT "CENTRONICS HARDWARE STREAMING ACTIVE" ; Characters output to continuous paper feed
+] PR#0                                         ; Restore character stream to Slot 0 CRT Screen</code></pre>
         </div>
       </div>
     </section>
 
-    <!-- CHAPTER 5: Custom ROM Creation -->
+        <!-- CHAPTER 5: Custom ROM Creation & Firmware Engineering -->
     <section id="ch5" class="space-y-6">
       <div class="flex items-center gap-3">
         <span class="w-9 h-9 rounded-lg bg-pink-500/20 text-pink-400 font-mono font-bold text-lg flex items-center justify-center border border-pink-500/40">5</span>
@@ -387,39 +486,119 @@
       </div>
 
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
-        <h4 class="text-lg font-bold text-pink-400">5.1 32KB System ROM Vector Table Structure</h4>
+        <h4 class="text-lg font-bold text-pink-400">5.1 32KB System ROM Vector Table Structure ($FFFA–$FFFF)</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          When the 65C02 CPU powers on or resets, it fetches the 16-bit address stored at <code>$FFFC–$FFFD</code> and begins execution.
+          When the 65C02 microprocessor powers on, receives an interrupt, or resets, the CPU hardware hard-wires instruction fetching to the top 6 bytes of the 16-bit address space. The 16-bit address stored in each vector determines where execution jumps:
         </p>
 
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+          <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
+            <span class="text-pink-400 font-bold block">NMI Vector ($FFFA–$FFFB)</span>
+            <span class="text-gray-400">Non-Maskable Interrupt. Jump address when the physical /NMI pin goes low.</span>
+          </div>
+          <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
+            <span class="text-amber-400 font-bold block">RESET Vector ($FFFC–$FFFD)</span>
+            <span class="text-gray-400">Power-On / Reset. Points to cold boot initialization routine at $F800 (63488).</span>
+          </div>
+          <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
+            <span class="text-cyan-400 font-bold block">IRQ / BRK Vector ($FFFE–$FFFF)</span>
+            <span class="text-gray-400">Interrupt Request / Break. Shared vector for software BRK ($00) and hardware /IRQ.</span>
+          </div>
+        </div>
+
         <!-- Guided Task 5.1 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 5.1</span>
-            <span class="font-bold text-white text-xs">Inspecting the System Reset Vector ($FFFC–$FFFD)</span>
+            <span class="font-bold text-white text-xs">Inspecting the System Reset Vector ($FFFC–$FFFD) via Applesoft PEEK</span>
           </div>
-          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] ? PEEK(65532) + PEEK(65533) * 256
-63488   <-- ($F800: Authentic Apple //c Cold Boot Vector)</code></pre>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-pink-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              In 65C02 architecture, 16-bit pointers are stored in little-endian order (Least Significant Byte first at the lower address, Most Significant Byte second at the higher address).
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              In this lab, you will query the reset vector using Applesoft BASIC <code class="text-pink-300">PEEK</code> statements. Address $FFFC in decimal is 65532, and $FFFD is 65533. To reconstruct the 16-bit address in decimal, we compute: <code>PEEK(65532) + PEEK(65533) * 256</code>.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>
+                At the Applesoft BASIC prompt (<code class="text-emerald-400">] █</code>), type:
+                <pre class="mt-1 p-2 bg-[#061008] text-emerald-300 rounded border border-[#1a3820]"><code>? PEEK(65532) + PEEK(65533) * 256</code></pre>
+              </li>
+              <li>Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.</li>
+              <li>Observe the output value: <code class="text-pink-300 font-bold">63488</code>.</li>
+            </ol>
+          </div>
+
+          <div class="bg-[#061008] p-4 rounded-lg border border-[#1a3820] font-mono text-xs space-y-2">
+            <span class="font-bold text-emerald-400 block">Mathematical Verification &amp; Address Translation:</span>
+            <pre class="text-emerald-300"><code>65532 ($FFFC) = $00 (LSB)
+65533 ($FFFD) = $F8 (MSB = 248 decimal)
+Address = $F800 = (248 * 256) + 0 = 63,488
+Result: Successfully verified authentic 6502 Ultra cold boot reset entry vector!</code></pre>
+          </div>
         </div>
 
         <!-- Guided Task 5.2 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 5.2</span>
-            <span class="font-bold text-white text-xs">Custom ROM Cold Reset Diagnostic Routine</span>
+            <span class="font-bold text-white text-xs">Custom ROM Cold Reset Diagnostic Routine &amp; Direct ROM Subroutine Calling</span>
           </div>
-          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] CALL 64600    <-- Calls ROM $FC58 (HOME Clear Screen)
-] VTAB 10 : HTAB 8 : PRINT "CUSTOM ROM DIAGNOSTIC PASSED"</code></pre>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-pink-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              The 65C02 system ROM contains standard helper subroutines accessible via direct <code class="text-pink-300">CALL</code> instructions. Address $FC58 (decimal 64600 or -936) is the standard ROM routine <code class="text-pink-300">HOME</code> which clears Text Page 1 VRAM ($0400–$07FF) and moves the cursor to (0,0).
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              In this lab, you simulate a ROM power-on diagnostic routine by executing the ROM clear screen routine followed by coordinate-targeted text positioning using <code class="text-pink-300">VTAB</code> (Vertical Tab, 1-24) and <code class="text-pink-300">HTAB</code> (Horizontal Tab, 1-40).
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>Type <code class="text-pink-300 font-bold">CALL 64600</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd> to execute the ROM screen clear subroutine.</li>
+              <li>Type <code class="text-pink-300 font-bold">VTAB 10 : HTAB 8 : PRINT "CUSTOM ROM DIAGNOSTIC PASSED"</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.</li>
+              <li>Verify that the message renders centered at Row 10, Column 8.</li>
+            </ol>
+          </div>
         </div>
 
         <!-- Guided Task 5.3 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 5.3</span>
-            <span class="font-bold text-white text-xs">Writing a Custom Power-On Banner into Video RAM</span>
+            <span class="font-bold text-white text-xs">Direct Video RAM Injection: Writing a Custom Power-On Banner</span>
           </div>
-          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] POKE 1024 + 10, 193 : POKE 1024 + 11, 208 : POKE 1024 + 12, 208 : POKE 1024 + 13, 204 : POKE 1024 + 14, 197
-<-- Directly deposits 'APPLE' high-bit ASCII ($C1, $D0, $D0, $CC, $C5) into Row 0 VRAM!</code></pre>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-pink-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              Text Page 1 Video RAM begins at physical address $0400 (decimal 1024). Row 0 occupies memory addresses $0400 through $0427 (1024 to 1063 decimal).
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              The System character generator ROM uses high-bit ASCII (normal text has bit 7 = 1, adding 128 to standard ASCII). Thus:
+              <code class="text-amber-300">'A' = 65 + 128 = 193 ($C1)</code>, <code class="text-amber-300">'P' = 80 + 128 = 208 ($D0)</code>, <code class="text-amber-300">'L' = 76 + 128 = 204 ($CC)</code>, <code class="text-amber-300">'E' = 69 + 128 = 197 ($C5)</code>.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>Type the following compound statement at the <code class="text-emerald-400">]</code> prompt:
+                <pre class="mt-1 p-2 bg-[#061008] text-emerald-300 rounded border border-[#1a3820]"><code>POKE 1024 + 10, 193 : POKE 1024 + 11, 208 : POKE 1024 + 12, 208 : POKE 1024 + 13, 204 : POKE 1024 + 14, 197</code></pre>
+              </li>
+              <li>Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.</li>
+              <li>Look at the top line (Row 0) of the CRT screen: the word <code class="text-emerald-400 font-bold">APPLE</code> appears instantly at columns 10–14 without using the BASIC print pipeline!</li>
+            </ol>
+          </div>
         </div>
       </div>
     </section>
@@ -435,46 +614,92 @@
       </div>
 
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
+        <h4 class="text-lg font-bold text-amber-400">6.1 Ahead-Of-Time (AOT) Micro-Compiler Architecture</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          The 65C02 AOT Compiler translates modern Java 17 and C# 12 object-oriented constructs down to native 65C02 opcodes. High-level method calls are lowered to zero-overhead <code>JSR</code> jumps, instance variables map into Zero Page pointers ($E0–$EF), and strings compile directly to high-bit ASCII bytes.
+          The 65C02 Ultra AOT engine compiles modern Java 17 and C# 12 object-oriented source code directly into native 65C02 machine code without requiring an interpreter or VM on the 8-bit target:
         </p>
 
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+          <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
+            <span class="text-amber-400 font-bold block">1. Zero Page Allocation ($E0–$EF)</span>
+            <span class="text-gray-400">Class instance fields and method parameters are mapped directly into high-speed Zero Page hardware memory slots.</span>
+          </div>
+          <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
+            <span class="text-cyan-400 font-bold block">2. Zero-Overhead Method Inlining</span>
+            <span class="text-gray-400">Method invocations are lowered directly to hardware <code class="text-cyan-300">JSR</code> subroutines or inlined opcodes.</span>
+          </div>
+          <div class="bg-[#090d14] p-3 rounded border border-[#1f2736]">
+            <span class="text-emerald-400 font-bold block">3. Direct Hardware Memory Mapping</span>
+            <span class="text-gray-400">API calls like <code class="text-emerald-300">Console.WriteLine()</code> lower to <code class="text-emerald-300">JSR $FDED</code> character loops.</span>
+          </div>
+        </div>
+
         <!-- 5 Case Studies Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-mono text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-mono text-xs pt-2">
           <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-            <span class="text-amber-400 font-bold block">Case 1: Retro Breakout</span>
+            <span class="text-amber-400 font-bold block">Case 1: Retro Breakout (C#)</span>
             <span class="text-gray-400 text-[11px]">Paddle dynamics, 32 bricks, DHGR collision detection &amp; chiptune sound.</span>
           </div>
           <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-            <span class="text-cyan-400 font-bold block">Case 2: 3D Starship Engine</span>
+            <span class="text-cyan-400 font-bold block">Case 2: 3D Starship Engine (C#)</span>
             <span class="text-gray-400 text-[11px]">3D matrix rotation, perspective projection &amp; Double Hi-Res vector rendering.</span>
           </div>
           <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-            <span class="text-emerald-400 font-bold block">Case 3: Storage Ledger</span>
+            <span class="text-emerald-400 font-bold block">Case 3: Storage Ledger (Java)</span>
             <span class="text-gray-400 text-[11px]">ProDOS MLI 512-byte block serialization on 32MB SmartPort HD (/HD).</span>
           </div>
           <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-            <span class="text-purple-400 font-bold block">Case 4: FM Synth</span>
+            <span class="text-purple-400 font-bold block">Case 4: FM Synth (Java)</span>
             <span class="text-gray-400 text-[11px]">Mockingboard 3-voice harmonic audio sequencing via Web Audio.</span>
           </div>
           <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-            <span class="text-pink-400 font-bold block">Case 5: Mandelbrot Fractal</span>
+            <span class="text-pink-400 font-bold block">Case 5: Mandelbrot Fractal (C#)</span>
             <span class="text-gray-400 text-[11px]">Fixed-point escape time calculation on Double Hi-Res raster grid.</span>
           </div>
         </div>
 
         <!-- Guided Task 6.1 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 6.1</span>
             <span class="font-bold text-white text-xs">Compiling &amp; Executing C# Retro Breakout Arcade Game</span>
           </div>
-          <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
-            <li>Open the <strong>☕ Java &amp; C# AOT Studio</strong> cabinet.</li>
-            <li>Select <strong>Case 1 (C#): Retro Breakout Arcade</strong>.</li>
-            <li>Click <strong>⚡ Compile &amp; Run on 65C02</strong>.</li>
-            <li>Play the arcade game using <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">A</kbd>/<kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">D</kbd> or <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">J</kbd>/<kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">L</kbd>!</li>
-          </ol>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-amber-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              In this lab, you will compile a complete 2D arcade game written in modern C# down to 65C02 machine code. The compiler parses the class structure, allocates zero-page pointers for ball and paddle coordinates, lowers keyboard event polling from <code class="text-amber-300">$C000</code>, and generates speaker click strobes at <code class="text-amber-300">$C030</code> for ball collisions.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>Click the <strong>☕ Java &amp; C# AOT Studio</strong> cabinet tab in the Under the Hood Workbench.</li>
+              <li>Select <strong>Case 1 (C#): Retro Breakout Arcade</strong> from the case study dropdown.</li>
+              <li>Click the <strong>⚡ Compile &amp; Run on 65C02</strong> button.</li>
+              <li>Observe the compiler output: notice the AST parsing, Zero Page symbol table allocation ($E0–$EF), and generated 65C02 machine code disassembled in the viewer.</li>
+              <li>Switch to the main CRT display: play the live arcade game using <kbd class="px-1.5 py-0.5 bg-stone-800 rounded border border-stone-700">A</kbd>/<kbd class="px-1.5 py-0.5 bg-stone-800 rounded border border-stone-700">D</kbd> (or <kbd class="px-1.5 py-0.5 bg-stone-800 rounded border border-stone-700">J</kbd>/<kbd class="px-1.5 py-0.5 bg-stone-800 rounded border border-stone-700">L</kbd>) to guide the paddle and bounce the ball!</li>
+            </ol>
+          </div>
+
+          <div class="bg-[#061008] p-4 rounded-lg border border-[#1a3820] font-mono text-xs space-y-2">
+            <span class="font-bold text-emerald-400 block">C# Source to 65C02 Assembly Lowering Snapshot:</span>
+            <pre class="text-emerald-300"><code>// C# High-Level Source:
+public class Breakout {
+    public static void Main() {
+        AppleScreen.Clear();
+        AppleSpeaker.Beep(440, 50);
+    }
+}
+
+; Lowered 65C02 Machine Code:
+$0800: 20 58 FC       JSR $FC58         ; HOME Clear Screen
+$0803: A9 2C          LDA #$2C          ; Pitch parameter ($2C = 440Hz)
+$0805: 85 E0          STA $E0           ; Store in Zero Page $E0
+$0807: 20 3A 08       JSR $083A         ; Call Speaker Toggle Routine ($C030)
+$080A: 60             RTS               ; Return to Caller</code></pre>
+          </div>
         </div>
       </div>
     </section>
@@ -492,7 +717,7 @@
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-6">
         <h4 class="text-lg font-bold text-blue-400">7.1 Peripheral Slot Memory Mapping Matrix ($C100–$C7FF)</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          Each peripheral slot is assigned a 256-byte ROM space (<code>$Cn00</code>) and 16 bytes of I/O softswitches (<code>$C080 + Slot * $10</code>):
+          Each peripheral slot on the 65C02 motherboard is decoded into 256 bytes of Slot ROM (<code>$Cn00–$CnFF</code>) and 16 bytes of I/O softswitches (<code>$C080 + Slot * $10</code>):
         </p>
 
         <div class="overflow-x-auto">
@@ -564,7 +789,7 @@
         <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-3 text-xs">
           <span class="text-amber-400 font-bold block text-sm">🖨️ ImageWriter II Tractor-Feed Continuous Printer Subsystem</span>
           <p class="text-gray-300 leading-relaxed">
-            The virtual printer is driven by authentic 65C02 Centronics hardware latch writes (<code>$C090</code>) or BASIC character routing (<code>PR#1</code>). Print Studio / Print Shop banner creations are executed exclusively through authentic Print Shop / Print Master DSK images or Centronics redirection. Key features include:
+            The virtual printer is driven by authentic 65C02 Centronics hardware latch writes (<code>$C090</code>) or BASIC character routing (<code>PR#1</code>). Key features include:
           </p>
           <ul class="list-disc list-inside space-y-1 text-gray-300">
             <li><strong>5 Paper Stocks:</strong> Pure Blank White (no lines), Pure Blank Ivory (no lines), Classic Green-Bar Fanfold, Classic Lined White, and Classic Lined Ivory.</li>
@@ -576,46 +801,90 @@
         </div>
 
         <!-- Guided Task 7.1 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-blue-500/20 text-blue-400 font-bold border border-blue-500/40">LAB EXERCISE 7.1</span>
             <span class="font-bold text-white text-xs">Booting Peripheral Slot Devices (PR#6 Floppy &amp; PR#7 SmartPort HD)</span>
           </div>
-          <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] PR#6    <-- Jumps to $C600: Boots Drive 1 5.25" Floppy Diskette!
-] PR#7    <-- Jumps to $C700: Boots 32MB SmartPort Hard Disk Volume (/HD)!
-] CATALOG <-- Lists 32MB ProDOS Volume directory files</code></pre>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-blue-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              In Applesoft BASIC, typing <code class="text-blue-300">PR#n</code> executes a jump to the Slot <code class="text-blue-300">n</code> firmware ROM vector at <code>$Cn00</code>.
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              Typing <code class="text-blue-300">PR#6</code> jumps to $C600, initiating the Disk II floppy bootloader which reads Track 0, Sector 0 into RAM at $0800 and executes it. Typing <code class="text-blue-300">PR#7</code> jumps to $C700, booting the 32MB SmartPort Hard Disk volume (<code class="text-emerald-400">/HD</code>).
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>Type <code class="text-blue-300 font-bold">PR#7</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd> to boot from the 32MB SmartPort Hard Disk.</li>
+              <li>At the ProDOS command prompt, type <code class="text-blue-300 font-bold">CATALOG</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.</li>
+              <li>Verify that the volume directory for <code class="text-emerald-400">/HD</code> displays its file listings.</li>
+            </ol>
+          </div>
         </div>
 
         <!-- Guided Task 7.2 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 7.2</span>
             <span class="font-bold text-white text-xs">Continuous Tractor-Feed Dot Matrix Printing via Centronics Redirection (PR#1)</span>
           </div>
-          <pre class="text-amber-400 p-3 bg-[#130f07] rounded border border-[#3b2d13]"><code>] 10 PR#1
-] 20 PRINT "========================================"
-] 30 PRINT "   65C02 ULTRA HARDWARE PRINT REPORT    "
-] 40 PRINT "========================================"
-] 50 FOR I = 1 TO 5: PRINT "DATA RECORD #"; I: NEXT I
-] 60 PR#0
-] RUN</code></pre>
-          <p class="text-gray-400 text-[11px]">
-            Open the <strong>🖨️ Printer</strong> cabinet to watch characters feed into the continuous tractor paper with authentic audio chimes!
-          </p>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-amber-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              When you execute <code class="text-amber-300">PR#1</code>, the 6502 Ultra vectors the system character output pointer (<code class="text-amber-300">CSW @ $0036</code>) to the Slot 1 driver ROM ($C100). All subsequent <code class="text-amber-300">PRINT</code> statements stream directly into the ImageWriter II continuous print feed instead of the CRT screen. Executing <code class="text-amber-300">PR#0</code> restores the output vector back to the video screen.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>Enter the following BASIC program:
+                <pre class="mt-1 p-2 bg-[#130f07] text-amber-300 rounded border border-[#3b2d13]"><code>10 PR#1
+20 PRINT "========================================"
+30 PRINT "   65C02 ULTRA HARDWARE PRINT REPORT    "
+40 PRINT "========================================"
+50 FOR I = 1 TO 5: PRINT "DATA RECORD #"; I: NEXT I
+60 PR#0</code></pre>
+              </li>
+              <li>Type <code class="text-amber-300 font-bold">RUN</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.</li>
+              <li>Open the <strong>🖨️ Printer</strong> cabinet tab to view the live printed output feeding into the continuous paper roll with dot-matrix sound effects!</li>
+            </ol>
+          </div>
         </div>
 
         <!-- Guided Task 7.3 -->
-        <div class="task-card space-y-2">
+        <div class="task-card space-y-4">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 7.3</span>
-            <span class="font-bold text-white text-xs">Switching Paper Stocks (Pure Blank vs Lined vs Green-Bar) &amp; Form Feeding</span>
+            <span class="font-bold text-white text-xs">Switching Paper Stocks (Pure Blank vs Lined vs Green-Bar) &amp; Zero-Blank-Page PDF Export</span>
           </div>
-          <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1">
-            <li>In the Printer toolkit, select <strong>Pure Blank White (No Lines)</strong> from the Paper Stock dropdown.</li>
-            <li>Confirm the paper sheet renders completely plain without preprinted horizontal rules.</li>
-            <li>Click <strong>📄 Form Feed</strong> and verify continuous paper advance.</li>
-            <li>Click <strong>🖨️ Print / PDF</strong> to verify a 1-page PDF export with zero extra blank pages!</li>
-          </ol>
+
+          <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+            <span class="font-bold text-cyan-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+            <p class="text-gray-300 leading-relaxed">
+              In real-world retrocomputing, dot-matrix printers supported various paper formats—from preprinted green-bar fanfold to unlined clean stationery.
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              The 65C02 Ultra includes 5 authentic paper stock styles and a pure print-spooler pipeline that ensures exported documents contain zero informational clutter and print exactly on 1 page.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+              <li>In the Printer toolkit, click the <strong>Paper Stock</strong> dropdown and choose <code class="text-cyan-300 font-bold">Pure Blank White (No Lines)</code>.</li>
+              <li>Confirm the paper background switches to pristine unlined paper.</li>
+              <li>Click the <strong>📄 Form Feed</strong> button and verify the paper advances to the top of the next logical sheet.</li>
+              <li>Click <strong>Clear Buffer</strong>: observe that the buffer resets completely clean without printing any status messages.</li>
+              <li>Click <strong>🖨️ Print / PDF</strong> to open your browser's print dialog: verify the preview shows a clean, single-page printout with no trailing blank pages!</li>
+            </ol>
+          </div>
         </div>
       </div>
     </section>
@@ -625,7 +894,7 @@
       <div class="flex items-center gap-3">
         <span class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold text-lg flex items-center justify-center border border-emerald-500/40">8</span>
         <div>
-          <h3 class="text-2xl font-black text-white tracking-tight">Chapter 8: Storage Architecture, ProDOS 32MB Block Storage & File Persistence</h3>
+          <h3 class="text-2xl font-black text-white tracking-tight">Chapter 8: Storage Architecture, ProDOS 32MB Block Storage &amp; File Persistence</h3>
           <span class="text-xs font-mono text-gray-400">Floppy 6-and-2 GCR, SmartPort 32MB hard disk ($C700 MLI), Slinky 1MB RAM disk, and object-oriented file persistence</span>
         </div>
       </div>
@@ -678,131 +947,148 @@
           <h4 class="text-lg font-bold text-emerald-400">8.2 Guided Hands-On Storage Practicum &amp; Interactive Labs</h4>
 
           <!-- Lab 8.1 -->
-          <div class="task-card space-y-3">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 8.1</span>
               <span class="font-bold text-white text-xs">Floppy Sector Inspection, GCR Nibble Decoding &amp; Track Stepping</span>
             </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              <strong>Objective:</strong> Inspect physical floppy track 0, sector 0 and verify the GCR Address Field prologue (<code>$D5 $AA $96</code>) and Data Field prologue (<code>$D5 $AA $AD</code>).
-            </p>
-            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-amber-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                Floppy disk drives do not write raw 8-bit bytes to magnetic media because consecutive zero bits cause clock synchronization loss in the analog read head. Steve Wozniak's ingenious <strong>6-and-2 GCR (Group Code Recording)</strong> encodes 6 data bits into 8 disk nibbles with guaranteed transitions.
+              </p>
+            </div>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-2">
               <li>Open the <strong>💾 Storage Bay</strong> tab in the Under the Hood Workbench.</li>
               <li>Under <strong>Floppy Drive 1 (Slot 6)</strong>, select <strong>Track 00, Sector 00</strong>.</li>
-              <li>Observe the raw 342-byte GCR stream: notice the leading sync pulses (<code>$FF $FF $FF</code>) followed immediately by <code>$D5 $AA $96</code>.</li>
-              <li>Click <strong>Step Head +1 Track</strong>: notice the stepper motor advances phase from Phase 0 ($C0E1) to Phase 1 ($C0E3) with real-time head repositioning sound!</li>
+              <li>Observe the raw 342-byte GCR stream: notice the leading sync pulses (<code>$FF $FF $FF</code>) followed immediately by the Address Field prologue <code>$D5 $AA $96</code>.</li>
+              <li>Click <strong>Step Head +1 Track</strong>: observe the stepper motor advances phase from Phase 0 ($C0E1) to Phase 1 ($C0E3) with real-time head repositioning sound!</li>
             </ol>
           </div>
 
           <!-- Lab 8.2 -->
-          <div class="task-card space-y-3">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 8.2</span>
               <span class="font-bold text-white text-xs">32MB SmartPort Volume Structure, Key Block 2 &amp; Directory Parsing</span>
             </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              <strong>Objective:</strong> Read and parse the ProDOS 32MB Volume Directory Header located at Block 2.
-            </p>
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-cyan-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                In ProDOS 8 filesystems, <strong>Block 2</strong> contains the Volume Directory Header. Byte +$04 defines the Storage Type ($F = Volume Header) and volume name length, while bytes +$05..+$13 contain the ASCII volume label (e.g. "HD").
+              </p>
+            </div>
             <pre class="text-cyan-400 p-3 bg-[#081520] rounded border border-[#1b3d52] font-mono text-[11px]"><code>; ProDOS Volume Directory Header Layout (Block 2, Offset $0000):
 ; +$00: Previous Directory Block Pointer ($0000 = Root)
 ; +$02: Next Directory Block Pointer ($0003)
-; +$04: Storage Type ($F = Volume Directory Header) & Name Length
-; +$05: Volume Name (Up to 15 ASCII characters, e.g. "HD")
+; +$04: Storage Type ($F = Volume Directory Header) & Name Length ($2 = "HD")
+; +$05: Volume Name ("HD" -> $C8 $C4 in high-ASCII)
 ; +$29: Total Volume Blocks ($0000 = 65,536 blocks for 32MB)
 ; +$2B: Volume Bitmap Starting Block ($0006)</code></pre>
-            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-2">
               <li>In the Workbench Storage tab, enter Block <strong>2</strong> in the SmartPort Hard Disk inspector.</li>
-              <li>Verify that byte <code>+$04</code> is <code>$F2</code> ($F = Volume Header, $2 = Name Length 2: "HD").</li>
-              <li>Verify that bytes <code>+$05..+$06</code> contain ASCII <code>'H' 'D'</code> (<code>$C8 $C4</code> in Apple high-ASCII).</li>
+              <li>Verify that byte <code>+$04</code> is <code>$F2</code> ($F = Volume Header, $2 = Name Length 2).</li>
+              <li>Verify that bytes <code>+$05..+$06</code> contain ASCII <code>'H' 'D'</code> (<code>$C8 $C4</code>).</li>
             </ol>
           </div>
 
           <!-- Lab 8.3 -->
-          <div class="task-card space-y-3">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">LAB EXERCISE 8.3</span>
               <span class="font-bold text-white text-xs">Direct 65C02 Assembly ProDOS MLI Block Driver Programming ($C700 / $C600)</span>
             </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              <strong>Objective:</strong> Write a 65C02 assembly routine that writes a 512-byte payload to Hard Disk Block 100 via the direct driver entry point at <code>$C700</code>.
-            </p>
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-emerald-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                The ProDOS Machine Language Interface (MLI) block driver allows assembly programs to write and read 512-byte blocks directly by jumping to the card driver entry at <code class="text-emerald-300">$C700</code> (Slot 7) or <code class="text-emerald-300">$C600</code> (Slot 6) with X and Y pointing to a parameter table.
+              </p>
+            </div>
             <pre class="text-emerald-400 p-3 bg-[#06140b] rounded border border-[#1b4324] font-mono text-[11px]"><code>; Direct SmartPort Block Driver Write Routine ($C700)
 START:
   LDA #$70        ; Unit Number ($70 = Slot 7, Drive 1: /HD)
   LDX #&lt;PARAM_LST ; Parameter List Pointer Low
   LDY #&gt;PARAM_LST ; Parameter List Pointer High
-  JSR $C700       ; Call SmartPort Driver
-  BCS WRITE_FAIL  ; Branch if Carry set (Error code in A)
+  JSR $C700       ; Call SmartPort Driver Entry Point
+  BCS WRITE_FAIL  ; Branch if Carry flag set (Error code in A)
   RTS             ; Success!
 
 PARAM_LST:
   .BYTE $03       ; Parameter Count: 3
   .BYTE $70       ; Unit Number: Slot 7, Drive 1
   .WORD $4000     ; Data Buffer Pointer in Main RAM ($4000)
-  .WORD $0064     ; Block Number: 100 ($0064)</code></pre>
+  .WORD $0064     ; Target Block Number: 100 ($0064)</code></pre>
           </div>
 
           <!-- Lab 8.4 -->
-          <div class="task-card space-y-3">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 8.4</span>
               <span class="font-bold text-white text-xs">Object-Oriented High Score &amp; Game State Persistence in C# &amp; Java</span>
             </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              <strong>Objective:</strong> Persist high scores across system reboots using C# <code>System.IO.File</code> and Java <code>apple2.hardware.AppleStorage</code>.
-            </p>
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-pink-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                In C# and Java AOT applications, file persistence APIs (e.g. <code>File.WriteAllText</code> and <code>StorageCore.WriteBlock</code>) are automatically lowered to native ProDOS MLI driver routines, enabling persistent save games across machine power cycles.
+              </p>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-[11px]">
               <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
-                <span class="text-cyan-400 font-bold block mb-1">C# Persistence</span>
+                <span class="text-cyan-400 font-bold block mb-1">C# High Score Persistence</span>
                 <pre class="text-gray-300"><code>using System.IO;
 using Apple2.Ultra;
 
-// Write high scores to /HD
+// Save high scores to 32MB /HD
 File.WriteAllText("/HD/SCORES.TXT", "WOZ:99990");
 
-// Low-level Block Write
+// Low-level direct 512B Block Write
 byte[] data = new byte[512];
 data[0] = 99; data[1] = 99;
-AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, data);</code></pre>
+StorageCore.WriteBlock(
+  StorageCore.UnitSlot7Drive1, 100, data);</code></pre>
               </div>
               <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a]">
                 <span class="text-emerald-400 font-bold block mb-1">Java 17 Persistence</span>
                 <pre class="text-gray-300"><code>import java.io.File;
-import apple2.hardware.AppleStorage;
+import apple2.hardware.StorageCore;
 
-// Write log to /HD
+// Save game log to /HD
 File log = new File("/HD/LOG.TXT");
 log.writeText("STATUS: OK");
 
-// Low-level Block Write
+// Low-level direct 512B Block Write
 byte[] buf = new byte[512];
 buf[0] = 1; buf[1] = 2;
-AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
+StorageCore.writeBlock(
+  StorageCore.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
               </div>
             </div>
           </div>
 
           <!-- Lab 8.5 -->
-          <div class="task-card space-y-3">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-purple-500/20 text-purple-400 font-bold border border-purple-500/40">LAB EXERCISE 8.5</span>
               <span class="font-bold text-white text-xs">High-Speed Slinky 1MB RAM Disk Data Streaming &amp; Buffer Paging</span>
             </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              <strong>Objective:</strong> Stream 1,024 bytes of graphics sprite data from Slinky RAM into video memory in real time using the hardware auto-incrementing data port <code>$C0CB</code>.
-            </p>
-            <pre class="text-purple-400 p-3 bg-[#150921] rounded border border-[#3b195c] font-mono text-[11px]"><code>; Slinky Fast Buffer Streaming ($C0C8-$C0CB)
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-purple-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                The Slinky 1MB Memory Expansion Card exposes 1MB of banked RAM through 4 hardware registers: $C0C8 (Address LSB), $C0C9 (Address MID), $C0CA (Address MSB / Bank), and $C0CB (Data Port). Every read or write to $C0CB automatically increments the 24-bit internal address counter, allowing blazing-fast streaming into VRAM without CPU pointer arithmetic!
+              </p>
+            </div>
+            <pre class="text-purple-400 p-3 bg-[#150921] rounded border border-[#3b195c] font-mono text-[11px]"><code>; Slinky Fast DMA Video Streaming Routine ($C0C8-$C0CB)
   LDA #$00 : STA $C0C8   ; Set Slinky Address LSB ($00)
   LDA #$10 : STA $C0C9   ; Set Slinky Address MID ($10 = 4KB offset)
   LDA #$00 : STA $C0CA   ; Set Slinky Bank 0
   LDY #$00
 STREAM_LOOP:
-  LDA $C0CB              ; Read byte from Slinky (Auto-increments!)
-  STA $2000,Y            ; Store into Hi-Res Page 1 ($2000)
+  LDA $C0CB              ; Read byte from Slinky (Hardware Auto-Increments!)
+  STA $2000,Y            ; Store directly into Hi-Res Page 1 ($2000)
   LDA $C0CB              ; Read next byte
-  STA $2100,Y            ; Store into next page ($2100)
+  STA $2100,Y            ; Store into next video page ($2100)
   INY
-  BNE STREAM_LOOP        ; Transfer 512 bytes in single pass!</code></pre>
+  BNE STREAM_LOOP        ; Transfer 512 bytes in a single tight loop!</code></pre>
           </div>
         </div>
       </div>
@@ -813,7 +1099,7 @@ STREAM_LOOP:
       <div class="flex items-center gap-3">
         <span class="w-9 h-9 rounded-lg bg-yellow-500/20 text-yellow-400 font-mono font-bold text-lg flex items-center justify-center border border-yellow-500/40">9</span>
         <div>
-          <h3 class="text-2xl font-black text-white tracking-tight">Chapter 9: Under the Hood Workbench & System Tools Mastery</h3>
+          <h3 class="text-2xl font-black text-white tracking-tight">Chapter 9: Under the Hood Workbench &amp; System Tools Mastery</h3>
           <span class="text-xs font-mono text-gray-400">Mastering top bezel controls, phosphor selection, fly-up mechanical matrix keyboard, and the 6-tab diagnostic workbench</span>
         </div>
       </div>
@@ -852,57 +1138,81 @@ STREAM_LOOP:
         </div>
 
         <!-- Workbench Labs -->
-        <div class="space-y-4 pt-4 border-t border-[#252f42]">
+        <div class="space-y-6 pt-4 border-t border-[#252f42]">
           <h4 class="text-lg font-bold text-yellow-400">9.1 Interactive Workbench &amp; Bezel Mastery Exercises</h4>
 
           <!-- Lab 9.1 -->
-          <div class="task-card space-y-2">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 9.1</span>
               <span class="font-bold text-white text-xs">Top Bezel Speed Throttling &amp; 50 MHz Turbo Boost</span>
             </div>
-            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-amber-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                The 6502 Ultra originally operated at 1.023 MHz, where a benchmark loop takes several seconds. The 65C02 Ultra includes a dynamic cycle throttle capable of scaling from 1.02 MHz up to 50.0 MHz (Ultra Turbo) without altering audio pitch or video frame buffer stability.
+              </p>
+            </div>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-2 font-mono">
               <li>In the top monitor bezel toolbar, locate the Speed dropdown.</li>
-              <li>Select <code>1.02 MHz (Vintage 1984)</code> and run a BASIC loop (<code>10 FOR I=1 TO 1000: NEXT I</code>). Observe authentic 1984 execution speed.</li>
-              <li>Switch the dropdown to <code>50.0 MHz (Ultra Turbo)</code> and run the loop again. Observe instantaneous execution!</li>
+              <li>Select <code>1.02 MHz (Vintage 1984)</code> and run a benchmark loop: <code>10 FOR I=1 TO 500: PRINT I: NEXT I: RUN</code>. Observe authentic vintage execution speed.</li>
+              <li>Switch the dropdown to <code>50.0 MHz (Ultra Turbo)</code> and type <code>RUN</code> again. Observe near-instantaneous completion!</li>
             </ol>
           </div>
 
           <!-- Lab 9.2 -->
-          <div class="task-card space-y-2">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-blue-500/20 text-blue-400 font-bold border border-blue-500/40">LAB EXERCISE 9.2</span>
-              <span class="font-bold text-white text-xs">Fly-Up 63-Key Mechanical Matrix Keyboard &amp; Modifiers</span>
+              <span class="font-bold text-white text-xs">Fly-Up 63-Key Mechanical Matrix Keyboard &amp; Hardware Modifiers</span>
             </div>
-            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-blue-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                The fly-up keyboard recreates the physical 63-key matrix of the 6502 Ultra, including special modifier keys like Control, Reset, and Open/Closed Apple buttons (which map to joystick pushbuttons PB0 and PB1 at $C061–$C062).
+              </p>
+            </div>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-2 font-mono">
               <li>Click the <strong>⌨️</strong> button on the top monitor bezel.</li>
               <li>Confirm the 63-key matrix drawer slides UP smoothly from the bottom of the screen.</li>
               <li>Click keys on the virtual keyboard (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>) and verify audio clicks and screen clearing.</li>
-              <li>Press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd> or click <strong>✕ Close Keyboard</strong> to dismiss the drawer.</li>
+              <li>Press <kbd class="px-1.5 py-0.5 bg-stone-800 rounded border border-stone-700">Esc</kbd> or click <strong>✕ Close Keyboard</strong> to dismiss the drawer.</li>
             </ol>
           </div>
 
           <!-- Lab 9.3 -->
-          <div class="task-card space-y-2">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-pink-500/20 text-pink-400 font-bold border border-pink-500/40">LAB EXERCISE 9.3</span>
               <span class="font-bold text-white text-xs">Single-Stepping 65C02 Machine Code in CPU Debugger</span>
             </div>
-            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
-              <li>Open the <strong>⚙️ 65C02 CPU Debugger</strong> tab.</li>
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-pink-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                The CPU Debugger studio provides interactive single-cycle instruction execution, exposing all internal CPU registers (Accumulator A, Index X, Index Y, Stack Pointer SP, Program Counter PC, and Status Flags P) with live disassembly tracing.
+              </p>
+            </div>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-2 font-mono">
+              <li>Open the <strong>⚙️ 65C02 CPU Debugger</strong> tab in the Under the Hood Workbench.</li>
               <li>Click <strong>Step Instruction (F8)</strong> to execute single opcodes.</li>
               <li>Observe the real-time updates to registers A, X, Y, SP, and PC!</li>
             </ol>
           </div>
 
           <!-- Lab 9.4 -->
-          <div class="task-card space-y-2">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">LAB EXERCISE 9.4</span>
               <span class="font-bold text-white text-xs">Firmware Customization with Custom ROM Studio</span>
             </div>
-            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
-              <li>Click the <strong>⚡ Custom ROM Studio</strong> tab.</li>
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-emerald-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                The Custom ROM Studio allows real-time hot-patching of system firmware in memory without reflashing physical EPROMs, demonstrating how firmware vectors and boot banners are constructed.
+              </p>
+            </div>
+            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-2 font-mono">
+              <li>Click the <strong>⚡ Custom ROM Studio</strong> tab in the Under the Hood Workbench.</li>
               <li>Change the boot banner text string to <code>"65C02 ULTRA CUSTOM EDITION"</code>.</li>
               <li>Click <strong>⚡ Hot-Patch Banner</strong>. Observe the top row of the CRT display updates immediately!</li>
             </ol>
@@ -926,41 +1236,67 @@ STREAM_LOOP:
           The <strong>65C02 Ultra Workstation</strong> virtualizes a full 50-pin 7-slot motherboard expansion architecture. Each slot decodes 16 dedicated I/O softswitch registers (<code class="text-cyan-300">$C080 + $n0</code>), a 256-byte Slot ROM (<code class="text-purple-300">$Cn00–$CnFF</code>), and optional banked 2KB expansion ROM (<code class="text-emerald-300">$C800–$CFFF</code>).
         </p>
 
-        <!-- Guided Labs 10.1, 10.2 & 10.3 -->
-        <div class="space-y-4 pt-4 border-t border-[#252f42]">
+        <!-- Guided Labs 10.1 & 10.2 -->
+        <div class="space-y-6 pt-4 border-t border-[#252f42]">
           <h4 class="text-lg font-bold text-amber-400">10.1 Guided Laboratory Practicum: Expansion Cards &amp; Scripting</h4>
 
           <!-- Lab 10.1 -->
-          <div class="task-card space-y-2">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">LAB EXERCISE 10.1</span>
               <span class="font-bold text-white text-xs">Scripting a Custom JavaScript Hardware Peripheral Card in Slot 3</span>
             </div>
-            <ol class="text-xs text-gray-300 list-decimal list-inside space-y-1 font-mono">
-              <li>Open the <strong>🎛️ Slot Bay</strong> tab and switch to the <strong>🧪 Custom JS Card Sandbox</strong>.</li>
-              <li>Select <strong>Target Slot: Slot 3 ($C0B0)</strong>.</li>
-              <li>In the JavaScript editor, define a hardware simulated temperature register:
-                <pre class="p-2 bg-black/60 rounded text-emerald-300 text-[11px] mt-1">card.ioRead = (reg) => {
+
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-amber-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                Slot 3 is decoded to I/O registers <code class="text-amber-300">$C0B0–$C0BF</code> (decimal 49328–49343). In this lab, you write a custom JavaScript device driver in the JS Card Sandbox that simulates an environmental temperature sensor on register $C0B0. When Applesoft reads <code class="text-amber-300">PEEK(49328)</code>, your JavaScript handler executes and feeds simulated sensor data into the 65C02 data bus!
+              </p>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+              <ol class="list-decimal list-inside space-y-2 text-gray-300">
+                <li>Open the <strong>🎛️ Slot Expansion Bay</strong> tab and click <strong>🧪 Custom JS Card Sandbox</strong>.</li>
+                <li>Select <strong>Target Slot: Slot 3 ($C0B0)</strong>.</li>
+                <li>In the JavaScript card script editor, paste the following hardware handler:
+                  <pre class="mt-1 p-2 bg-black/60 rounded text-emerald-300 text-[11px] font-mono">card.onReadHandler = (reg) => {
+  // Register 0 = $C0B0 (decimal 49328)
   if (reg === 0) return Math.floor(20 + Math.random() * 5); // Return simulated Celsius temp
   return 0;
 };</pre>
-              </li>
-              <li>Click <strong>▶ Apply to Slot 3</strong>.</li>
-              <li>Switch to the Apple II screen and type <code>PRINT PEEK(49328)</code>: watch the 65C02 read your live simulated temperature sensor!</li>
-            </ol>
+                </li>
+                <li>Click <strong>▶ Apply to Slot 3</strong>.</li>
+                <li>Switch to the 6502 Ultra screen and type <code class="text-amber-300 font-bold">PRINT PEEK(49328)</code>: watch the 65C02 read your live simulated temperature sensor!</li>
+              </ol>
+            </div>
           </div>
 
           <!-- Lab 10.2 -->
-          <div class="task-card space-y-2">
+          <div class="task-card space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40">LAB EXERCISE 10.2</span>
               <span class="font-bold text-white text-xs">Real-Time Host Clock Polling via $C400 (Thunderclock RTC)</span>
             </div>
-            <p class="text-gray-300 text-[11px] font-sans">
-              Read host computer real-time clock registers directly from memory-mapped I/O:
-            </p>
-            <pre class="bg-[#05070a] p-3 rounded text-cyan-300 text-[11px]">10 H = PEEK(49346): M = PEEK(49345): S = PEEK(49344)
-20 PRINT "HOST TIME: "; H; ":"; M; ":"; S</pre>
+
+            <div class="bg-[#070b12] p-4 rounded-lg border border-[#1b2538] space-y-2 text-xs">
+              <span class="font-bold text-cyan-400 block text-sm">💡 What You Are Doing &amp; Why:</span>
+              <p class="text-gray-300 leading-relaxed">
+                The Thunderclock Plus card in Slot 4 maps hardware real-time clock registers to addresses <code class="text-cyan-300">$C0C0–$C0C2</code> (decimal 49344–49346). Reading these registers yields live seconds, minutes, and hours synchronized with the host operating system clock.
+              </p>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <span class="font-bold text-white block">Step-by-Step Instructions:</span>
+              <ol class="list-decimal list-inside space-y-2 text-gray-300">
+                <li>At the Applesoft BASIC prompt, enter the following real-time clock reader:
+                  <pre class="mt-1 p-2 bg-[#05070a] text-cyan-300 rounded border border-[#1b3d52] font-mono text-[11px]"><code>10 H = PEEK(49346): M = PEEK(49345): S = PEEK(49344)
+20 PRINT "HOST TIME: "; H; ":"; M; ":"; S</code></pre>
+                </li>
+                <li>Type <code class="text-cyan-300 font-bold">RUN</code> and press <kbd class="px-1 py-0.5 bg-stone-800 rounded border border-stone-700">Return</kbd>.</li>
+                <li>Verify that the host time prints accurately!</li>
+              </ol>
+            </div>
           </div>
         </div>
 
@@ -979,7 +1315,7 @@ STREAM_LOOP:
   <!-- Footer -->
   <footer class="bg-[#10141d] border-t border-[#212836] py-8 px-6 text-center text-xs font-mono text-gray-500">
     65C02 Ultra Workstation Comprehensive Systems Engineering &amp; Architectural Education • Zero Platform Lock-In • 1984–2026
-    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>
+    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved. Compatible with 6502 Ultra Architecture.</div>
   </footer>
 
 </body>

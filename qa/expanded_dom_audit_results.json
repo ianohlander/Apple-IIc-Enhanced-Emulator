@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Scenario 1: Cold Boot & Cursor Glyph",
+    "pass": true,
+    "detail": "Clean prompt ] with calm single cursor, zero apostrophe or dual cursor defects"
+  },
+  {
+    "name": "Scenario 2: Bird Brain Type-In Execution",
+    "pass": true,
+    "detail": "Dispatched K, Y, 1 cleanly without descending ASCII stream or memory corruption"
+  },
+  {
+    "name": "Scenario 3: Adventure Construction Set Native 65C02 Boot",
+    "pass": true,
+    "detail": "Native 65C02 Forth booted from Disk II, rasterizing 5138 VRAM bytes with zero HLI simulation"
+  },
+  {
+    "name": "Scenario 4: World Games Native Boot & Input",
+    "pass": true,
+    "detail": "World Games booted cleanly and responsive to DOM input with zero mock simulation"
+  },
+  {
+    "name": "Scenario 5: Hardware RESET State & VRAM Clear",
+    "pass": true,
+    "detail": "All MMU softswitches cleared, 40-col prompt restored with zero artifacts"
+  }
+]

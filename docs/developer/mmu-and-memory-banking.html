@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MMU Banking & Slinky 16MB RAM — Apple //c Ultra Developer Guide</title>
+  <title>MMU Banking & Slinky 16MB RAM — 6502 Ultra Developer Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -51,11 +51,11 @@
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">1. Full 64KB Address Space Architecture</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c uses a unified 16-bit address bus spanning $0000 through $FFFF. The custom Apple MMU gate array partitions this address space into distinct functional regions, dynamically bank-switching between 128KB of onboard RAM (Main & Auxiliary), 32KB of Motherboard ROM, and 16MB of Slinky expanded RAM.
+        The 6502 Ultra uses a unified 16-bit address bus spanning $0000 through $FFFF. The custom Apple MMU gate array partitions this address space into distinct functional regions, dynamically bank-switching between 128KB of onboard RAM (Main & Auxiliary), 32KB of Motherboard ROM, and 16MB of Slinky expanded RAM.
       </p>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
-        <h3 class="text-base font-bold text-cyan-400 font-mono">Apple //c Ultra 64KB Memory Map Breakdown</h3>
+        <h3 class="text-base font-bold text-cyan-400 font-mono">6502 Ultra 64KB Memory Map Breakdown</h3>
         <div class="overflow-x-auto">
           <table class="w-full text-xs font-mono border border-[#30363d] text-left">
             <thead class="bg-[#0d1117] text-gray-400">
@@ -137,7 +137,7 @@
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">2. Auxiliary RAM, 80STORE & Video Page Banking Truth Table</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c features 128KB of total dynamic RAM divided into 64KB Main RAM and 64KB Auxiliary RAM. The <code>80STORE</code> softswitch overrides general <code>RAMRD/RAMWRT</code> controls specifically for video memory buffers ($0400-$07FF and $2000-$3FFF):
+        The 6502 Ultra features 128KB of total dynamic RAM divided into 64KB Main RAM and 64KB Auxiliary RAM. The <code>80STORE</code> softswitch overrides general <code>RAMRD/RAMWRT</code> controls specifically for video memory buffers ($0400-$07FF and $2000-$3FFF):
       </p>
 
       <div class="overflow-x-auto">
@@ -216,7 +216,7 @@
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">4. Slinky 16MB Expanded RAM Engine & Streaming DMA</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra implements the Apple II Memory Expansion Card (Slinky) extended to 16 Megabytes. It uses four hardware registers mapped at $C071-$C075:
+        The 6502 Ultra implements the Slinky 1MB Memory Expansion Card extended to 16 Megabytes. It uses four hardware registers mapped at $C071-$C075:
       </p>
 
       <div class="overflow-x-auto">
@@ -326,7 +326,7 @@ READLP: LDA $C073       ; Read byte from Slinky (Auto-increments 24-bit pointer!
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-cyan-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+    <a href="index.html" class="text-cyan-400 hover:underline">← Back to Developer Hub</a> • 65C02 Ultra Workstation
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

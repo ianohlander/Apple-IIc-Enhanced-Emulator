@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Java & C# 65C02 Developer & Runtime Engineering Guide</title>
+  <title>6502 Ultra — Java & C# 65C02 Developer & Runtime Engineering Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -41,7 +41,7 @@
         
       </div>
       <div>
-        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Engineering</span>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">6502 Ultra Engineering</span>
         <h1 class="text-base font-extrabold text-white">Java & C# 65C02 Runtime & Developer Guide</h1>
       </div>
     </div>
@@ -61,7 +61,7 @@
       <!-- VISUAL DIAGRAM: Developer System Map -->
       <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
         <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
-          <span class="font-bold text-amber-400 text-sm">📐 Apple //c Ultra Full-Stack Developer Architecture Map</span>
+          <span class="font-bold text-amber-400 text-sm">📐 6502 Ultra Full-Stack Developer Architecture Map</span>
           <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Developer Architecture</span>
         </div>
         <p class="text-gray-400 text-xs">
@@ -122,7 +122,7 @@
       </div>
       <h2 class="text-3xl font-black text-white">How Java & C# Execute on the 65C02 CPU</h2>
       <p class="text-gray-400 text-sm leading-relaxed">
-        A deep architectural exploration of modern Object-Oriented bytecode translation, Zero Page register virtualization, memory layout, and the Apple II hardware API bindings.
+        A deep architectural exploration of modern Object-Oriented bytecode translation, Zero Page register virtualization, memory layout, and the 6502 Ultra hardware API bindings.
       </p>
     </div>
 
@@ -132,27 +132,27 @@
         <span>1. The Lineage: Sweet16, UCSD Pascal & Virtual Machines</span>
       </h3>
       <p class="text-gray-300 text-xs leading-relaxed">
-        Running higher-level virtual machine bytecodes on an 8-bit Apple II is not a foreign concept; it is part of Apple's deepest DNA:
+        Running higher-level virtual machine bytecodes on an 8-bit 65C02 system has a rich historical lineage:
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
         <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
           <h4 class="font-bold text-emerald-400">Sweet16 (Steve Wozniak, 1977)</h4>
           <p class="text-gray-400">
-            Woz created <strong>Sweet16</strong>, a 16-bit virtual processor implemented as a 6502 bytecode interpreter in the Apple II Integer BASIC ROM. It mapped 16 virtual 16-bit registers (R0–R15) into Zero Page ($00–$1F), enabling 16-bit pointer arithmetic and memory addressing in compact code.
+            Woz created <strong>Sweet16</strong>, a 16-bit virtual processor implemented as a 6502 bytecode interpreter in the Integer BASIC ROM. It mapped 16 virtual 16-bit registers (R0–R15) into Zero Page ($00–$1F), enabling 16-bit pointer arithmetic and memory addressing in compact code.
           </p>
         </div>
 
         <div class="p-4 bg-[#0d1117] rounded-lg border border-[#30363d] space-y-2">
           <h4 class="font-bold text-cyan-400">UCSD Pascal p-System (1979)</h4>
           <p class="text-gray-400">
-            The Apple II Pascal system compiled structured Pascal source code into intermediate <strong>p-code</strong>, which was interpreted by a native 6502 p-machine runtime. It brought structured programming and separate compilation units to 64KB machines.
+            The UCSD Pascal p-System compiled structured Pascal source code into intermediate <strong>p-code</strong>, which was interpreted by a native 6502 p-machine runtime. It brought structured programming and separate compilation units to 64KB machines.
           </p>
         </div>
       </div>
 
       <p class="text-gray-300 text-xs leading-relaxed">
-        The <strong>Apple //c Ultra</strong> takes this heritage to its ultimate conclusion: using modern Ahead-Of-Time (AOT) compiler theory to take modern Java and C# source trees, parse their Abstract Syntax Trees (AST), and compile them directly down to native, un-emulated CMOS 65C02 machine instructions that run at up to 50 MHz Turbo clock rates!
+        The <strong>6502 Ultra</strong> takes this heritage to its ultimate conclusion: using modern Ahead-Of-Time (AOT) compiler theory to take modern Java and C# source trees, parse their Abstract Syntax Trees (AST), and compile them directly down to native, un-emulated CMOS 65C02 machine instructions that run at up to 50 MHz Turbo clock rates!
       </p>
     </section>
 
@@ -260,7 +260,7 @@
               <tr>
                 <td class="py-1.5 text-cyan-400">print(string) / WriteLine(string)</td>
                 <td class="py-1.5 text-gray-400">LDA #char | 0x80, JSR $FDED (COUT)</td>
-                <td class="py-1.5">Outputs characters through Apple IIc ROM terminal.</td>
+                <td class="py-1.5">Outputs characters through 65C02 ROM terminal.</td>
               </tr>
               <tr>
                 <td class="py-1.5 text-cyan-400">poke(address, value)</td>
@@ -307,7 +307,7 @@ public class UltraArcadeIntro {
         AppleAudio.beep(783, 150); // G5
         AppleAudio.beep(1046, 250); // C6
         
-        // Step 3: Print Welcome Message to Apple //c Screen
+        // Step 3: Print Welcome Message to 6502 Ultra Screen
         AppleSystem.print("APPLE //C ULTRA - JAVA RUNTIME READY");
     }
 }</code></pre>
@@ -346,7 +346,7 @@ namespace RetroUltra {
   </main>
 
   <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">
-    Apple //c Ultra • Java & C# 65C02 Runtime & Developer Guide 
+    6502 Ultra • Java & C# 65C02 Runtime & Developer Guide 
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

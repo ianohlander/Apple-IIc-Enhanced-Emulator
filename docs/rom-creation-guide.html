@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Complete Custom ROM & Firmware Engineering Guide</title>
+  <title>6502 Ultra — Complete Custom ROM & Firmware Engineering Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
   <style>
@@ -65,7 +65,7 @@
       </div>
       <div>
         <span class="text-[10px] font-mono text-pink-400 font-bold tracking-widest uppercase">Firmware Engineering Guide</span>
-        <h1 class="text-base font-extrabold text-white">Apple //c 32KB Custom ROM & Kernel Creation Guide</h1>
+        <h1 class="text-base font-extrabold text-white">6502 Ultra 32KB Custom ROM & Kernel Creation Guide</h1>
       </div>
     </div>
 
@@ -95,7 +95,7 @@
         Custom ROM & Firmware Engineering Manual
       </h2>
       <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
-        This comprehensive guide explains how to construct, assemble, link, and flash custom <strong>32KB System ROM firmware images ($C000–$FFFF)</strong> and <strong>Character Generator ROMs</strong> for the Apple //c. Whether building custom boot diagnostics, arcade game auto-boot cartridges, or alternate operating systems, this manual provides complete assembly listings, vector maps, and step-by-step hands-on labs.
+        This comprehensive guide explains how to construct, assemble, link, and flash custom <strong>32KB System ROM firmware images ($C000–$FFFF)</strong> and <strong>Character Generator ROMs</strong> for the 6502 Ultra. Whether building custom boot diagnostics, arcade game auto-boot cartridges, or alternate operating systems, this manual provides complete assembly listings, vector maps, and step-by-step hands-on labs.
       </p>
 
       <!-- Table of Contents -->
@@ -133,7 +133,7 @@
     <!-- VISUAL DIAGRAM 1: ROM Address Space & Bank Switching Architecture -->
     <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs my-6">
       <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
-        <span class="font-bold text-amber-400 text-sm">📐 Figure 1.1: Apple //c 32KB/64KB ROM Memory Map & Banking Architecture</span>
+        <span class="font-bold text-amber-400 text-sm">📐 Figure 1.1: 6502 Ultra 32KB/64KB ROM Memory Map & Banking Architecture</span>
         <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">ROM Memory Map</span>
       </div>
       <p class="text-gray-400 text-xs">
@@ -194,7 +194,7 @@
 
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
         <p class="text-gray-300 leading-relaxed text-xs">
-          On the Apple //c motherboard, the System ROM is housed in a 28-pin 32KB 27C256 EPROM (or 64KB 27C512 EPROM on Revision 3/4 machines). The upper 16KB of physical address space ($C000–$FFFF) is multiplexed across multiple internal sub-blocks:
+          On the 6502 Ultra motherboard, the System ROM is housed in a 28-pin 32KB 27C256 EPROM (or 64KB 27C512 EPROM on Revision 3/4 machines). The upper 16KB of physical address space ($C000–$FFFF) is multiplexed across multiple internal sub-blocks:
         </p>
 
         <div class="overflow-x-auto">
@@ -294,7 +294,7 @@
 
         <div class="bg-[#070a10] p-4 rounded-lg border border-[#21293a] font-mono text-xs">
           <pre class="text-gray-200"><code>; =====================================================================
-; APPLE //c ULTRA CUSTOM FIRMWARE COLD BOOT HANDLER ($F800)
+; 6502 ULTRA CUSTOM FIRMWARE COLD BOOT HANDLER ($F800)
 ; =====================================================================
         .ORG $F800
 
@@ -323,7 +323,7 @@ COLD_BOOT:
 PRINT_BANNER:
         LDA BANNER_TEXT,Y
         BEQ START_KERNEL
-        ORA #$80            ; Convert ASCII to Apple II High-Bit ASCII
+        ORA #$80            ; Convert ASCII to Standard High-Bit ASCII ($80)
         STA $0400 + 10,Y    ; Write to Row 0 Center VRAM ($0400)
         INY
         BNE PRINT_BANNER
@@ -364,7 +364,7 @@ CHIME_WAIT:
         RTS
 
 BANNER_TEXT:
-        .ASCII "APPLE //c ULTRA CUSTOM ROM v1.0"
+        .ASCII "6502 ULTRA CUSTOM ROM v1.0"
         .BYTE 0</code></pre>
         </div>
       </div>
@@ -382,7 +382,7 @@ BANNER_TEXT:
 
       <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4">
         <p class="text-gray-300 leading-relaxed text-xs">
-          The Apple //c Character Generator ROM stores a 7x8 dot matrix for 128 standard ASCII glyphs ($00–$7F). Each character requires 8 consecutive bytes, where each byte represents one horizontal row of 7 dots:
+          The 6502 Ultra Character Generator ROM stores a 7x8 dot matrix for 128 standard ASCII glyphs ($00–$7F). Each character requires 8 consecutive bytes, where each byte represents one horizontal row of 7 dots:
         </p>
 
         <div class="diagram-panel space-y-3 font-mono text-xs">
@@ -483,7 +483,7 @@ Row 7:  . . X . X . .  -> $14  (0001 0100)</code></pre>
           <pre class="text-gray-300"><code>ca65 --cpu 65C02 -o custom_rom.o custom_rom.asm
 ld65 -C apple2c_rom.cfg -o custom_rom.bin custom_rom.o</code></pre>
 
-          <span class="text-emerald-400 font-bold block pt-2">2. Inject into Apple //c Web Workstation via JavaScript API:</span>
+          <span class="text-emerald-400 font-bold block pt-2">2. Inject into 6502 Ultra Web Workstation via JavaScript API:</span>
           <pre class="text-gray-300"><code>// Load 32KB binary array directly into emulator ROM memory:
 window.emulator.rom.set(customRomUint8Array, 0x0000);
 window.emulator.reset();</code></pre>
@@ -512,7 +512,7 @@ window.emulator.reset();</code></pre>
             Verify the active 16-bit cold reset vector in memory by executing this memory peek:
           </p>
           <pre class="text-emerald-400 p-3 bg-[#061008] rounded border border-[#1a3820]"><code>] ? PEEK(65532) + PEEK(65533) * 256
-63488   <-- ($F800: Authentic Apple //c Cold Boot Vector)</code></pre>
+63488   <-- ($F800: Authentic 6502 Ultra Cold Boot Vector)</code></pre>
         </div>
 
         <!-- Guided Task 2 -->
@@ -547,7 +547,7 @@ window.emulator.reset();</code></pre>
 
   <!-- Footer -->
   <footer class="bg-[#10141d] border-t border-[#212836] py-8 px-6 text-center text-xs font-mono text-gray-500">
-    Apple //c Ultra Custom ROM & Firmware Engineering Guide • Zero Platform Lock-In • 1984–2026
+    6502 Ultra Custom ROM & Firmware Engineering Guide • Zero Platform Lock-In • 1984–2026
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

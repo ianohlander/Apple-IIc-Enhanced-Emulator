@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JVM & .NET CLR AOT Compiler Engine — Apple //c Ultra Developer Guide</title>
+  <title>JVM & .NET CLR AOT Compiler Engine — 6502 Ultra Developer Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -115,7 +115,7 @@
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">1. The Lineage: Sweet16, UCSD Pascal & Modern AOT</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        In 1977, Steve Wozniak created <strong>Sweet16</strong>, a 16-bit virtual machine interpreter embedded in Apple II Integer BASIC ROM ($F689..$F7FC). It simulated sixteen 16-bit virtual registers (R0-R15) in Zero Page. In 1979, the <strong>UCSD Pascal p-System</strong> introduced stack-based p-code bytecode execution to the 6502. The Apple //c Ultra advances this historical lineage by compiling high-level <strong>Java</strong> and <strong>C# .NET</strong> object-oriented source code directly into native, optimized 65C02 CMOS machine code ahead of time.
+        In 1977, Steve Wozniak created <strong>Sweet16</strong>, a 16-bit virtual machine interpreter embedded in Integer BASIC ROM ($F689..$F7FC). It simulated sixteen 16-bit virtual registers (R0-R15) in Zero Page. In 1979, the <strong>UCSD Pascal p-System</strong> introduced stack-based p-code bytecode execution to the 6502. The 6502 Ultra advances this historical lineage by compiling high-level <strong>Java</strong> and <strong>C# .NET</strong> object-oriented source code directly into native, optimized 65C02 CMOS machine code ahead of time.
       </p>
     </section>
 
@@ -224,7 +224,7 @@ DISTSQ: ; dx = x1 - x0 (R1 = R2 - R1)
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-3 text-xs font-mono">
         <h3 class="text-amber-400 font-bold text-sm">How Standard APIs Execute on 65C02 Silicon</h3>
         <ul class="list-disc list-inside text-gray-300 space-y-2 leading-relaxed">
-          <li><strong>System.Console.WriteLine & System.out.println:</strong> Character strings are converted to Apple II high-bit ASCII (<code>ch | 0x80</code>) and iterated through the Apple Monitor ROM Character Output vector (<code>JSR $FDED [COUT]</code>), followed by a carriage return (<code>JSR $FD8E [CROUT]</code>).</li>
+          <li><strong>System.Console.WriteLine & System.out.println:</strong> Character strings are converted to high-bit ASCII ($80) (<code>ch | 0x80</code>) and iterated through the 65C02 System Monitor ROM Character Output vector (<code>JSR $FDED [COUT]</code>), followed by a carriage return (<code>JSR $FD8E [CROUT]</code>).</li>
           <li><strong>System.Collections.Generic.List&lt;T&gt; & java.util.ArrayList:</strong> Dynamically allocate contiguous object pointers in Auxiliary RAM ($4000-$BFFF).</li>
           <li><strong>System.Math & java.lang.Math:</strong> <code>Min</code>, <code>Max</code>, and <code>Abs</code> are lowered into 16-bit Zero Page register comparisons (<code>CMP</code>, <code>BEQ</code>, <code>BMI</code>, <code>BPL</code>) without requiring any external CRT or runtime libraries.</li>
           <li><strong>Optional Hardware Packages:</strong> <code class="text-amber-300">Apple2.Ultra</code> and <code class="text-cyan-300">apple2.hardware</code> are purely optional interfaces for developers who specifically want direct access to retro hardware switches ($C050/$C057/$C05F Double Hi-Res, $C064 paddles, and Mockingboard PSG voices).</li>
@@ -235,7 +235,7 @@ DISTSQ: ; dx = x1 - x0 (R1 = R2 - R1)
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • 65C02 Ultra Workstation
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

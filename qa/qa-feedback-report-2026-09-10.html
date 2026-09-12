@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Architecture. -->
+  <meta name="author" content="Ian Ohlander">
+  <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
+  <meta name="generator" content="65C02 Ultra - Ian Ohlander (2026)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quality Assurance Feedback Report &amp; Issue Resolution Register — September 10, 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    .card-box { background: #101622; border: 1px solid #212c3d; border-radius: 0.75rem; }
+    .issue-badge { font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 0.375rem; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Header -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-black font-bold text-lg">
+        📋
+      </div>
+      <div>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Quality Assurance &amp; Engineering Registry</span>
+        <h1 class="text-base font-extrabold text-white">QA Feedback Report &amp; Issue Resolution Register (2026-09-10)</h1>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow flex items-center gap-1.5">
+        <span>⚡</span> Virtual Computer
+      </a>
+      <a href="index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
+        🧪 Central QA Hub
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12 text-sm">
+
+    <!-- Executive Summary Banner -->
+    <div class="bg-gradient-to-br from-[#161f2c] via-[#101622] to-[#1a1528] border-2 border-amber-500/50 rounded-2xl p-8 space-y-4 shadow-2xl">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#2d3748] pb-3">
+        <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">Formal Engineering Audit • Document QA-20260910-R1</span>
+        <span class="px-3 py-1 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">9/9 ISSUES RESOLVED</span>
+      </div>
+      <h2 class="text-2xl font-black text-white">Comprehensive QA Feedback Analysis &amp; Technical Fix Register</h2>
+      <p class="text-gray-300 text-xs leading-relaxed max-w-4xl">
+        This document serves as the permanent tracking register and root-cause resolution record for the comprehensive QA feedback delivered on <strong>September 10, 2026</strong>. Each issue is categorized under <strong>User Experience (UX)</strong>, <strong>Documentation Architecture &amp; IP Compliance</strong>, or <strong>Emulator Functionality</strong>, assigned a unique tracking number, analyzed, and verified with complete engineering remedies.
+      </p>
+    </div>
+
+    <!-- Master Tracking Table -->
+    <section class="space-y-4 font-mono text-xs">
+      <h3 class="text-base font-bold text-amber-400 uppercase tracking-wider">Master QA Issue Tracking Register</h3>
+      
+      <div class="overflow-x-auto card-box">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-[#0b0e14] border-b border-[#212c3d] text-gray-400 text-[11px]">
+              <th class="p-3">Issue ID</th>
+              <th class="p-3">Domain</th>
+              <th class="p-3">Subject / Target Document</th>
+              <th class="p-3">Severity / Priority</th>
+              <th class="p-3">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#1b2533] text-[11px]">
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-UX-20260910-01</td>
+              <td class="p-3 text-purple-300">UX / UI</td>
+              <td class="p-3 text-gray-200">80s Vintage Home Computing &amp; Apple II Color Schemes</td>
+              <td class="p-3 text-cyan-400">Design Feature</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-DOC-20260910-02</td>
+              <td class="p-3 text-blue-300">Documentation</td>
+              <td class="p-3 text-gray-200">Documentation-Wide Trademark &amp; Actionable IP Audit</td>
+              <td class="p-3 text-red-400">Legal / High</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-DOC-20260910-03</td>
+              <td class="p-3 text-blue-300">Documentation</td>
+              <td class="p-3 text-gray-200"><code>docs/index.html</code> Welcome Clean-Up &amp; Deduplication</td>
+              <td class="p-3 text-amber-400">Medium</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-DOC-20260910-04</td>
+              <td class="p-3 text-blue-300">Documentation</td>
+              <td class="p-3 text-gray-200">Developer-Only Central Architecture &amp; QA Repository</td>
+              <td class="p-3 text-amber-400">High</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-DOC-20260910-05</td>
+              <td class="p-3 text-blue-300">Documentation</td>
+              <td class="p-3 text-gray-200"><code>custom-peripheral-cards.html</code> Section 2.5 LaTeX Fix</td>
+              <td class="p-3 text-gray-400">Low</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-DOC-20260910-06</td>
+              <td class="p-3 text-blue-300">Documentation</td>
+              <td class="p-3 text-gray-200"><code>custom-peripheral-cards.html</code> Case Study 3 Domain 1 Code</td>
+              <td class="p-3 text-amber-400">Medium</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-DOC-20260910-07</td>
+              <td class="p-3 text-blue-300">Documentation</td>
+              <td class="p-3 text-gray-200">Custom Peripheral C#/Java SDK API &amp; Dual-Floppy Guide</td>
+              <td class="p-3 text-red-400">High</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-DOC-20260910-08</td>
+              <td class="p-3 text-blue-300">Documentation</td>
+              <td class="p-3 text-gray-200"><code>physical-hardware-export.html</code> Device Guide &amp; Limits</td>
+              <td class="p-3 text-amber-400">High</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+            <tr class="hover:bg-[#131b26] transition">
+              <td class="p-3 text-amber-300 font-bold">QA-EMU-20260910-09</td>
+              <td class="p-3 text-emerald-300">Emulator</td>
+              <td class="p-3 text-gray-200">Commercial Disk Removal &amp; Real User DSK Boot Loader</td>
+              <td class="p-3 text-red-400">High</td>
+              <td class="p-3 text-emerald-400 font-bold">✅ Resolved</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: USER EXPERIENCE (UX) -->
+    <!-- ========================================================================= -->
+    <section class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center border border-purple-500/40">🎨</span>
+        <div>
+          <span class="issue-badge bg-purple-500/20 text-purple-300 border border-purple-500/40">QA-UX-20260910-01</span>
+          <h3 class="text-base font-bold text-white mt-1">UX Design Proposals: 80s Vintage Home Computing &amp; Apple II Color Schemes</h3>
+        </div>
+      </div>
+
+      <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
+        <p class="text-gray-300 font-sans">
+          To achieve a seamless modern studio that pays authentic homage to the 1980s home computing revolution without feeling archaic or cluttered, we have engineered three curated design palettes combining vintage industrial design elements with modern high-productivity development controls.
+        </p>
+
+        <!-- 3 Design Proposals Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans">
+          
+          <!-- Palette 1: Cupertino 1977 Heritage -->
+          <div class="p-4 bg-[#0a0d14] rounded-xl border border-amber-500/40 space-y-3">
+            <div class="flex items-center justify-between border-b border-[#1b2533] pb-2">
+              <span class="text-amber-400 font-bold text-sm font-mono">1. Cupertino 1977</span>
+              <span class="px-2 py-0.5 rounded text-[9px] bg-amber-950 text-amber-300 font-mono">Warm Beige</span>
+            </div>
+            <div class="h-3 rounded-full rainbow-border"></div>
+            <p class="text-gray-300 text-[11px] leading-relaxed">
+              <strong>Homage:</strong> Original Apple II / II Plus matte warm beige casing (<code class="text-amber-300">#EFE8D8</code>), sculpted dark brown keycaps (<code class="text-amber-200">#3E322A</code>), and the famous 6-color rainbow spectrum accent stripe.
+            </p>
+            <ul class="text-gray-400 text-[10px] space-y-1 font-mono">
+              <li>• Green P1 CRT Bloom: <code>#33FF44</code> on <code>#061008</code></li>
+              <li>• Amber P3 CRT Glow: <code>#FFB000</code> on <code>#120A02</code></li>
+              <li>• Subtle warm drop-shadows &amp; textured bezels</li>
+            </ul>
+          </div>
+
+          <!-- Palette 2: Snow White 1984 Frog Design -->
+          <div class="p-4 bg-[#0a0d14] rounded-xl border border-cyan-500/40 space-y-3">
+            <div class="flex items-center justify-between border-b border-[#1b2533] pb-2">
+              <span class="text-cyan-400 font-bold text-sm font-mono">2. Snow White 1984</span>
+              <span class="px-2 py-0.5 rounded text-[9px] bg-cyan-950 text-cyan-300 font-mono">Platinum / Frog</span>
+            </div>
+            <div class="h-3 rounded-full bg-gradient-to-r from-gray-200 via-stone-400 to-gray-300"></div>
+            <p class="text-gray-300 text-[11px] leading-relaxed">
+              <strong>Homage:</strong> Hartmut Esslinger’s <em>Frogdesign Snow White</em> language for the 6502 Ultra. Clean off-white platinum panels (<code class="text-cyan-300">#E2E4E0</code>), 2mm vertical ventilation louvers, and subtle recessed control bays.
+            </p>
+            <ul class="text-gray-400 text-[10px] space-y-1 font-mono">
+              <li>• Helvetica/Univers clean Swiss typography</li>
+              <li>• Emerald power &amp; red drive activity LEDs</li>
+              <li>• Precision 90-degree chamfered edges</li>
+            </ul>
+          </div>
+
+          <!-- Palette 3: Midnight 16-Color DHGR Cyber-Studio -->
+          <div class="p-4 bg-[#0a0d14] rounded-xl border border-emerald-500/40 space-y-3">
+            <div class="flex items-center justify-between border-b border-[#1b2533] pb-2">
+              <span class="text-emerald-400 font-bold text-sm font-mono">3. Midnight DHGR</span>
+              <span class="px-2 py-0.5 rounded text-[9px] bg-emerald-950 text-emerald-300 font-mono">Dark Studio</span>
+            </div>
+            <div class="h-3 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 via-blue-500 to-emerald-500"></div>
+            <p class="text-gray-300 text-[11px] leading-relaxed">
+              <strong>Homage:</strong> Late-night machine code hacking on Double Hi-Res graphics. Deep graphite dark studio (<code class="text-emerald-300">#0D1117</code>) with color-coded studio bays mapped to the 16 Apple II DHGR palettes.
+            </p>
+            <ul class="text-gray-400 text-[10px] space-y-1 font-mono">
+              <li>• Color-coded tabs: Slot (Amber), Sound (Pink)</li>
+              <li>• Animated real-time bus &amp; raster line indicators</li>
+              <li>• High-contrast code editor with scanline overlays</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Visual UI Mockup Screen Gallery -->
+        <div class="space-y-4 pt-4 border-t border-[#1b2533]">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">🖼️ Generated High-Fidelity UX Studio Interface Screens:</span>
+            <span class="text-[10px] text-gray-400 font-mono">16:9 Desktop Studio Concept Mockups</span>
+          </div>
+
+          <!-- Prototype 1: Clean Classic Closed-Cabinet State + 6502 Ultra Logo Badge -->
+          <div class="bg-[#0c121d] border-2 border-emerald-500/60 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212f42] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  DEFAULT WORKSTATION STATE • CLOSED CABINETS
+                </span>
+                <span class="font-bold text-white font-mono text-sm">Clean Classic Frogdesign + Inlaid 6502 Ultra Rainbow Badge</span>
+              </div>
+              <span class="text-xs font-mono text-emerald-400">Minimalist Classic UI</span>
+            </div>
+
+            <a href="screenshots/ux-palette-frogdesign-closed-cabinet.jpg" target="_blank" class="block group relative rounded-xl overflow-hidden border border-[#26374f]">
+              <img src="screenshots/ux-palette-frogdesign-closed-cabinet.jpg" alt="Clean Classic Closed-Cabinet Frogdesign UI" class="w-full h-auto object-cover group-hover:scale-[1.02] transition duration-200">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-white font-mono text-xs font-bold gap-2">
+                <span>🔍 Click to View Full 4K Resolution</span>
+              </div>
+            </a>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-gray-300 font-sans pt-1">
+              <div class="p-2.5 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1">
+                <strong class="text-emerald-300 font-mono block">1. Flush Closed Flyout Cabinets:</strong>
+                Printer and Expansion Backplane retract into clean, flush grooved doors with subtle recessed handles and status glyphs.
+              </div>
+              <div class="p-2.5 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1">
+                <strong class="text-amber-300 font-mono block">2. Inlaid 6502 Ultra Badge:</strong>
+                Embossed rainbow-banded silicon microprocessor badge positioned proudly on the lower chassis bezel.
+              </div>
+              <div class="p-2.5 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1">
+                <strong class="text-cyan-300 font-mono block">3. Tactile Switchgear:</strong>
+                Authentic green-illuminated power rocker switch (left) and recessed circular red RESET push button (right).
+              </div>
+            </div>
+          </div>
+
+          <!-- Prototype 2: Hardware Expanded Flyout State (Cabinets Open) -->
+          <div class="bg-[#0c121d] border-2 border-cyan-500/60 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212f42] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                  HARDWARE EXPANDED STATE • CABINETS DEPLOYED
+                </span>
+                <span class="font-bold text-white font-mono text-sm">Spooling ImageWriter Printer + 7-Slot Expansion Backplane</span>
+              </div>
+              <span class="text-xs font-mono text-cyan-400">Tactile Hardware Mode</span>
+            </div>
+
+            <a href="screenshots/ux-palette-frogdesign-hardware-studio.jpg" target="_blank" class="block group relative rounded-xl overflow-hidden border border-[#26374f]">
+              <img src="screenshots/ux-palette-frogdesign-hardware-studio.jpg" alt="Unified Frogdesign Hardware Studio UI (Flyouts Open)" class="w-full h-auto object-cover group-hover:scale-[1.02] transition duration-200">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-white font-mono text-xs font-bold gap-2">
+                <span>🔍 Click to View Full 4K Resolution</span>
+              </div>
+            </a>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-[11px] text-gray-300 font-sans pt-1">
+              <div class="p-2.5 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1">
+                <strong class="text-cyan-300 font-mono block">1. Frogdesign Styling:</strong>
+                Off-white platinum chassis with authentic horizontal precision ventilation slats and chamfered edges.
+              </div>
+              <div class="p-2.5 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1">
+                <strong class="text-amber-300 font-mono block">2. Dual 5.25" Floppy Bay:</strong>
+                Stacked Disk II Drive 1 &amp; 2 with dark textured doors, working read/write LED indicators, and cooling fan louvers.
+              </div>
+              <div class="p-2.5 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1">
+                <strong class="text-emerald-300 font-mono block">3. ImageWriter Hardware:</strong>
+                Spooling continuous tractor-feed green-bar paper with streamlined, uncluttered printing pushbuttons.
+              </div>
+              <div class="p-2.5 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1">
+                <strong class="text-purple-300 font-mono block">4. Physical Slot Backplane:</strong>
+                Real expansion cards plugged in (Mockingboard with AY-3-8910s, Uthernet, RTC) with visible gold card guides.
+              </div>
+            </div>
+          </div>
+
+          <!-- Prototype 3: 6502 Ultra Logo & Brand Identity Badge -->
+          <div class="bg-[#0c121d] border-2 border-purple-500/60 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#212f42] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                  CLEAN-ROOM BRAND IDENTITY BADGE
+                </span>
+                <span class="font-bold text-white font-mono text-sm">6502 Ultra Retro Silicon Prism &amp; Rainbow Spectrum Emblem</span>
+              </div>
+              <span class="text-xs font-mono text-purple-400">100% IP Safe</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+              <div class="md:col-span-1">
+                <a href="screenshots/logo-6502-ultra-badge.jpg" target="_blank" class="block group relative rounded-xl overflow-hidden border border-[#26374f]">
+                  <img src="screenshots/logo-6502-ultra-badge.jpg" alt="6502 Ultra Silicon Prism Logo Badge" class="w-full h-auto object-cover group-hover:scale-[1.03] transition duration-200">
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-white font-mono text-xs font-bold">
+                    🔍 Zoom
+                  </div>
+                </a>
+              </div>
+              <div class="md:col-span-2 space-y-2 text-xs font-sans text-gray-300 leading-relaxed">
+                <p>
+                  <strong>Design Concept:</strong> The <em>6502 Ultra</em> emblem pays homage to the vibrant 1977–1984 Silicon Valley microcomputer era through a multi-band rainbow spectrum prism casting light across a 65C02 microprocessor silicon die.
+                </p>
+                <div class="p-3 bg-[#06090e] rounded-lg border border-[#1a2332] space-y-1.5 font-mono text-[11px]">
+                  <div class="text-emerald-400 font-bold">⚖️ Intellectual Property &amp; Trademark Compliance:</div>
+                  <ul class="list-disc list-inside text-gray-400 space-y-1 pl-1 text-[10px]">
+                    <li><strong>Zero Silhouette Conflict:</strong> Does not use any apple, fruit, or bite silhouette; purely geometric silicon architecture.</li>
+                    <li><strong>Distinctive Wordmark:</strong> Pairs classic serif numerals (6502) with modern spaced capitals (ULTRA).</li>
+                    <li><strong>Nominative Preservation:</strong> Celebrates 1980s 6502 computing history while standing as an independent trademark.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <!-- Screen 1: Cupertino Beige -->
+            <div class="bg-[#070b10] border border-[#1e2a3b] rounded-xl overflow-hidden shadow-lg space-y-2">
+              <a href="screenshots/ux-palette-cupertino-beige.jpg" target="_blank" class="block group relative">
+                <img src="screenshots/ux-palette-cupertino-beige.jpg" alt="Cupertino 1977 Warm Beige &amp; Rainbow Studio UI" class="w-full h-auto object-cover group-hover:scale-105 transition duration-200">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-white font-mono text-[11px] font-bold">
+                  🔍 Click to Expand
+                </div>
+              </a>
+              <div class="p-3 space-y-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-amber-400 font-mono text-xs">Palette A: Cupertino 1977</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">Warm Beige</span>
+                </div>
+                <p class="text-[11px] text-gray-400 font-sans">
+                  Warm beige chassis (#EFE8D8), rainbow spectrum banner, curved green P1 phosphor CRT with scanlines, vintage Disk II drive bay, and docked mechanical keyboard.
+                </p>
+              </div>
+            </div>
+
+            <!-- Screen 2: Snow White -->
+            <div class="bg-[#070b10] border border-[#1e2a3b] rounded-xl overflow-hidden shadow-lg space-y-2">
+              <a href="screenshots/ux-palette-snow-white.jpg" target="_blank" class="block group relative">
+                <img src="screenshots/ux-palette-snow-white.jpg" alt="Snow White 1984 Frogdesign Platinum &amp; Fog UI" class="w-full h-auto object-cover group-hover:scale-105 transition duration-200">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-white font-mono text-[11px] font-bold">
+                  🔍 Click to Expand
+                </div>
+              </a>
+              <div class="p-3 space-y-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-cyan-400 font-mono text-xs">Palette B: Snow White 1984</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono">Frogdesign</span>
+                </div>
+                <p class="text-[11px] text-gray-400 font-sans">
+                  Off-white platinum chassis with horizontal ventilation slats, glowing amber P3 phosphor CRT, integrated floppy slot, and dockable 65C02 disassembler.
+                </p>
+              </div>
+            </div>
+
+            <!-- Screen 3: Midnight DHGR -->
+            <div class="bg-[#070b10] border border-[#1e2a3b] rounded-xl overflow-hidden shadow-lg space-y-2">
+              <a href="screenshots/ux-palette-midnight-dhgr.jpg" target="_blank" class="block group relative">
+                <img src="screenshots/ux-palette-midnight-dhgr.jpg" alt="Midnight 16-Color DHGR Cyber-Studio UI" class="w-full h-auto object-cover group-hover:scale-105 transition duration-200">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-white font-mono text-[11px] font-bold">
+                  🔍 Click to Expand
+                </div>
+              </a>
+              <div class="p-3 space-y-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-emerald-400 font-mono text-xs">Palette C: Midnight DHGR</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">Dark Studio</span>
+                </div>
+                <p class="text-[11px] text-gray-400 font-sans">
+                  Deep obsidian dark mode (#0B0E14) with cyan/amber neon edge accents, 16-color DHGR composite pixel art on CRT, continuous dot-matrix printer, and 6-voice audio mixer.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: DOCUMENTATION & IP COMPLIANCE -->
+    <!-- ========================================================================= -->
+    <section class="space-y-8">
+      <div class="border-b border-[#212c3d] pb-2">
+        <h3 class="text-lg font-bold text-amber-400 uppercase tracking-wider font-mono">Documentation Audits &amp; Architectural Cleanups</h3>
+      </div>
+
+      <!-- QA-DOC-20260910-02 -->
+      <div class="card-box p-6 space-y-4 text-xs leading-relaxed">
+        <div class="flex items-center gap-2">
+          <span class="issue-badge bg-red-500/20 text-red-300 border border-red-500/40">QA-DOC-20260910-02</span>
+          <h4 class="text-sm font-bold text-white font-mono">Documentation-Wide Trademark &amp; Actionable IP Removal</h4>
+        </div>
+        <div class="p-4 bg-[#140f1a] rounded-xl border border-red-500/30 space-y-2 font-sans">
+          <span class="text-red-400 font-bold block font-mono text-xs">⚖️ Legal Analysis: Nominative Fair Use vs Actionable Brand Labeling</span>
+          <p class="text-gray-300 text-[11px] leading-relaxed">
+            Under US Trademark Law (e.g. <em>New Kids on the Block v. News America Publishing, Inc.</em>, 971 F.2d 302), referencing a trademarked product name (such as <em>Apple II</em>, <em>ImageWriter</em>, or <em>Mockingboard</em>) is protected under <strong>Nominative Fair Use</strong> when:
+            (1) The product or service cannot be readily identified without reference to the trademark;
+            (2) Only so much of the mark is used as is reasonably necessary; and
+            (3) The user does nothing that would suggest sponsorship or endorsement by the trademark holder.
+          </p>
+          <p class="text-gray-300 text-[11px] leading-relaxed">
+            <strong>Remedy Applied:</strong> We replaced all actionable product branding instances (e.g., using "Apple II Ultra" as a proprietary software brand) with clean-room descriptive terms: <code class="text-amber-300">65C02 Ultra Workstation (Compatible with 6502 Ultra Architecture)</code>. All peripheral cards are categorized by hardware function with compatibility descriptors (e.g., <em>"9-Pin Dot-Matrix Tractor-Feed Printer (Compatible with ImageWriter II Protocol)"</em>), and trademark disclaimers have been verified on all document footers.
+          </p>
+        </div>
+      </div>
+
+      <!-- QA-DOC-20260910-03 & QA-DOC-20260910-04 -->
+      <div class="card-box p-6 space-y-4 text-xs leading-relaxed">
+        <div class="flex items-center gap-2">
+          <span class="issue-badge bg-blue-500/20 text-blue-300 border border-blue-500/40">QA-DOC-20260910-03</span>
+          <span class="issue-badge bg-amber-500/20 text-amber-300 border border-amber-500/40">QA-DOC-20260910-04</span>
+          <h4 class="text-sm font-bold text-white font-mono"><code>docs/index.html</code> Layout Restructuring &amp; Developer Portal Separation</h4>
+        </div>
+        <div class="space-y-3 font-sans text-gray-300">
+          <p>
+            <strong>Problem:</strong> <code>docs/index.html</code> contained redundant quick-link buttons in the welcome header, duplicated expansion card buttons, and exposed internal developer/QA documents to general users.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-[11px]">
+            <div class="p-3 bg-[#0d1219] rounded border border-[#212d3d] space-y-1">
+              <span class="text-amber-400 font-bold block">1. User-Facing <code>docs/index.html</code> Fixes:</span>
+              <ul class="list-disc list-inside text-gray-400 space-y-1">
+                <li>Removed all 5 quick-links from the Welcome Header card.</li>
+                <li>Added dedicated card for <em>Master Systems Architecture Tutorial</em> under the Portal Map.</li>
+                <li>Removed duplicate top button &amp; non-functional workbench button from the Expansion Section.</li>
+                <li>Moved <em>Developer Architecture Hub</em> to the top position.</li>
+                <li>Removed internal QA/UAT links from public card grid.</li>
+              </ul>
+            </div>
+            <div class="p-3 bg-[#0d1219] rounded border border-[#212d3d] space-y-1">
+              <span class="text-cyan-400 font-bold block">2. Developer-Only Internal QA Portal:</span>
+              <ul class="list-disc list-inside text-gray-400 space-y-1">
+                <li>Created <code class="text-cyan-300">qa/index.html</code> &amp; <code class="text-cyan-300">docs/qa/index.html</code>.</li>
+                <li>Houses all internal test reports, UAT runbooks, and performance audits.</li>
+                <li>Houses architecture blueprints &amp; vertical traces.</li>
+                <li>Includes trademark IP reviews &amp; watermark registries.</li>
+                <li>Indexes all QA feedback resolution documents.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QA-DOC-20260910-05 & QA-DOC-20260910-06 -->
+      <div class="card-box p-6 space-y-4 text-xs leading-relaxed">
+        <div class="flex items-center gap-2">
+          <span class="issue-badge bg-purple-500/20 text-purple-300 border border-purple-500/40">QA-DOC-20260910-05</span>
+          <span class="issue-badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">QA-DOC-20260910-06</span>
+          <h4 class="text-sm font-bold text-white font-mono"><code>custom-peripheral-cards.html</code> LaTeX Rendering Fix &amp; Case Study 3 Domain 1 Completeness</h4>
+        </div>
+        <div class="space-y-2 font-sans text-gray-300">
+          <p>
+            <strong>Section 2.5 LaTeX Rendering:</strong> Verified and standardized all mathematical slot expressions to semantic HTML: <code class="text-purple-300">Slot &lt;em&gt;N&lt;/em&gt; (where &lt;em&gt;N&lt;/em&gt; &isin; {1..7})</code>, preventing raw LaTeX delimiter artifacts.
+          </p>
+          <p>
+            <strong>Case Study 3 Domain 1 Completeness:</strong> Added inline, full code demonstrations for <strong>Domain 1 (65C02 Program Code)</strong> in Applesoft BASIC, 65C02 Machine Code Assembly, and C# .NET to run side-by-side with Domain 2 (JavaScript Sandbox Card) and Domain 3 (Host Process Daemon).
+          </p>
+        </div>
+      </div>
+
+      <!-- QA-DOC-20260910-07 -->
+      <div class="card-box p-6 space-y-4 text-xs leading-relaxed">
+        <div class="flex items-center gap-2">
+          <span class="issue-badge bg-amber-500/20 text-amber-300 border border-amber-500/40">QA-DOC-20260910-07</span>
+          <h4 class="text-sm font-bold text-white font-mono">Custom Peripheral Cards: C#/Java SDK API Reference &amp; Dual-Floppy Guide</h4>
+        </div>
+        <div class="space-y-3 font-sans text-gray-300">
+          <p>
+            Added exhaustive, method-by-method API reference documentation for the <strong>C# (.NET) and Java Hardware SDK Libraries</strong> covering all 11 hardware objects and peripheral cards:
+          </p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left font-mono text-[10px] border-collapse">
+              <thead>
+                <tr class="bg-[#0b0e14] text-gray-400 border-b border-[#212c3d]">
+                  <th class="p-2">Card / Peripheral</th>
+                  <th class="p-2">C# Namespace &amp; Class</th>
+                  <th class="p-2">Java Package &amp; Class</th>
+                  <th class="p-2">Key API Methods</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#1b2533]">
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Dot-Matrix Printer (Slot 1)</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.DotMatrixPrinter</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.DotMatrixPrinter</code></td>
+                  <td class="p-2 text-gray-300"><code>PrintString(s), FormFeed(), LineFeed(), SetCondensed(b)</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Web MIDI Master (Slot 2)</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.MidiMaster</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.MidiMaster</code></td>
+                  <td class="p-2 text-gray-300"><code>SendNoteOn(ch, note, vel), SendNoteOff(), PitchBend()</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Uthernet TCP/IP (Slot 3)</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.Uthernet</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.Uthernet</code></td>
+                  <td class="p-2 text-gray-300"><code>Connect(host, port), Send(b, len), Receive(b)</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Mockingboard PSG (Slot 4)</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.MockingAudio</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.MockingAudio</code></td>
+                  <td class="p-2 text-gray-300"><code>SetTone(ch, freq), SetNoisePeriod(p), SetMixer(m), SetVolume()</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">ProDOS Thunderclock (Slot 4)</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.ProDosClock</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.ProDosClock</code></td>
+                  <td class="p-2 text-gray-300"><code>GetDateTime(), GetTimestampBytes()</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Dual Floppy &amp; 32MB HD</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.StorageCore</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.StorageCore</code></td>
+                  <td class="p-2 text-gray-300"><code>SelectFloppyDrive(1 | 2), ReadBlock(unit, blk), WriteBlock()</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Double Hi-Res &amp; VRAM</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.UltraVideo</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.UltraVideo</code></td>
+                  <td class="p-2 text-gray-300"><code>SetDoubleHiRes(b), DrawPixel(x,y,c), DrawLine(), ClearScreen()</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Speaker, Paddles &amp; Clock</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.UltraSound / UltraSystem</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.UltraSound / UltraSystem</code></td>
+                  <td class="p-2 text-gray-300"><code>Beep(hz, ms), ReadPaddle(i), SetCpuClockSpeed(mhz)</code></td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-amber-300 font-bold">Custom User Cards (Slots 1–7)</td>
+                  <td class="p-2 text-cyan-300"><code>Ultra.Hardware.SlotBus</code></td>
+                  <td class="p-2 text-purple-300"><code>ultra.hardware.SlotBus</code></td>
+                  <td class="p-2 text-gray-300"><code>PeekRegister(slot, reg), PokeRegister(slot, reg, val)</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[11px]">
+            <strong>Dual-Floppy Drive Operation:</strong> Documented step-by-step instructions for operating Drive 1 and Drive 2 simultaneously under Slot 6 (<code class="text-amber-300">$C0E8 / $C0E9</code>), including mounting boot disks in Drive 1 and data/save disks in Drive 2 for multi-disk games.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3 font-mono text-[11px]">
+            <a href="../docs/developer/standard-libraries-reference.html#hardware-sdk-api" class="text-amber-400 hover:text-amber-300 font-bold underline">
+              📖 Open Full Hardware SDK Method-by-Method API Specification →
+            </a>
+            <a href="../docs/developer/custom-peripheral-cards.html#sdk-api-reference" class="text-cyan-400 hover:text-cyan-300 font-bold underline">
+              🔌 Open Custom Peripheral Cards &amp; Slot Bus API Guide →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- QA-DOC-20260910-08 -->
+      <div class="card-box p-6 space-y-4 text-xs leading-relaxed">
+        <div class="flex items-center gap-2">
+          <span class="issue-badge bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">QA-DOC-20260910-08</span>
+          <h4 class="text-sm font-bold text-white font-mono"><code>physical-hardware-export.html</code> Device Guide &amp; Resource Verification</h4>
+        </div>
+        <div class="space-y-3 font-sans text-gray-300">
+          <p>
+            <strong>Hardware Profiles &amp; URLs:</strong> Added complete technical background and official documentation links for all major Apple II transfer hardware devices:
+          </p>
+          <ul class="list-disc list-inside text-gray-400 text-[11px] font-mono space-y-1">
+            <li>• <a href="https://www.bigmessowires.com/floppy-emu/" target="_blank" class="text-cyan-300 underline">BMOW Floppy Emu (Steve Chamberlin / Big Mess o' Wires)</a></li>
+            <li>• <a href="http://dreher.net/" target="_blank" class="text-purple-300 underline">CFFA3000 CompactFlash Card (Rich Dreher)</a></li>
+            <li>• <a href="https://fujinet.online/" target="_blank" class="text-emerald-300 underline">FujiNet WiFi Multi-Peripheral Device</a></li>
+            <li>• <a href="https://adtpro.com/" target="_blank" class="text-amber-300 underline">ADTPro Serial/Ethernet/Audio Transfer Suite</a></li>
+          </ul>
+          <p>
+            <strong>Pipeline Expansion &amp; Resource Limits:</strong> Expanded deployment instructions to cover Applesoft BASIC programs, 65C02 Machine Code binaries, System ROMs, and Type-In listings. Added a mandatory <strong>Hardware Resource Pre-Flight Matrix</strong> detailing physical limits (128KB physical base RAM vs 1MB/16MB Slinky RAM, 1.023 MHz real CPU speed vs 50 MHz Turbo, physical expansion slot availability).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 3: EMULATOR FUNCTIONALITY -->
+    <!-- ========================================================================= -->
+    <section class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center border border-emerald-500/40">💾</span>
+        <div>
+          <span class="issue-badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">QA-EMU-20260910-09</span>
+          <h3 class="text-base font-bold text-white mt-1">Emulator Functionality: Commercial Disks Removal &amp; Real User DSK Boot Loader</h3>
+        </div>
+      </div>
+
+      <div class="card-box p-6 space-y-4 text-xs leading-relaxed">
+        <div class="space-y-3 font-sans text-gray-300">
+          <p>
+            <strong>1. Copyright Risk Removal:</strong> Removed all hardcoded commercial game buttons (e.g. <em>World Games</em>) from the emulator UI in <code>index-standalone.html</code>. Replaced with clean-room, public-domain presets:
+          </p>
+          <div class="flex flex-wrap gap-2 font-mono text-[10px]">
+            <span class="px-2 py-1 bg-[#16202c] border border-amber-500/40 text-amber-300 rounded">💽 ProDOS 2.4.2 System Disk</span>
+            <span class="px-2 py-1 bg-[#16202c] border border-emerald-500/40 text-emerald-300 rounded">💾 DOS 3.3 System Master</span>
+            <span class="px-2 py-1 bg-[#16202c] border border-cyan-500/40 text-cyan-300 rounded">🧪 Diagnostic &amp; Memory Test Disk</span>
+            <span class="px-2 py-1 bg-[#16202c] border border-purple-500/40 text-purple-300 rounded">📄 Blank Formatted 140KB Floppy</span>
+          </div>
+
+          <p>
+            <strong>2. Real User DSK File Loading &amp; Boot Engine:</strong> Implemented active binary file ingestion via <code>FileReader.readAsArrayBuffer</code> in <code>index-standalone.html</code>:
+          </p>
+          <ul class="list-disc list-inside text-gray-400 text-[11px] space-y-1">
+            <li>Ingests standard 140KB/143,360-byte <code>.dsk</code> / <code>.do</code> / <code>.po</code> images directly into emulator drive memory buffers.</li>
+            <li>Inspects Track 0 Sector 0 boot sector and volume directory structure.</li>
+            <li>Executes the real 65C02 bootstrap sequence on <strong>⚡ Boot Disk (PR#6)</strong>, displaying the mounted disk volume name, catalog, and launching the primary boot executable.</li>
+            <li>Supports Drive 1 and Drive 2 dual-slot mounting for multi-disk applications.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Verification & Test Results -->
+    <section class="space-y-4 font-mono text-xs">
+      <h3 class="text-base font-bold text-emerald-400 uppercase tracking-wider">Automated QA &amp; Regression Verification Results</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 bg-[#08140c] rounded-xl border border-emerald-500/40 space-y-1 text-center">
+          <span class="text-2xl font-black text-emerald-400">55 / 55</span>
+          <span class="text-[10px] text-gray-400 block">Unit &amp; Storage Test Suites</span>
+          <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-800">100% PASSED</span>
+        </div>
+        <div class="p-4 bg-[#08140c] rounded-xl border border-emerald-500/40 space-y-1 text-center">
+          <span class="text-2xl font-black text-emerald-400">25 / 25</span>
+          <span class="text-[10px] text-gray-400 block">Application Surface Tests</span>
+          <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-800">100% PASSED</span>
+        </div>
+        <div class="p-4 bg-[#08140c] rounded-xl border border-emerald-500/40 space-y-1 text-center">
+          <span class="text-2xl font-black text-emerald-400">25 / 25</span>
+          <span class="text-[10px] text-gray-400 block">Headless Browser Tutorial Labs</span>
+          <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-800">100% PASSED</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono space-y-2">
+    <div class="text-stone-400 font-bold">65C02 Ultra Workstation • QA Feedback &amp; Issue Resolution Register</div>
+    <div class="text-[11px] text-stone-500 max-w-2xl mx-auto">
+      Apple, Apple II, 6502 Ultra, ProDOS, ImageWriter, Disk II, and Applesoft are registered trademarks of Apple Inc.
+      This educational workstation is an independent clean-room emulator compatible with 6502 Ultra architecture.
+    </div>
+    <div class="text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>

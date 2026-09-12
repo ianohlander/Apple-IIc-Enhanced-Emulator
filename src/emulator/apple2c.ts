@@ -68,6 +68,7 @@ export class Apple2cUltra {
     this.mmu.ioRouter.slotManager = this.slotManager;
     this.video = new Apple2cVideo(this.mmu);
     this.cpu = new CPU65C02(this.mmu);
+    this.diskController.cycleProvider = () => this.cpu.totalCycles;
   }
 
   public powerOn(): void {

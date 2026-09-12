@@ -198,6 +198,7 @@ export async function runSurfaceTests() {
       loadTypeInSample: (typeof loadTypeInSample !== 'undefined') ? loadTypeInSample : null,
       injectTypeIn: (typeof injectTypeIn !== 'undefined') ? injectTypeIn : null,
       compileAndRunCode: (typeof compileAndRunCode !== 'undefined') ? compileAndRunCode : null,
+      toggleScanlines: (window && window.toggleScanlines) || ((typeof toggleScanlines !== 'undefined') ? toggleScanlines : null),
       setPrinterMode: (window && window.setPrinterMode) || ((typeof setPrinterMode !== 'undefined') ? setPrinterMode : null),
       PRINTSHOP_TEMPLATES: (window && window.PRINTSHOP_TEMPLATES) || ((typeof PRINTSHOP_TEMPLATES !== 'undefined') ? PRINTSHOP_TEMPLATES : null)
     };
@@ -205,6 +206,7 @@ export async function runSurfaceTests() {
 
   const app = runSandbox(context.canvas, context.document, global.window);
   const emu = app.emulator;
+  global.window.emulator = emu;
   const ctx = context.canvas.getContext('2d');
 
   let passed = 0;
@@ -260,9 +262,11 @@ export async function runSurfaceTests() {
   emu.handleReturn();
 
   let mathResult = '';
-  for (let c = 0; c < 40; c++) {
-    const ch = emu.ram[emu.getRowBase(0) + c] & 0x7f;
-    mathResult += ch >= 32 ? String.fromCharCode(ch) : ' ';
+  for (let r = 0; r <= 1; r++) {
+    for (let c = 0; c < 40; c++) {
+      const ch = emu.ram[emu.getRowBase(r) + c] & 0x7f;
+      mathResult += ch >= 32 ? String.fromCharCode(ch) : ' ';
+    }
   }
   assert(mathResult.includes('512'), 'Immediate Math Surface: "? 128 * 4" evaluated to "512" in physical VRAM');
 
@@ -324,6 +328,13 @@ public class RetroDemo {
 
   emu.setPhosphor('green');
   assert(emu.phosphor === 'green', 'Phosphor Matrix Surface: Restored P1 Green display filter');
+
+  if (typeof app.toggleScanlines === 'function') {
+    app.toggleScanlines(false);
+    assert(emu.scanlines === false, 'CRT Scanlines Surface: Toggled Scanlines OFF');
+    app.toggleScanlines(true);
+    assert(emu.scanlines === true, 'CRT Scanlines Surface: Restored Scanlines ON');
+  }
 
   // --- SURFACE TEST SUITE 7: ImageWriter II Dot-Matrix & Print Shop Studio Surface ---
   console.log('\n📦 Surface Suite 7: ImageWriter II Dot-Matrix & Print Shop Studio Surface');

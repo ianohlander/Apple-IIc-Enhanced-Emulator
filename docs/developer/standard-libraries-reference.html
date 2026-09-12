@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Standard Class Libraries & Hardware API Reference — Apple //c Ultra</title>
+  <title>Standard Class Libraries & Hardware API Reference — 6502 Ultra</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -69,9 +69,9 @@
           <span class="px-2.5 py-0.5 bg-blue-500/20 text-cyan-300 font-mono text-xs font-bold rounded">CORE DESIGN PRINCIPLE</span>
           <span class="text-xs text-gray-400 font-mono">Zero Platform-Lock-In</span>
         </div>
-        <h3 class="text-xl font-bold text-white">Write Standard Modern Code Without Apple II Imports</h3>
+        <h3 class="text-xl font-bold text-white">Write Standard Modern Code Without Proprietary Imports</h3>
         <p class="text-gray-300 text-sm leading-relaxed">
-          The Apple //c Ultra is engineered so that developers can write and compile <strong>pure, standard C# .NET Core and Java applications</strong> using standard namespaces (<code class="text-amber-300">System</code>, <code class="text-amber-300">System.Collections.Generic</code>, <code class="text-cyan-300">java.lang</code>, <code class="text-cyan-300">java.util</code>) <strong>without requiring any Apple II-specific packages or imports</strong>.
+          The 6502 Ultra is engineered so that developers can write and compile <strong>pure, standard C# .NET Core and Java applications</strong> using standard namespaces (<code class="text-amber-300">System</code>, <code class="text-amber-300">System.Collections.Generic</code>, <code class="text-cyan-300">java.lang</code>, <code class="text-cyan-300">java.util</code>) <strong>without requiring any proprietary platform-specific packages or imports</strong>.
         </p>
         <p class="text-gray-300 text-sm leading-relaxed">
           The Apple-specific packages (<code class="text-emerald-300">Apple2.Ultra</code> and <code class="text-emerald-300">apple2.hardware</code>) are <strong>purely optional low-level hardware abstraction layers</strong>. They are provided for developers who specifically want direct, explicit access to vintage retro hardware features—such as Double Hi-Res 560&times;192 graphics switches (<code class="text-cyan-300">$C050</code>, <code class="text-cyan-300">$C057</code>, <code class="text-cyan-300">$C05F</code>), analog game paddle timers (<code class="text-cyan-300">$C064</code>), and Mockingboard Dual AY-3-8910 6-voice programmable sound chips.
@@ -302,34 +302,450 @@
 
     <!-- Section 4: Optional Hardware APIs Reference -->
     <section id="hardware-apis" class="space-y-6">
-      <h2 class="text-3xl font-black text-white section-title">4. Optional Hardware Platform APIs Reference</h2>
-      <p class="text-gray-300 text-sm leading-relaxed">
-        For developers who explicitly choose to write retro-hardware software, the optional namespaces <code class="text-emerald-300">Apple2.Ultra</code> (C#) and <code class="text-emerald-300">apple2.hardware</code> (Java) provide direct access to the retro architecture:
-      </p>
+      <div id="hardware-sdk-api" class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold border border-amber-500/40">QA-DOC-20260910-07</span>
+        <h2 class="text-3xl font-black text-white section-title">4. C# (.NET) &amp; Java Hardware Object SDK API Reference</h2>
+      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
-        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-4">
-          <h3 class="text-emerald-400 font-bold text-sm">C# Hardware API: Apple2.Ultra</h3>
-          <ul class="space-y-2 text-gray-300">
-            <li><strong class="text-white">AppleVideo.SetDoubleHiRes(bool):</strong> Strobes softswitches <code>$C050</code>, <code>$C057</code>, <code>$C00D</code>, <code>$C05F</code>.</li>
-            <li><strong class="text-white">AppleVideo.DrawLine(x0, y0, x1, y1, color):</strong> Fast Bresenham Double Hi-Res rasterizer.</li>
-            <li><strong class="text-white">AppleSound.Beep(frequency, durationMs):</strong> Cycles 1-bit speaker flip-flop at <code>$C030</code>.</li>
-            <li><strong class="text-white">AppleSound.PlayMockingboard(voice, freq, vol):</strong> Writes AY-3-8910 PSG registers (Slot 4).</li>
-            <li><strong class="text-white">AppleSystem.GetMouseX() / GetMouseY():</strong> Reads paddle registers <code>$C064/$C065</code>.</li>
-            <li><strong class="text-white">AppleMemory.SetSlinkyAddress(addr24):</strong> Sets 24-bit pointer into 16MB RAM (<code>$C071-$C075</code>).</li>
-          </ul>
+      <div class="bg-[#101622] border-2 border-amber-500/40 rounded-2xl p-6 shadow-xl space-y-4 font-sans text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-amber-400 font-bold text-sm">C# Namespace: <code>Ultra.Hardware</code> &bull; Java Package: <code>ultra.hardware</code></span>
+          <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px]">Zero Overhead Native AOT Lowering</span>
+        </div>
+        <p class="text-gray-300 leading-relaxed">
+          For developers building games, graphic demos, sound engines, network drivers, and peripheral interfaces, the <strong>6502 Ultra Hardware SDK</strong> exposes 11 specialized hardware abstraction classes. Each method call directly lowers during compilation into inline 65C02 memory-mapped I/O (MMIO) instructions (e.g. <code>STA $C050</code>, <code>LDA $C000</code>, <code>JSR $C700</code>) with zero runtime interpreter overhead.
+        </p>
+      </div>
+
+      <div class="space-y-8 font-mono text-xs">
+
+        <!-- 1. UltraVideo -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-purple-400 font-bold text-base sub-section-title">1. UltraVideo (Graphics &amp; Text VRAM Controller)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.UltraVideo</code> &bull; Java: <code>ultra.hardware.UltraVideo</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Controls 40/80 column text screens, Hi-Res Page 1/2 graphics (280&times;192), and Double Hi-Res 16-color composite graphics (560&times;192).</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetDoubleHiRes(bool enable)</td>
+                  <td class="p-2"><code>enable</code>: <code>true</code> for 560&times;192 DHGR, <code>false</code> for TEXT</td>
+                  <td class="p-2">Strobes <code>STA $C050</code> (Graphics), <code>STA $C057</code> (Hi-Res), <code>STA $C00D</code> (80-Col), <code>STA $C05F</code> (DHR-On).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetTextMode(bool enable)</td>
+                  <td class="p-2"><code>enable</code>: <code>true</code> for 24-row text mode</td>
+                  <td class="p-2">Strobes <code>STA $C051</code> (Text ON), <code>STA $C05E</code> (DHR OFF).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">DrawPixel(int x, int y, int color)</td>
+                  <td class="p-2"><code>x &isin; [0..559]</code>, <code>y &isin; [0..191]</code>, <code>color &isin; [0..15]</code></td>
+                  <td class="p-2">Computes scanline base in Main/Aux VRAM (<code>$2000/$4000</code>) and writes 7-pixel packed nibble.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">DrawLine(int x0, int y0, int x1, int y1, int color)</td>
+                  <td class="p-2">Line endpoints and 16-color DHGR composite palette index</td>
+                  <td class="p-2">Fast Zero Page Bresenham rasterizer loop plotting into 8KB Video RAM.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">ClearScreen(int color)</td>
+                  <td class="p-2"><code>color</code>: solid color or 0 for black</td>
+                  <td class="p-2">Fills 8,192 bytes of Main &amp; Aux Page 1 VRAM (<code>$2000–$3FFF</code>) using 16-bit unrolled store.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="p-5 bg-[#161b22] border border-[#30363d] rounded-xl space-y-4">
-          <h3 class="text-emerald-400 font-bold text-sm">Java Hardware API: apple2.hardware</h3>
-          <ul class="space-y-2 text-gray-300">
-            <li><strong class="text-white">AppleGraphics.setVideoMode(mode):</strong> Sets <code>MODE_TEXT40</code>, <code>MODE_HIRES</code>, or <code>MODE_DOUBLE_HIRES</code>.</li>
-            <li><strong class="text-white">AppleGraphics.drawLine(x0, y0, x1, y1, color):</strong> Double Hi-Res line renderer.</li>
-            <li><strong class="text-white">AppleAudio.beep(freqHz, durationMs):</strong> 1-bit speaker pulse generator.</li>
-            <li><strong class="text-white">AppleAudio.playMockingboard(ch, freq, vol):</strong> 6-channel PSG voice synthesizer.</li>
-            <li><strong class="text-white">AppleSystem.readPaddle(paddleNum):</strong> Reads paddle registers.</li>
-          </ul>
+        <!-- 2. UltraSound -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-pink-400 font-bold text-base sub-section-title">2. UltraSound (1-Bit Motherboard Speaker)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.UltraSound</code> &bull; Java: <code>ultra.hardware.UltraSound</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Direct control over the physical 1-bit speaker cone flip-flop at softswitch <code>$C030</code> (decimal <code>49200</code>).</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Click()</td>
+                  <td class="p-2">None &bull; <code>void</code></td>
+                  <td class="p-2">Executes single <code>BIT $C030</code> to toggle speaker cone state.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Beep(int frequencyHz, int durationMs)</td>
+                  <td class="p-2"><code>frequencyHz</code> (pitch), <code>durationMs</code> (duration)</td>
+                  <td class="p-2">Cycles <code>$C030</code> toggle in timed cycle loop calibrated for 1.02 MHz or 50 MHz clock.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        <!-- 3. MockingAudio -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-pink-400 font-bold text-base sub-section-title">3. MockingAudio (Slot 4 Dual AY-3-8910 6-Voice PSG)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.MockingAudio</code> &bull; Java: <code>ultra.hardware.MockingAudio</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Full polyphonic chiptune sound synthesis via dual General Instrument AY-3-8910 sound chips mapped through 6522 VIAs in Slot 4.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetTone(int voice, int frequencyHz)</td>
+                  <td class="p-2"><code>voice &isin; [0..5]</code>, <code>frequencyHz &isin; [20..20000]</code></td>
+                  <td class="p-2">Writes 12-bit tone period divider into PSG registers R0/R1, R2/R3, or R4/R5 via VIA port $C0C0.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetNoisePeriod(int chip, int period)</td>
+                  <td class="p-2"><code>chip &isin; [0..1]</code>, <code>period &isin; [0..31]</code> (5-bit)</td>
+                  <td class="p-2">Writes 5-bit LFSR noise generator period to register R6.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetMixer(int chip, int mixerMask)</td>
+                  <td class="p-2"><code>mixerMask</code> (bits 0-2 tone enable, 3-5 noise enable)</td>
+                  <td class="p-2">Writes I/O mixer control register R7 (active-low bitmask).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetVolume(int voice, int volume, bool envelope)</td>
+                  <td class="p-2"><code>voice &isin; [0..5]</code>, <code>volume &isin; [0..15]</code>, <code>envelope</code> flag</td>
+                  <td class="p-2">Writes 4-bit fixed amplitude or 5-bit envelope mode flag to amplitude registers R8, R9, R10.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">MuteAll()</td>
+                  <td class="p-2">None &bull; <code>void</code></td>
+                  <td class="p-2">Zeros all 16 PSG registers across both sound chips in Slot 4.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. DotMatrixPrinter -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-amber-400 font-bold text-base sub-section-title">4. DotMatrixPrinter (Slot 1 Tractor-Feed Printer)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.DotMatrixPrinter</code> &bull; Java: <code>ultra.hardware.DotMatrixPrinter</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Interface to the continuous 9-pin dot-matrix tractor-feed printer in Slot 1 (compatible with ImageWriter II / Centronics protocols).</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">PrintString(string text)</td>
+                  <td class="p-2"><code>text</code>: ASCII string content</td>
+                  <td class="p-2">Directs character byte stream to Slot 1 Centronics strobe register (<code>$C090</code>).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">FormFeed()</td>
+                  <td class="p-2">None &bull; <code>void</code></td>
+                  <td class="p-2">Sends Form Feed control byte (<code>0x0C</code> / ASCII 12) to advance to the next perforation fold.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">LineFeed()</td>
+                  <td class="p-2">None &bull; <code>void</code></td>
+                  <td class="p-2">Sends Carriage Return + Line Feed (<code>0x0D, 0x0A</code>) to advance paper one platen line.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetCondensed(bool enable)</td>
+                  <td class="p-2"><code>enable</code>: <code>true</code> for 17.16 CPI condensed mode</td>
+                  <td class="p-2">Transmits ESC sequence <code>ESC Q</code> (condensed font) or <code>ESC N</code> (standard 10 CPI).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 5. MidiMaster -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-amber-400 font-bold text-base sub-section-title">5. MidiMaster (Slot 2 31.25 kBaud Web MIDI Interface)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.MidiMaster</code> &bull; Java: <code>ultra.hardware.MidiMaster</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Transmits standard MIDI 1.0 serial commands through the 6850 ACIA interface in Slot 2 to connected Web MIDI synthesizers and hardware instruments.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SendNoteOn(int channel, int noteNumber, int velocity)</td>
+                  <td class="p-2"><code>channel &isin; [0..15]</code>, <code>note &isin; [0..127]</code>, <code>vel &isin; [0..127]</code></td>
+                  <td class="p-2">Transmits 3-byte MIDI packet (<code>0x90|channel, note, velocity</code>) via ACIA at $C0A0.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SendNoteOff(int channel, int noteNumber)</td>
+                  <td class="p-2"><code>channel &isin; [0..15]</code>, <code>note &isin; [0..127]</code></td>
+                  <td class="p-2">Transmits 3-byte MIDI packet (<code>0x80|channel, note, 0x00</code>).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SendProgramChange(int channel, int programId)</td>
+                  <td class="p-2"><code>channel &isin; [0..15]</code>, <code>programId &isin; [0..127]</code></td>
+                  <td class="p-2">Transmits 2-byte MIDI program patch change (<code>0xC0|channel, programId</code>).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 6. ProDosClock -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-emerald-400 font-bold text-base sub-section-title">6. ProDosClock (Slot 4 / Host RTC Calendar)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.ProDosClock</code> &bull; Java: <code>ultra.hardware.ProDosClock</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Reads host system real-time clock and calendar values conforming to the ProDOS standard clock driver format ($BF90–$BF93).</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">GetDateTime()</td>
+                  <td class="p-2">Returns <code>DateTime</code> (C#) or <code>Date</code> (Java)</td>
+                  <td class="p-2">Reads 4-byte packed ProDOS clock buffer: year/month at <code>$BF90</code>, day at <code>$BF91</code>, hour at <code>$BF92</code>, minute at <code>$BF93</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">GetTimestampBytes()</td>
+                  <td class="p-2">Returns <code>byte[4]</code></td>
+                  <td class="p-2">Copies the raw 4-byte ProDOS timestamp array directly into user memory buffer.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 7. Uthernet -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-cyan-400 font-bold text-base sub-section-title">7. Uthernet (Slot 3 10BASE-T Ethernet Controller)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.Uthernet</code> &bull; Java: <code>ultra.hardware.Uthernet</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">CS8900A 10Mbps Ethernet NIC interface in Slot 3 with bridge to host WebSockets / WebRTC network tunnels.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Connect(string host, int port)</td>
+                  <td class="p-2"><code>host</code> (IP or domain), <code>port &isin; [1..65535]</code> &bull; <code>bool</code></td>
+                  <td class="p-2">Initializes CS8900A packet buffer at <code>$C0B0</code> and begins TCP 3-way handshake.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Send(byte[] buffer, int length)</td>
+                  <td class="p-2"><code>buffer</code> (payload), <code>length</code> &bull; <code>int</code> bytes sent</td>
+                  <td class="p-2">Streams packet frames into NIC transmit FIFO at <code>$C0B4</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">Receive(byte[] buffer)</td>
+                  <td class="p-2"><code>buffer</code> (destination) &bull; <code>int</code> bytes received</td>
+                  <td class="p-2">Reads incoming packet frame from receive buffer register <code>$C0B0</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 8. StorageCore -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-amber-400 font-bold text-base sub-section-title">8. StorageCore (32MB SmartPort HD &amp; Dual Floppy Controller)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.StorageCore</code> &bull; Java: <code>ultra.hardware.StorageCore</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">High-speed mass storage block I/O driver (Slot 7 SmartPort 32MB HD) and Disk II dual-drive floppy controller (Slot 6 Drive 1 / Drive 2).</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">ReadBlock(int unit, int blockNum)</td>
+                  <td class="p-2"><code>unit</code> (e.g. <code>$70</code> for /HD), <code>blockNum &isin; [0..65535]</code> &bull; <code>byte[512]</code></td>
+                  <td class="p-2">Executes ProDOS MLI <code>READ_BLOCK</code> driver jump at <code>$C700</code> to read 512-byte block into RAM.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">WriteBlock(int unit, int blockNum, byte[] data)</td>
+                  <td class="p-2"><code>unit</code>, <code>blockNum</code>, <code>data &isin; byte[512]</code> &bull; <code>bool</code></td>
+                  <td class="p-2">Executes ProDOS MLI <code>WRITE_BLOCK</code> driver jump at <code>$C700</code> to commit 512 bytes to storage.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SelectFloppyDrive(int driveNumber)</td>
+                  <td class="p-2"><code>driveNumber</code>: <code>1</code> (Upper Drive) or <code>2</code> (Lower Drive)</td>
+                  <td class="p-2">Strobes <code>$C0EA</code> (Drive 1 motor/head) or <code>$C0EB</code> (Drive 2 motor/head) in Slot 6.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 9. UltraMemory -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-cyan-400 font-bold text-base sub-section-title">9. UltraMemory (MMU Banking &amp; Slinky 16MB RAM)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.UltraMemory</code> &bull; Java: <code>ultra.hardware.UltraMemory</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Manages Zero Page / Stack redirection (ALTZP), Auxiliary 128KB banking, Language Card write-enable protection, and 16MB Slinky streaming.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetSlinkyAddress(int address24)</td>
+                  <td class="p-2"><code>address24 &isin; [0..16777215]</code> (24-bit pointer)</td>
+                  <td class="p-2">Writes Low (<code>$C071</code>), Mid (<code>$C072</code>), and High (<code>$C073</code>) pointer bytes to Slinky port.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">ReadSlinkyByte()</td>
+                  <td class="p-2">Returns <code>byte</code> &bull; Auto-increments 24-bit address</td>
+                  <td class="p-2">Executes <code>LDA $C070</code> (auto-increments 24-bit pointer after read).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">WriteSlinkyByte(byte val)</td>
+                  <td class="p-2"><code>val</code>: 8-bit byte &bull; Auto-increments address</td>
+                  <td class="p-2">Executes <code>STA $C070</code> (auto-increments 24-bit pointer after write).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetAltZeroPage(bool enable)</td>
+                  <td class="p-2"><code>enable</code>: <code>true</code> for Aux Zero Page/Stack (<code>$0000–$01FF</code>)</td>
+                  <td class="p-2">Strobes <code>STA $C009</code> (ALTZP ON) or <code>STA $C008</code> (ALTZP OFF).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 10. UltraSystem -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-amber-400 font-bold text-base sub-section-title">10. UltraSystem (Paddles, Mouse, Keyboard &amp; Turbo Clock)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.UltraSystem</code> &bull; Java: <code>ultra.hardware.UltraSystem</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Reads analog game paddles, mouse coordinates, keyboard matrix strobes ($C000/$C010), and switches CPU clock frequency.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">ReadPaddle(int paddleIndex)</td>
+                  <td class="p-2"><code>paddleIndex &isin; [0..3]</code> &bull; Returns <code>int &isin; [0..255]</code></td>
+                  <td class="p-2">Triggers <code>$C070</code> timer strobe and counts NE558 discharge cycles at <code>$C064–$C067</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">GetMouseButton(int buttonIndex)</td>
+                  <td class="p-2"><code>buttonIndex &isin; [0..2]</code> &bull; Returns <code>bool</code></td>
+                  <td class="p-2">Reads pushbutton 0 (<code>$C061</code> Open-Apple), pushbutton 1 (<code>$C062</code> Solid-Apple), or PB2 (<code>$C063</code>).</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">ReadKey()</td>
+                  <td class="p-2">Returns <code>char</code> &bull; Clears strobe register</td>
+                  <td class="p-2">Polls bit 7 of <code>$C000</code>; when set, extracts ASCII char and strobes <code>$C010</code> to reset buffer.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">SetCpuClockSpeed(double mhz)</td>
+                  <td class="p-2"><code>mhz &isin; {1.02, 2.80, 8.00, 50.0}</code></td>
+                  <td class="p-2">Configures hardware cycle budget governor to throttle or turbocharge 65C02 execution.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 11. SlotBus -->
+        <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
+            <h3 class="text-amber-400 font-bold text-base sub-section-title">11. SlotBus (Direct Generic Peripheral Slot I/O)</h3>
+            <span class="text-gray-400 text-[11px]">C#: <code>Ultra.Hardware.SlotBus</code> &bull; Java: <code>ultra.hardware.SlotBus</code></span>
+          </div>
+          <p class="text-gray-300 font-sans">Low-level generic I/O bus interface allowing any custom user-scripted JavaScript card in Slots 1–7 to be controlled from compiled C# or Java code.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-[#30363d] text-left">
+              <thead class="bg-[#0d1117] text-gray-400 text-[11px]">
+                <tr>
+                  <th class="p-2 border-b border-[#30363d]">Method Signature</th>
+                  <th class="p-2 border-b border-[#30363d]">Parameters &amp; Return</th>
+                  <th class="p-2 border-b border-[#30363d]">65C02 MMIO / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#30363d] text-gray-300 text-[11px]">
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">PeekRegister(int slot, int registerOffset)</td>
+                  <td class="p-2"><code>slot &isin; [1..7]</code>, <code>offset &isin; [0..15]</code> &bull; Returns <code>byte</code></td>
+                  <td class="p-2">Executes <code>LDA $C080 + (slot * $10) + offset</code> and returns 8-bit hardware state byte.</td>
+                </tr>
+                <tr>
+                  <td class="p-2 text-cyan-300 font-bold">PokeRegister(int slot, int registerOffset, byte value)</td>
+                  <td class="p-2"><code>slot &isin; [1..7]</code>, <code>offset &isin; [0..15]</code>, <code>value &isin; byte</code></td>
+                  <td class="p-2">Executes <code>STA $C080 + (slot * $10) + offset</code> to trigger hardware actuator/register.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -391,7 +807,7 @@ public class PureJavaApp
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-blue-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Standard Libraries Reference
+    <a href="index.html" class="text-blue-400 hover:underline">← Back to Developer Hub</a> • 6502 Ultra Standard Libraries Reference
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

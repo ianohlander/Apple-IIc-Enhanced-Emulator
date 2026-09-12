@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>65C02 CPU Emulation Deep Dive — Apple //c Ultra Developer Guide</title>
+  <title>65C02 CPU Emulation Deep Dive — 6502 Ultra Developer Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -114,7 +114,7 @@
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">1. WDC 65C02 Core Architecture & Silicon Enhancements</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra is powered by an cycle-accurate emulation of the <strong>Western Design Center (WDC) 65C02 CMOS</strong> microprocessor. First released in 1983, the 65C02 represents a major evolution over the classic NMOS 6502 found in the original 1977 Apple II and II Plus. It is manufactured in high-density static CMOS silicon, drastically reducing power consumption while adding 27 new instructions, 8 new addressing modes, and fixing several notorious hardware bugs that plagued the NMOS version.
+        The 6502 Ultra is powered by an cycle-accurate emulation of the <strong>Western Design Center (WDC) 65C02 CMOS</strong> microprocessor. First released in 1983, the 65C02 represents a major evolution over the classic NMOS 6502 found in the original 1977 Apple II and II Plus. It is manufactured in high-density static CMOS silicon, drastically reducing power consumption while adding 27 new instructions, 8 new addressing modes, and fixing several notorious hardware bugs that plagued the NMOS version.
       </p>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
@@ -151,7 +151,7 @@
               </tr>
               <tr>
                 <td class="p-2.5 text-white font-bold">Clock Frequency Range</td>
-                <td class="p-2.5 text-gray-400">1.0227 MHz (Standard Apple II)</td>
+                <td class="p-2.5 text-gray-400">1.0227 MHz (Standard 1.02 MHz 6502)</td>
                 <td class="p-2.5 text-amber-400"><strong>1.00 MHz to 50.00 MHz Turbo Mode</strong> with dynamic software throttling.</td>
               </tr>
             </tbody>
@@ -205,21 +205,21 @@
       <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 space-y-4 text-xs font-mono">
         <h3 class="text-amber-400 font-bold text-sm">Exact Mathematical Formulation of BCD Addition (ADC)</h3>
         <p class="text-gray-300">
-          Given accumulator \(A\) and operand \(M\), with carry \(C_{in}\):
+          Given accumulator <code class="text-amber-300">A</code> and operand <code class="text-amber-300">M</code>, with carry <code class="text-amber-300">C<sub>in</sub></code>:
         </p>
         <ol class="list-decimal list-inside space-y-2 text-gray-300">
-          <li><strong>Low Nibble Addition:</strong> \(AL = (A \pmod{16}) + (M \pmod{16}) + C_{in}\). If \(AL > 9\), adjust: \(AL = (AL + 6) \pmod{16}\), and propagate carry \(AH_{carry} = 1\).</li>
-          <li><strong>High Nibble Addition:</strong> \(AH = \lfloor A / 16 \rfloor + \lfloor M / 16 \rfloor + AH_{carry}\).</li>
-          <li><strong>High Nibble Overflow:</strong> If \(AH > 9\), adjust: \(AH = (AH + 6) \pmod{16}\), and set Carry Out \(C_{out} = 1\). Otherwise, \(C_{out} = 0\).</li>
-          <li><strong>Final Decimal Result:</strong> \(A_{new} = (AH \times 16) + AL\).</li>
-          <li><strong>Flags Update (65C02 Standard):</strong> \(Z = (A_{new} == 0)\), \(N = (A_{new} \ \& \ 0x80) \neq 0\).</li>
+          <li><strong>Low Nibble Addition:</strong> <code class="text-emerald-300">AL = (A mod 16) + (M mod 16) + C<sub>in</sub></code>. If <code class="text-emerald-300">AL &gt; 9</code>, adjust: <code class="text-emerald-300">AL = (AL + 6) mod 16</code>, and propagate carry <code class="text-emerald-300">AH<sub>carry</sub> = 1</code>.</li>
+          <li><strong>High Nibble Addition:</strong> <code class="text-emerald-300">AH = &lfloor;A / 16&rfloor; + &lfloor;M / 16&rfloor; + AH<sub>carry</sub></code>.</li>
+          <li><strong>High Nibble Overflow:</strong> If <code class="text-emerald-300">AH &gt; 9</code>, adjust: <code class="text-emerald-300">AH = (AH + 6) mod 16</code>, and set Carry Out <code class="text-emerald-300">C<sub>out</sub> = 1</code>. Otherwise, <code class="text-emerald-300">C<sub>out</sub> = 0</code>.</li>
+          <li><strong>Final Decimal Result:</strong> <code class="text-emerald-300">A<sub>new</sub> = (AH &times; 16) + AL</code>.</li>
+          <li><strong>Flags Update (65C02 Standard):</strong> <code class="text-emerald-300">Z = (A<sub>new</sub> == 0)</code>, <code class="text-emerald-300">N = (A<sub>new</sub> &amp; 0x80) &ne; 0</code>.</li>
         </ol>
 
         <div class="p-4 bg-[#161b22] border border-[#30363d] rounded-lg text-emerald-300">
           <strong>Concrete Example:</strong> Adding $29 + $43 with Carry = 0.<br>
-          • Low nibble: \(9 + 3 + 0 = 12\) ($0C). Since \(12 > 9\), \(AL = (12 + 6) \pmod{16} = 2\), \(AH_{carry} = 1\).<br>
-          • High nibble: \(2 + 4 + 1 = 7\). Since \(7 \le 9\), \(AH = 7\), \(C_{out} = 0\).<br>
-          • Final Result: \(A = $72\) (representing decimal 72). Valid: \(29 + 43 = 72\)!
+          • Low nibble: <code class="text-cyan-300">9 + 3 + 0 = 12 ($0C)</code>. Since <code class="text-cyan-300">12 &gt; 9</code>, <code class="text-cyan-300">AL = (12 + 6) mod 16 = 2</code>, <code class="text-cyan-300">AH<sub>carry</sub> = 1</code>.<br>
+          • High nibble: <code class="text-cyan-300">2 + 4 + 1 = 7</code>. Since <code class="text-cyan-300">7 &le; 9</code>, <code class="text-cyan-300">AH = 7</code>, <code class="text-cyan-300">C<sub>out</sub> = 0</code>.<br>
+          • Final Result: <code class="text-emerald-400 font-bold">A = $72</code> (representing decimal 72). Valid: <code class="text-emerald-400">29 + 43 = 72</code>!
         </div>
       </div>
     </section>
@@ -268,7 +268,7 @@
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • 65C02 Ultra Workstation
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

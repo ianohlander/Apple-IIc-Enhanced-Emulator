@@ -96,10 +96,10 @@ export function runTypeInTests(): void {
       assertTrue(prog!.sourceCode.includes('SZ(I) = SZ(I) - 3'), 'Simulates warp velocity along Z-axis');
     });
 
-    runner.test('Raw 65C02 Assembly Injection: $0300 Apple String Out', () => {
+    runner.test('Raw 65C02 Assembly Injection: $0300 65C02 String Out', () => {
       const stringOutDump = `
         300: A2 00 BD 10 03 F0 06 20 ED FD E8 D0 F5 60
-        310: C1 D0 D0 CC C5 A0 C9 C9 E3 A0 D5 EC F4 F2 E1 00
+        310: B6 B5 B0 B2 A0 D5 CC D4 D2 C1 00
       `;
 
       assertEqual(mgr.detectMode(stringOutDump), 'monitor', 'Detected as Monitor Hex Dump');
@@ -107,7 +107,7 @@ export function runTypeInTests(): void {
       assertEqual(entries.length, 2, 'Parsed 2 lines');
 
       const injectedBytes = mgr.injectMonitorDirectly(entries);
-      assertEqual(injectedBytes, 30, 'Injected 30 bytes at $0300-$031D');
+      assertEqual(injectedBytes, 26, 'Injected 26 bytes at $0300-$031A');
 
       // Verify memory at $0300 contains routine
       assertEqual(mmu.read(0x0300), 0xa2); // LDX #$00
@@ -131,7 +131,7 @@ export function runTypeInTests(): void {
       }
 
       assertEqual(cpu.pc, 0x030d, 'CPU reached RTS at $030D');
-      assertEqual(cpu.x, 15, 'Printed all 15 characters of "APPLE IIc Ultra"');
+      assertEqual(cpu.x, 10, 'Printed all 10 characters of "6502 ULTRA"');
       assertEqual(cpu.flagZ, true, 'Zero flag set by null terminator');
     });
 

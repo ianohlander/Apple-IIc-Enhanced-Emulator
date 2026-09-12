@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>65C02 Ultra Workstation — Technical Reference Manual (Apple //c Compatible)</title>
+  <title>65C02 Ultra Workstation — Technical Reference Manual (6502 Ultra Compatible)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -57,7 +57,7 @@
       </div>
       <div>
         <span class="text-[11px] font-mono text-amber-400 font-bold tracking-widest uppercase">Vintage Computing Technical Library</span>
-        <h1 class="text-sm font-extrabold text-white tracking-wide">65C02 Ultra Workstation Reference Manual <span class="text-xs text-stone-400 font-normal">(Compatible with Apple //c Architecture)</span></h1>
+        <h1 class="text-sm font-extrabold text-white tracking-wide">65C02 Ultra Workstation Reference Manual <span class="text-xs text-stone-400 font-normal">(Compatible with 6502 Ultra Architecture)</span></h1>
       </div>
     </div>
 
@@ -115,7 +115,7 @@
           65C02 Ultra Workstation Technical Reference Manual
         </h1>
         <p class="text-gray-400 text-sm max-w-3xl leading-relaxed">
-          Welcome, vintage computing enthusiast! Whether you are a retrocomputing historian exploring Wozniak's ingenious hardware softswitches or a modern developer compiling object-oriented Java and C# into raw 65C02 machine code, this reference manual provides an exhaustive guide to every register, circuit, top bezel control, ImageWriter II continuous printer, fly-up keyboard, and runtime feature of the <strong>65C02 Ultra Workstation (Compatible with Apple //c Architecture)</strong>.
+          Welcome, vintage computing enthusiast! Whether you are a retrocomputing historian exploring Wozniak's ingenious hardware softswitches or a modern developer compiling object-oriented Java and C# into raw 65C02 machine code, this reference manual provides an exhaustive guide to every register, circuit, top bezel control, ImageWriter II continuous printer, fly-up keyboard, and runtime feature of the <strong>65C02 Ultra Workstation (Compatible with 6502 Ultra Architecture)</strong>.
         </p>
       </div>
 
@@ -127,11 +127,11 @@
         </div>
 
         <p class="text-gray-300 text-sm">
-          On April 24, 1984, at the Moscone Center in San Francisco, Apple Computer declared: <em>"Apple II Forever."</em> The centerpiece of that vision was the Apple //c — a lightweight, closed-architecture portable computer designed to sit elegantly on any desk.
+          On April 24, 1984, at the Moscone Center in San Francisco, Apple Computer declared: <em>"Apple II Forever."</em> The centerpiece of that vision was the 6502 Ultra — a lightweight, closed-architecture portable computer designed to sit elegantly on any desk.
         </p>
 
         <p class="text-gray-300 text-sm">
-          The <strong>65C02 Ultra Workstation</strong> poses a thrilling historical "what if?": <em>What if the 1984 Apple //c were engineered with access to future breakthroughs while preserving 100% cycle-accurate backward compatibility?</em>
+          The <strong>65C02 Ultra Workstation</strong> poses a thrilling historical "what if?": <em>What if the 1984 6502 Ultra were engineered with access to future breakthroughs while preserving 100% cycle-accurate backward compatibility?</em>
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 font-mono text-xs">
@@ -158,7 +158,7 @@
         </div>
 
         <p class="text-gray-300 text-sm">
-          The following exhaustive matrix highlights the architectural differences between the original 1984 Apple //c and the 65C02 Ultra Workstation:
+          The following exhaustive matrix highlights the architectural differences between the original 1984 6502 Ultra and the 65C02 Ultra Workstation:
         </p>
 
         <div class="overflow-x-auto">
@@ -166,7 +166,7 @@
             <thead>
               <tr class="border-b border-[#30363d] bg-[#0d1117] text-amber-400">
                 <th class="p-3">Component</th>
-                <th class="p-3">Original 1984 Apple //c</th>
+                <th class="p-3">Original 1984 6502 Ultra</th>
                 <th class="p-3 text-emerald-400">65C02 Ultra Enhancement</th>
                 <th class="p-3 text-cyan-400">Underlying Technology Bridge</th>
               </tr>
@@ -182,7 +182,7 @@
                 <td class="p-3 font-bold text-white">Addressable RAM</td>
                 <td class="p-3">128 KB (64K Main + 64K Aux)</td>
                 <td class="p-3 text-emerald-400 font-semibold">1,024 KB to 16 MB Slinky &amp; RamWorks Banked Memory</td>
-                <td class="p-3 text-gray-400">Apple II Memory Expansion Card ($C071–$C075)</td>
+                <td class="p-3 text-gray-400">Slinky 1MB Memory Expansion Card ($C071–$C075)</td>
               </tr>
               <tr>
                 <td class="p-3 font-bold text-white">Mass Storage</td>
@@ -277,7 +277,7 @@
         </div>
 
         <p class="text-gray-300 text-sm leading-relaxed">
-          The Apple //c Ultra provides a complete, unified storage architecture combining authentic vintage physical diskette emulation with high-speed virtual hard disks and banked RAM disks:
+          The 6502 Ultra provides a complete, unified storage architecture combining authentic vintage physical diskette emulation with high-speed virtual hard disks and banked RAM disks:
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
@@ -353,12 +353,12 @@ string state = File.ReadAllText("/HD/SAVEGAME.DAT");
 
 // Low-level MLI Block I/O ($C700)
 byte[] block = new byte[512];
-AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, block);</code></pre>
+StorageCore.WriteBlock(StorageCore.UnitSlot7Drive1, 100, block);</code></pre>
             </div>
             <div class="p-3 bg-[#081510] rounded border border-[#1b432a]">
               <span class="text-emerald-300 font-bold block mb-1">Java 17 Storage Access</span>
               <pre class="text-gray-300 text-[11px] overflow-x-auto"><code>import java.io.File;
-import apple2.hardware.AppleStorage;
+import apple2.hardware.StorageCore;
 
 // High-level File Streams
 File file = new File("/HD/CONFIG.CFG");
@@ -366,7 +366,7 @@ file.writeText("SPEED=FAST;AUDIO=ON");
 
 // Low-level MLI Block I/O ($C700)
 byte[] buf = new byte[512];
-AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
+StorageCore.writeBlock(StorageCore.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
             </div>
           </div>
         </div>
@@ -380,7 +380,7 @@ AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
         </div>
 
         <p class="text-gray-300 text-sm">
-          Instead of relying on boot floppies, the <strong>Custom ROM Studio</strong> allows you to construct custom 32KB/64KB Apple //c ROM packages and flash them into the motherboard:
+          Instead of relying on boot floppies, the <strong>Custom ROM Studio</strong> allows you to construct custom 32KB/64KB 6502 Ultra ROM packages and flash them into the motherboard:
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
@@ -408,7 +408,7 @@ AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>
         </div>
 
         <p class="text-gray-300 text-sm">
-          Throughout the 1980s, computer magazines were the lifeblood of the Apple II community. The <strong>Magazine Type-In Studio</strong> bridges those historical publications to your modern workflow:
+          Throughout the 1980s, computer magazines were the lifeblood of the vintage computing community. The <strong>Magazine Type-In Studio</strong> bridges those historical publications to your modern workflow:
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
@@ -679,7 +679,7 @@ namespace SoundEngine {
       </section>
 
       <footer class="text-center text-xs font-mono text-gray-500 pt-8 pb-12 border-t border-[#30363d]">
-        65C02 Ultra Workstation • Technical Reference Manual &amp; Programming Guide • Compatible with Apple //c Architecture
+        65C02 Ultra Workstation • Technical Reference Manual &amp; Programming Guide • Compatible with 6502 Ultra Architecture
         <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
       </footer>
 

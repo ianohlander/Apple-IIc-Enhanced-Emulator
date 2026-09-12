@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Full-Stack C# to 65C02 Video Game Engineering Guide</title>
+  <title>6502 Ultra — Full-Stack C# to 65C02 Video Game Engineering Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -44,7 +44,7 @@
         
       </div>
       <div>
-        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Engineering</span>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">6502 Ultra Engineering</span>
         <h1 class="text-base font-extrabold text-white">Full-Stack C# to 65C02 Video Game Engineering</h1>
       </div>
     </div>
@@ -154,7 +154,7 @@
 
           <!-- Stage 5: Silicon & Video VRAM -->
           <rect x="720" y="35" width="140" height="110" rx="6" fill="url(#grad-silicon)" stroke="#00e5ff" stroke-width="1.5" />
-          <text x="790" y="60" fill="#00e5ff" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">5. Apple //c Silicon</text>
+          <text x="790" y="60" fill="#00e5ff" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">5. 6502 Ultra Silicon</text>
           <text x="790" y="80" fill="#bae6fd" font-size="9" text-anchor="middle" font-family="monospace">50 MHz WDC 65C02</text>
           <text x="790" y="98" fill="#bae6fd" font-size="9" text-anchor="middle" font-family="monospace">DHGR 560x192 VRAM</text>
           <text x="790" y="120" fill="#00e5ff" font-size="8" text-anchor="middle" font-family="monospace">Mockingboard Audio</text>
@@ -371,7 +371,7 @@ namespace RetroBreakout
 <!-- Section 2: Memory Layout & Object Allocation -->
     <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
       <div class="flex items-center justify-between border-b border-[#30363d] pb-3">
-        <h3 class="text-base font-bold text-emerald-400">2. How C# Objects & Fields Live in Apple II Memory</h3>
+        <h3 class="text-base font-bold text-emerald-400">2. How C# Objects & Fields Live in 6502 Ultra Memory</h3>
         <span class="text-[11px] text-gray-500">Memory Architecture</span>
       </div>
 
@@ -559,7 +559,7 @@ NO_BOUNCE:
         </div>
 
         <p class="text-gray-400 text-[11px]">
-          The Apple II video RAM is notoriously non-linear. The compiler generates an efficient jump table using the scanline formula:
+          The 6502 Ultra video RAM is notoriously non-linear. The compiler generates an efficient jump table using the scanline formula:
         </p>
 
         <pre class="bg-[#161b22] p-3 rounded text-purple-300 overflow-x-auto"><code>; Input: A = X (0..139), X = Y (0..191), Y = Color (0..15)
@@ -658,7 +658,7 @@ SAVE_HIGHSCORE:
       </div>
 
       <p class="text-gray-300 leading-relaxed font-sans text-sm">
-        The Apple //c Ultra bridges modern managed file streams (<code class="text-amber-300">System.IO.File</code>, <code class="text-amber-300">java.io.File</code>) and raw block device access (<code class="text-cyan-300">AppleStorage.ReadBlock</code>, <code class="text-cyan-300">AppleStorage.WriteBlock</code>) directly to the vintage ProDOS Machine Language Interface (MLI) Block Device Driver at <code class="text-amber-400">$C700</code> (Slot 7 32MB SmartPort Hard Disk) and <code class="text-amber-400">$C600</code> (Slot 6 5.25" Floppy Disk Controller).
+        The 6502 Ultra bridges modern managed file streams (<code class="text-amber-300">System.IO.File</code>, <code class="text-amber-300">java.io.File</code>) and raw block device access (<code class="text-cyan-300">StorageCore.ReadBlock</code>, <code class="text-cyan-300">StorageCore.WriteBlock</code>) directly to the vintage ProDOS Machine Language Interface (MLI) Block Device Driver at <code class="text-amber-400">$C700</code> (Slot 7 32MB SmartPort Hard Disk) and <code class="text-amber-400">$C600</code> (Slot 6 5.25" Floppy Disk Controller).
       </p>
 
       <!-- Storage Block Diagram SVG -->
@@ -671,7 +671,7 @@ SAVE_HIGHSCORE:
             <text x="130" y="50" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="Space Mono">Managed Storage APIs</text>
             <text x="130" y="75" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="Space Mono">System.IO.File.WriteAllText()</text>
             <text x="130" y="95" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="Space Mono">java.io.FileOutputStream</text>
-            <text x="130" y="115" fill="#fbbf24" font-size="10" text-anchor="middle" font-family="Space Mono">AppleStorage.WriteBlock()</text>
+            <text x="130" y="115" fill="#fbbf24" font-size="10" text-anchor="middle" font-family="Space Mono">StorageCore.WriteBlock()</text>
 
             <!-- Arrow 1 -->
             <path d="M 240 80 L 290 80" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
@@ -710,19 +710,19 @@ SAVE_HIGHSCORE:
           <tbody class="text-gray-300">
             <tr>
               <td class="border border-[#30363d] p-2 text-cyan-300 font-bold">C# .NET</td>
-              <td class="border border-[#30363d] p-2 font-mono">AppleStorage.WriteBlock(unit, blk, buf)</td>
+              <td class="border border-[#30363d] p-2 font-mono">StorageCore.WriteBlock(unit, blk, buf)</td>
               <td class="border border-[#30363d] p-2 font-mono text-amber-300">LDA #$02 : STA $0800 : JSR $C700</td>
               <td class="border border-[#30363d] p-2">Writes 512-byte payload to SmartPort HD (/HD) or Floppy.</td>
             </tr>
             <tr class="bg-[#12161a]">
               <td class="border border-[#30363d] p-2 text-cyan-300 font-bold">C# .NET</td>
-              <td class="border border-[#30363d] p-2 font-mono">AppleStorage.ReadBlock(unit, blk)</td>
+              <td class="border border-[#30363d] p-2 font-mono">StorageCore.ReadBlock(unit, blk)</td>
               <td class="border border-[#30363d] p-2 font-mono text-amber-300">LDA #$01 : STA $0800 : JSR $C700</td>
               <td class="border border-[#30363d] p-2">Reads 512-byte block from volume into memory buffer.</td>
             </tr>
             <tr>
               <td class="border border-[#30363d] p-2 text-emerald-300 font-bold">Java 17</td>
-              <td class="border border-[#30363d] p-2 font-mono">AppleStorage.writeBlock(unit, blk, buf)</td>
+              <td class="border border-[#30363d] p-2 font-mono">StorageCore.writeBlock(unit, blk, buf)</td>
               <td class="border border-[#30363d] p-2 font-mono text-amber-300">LDA #$02 : STA $0800 : JSR $C700</td>
               <td class="border border-[#30363d] p-2">Direct ProDOS MLI block output from Java bytecode.</td>
             </tr>
@@ -776,7 +776,7 @@ SAVE_HIGHSCORE:
           <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">ProDOS Persistence</span>
         </div>
         <p class="text-gray-300 font-sans text-xs leading-relaxed">
-          Demonstrates binary object serialization of a <code class="text-amber-300">PlayerRecord</code> entity into 512-byte raw ProDOS blocks, invoking <code class="text-amber-300">AppleStorage.WriteBlock(0x70, blockNum, buffer)</code> to persist high scores and game state to the 32MB SmartPort hard drive (<code class="text-amber-400">/HD</code>).
+          Demonstrates binary object serialization of a <code class="text-amber-300">PlayerRecord</code> entity into 512-byte raw ProDOS blocks, invoking <code class="text-amber-300">StorageCore.WriteBlock(0x70, blockNum, buffer)</code> to persist high scores and game state to the 32MB SmartPort hard drive (<code class="text-amber-400">/HD</code>).
         </p>
       </div>
 
@@ -806,7 +806,7 @@ SAVE_HIGHSCORE:
   </main>
 
   <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">
-    Apple //c Ultra • Full-Stack C# to 65C02 Video Game Engineering Guide 
+    6502 Ultra • Full-Stack C# to 65C02 Video Game Engineering Guide 
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

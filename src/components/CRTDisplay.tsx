@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Apple2cUltra } from '../emulator/apple2c';
-import { DisplayPhosphor } from '../types/emulator';
-import { Monitor, Zap, Tv, Eye, Clipboard } from 'lucide-react';
+import { DisplayPhosphor, ClockSpeed } from '../types/emulator';
 import { TypeInManager } from '../emulator/typein/typeInManager';
 
 interface CRTDisplayProps {
@@ -12,6 +11,14 @@ interface CRTDisplayProps {
   onScanlinesToggle: () => void;
   isCurved: boolean;
   onCurvedToggle: () => void;
+  clockSpeed?: number;
+  onSpeedChange?: (speed: number) => void;
+  onReset?: (cold: boolean) => void;
+  onPowerToggle?: () => void;
+  isRunning?: boolean;
+  onOpenCabinet?: (tabId: string) => void;
+  onToggleKeyboard?: () => void;
+  onToggleFullscreen?: () => void;
 }
 
 export const CRTDisplay: React.FC<CRTDisplayProps> = ({
@@ -21,7 +28,15 @@ export const CRTDisplay: React.FC<CRTDisplayProps> = ({
   scanlines,
   onScanlinesToggle,
   isCurved,
-  onCurvedToggle
+  onCurvedToggle,
+  clockSpeed = ClockSpeed.SPEED_TURBO,
+  onSpeedChange,
+  onReset,
+  onPowerToggle,
+  isRunning = true,
+  onOpenCabinet,
+  onToggleKeyboard,
+  onToggleFullscreen
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -105,127 +120,130 @@ export const CRTDisplay: React.FC<CRTDisplayProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center">
-      {/* CRT Monitor Outer Casing (Warm Platinum Bezel) */}
-      <div className="relative bg-[#D6D0B8] border-8 border-[#B8B094] rounded-2xl p-6 shadow-2xl max-w-4xl w-full">
-        {/* Apple Logo Badge */}
-        <div className="absolute top-2 left-6 flex items-center space-x-1">
-          <span className="text-sm font-bold tracking-wider text-stone-700"> Monitor //c</span>
+    <div id="crt-bezel-box" className="snow-white-crt-bezel flex-1 rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-lg font-mono text-xs select-none">
+      {/* Bezel Top Bar: Phosphor Dial, Speed, Scanlines, Fullscreen & Paste */}
+      <div className="flex flex-wrap items-center justify-between pb-2.5 border-b border-[#bcb4a3] gap-2 font-mono text-xs">
+        {/* Left: Status LEDs & Model */}
+        <div className="flex items-center space-x-2">
+          <div
+            className={`w-3 h-3 rounded-full ${
+              isRunning ? 'bg-emerald-500 shadow-lg shadow-emerald-500/50 animate-pulse' : 'bg-red-500'
+            }`}
+            title="System Power & Video Clock Online"
+          />
+          <span className="font-black text-xs tracking-wider text-stone-800">MONITOR ULTRA //c</span>
+          <span className="text-[10px] text-stone-600 hidden xl:inline">HIGH-RESOLUTION CRT</span>
         </div>
 
-        {/* CRT Screen Bezel */}
-        <div className="relative bg-[#1A1C18] p-4 rounded-xl border-4 border-[#3A382E] shadow-inner flex justify-center items-center overflow-hidden">
-          {/* CRT Glass Curvature Effect */}
-          <div className={`relative w-full aspect-[4/3] max-w-[640px] flex items-center justify-center bg-black rounded-lg overflow-hidden ${
-            isCurved ? 'shadow-[inset_0_0_80px_rgba(0,0,0,0.9)]' : ''
-          }`}>
-            <canvas
-              ref={canvasRef}
-              width={560}
-              height={384}
-              onMouseMove={handleMouseMove}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onContextMenu={handleContextMenu}
-              className="w-full h-full object-contain rounded-md cursor-crosshair"
-              style={{
-                filter: phosphor === DisplayPhosphor.GREEN
-                  ? 'drop-shadow(0 0 8px rgba(51, 255, 68, 0.45))'
-                  : phosphor === DisplayPhosphor.AMBER
-                  ? 'drop-shadow(0 0 8px rgba(255, 176, 0, 0.45))'
-                  : 'drop-shadow(0 0 6px rgba(255, 255, 255, 0.2))'
-              }}
-            />
-
-            {/* Subtle Screen Glass Scanline Overlay */}
-            {scanlines && (
-              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px]" />
-            )}
-
-            {/* CRT Phosphor Glare / Vignette */}
-            <div className="absolute inset-0 pointer-events-none rounded-lg bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03)_0%,rgba(0,0,0,0.35)_100%)]" />
+        {/* Center: Phosphor & Clock Speed Selectors */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center space-x-1">
+            <span className="text-stone-600 text-[10px] font-bold">PHOSPHOR:</span>
+            <select
+              value={phosphor}
+              onChange={(e) => onPhosphorChange(e.target.value as DisplayPhosphor)}
+              className="bg-[#141a24] text-emerald-400 font-bold px-2 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none"
+            >
+              <option value={DisplayPhosphor.COLOR_NTSC} className="bg-[#141a24] text-amber-300">🎨 Color Composite</option>
+              <option value={DisplayPhosphor.GREEN} className="bg-[#141a24] text-emerald-400">🟢 P1 Green</option>
+              <option value={DisplayPhosphor.AMBER} className="bg-[#141a24] text-amber-400">🟡 P3 Amber</option>
+              <option value={DisplayPhosphor.WHITE} className="bg-[#141a24] text-stone-200">⚪ P4 B&amp;W</option>
+            </select>
           </div>
-        </div>
 
-        {/* Monitor Controls Under-Bezel */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-stone-800">
-          <div className="flex items-center space-x-2">
-            <span className="font-bold flex items-center gap-1">
-              <Tv className="w-3.5 h-3.5" /> Phosphor:
+          {onSpeedChange && (
+            <div className="flex items-center space-x-1">
+              <span className="text-stone-600 text-[10px] font-bold">SPEED:</span>
+              <select
+                value={clockSpeed}
+                onChange={(e) => onSpeedChange(parseFloat(e.target.value))}
+                className="bg-[#141a24] text-amber-400 font-bold px-2 py-1 rounded border border-stone-600 shadow-inner text-xs cursor-pointer focus:outline-none"
+              >
+                <option value={ClockSpeed.SPEED_1MHZ} className="bg-[#141a24] text-stone-200">1.02 MHz (1984)</option>
+                <option value={ClockSpeed.SPEED_2_8MHZ} className="bg-[#141a24] text-stone-200">2.80 MHz (IIGS)</option>
+                <option value={ClockSpeed.SPEED_8MHZ} className="bg-[#141a24] text-stone-200">8.00 MHz (Zip)</option>
+                <option value={ClockSpeed.SPEED_TURBO} className="bg-[#141a24] text-amber-400 font-bold">50.0 MHz (Ultra)</option>
+              </select>
+            </div>
+          )}
+
+          {/* Scanline Switch */}
+          <button
+            id="btn-scanlines-switch"
+            onClick={onScanlinesToggle}
+            className="px-2 py-1 bg-[#141a24] hover:bg-[#1f2838] text-emerald-400 font-bold rounded border border-stone-600 shadow-inner text-xs transition flex items-center gap-1 tooltip-hint"
+            data-tooltip="Toggle CRT Glass Raster Scanlines"
+          >
+            <span id="btn-bay-scanlines" className="inline-flex items-center gap-1">
+              <span>▤</span> <span>{scanlines ? 'Scanlines ON' : 'Scanlines OFF'}</span>
             </span>
-            <button
-              onClick={() => onPhosphorChange(DisplayPhosphor.COLOR_NTSC)}
-              className={`px-2.5 py-1 rounded font-bold border transition ${
-                phosphor === DisplayPhosphor.COLOR_NTSC
-                  ? 'bg-amber-600 text-white border-amber-700 shadow-sm'
-                  : 'bg-stone-200 text-stone-700 border-stone-400 hover:bg-stone-300'
-              }`}
-            >
-              NTSC Color
-            </button>
-            <button
-              onClick={() => onPhosphorChange(DisplayPhosphor.GREEN)}
-              className={`px-2.5 py-1 rounded font-bold border transition ${
-                phosphor === DisplayPhosphor.GREEN
-                  ? 'bg-green-600 text-white border-green-700 shadow-sm'
-                  : 'bg-stone-200 text-stone-700 border-stone-400 hover:bg-stone-300'
-              }`}
-            >
-              P1 Green
-            </button>
-            <button
-              onClick={() => onPhosphorChange(DisplayPhosphor.AMBER)}
-              className={`px-2.5 py-1 rounded font-bold border transition ${
-                phosphor === DisplayPhosphor.AMBER
-                  ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
-                  : 'bg-stone-200 text-stone-700 border-stone-400 hover:bg-stone-300'
-              }`}
-            >
-              P3 Amber
-            </button>
-            <button
-              onClick={() => onPhosphorChange(DisplayPhosphor.WHITE)}
-              className={`px-2.5 py-1 rounded font-bold border transition ${
-                phosphor === DisplayPhosphor.WHITE
-                  ? 'bg-stone-700 text-white border-stone-800 shadow-sm'
-                  : 'bg-stone-200 text-stone-700 border-stone-400 hover:bg-stone-300'
-              }`}
-            >
-              P4 White
-            </button>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={handlePasteClick}
-              className="px-2 py-1 rounded border flex items-center gap-1 font-bold bg-amber-600 hover:bg-amber-500 text-white border-amber-700 shadow-sm transition"
-              title="Paste clipboard text or BASIC program into Apple II"
-            >
-              <Clipboard className="w-3.5 h-3.5" /> Paste
-            </button>
-            <button
-              onClick={onScanlinesToggle}
-              className={`px-2 py-1 rounded border flex items-center gap-1 font-bold transition ${
-                scanlines
-                  ? 'bg-stone-700 text-white border-stone-800'
-                  : 'bg-stone-200 text-stone-700 border-stone-400 hover:bg-stone-300'
-              }`}
-            >
-              <Eye className="w-3.5 h-3.5" /> Scanlines {scanlines ? 'ON' : 'OFF'}
-            </button>
-            <button
-              onClick={onCurvedToggle}
-              className={`px-2 py-1 rounded border flex items-center gap-1 font-bold transition ${
-                isCurved
-                  ? 'bg-stone-700 text-white border-stone-800'
-                  : 'bg-stone-200 text-stone-700 border-stone-400 hover:bg-stone-300'
-              }`}
-            >
-              <Monitor className="w-3.5 h-3.5" /> CRT Glass {isCurved ? 'ON' : 'OFF'}
-            </button>
-          </div>
+          </button>
         </div>
+
+        {/* Right: Fullscreen & Paste */}
+        <div className="flex items-center space-x-1.5">
+          {onToggleFullscreen && (
+            <button
+              id="btn-screen-fullscreen"
+              onClick={onToggleFullscreen}
+              className="px-2.5 py-1 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 font-bold rounded border border-emerald-800 transition text-xs flex items-center gap-1 shadow tooltip-hint"
+              data-tooltip="HTML5 Fullscreen"
+            >
+              <span>⛶</span> Fullscreen
+            </button>
+          )}
+
+          <button
+            id="paste-btn"
+            onClick={handlePasteClick}
+            className="px-2.5 py-1 bg-amber-700 hover:bg-amber-600 text-white font-bold rounded border border-amber-800 transition flex items-center gap-1 shadow tooltip-hint"
+            data-tooltip="Pastes clipboard text directly into the 65C02 Keyboard Strobe register ($C000)"
+          >
+            <span>📋</span> Paste ($C000)
+          </button>
+        </div>
+      </div>
+
+      {/* Canvas Frame (Pixel-Crisp Apple II VRAM Surface) */}
+      <div id="crt-frame" className="crt-screen-frame relative p-2 crt-curved overflow-hidden aspect-[4/3] flex items-center justify-center transition-all duration-300">
+        <canvas
+          ref={canvasRef}
+          width={560}
+          height={384}
+          onMouseMove={handleMouseMove}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onContextMenu={handleContextMenu}
+          className="w-full h-full object-contain rounded-xl cursor-crosshair"
+          style={{
+            filter: phosphor === DisplayPhosphor.GREEN
+              ? 'drop-shadow(0 0 10px rgba(51, 255, 68, 0.4))'
+              : phosphor === DisplayPhosphor.AMBER
+              ? 'drop-shadow(0 0 10px rgba(255, 176, 0, 0.4))'
+              : phosphor === DisplayPhosphor.WHITE
+              ? 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.25))'
+              : 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))'
+          }}
+        />
+        {scanlines && (
+          <div id="scanline-overlay" className="absolute inset-0 pointer-events-none scanlines rounded-xl opacity-60" />
+        )}
+      </div>
+
+      {/* Bottom Bezel: Keyboard Trigger Button */}
+      <div className="flex items-center justify-between pt-2 border-t border-[#bcb4a3] text-[11px] font-mono text-stone-700">
+        {onToggleKeyboard && (
+          <button
+            id="btn-bay-keyboard"
+            onClick={onToggleKeyboard}
+            className="px-3 py-1.5 rounded-lg bg-[#2a303c] hover:bg-amber-600 text-amber-200 hover:text-white font-bold border border-stone-600 shadow transition flex items-center gap-2"
+          >
+            <span>⌨️</span> <span>Fly-Up 63-Key Mechanical Keyboard Matrix</span>
+          </button>
+        )}
+        <span className="text-[10px] text-stone-600 hidden sm:inline">Active Resolution: 560x384 Double Hi-Res Color Composite • 24x80 VRAM</span>
       </div>
     </div>
   );
 };
+

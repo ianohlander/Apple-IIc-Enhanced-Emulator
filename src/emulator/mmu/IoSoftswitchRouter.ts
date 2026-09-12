@@ -156,12 +156,15 @@ export class IoSoftswitchRouter {
       0xc012: sw.lcReadRam,
       0xc013: sw.ramrd,
       0xc014: sw.ramwrt,
+      0xc015: sw.intcxrom,
       0xc016: sw.altzp,
+      0xc017: sw.slotc3rom,
       0xc018: sw.store80,
       0xc01a: sw.text,
       0xc01b: sw.mixed,
       0xc01c: sw.page2,
       0xc01d: sw.hires,
+      0xc01e: sw.altCharset,
       0xc01f: sw.col80,
     };
     const val = statusMap[addr];
@@ -204,8 +207,8 @@ export class IoSoftswitchRouter {
   }
 
   private handleLanguageCardSwitch(addr: number, sw: SoftswitchesState): void {
-    sw.lcBank2 = (addr & 0x08) !== 0;
-    sw.lcReadRam = (addr & 0x02) === 0 && (addr & 0x01) !== 0;
+    sw.lcBank2 = (addr & 0x08) === 0;
+    sw.lcReadRam = (addr & 0x03) === 0x00 || (addr & 0x03) === 0x03;
     const writeEnable = (addr & 0x01) !== 0;
 
     if (writeEnable) {

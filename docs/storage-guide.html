@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Storage Architecture & SmartPort 32MB Guide</title>
+  <title>6502 Ultra — Storage Architecture & SmartPort 32MB Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -68,7 +68,7 @@
       </div>
       <div>
         <span class="text-[10px] font-mono text-emerald-400 font-bold tracking-widest uppercase">Storage Subsystem Reference</span>
-        <h1 class="text-base font-extrabold text-white">Apple //c Ultra Storage Architecture & SmartPort 32MB Guide</h1>
+        <h1 class="text-base font-extrabold text-white">6502 Ultra Storage Architecture & SmartPort 32MB Guide</h1>
       </div>
     </div>
 
@@ -95,10 +95,10 @@
       </div>
 
       <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
-        Apple //c Ultra Storage Architecture & Guide
+        6502 Ultra Storage Architecture & Guide
       </h2>
       <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
-        This definitive guide covers all physical and virtual storage tiers supported by the Apple //c Ultra: from Woz's legendary <strong>Disk II 140KB 5.25" Floppy Drive</strong> with 6-and-2 GCR nibblization, to the <strong>SmartPort 32 Megabyte virtual hard disk volume (/HD)</strong> with 65,536 logical blocks, the <strong>Slinky 1MB banked RAM disk</strong>, and modern managed file persistence in <strong>C# .NET</strong> and <strong>Java 17</strong>.
+        This definitive guide covers all physical and virtual storage tiers supported by the 6502 Ultra: from Woz's legendary <strong>Disk II 140KB 5.25" Floppy Drive</strong> with 6-and-2 GCR nibblization, to the <strong>SmartPort 32 Megabyte virtual hard disk volume (/HD)</strong> with 65,536 logical blocks, the <strong>Slinky 1MB banked RAM disk</strong>, and modern managed file persistence in <strong>C# .NET</strong> and <strong>Java 17</strong>.
       </p>
 
       <!-- Quick Navigation Grid -->
@@ -125,7 +125,7 @@
     <!-- VISUAL DIAGRAM: Complete Storage Pipeline -->
     <div class="diagram-panel space-y-4 font-mono text-xs">
       <div class="flex items-center justify-between border-b border-[#252d3d] pb-2">
-        <span class="font-bold text-emerald-400 text-sm">📐 Figure 1: Unified Apple //c Ultra Storage Pipeline</span>
+        <span class="font-bold text-emerald-400 text-sm">📐 Figure 1: Unified 6502 Ultra Storage Pipeline</span>
         <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">Hardware & Protocol Architecture</span>
       </div>
       <p class="text-gray-400 text-xs">
@@ -135,7 +135,7 @@
         <svg viewBox="0 0 880 200" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #080b0e; border-radius: 8px; border: 1px solid #1a222c;">
           <!-- Top Row: High Level APIs -->
           <rect x="25" y="20" width="830" height="40" rx="4" fill="#141e2e" stroke="#38bdf8" stroke-width="1.5" />
-          <text x="440" y="45" fill="#bae6fd" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Managed Application Code: System.IO.File (C#) • java.io.File (Java) • AppleStorage</text>
+          <text x="440" y="45" fill="#bae6fd" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Managed Application Code: System.IO.File (C#) • java.io.File (Java) • StorageCore</text>
 
           <!-- Middle Row: ProDOS MLI -->
           <rect x="25" y="80" width="830" height="40" rx="4" fill="#0f291e" stroke="#10b981" stroke-width="1.5" />
@@ -165,7 +165,7 @@
       </div>
 
       <p class="text-gray-300 leading-relaxed">
-        The Apple //c Ultra faithfully emulates Steve Wozniak's 1978 Disk II controller in Slot 6 ($C600). To prevent bit-slip errors on magnetic media without costly hardware PLL chips, Woz devised <strong>6-and-2 Group Code Recording (GCR)</strong>, converting 256 user data bytes into 342 6-bit disk nibbles ($96–$FF).
+        The 6502 Ultra faithfully emulates Steve Wozniak's 1978 Disk II controller in Slot 6 ($C600). To prevent bit-slip errors on magnetic media without costly hardware PLL chips, Woz devised <strong>6-and-2 Group Code Recording (GCR)</strong>, converting 256 user data bytes into 342 6-bit disk nibbles ($96–$FF).
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
@@ -202,7 +202,7 @@
       </div>
 
       <p class="text-gray-300 leading-relaxed">
-        The Apple //c Ultra implements the Apple SmartPort firmware protocol connected to an extended <strong>32 Megabyte virtual volume (/HD)</strong> in Slot 7 ($C700). The storage volume is partitioned into <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 	imes 512 = 33,554,432	ext{ bytes}$).
+        The 6502 Ultra implements the Apple SmartPort firmware protocol connected to an extended <strong>32 Megabyte virtual volume (/HD)</strong> in Slot 7 ($C700). The storage volume is partitioned into <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 	imes 512 = 33,554,432	ext{ bytes}$).
       </p>
 
       <div class="overflow-x-auto">
@@ -248,7 +248,7 @@
       </div>
 
       <p class="text-gray-300 leading-relaxed">
-        The Apple //c Memory Expansion Card ("Slinky") provides 1,048,576 bytes of fast banked memory accessed via 24-bit auto-incrementing registers at <code>$C0C8..$C0CB</code> (or $C071–$C075). Streaming 512 bytes of data requires zero bus wait-states, enabling instant audio and graphics texture paging.
+        The 6502 Ultra Memory Expansion Card ("Slinky") provides 1,048,576 bytes of fast banked memory accessed via 24-bit auto-incrementing registers at <code>$C0C8..$C0CB</code> (or $C071–$C075). Streaming 512 bytes of data requires zero bus wait-states, enabling instant audio and graphics texture paging.
       </p>
 
       <pre class="bg-[#0c0817] p-4 rounded-lg border border-[#2b1942] text-purple-300 font-mono text-xs"><code>; Stream 512 bytes from Slinky RAM Disk into Video VRAM ($2000)
@@ -298,7 +298,7 @@ PAGING_LOOP:
               <!-- Step 1: High Level Code -->
               <rect x="20" y="25" width="250" height="90" rx="5" fill="#111c2d" stroke="#38bdf8" stroke-width="1.5" />
               <text x="145" y="48" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">1. High-Level C# / Java AST</text>
-              <text x="145" y="68" fill="#93c5fd" font-size="8" text-anchor="middle">AppleStorage.WriteBlock(0x70, 100, buf);</text>
+              <text x="145" y="68" fill="#93c5fd" font-size="8" text-anchor="middle">StorageCore.WriteBlock(0x70, 100, buf);</text>
               <text x="145" y="84" fill="#93c5fd" font-size="8" text-anchor="middle">File.WriteAllText("/HD/LOG.TXT", "OK");</text>
               <text x="145" y="100" fill="#64748b" font-size="7.5" text-anchor="middle">Type checking &amp; buffer bounds validation</text>
 
@@ -336,7 +336,7 @@ PAGING_LOOP:
       <div class="space-y-4 pt-4 border-t border-[#212836]">
         <h4 class="text-lg font-bold text-cyan-400">4.2 C# .NET Core Storage API: Class Reference &amp; Specifications</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          The Apple //c Ultra standard library for C# provides two primary namespaces for storage access: <code>Apple2.Ultra</code> (for high-performance hardware block I/O) and <code>System.IO</code> (for file and stream abstractions).
+          The 6502 Ultra standard library for C# provides two primary namespaces for storage access: <code>Apple2.Ultra</code> (for high-performance hardware block I/O) and <code>System.IO</code> (for file and stream abstractions).
         </p>
 
         <!-- C# API Table -->
@@ -352,37 +352,37 @@ PAGING_LOOP:
             </thead>
             <tbody>
               <tr>
-                <td class="text-amber-400 font-bold"><code>AppleStorage.UnitSlot7Drive1</code></td>
+                <td class="text-amber-400 font-bold"><code>StorageCore.UnitSlot7Drive1</code></td>
                 <td><code>const int = 0x70</code></td>
                 <td>Immediate constant <code>#$70</code></td>
                 <td>Unit identifier for SmartPort 32MB Hard Disk volume (<code>/HD</code>).</td>
               </tr>
               <tr>
-                <td class="text-amber-400 font-bold"><code>AppleStorage.UnitSlot6Drive1</code></td>
+                <td class="text-amber-400 font-bold"><code>StorageCore.UnitSlot6Drive1</code></td>
                 <td><code>const int = 0x60</code></td>
                 <td>Immediate constant <code>#$60</code></td>
                 <td>Unit identifier for Disk II 5.25" Floppy Drive 1 (140 KB).</td>
               </tr>
               <tr>
-                <td class="text-amber-400 font-bold"><code>AppleStorage.UnitSlot4RamDisk</code></td>
+                <td class="text-amber-400 font-bold"><code>StorageCore.UnitSlot4RamDisk</code></td>
                 <td><code>const int = 0x40</code></td>
                 <td>Immediate constant <code>#$40</code></td>
                 <td>Unit identifier for Slinky 1MB banked RAM Disk (<code>/RAM</code>).</td>
               </tr>
               <tr>
-                <td class="text-cyan-400 font-bold"><code>AppleStorage.WriteBlock()</code></td>
+                <td class="text-cyan-400 font-bold"><code>StorageCore.WriteBlock()</code></td>
                 <td><code>int WriteBlock(int unit, int blockNum, byte[] buffer)</code></td>
                 <td>Setup $0800 packet &rarr; <code>JSR $C700</code></td>
                 <td>Writes a 512-byte payload to the target block. Returns 0 on success, or 65C02 MLI error code in A.</td>
               </tr>
               <tr>
-                <td class="text-cyan-400 font-bold"><code>AppleStorage.ReadBlock()</code></td>
+                <td class="text-cyan-400 font-bold"><code>StorageCore.ReadBlock()</code></td>
                 <td><code>byte[] ReadBlock(int unit, int blockNum)</code></td>
                 <td>Setup $0800 packet &rarr; <code>JSR $C700</code></td>
                 <td>Reads a 512-byte block from the unit into a managed heap array. Throws I/O exception if Carry set.</td>
               </tr>
               <tr>
-                <td class="text-cyan-400 font-bold"><code>AppleStorage.GetStatus()</code></td>
+                <td class="text-cyan-400 font-bold"><code>StorageCore.GetStatus()</code></td>
                 <td><code>int GetStatus(int unit)</code></td>
                 <td>Cmd $00 &rarr; <code>JSR $C700</code></td>
                 <td>Queries device status. Returns block capacity ($0000 = 65,536 for HD) and write-protect bit.</td>
@@ -414,7 +414,7 @@ PAGING_LOOP:
       <div class="space-y-4 pt-4 border-t border-[#212836]">
         <h4 class="text-lg font-bold text-emerald-400">4.3 Java 17 Storage API: Class Reference &amp; Specifications</h4>
         <p class="text-gray-300 leading-relaxed text-xs">
-          Java 17 applications utilize <code>apple2.hardware.AppleStorage</code> for direct silicon block access alongside <code>java.io.File</code> and <code>java.io.FileOutputStream</code>:
+          Java 17 applications utilize <code>apple2.hardware.StorageCore</code> for direct silicon block access alongside <code>java.io.File</code> and <code>java.io.FileOutputStream</code>:
         </p>
 
         <!-- Java API Table -->
@@ -430,19 +430,19 @@ PAGING_LOOP:
             </thead>
             <tbody>
               <tr>
-                <td class="text-amber-400 font-bold"><code>AppleStorage.UNIT_SLOT7_DRIVE1</code></td>
+                <td class="text-amber-400 font-bold"><code>StorageCore.UNIT_SLOT7_DRIVE1</code></td>
                 <td><code>public static final int = 0x70</code></td>
                 <td>Immediate constant <code>#$70</code></td>
                 <td>Slot 7 SmartPort 32MB HD volume (<code>/HD</code>).</td>
               </tr>
               <tr>
-                <td class="text-emerald-400 font-bold"><code>AppleStorage.writeBlock()</code></td>
+                <td class="text-emerald-400 font-bold"><code>StorageCore.writeBlock()</code></td>
                 <td><code>static int writeBlock(int unit, int blk, byte[] buf)</code></td>
                 <td>MLI Write Frame &rarr; <code>JSR $C700</code></td>
                 <td>Writes 512-byte buffer to block. Returns 0 on success.</td>
               </tr>
               <tr>
-                <td class="text-emerald-400 font-bold"><code>AppleStorage.readBlock()</code></td>
+                <td class="text-emerald-400 font-bold"><code>StorageCore.readBlock()</code></td>
                 <td><code>static int readBlock(int unit, int blk, byte[] buf)</code></td>
                 <td>MLI Read Frame &rarr; <code>JSR $C700</code></td>
                 <td>Fills user buffer with 512 bytes read from specified block.</td>
@@ -488,7 +488,7 @@ payload[1] = 0x50; // 'P'
 payload[2] = 0x50; // 'P'
 payload[3] = 0x4C; // 'L'
 payload[4] = 0x45; // 'E'
-AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, payload);</code></pre>
+StorageCore.WriteBlock(StorageCore.UnitSlot7Drive1, 100, payload);</code></pre>
           </div>
 
           <!-- Generated 65C02 Assembly -->
@@ -565,7 +565,7 @@ public class HighScoreManager {
         buffer[9] = checksum;
 
         // Commit directly to SmartPort 32MB Hard Disk Block 100
-        AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, SCORE_BLOCK, buffer);
+        StorageCore.WriteBlock(StorageCore.UnitSlot7Drive1, SCORE_BLOCK, buffer);
     }
 }</code></pre>
         </div>
@@ -587,7 +587,7 @@ public class MapStreamer {
         int startBlock = 200 + (floorNumber * 32);
         
         for (int b = 0; b < 32; b++) {
-            byte[] blockData = AppleStorage.ReadBlock(AppleStorage.UnitSlot7Drive1, startBlock + b);
+            byte[] blockData = StorageCore.ReadBlock(StorageCore.UnitSlot7Drive1, startBlock + b);
             // Copy 512 bytes into target memory buffer
             for (int i = 0; i < 512; i++) {
                 targetMemory[(b * 512) + i] = blockData[i];
@@ -606,7 +606,7 @@ public class MapStreamer {
           <p class="text-gray-300 text-xs">
             Log sensor samples to ultra-fast Slinky 1MB RAM disk in real-time, then batch-flush to 32MB hard disk when the 512-byte page fills:
           </p>
-          <pre class="bg-[#080d14] p-3 rounded border border-[#1b2533] text-gray-300 overflow-x-auto"><code>import apple2.hardware.AppleStorage;
+          <pre class="bg-[#080d14] p-3 rounded border border-[#1b2533] text-gray-300 overflow-x-auto"><code>import apple2.hardware.StorageCore;
 
 public class HighSpeedTelemetry {
     private static byte[] pageBuffer = new byte[512];
@@ -620,7 +620,7 @@ public class HighSpeedTelemetry {
 
         // When 512-byte page buffer fills, commit to /HD and reset index
         if (bufferIndex >= 510) {
-            AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, currentBlock++, pageBuffer);
+            StorageCore.writeBlock(StorageCore.UNIT_SLOT7_DRIVE1, currentBlock++, pageBuffer);
             bufferIndex = 0;
         }
     }
@@ -640,13 +640,13 @@ public class HighSpeedTelemetry {
 
 public class StorageSafety {
     public static bool TryWriteSafely(int unit, int blockNum, byte[] data) {
-        int status = AppleStorage.GetStatus(unit);
+        int status = StorageCore.GetStatus(unit);
         if (status != 0) {
             AppleVideo.Print("ERROR: DRIVE OFFLINE OR UNATTACHED\n");
             return false;
         }
 
-        int result = AppleStorage.WriteBlock(unit, blockNum, data);
+        int result = StorageCore.WriteBlock(unit, blockNum, data);
         if (result == 0x2B) {
             AppleVideo.Print("ERROR: WRITE PROTECTED DISKETTE\n");
             return false;
@@ -688,7 +688,7 @@ public class StorageSafety {
 
   <!-- Footer -->
   <footer class="bg-[#10141d] border-t border-[#212836] py-8 px-6 text-center text-xs font-mono text-gray-500">
-    Apple //c Ultra Storage Architecture & Systems Engineering • Zero Platform Lock-In • 1984–2026
+    6502 Ultra Storage Architecture & Systems Engineering • Zero Platform Lock-In • 1984–2026
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
 

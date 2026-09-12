@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#0a0c10] text-[#e6edf3]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architectural Audit: 65C02 CPU Emulation, ROM Firmware & Elimination of HLL Simulation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .font-retro { font-family: 'VT323', monospace; }
+    .rainbow-bar {
+      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+    }
+    .crt-card {
+      background: linear-gradient(145deg, #131720, #0c0f14);
+      border: 1px solid #253041;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col p-4 md:p-8">
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto w-full mb-8">
+    <div class="h-1.5 w-full rainbow-bar rounded-t mb-4"></div>
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-[#253041] pb-6">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">🏛️</span>
+          <h1 class="text-2xl md:text-3xl font-black text-amber-400 tracking-tight">ARCHITECTURAL AUDIT &amp; CPU SOURCE-OF-TRUTH ROADMAP</h1>
+        </div>
+        <p class="text-stone-400 text-sm mt-1">Deep Domain-by-Domain Analysis: Eliminating HLL JavaScript Simulation in Favor of Pure 65C02 &amp; Clean-Room ROM Execution</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="px-3.5 py-1.5 rounded bg-[#1b2330] hover:bg-[#253041] text-cyan-300 border border-cyan-800 text-xs font-mono font-bold transition flex items-center gap-1.5">
+          ⬅️ Back to QA Hub
+        </a>
+        <span class="px-3 py-1.5 rounded bg-red-950/90 text-red-400 border border-red-500 font-mono text-xs font-bold flex items-center gap-1.5 shadow">
+          <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span> ARCHITECTURAL DEFECT IDENTIFIED
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto w-full space-y-8 flex-1">
+
+    <!-- Executive Summary / Problem Statement -->
+    <section class="crt-card rounded-xl p-6 border-l-4 border-l-red-500 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-red-400 font-bold text-sm tracking-wider uppercase">Executive Architecture Finding</span>
+      </div>
+      <p class="text-stone-200 leading-relaxed text-sm md:text-base">
+        The current emulator implementation suffers from a critical architectural defect: <strong class="text-red-300">High-Level Language (HLL) Simulation Over-reach</strong>. Instead of executing real 6502/65C02 machine language code inside the CPU core using authentic ROM binaries, portions of the application (specifically <code class="text-cyan-300">index-standalone.html</code> and high-level input handlers) have been simulating BASIC syntax parsing, variable storage, arithmetic evaluation, screen scrolling, and vector graphics in TypeScript/JavaScript.
+      </p>
+      <p class="text-stone-300 leading-relaxed text-sm">
+        This approach creates an endless maintenance burden where every magazine scan, DSK disk image, and machine-code routine requires bespoke JavaScript patches. <strong>The 65C02 CPU must be the sole source of truth.</strong> The emulator must solely emulate the CPU, memory bus, and hardware softswitches, while clean-room 65C02 system ROM images handle all BASIC interpretation, monitor input, line buffering, and floppy disk execution.
+      </p>
+    </section>
+
+    <!-- Domain-by-Domain Audit Matrix -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b border-[#253041] pb-2">
+        <h2 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+          📊 Comprehensive Function &amp; Domain Audit
+        </h2>
+        <span class="text-xs text-stone-400 font-mono">Current State vs Pure 65C02 Standard</span>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4">
+
+        <!-- Domain 1: BASIC Interpreter Subsystem -->
+        <div class="crt-card rounded-xl p-5 border border-[#253041] space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-red-400 font-bold text-base font-mono">DOMAIN 1: BASIC Interpreter &amp; Tokenizer Subsystem</span>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs bg-red-950 text-red-300 border border-red-800 font-bold">CURRENTLY FAKED IN JAVASCRIPT</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="p-3 bg-[#0a0d13] rounded border border-red-900/40 space-y-1">
+              <strong class="text-red-400 font-mono">Current Implementation (Defective):</strong>
+              <p class="text-stone-300">
+                • <code class="text-stone-400">executeBasicStatement()</code> parses strings in JavaScript.<br>
+                • <code class="text-stone-400">evalBasicExpr()</code> converts BASIC math into JS <code class="text-stone-400">Function()</code> calls.<br>
+                • Variables stored in JS object <code class="text-stone-400">this.basicVars = {}</code>.<br>
+                • Program lines stored as JS strings in an array.<br>
+                • <strong class="text-red-300">Result:</strong> Incompatible with machine code calls, zero-page pointers, and vintage magazine idioms.
+              </p>
+            </div>
+            <div class="p-3 bg-[#0a0d13] rounded border border-emerald-900/40 space-y-1">
+              <strong class="text-emerald-400 font-mono">Pure 65C02 Target Architecture:</strong>
+              <p class="text-stone-300">
+                • 12KB Applesoft BASIC ROM at <code class="text-cyan-300">$D000–$F7FF</code> executes entirely on the 65C02 CPU.<br>
+                • Program tokenized into 6502 binary bytes in RAM starting at <code class="text-cyan-300">$0801</code> (TXTTAB).<br>
+                • Variables allocated in RAM at <code class="text-cyan-300">VARTAB ($69/$6A)</code> and arrays at <code class="text-cyan-300">ARYTAB ($6B/$6C)</code>.<br>
+                • Floating point operations run via 6502 FAC1 registers (<code class="text-cyan-300">$9D–$A2</code>).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain 2: System Monitor & Firmware Subsystem -->
+        <div class="crt-card rounded-xl p-5 border border-[#253041] space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-amber-400 font-bold text-base font-mono">DOMAIN 2: System ROM &amp; Monitor Firmware ($F800–$FFFF)</span>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs bg-amber-950 text-amber-300 border border-amber-800 font-bold">MINIMAL STUB IN DEFAULTROMS.TS</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="p-3 bg-[#0a0d13] rounded border border-amber-900/40 space-y-1">
+              <strong class="text-amber-400 font-mono">Current Implementation (Defective):</strong>
+              <p class="text-stone-300">
+                • <code class="text-stone-400">defaultRoms.ts</code> only contains ~40 bytes of hand-written NOPs and minimal loops.<br>
+                • Monitor routines (<code class="text-stone-400">GETLN $FD6A</code>, <code class="text-stone-400">RDKEY $FD0C</code>, <code class="text-stone-400">CROUT $FD8E</code>, <code class="text-stone-400">CLEOL $FC9C</code>, <code class="text-stone-400">CLEOS $FC42</code>, <code class="text-stone-400">PRBL2 $F94A</code>) are missing or stubbed.<br>
+                • <strong class="text-amber-300">Result:</strong> CPU cannot parse monitor commands or boot disks without high-level hacks.
+              </p>
+            </div>
+            <div class="p-3 bg-[#0a0d13] rounded border border-emerald-900/40 space-y-1">
+              <strong class="text-emerald-400 font-mono">Pure 65C02 Target Architecture:</strong>
+              <p class="text-stone-300">
+                • 2KB 65C02 System Monitor ROM at <code class="text-cyan-300">$F800–$FFFF</code>.<br>
+                • Full line editing into input buffer <code class="text-cyan-300">$0200–$02FF</code>.<br>
+                • Screen windowing math (<code class="text-cyan-300">WNDLFT $20, WNDWDTH $21, WNDTOP $22, WNDBTM $23, CH $24, CV $25</code>).<br>
+                • Built-in 65C02 Disassembler (<code class="text-cyan-300">$F88E</code>) and Mini-Assembler (<code class="text-cyan-300">$F666</code>).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain 3: Storage & Floppy Disk II Controller Subsystem -->
+        <div class="crt-card rounded-xl p-5 border border-[#253041] space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-cyan-400 font-bold text-base font-mono">DOMAIN 3: Storage &amp; Disk II Controller Subsystem</span>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">HARDWARE PARTIALLY READY • ROM NEEDED</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="p-3 bg-[#0a0d13] rounded border border-cyan-900/40 space-y-1">
+              <strong class="text-cyan-400 font-mono">Current Implementation:</strong>
+              <p class="text-stone-300">
+                • <code class="text-stone-400">diskII.ts</code> implements 6-and-2 GCR track nibblizing and phase stepping.<br>
+                • Softswitches <code class="text-stone-400">$C0E0–$C0EF</code> route phase coils and data register correctly.<br>
+                • <strong class="text-amber-300">Defect:</strong> The 256-byte Slot 6 Disk II Boot ROM (<code class="text-cyan-300">$C600–$C6FF</code>) is not mapped, preventing the 6502 CPU from executing the cold boot sequence itself via <code class="text-stone-400">PR#6</code> or reset.
+              </p>
+            </div>
+            <div class="p-3 bg-[#0a0d13] rounded border border-emerald-900/40 space-y-1">
+              <strong class="text-emerald-400 font-mono">Pure 65C02 Target Architecture:</strong>
+              <p class="text-stone-300">
+                • 256-byte clean-room Disk II Firmware at <code class="text-cyan-300">$C600–$C6FF</code>.<br>
+                • 6502 machine code reads Sector 0 from Track 0 directly into RAM at <code class="text-cyan-300">$0800</code>.<br>
+                • Sector 0 code loads DOS 3.3 / ProDOS image into high memory.<br>
+                • Zero TypeScript intervention in disk reads/writes.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain 4: Input & Memory-Mapped I/O Subsystem -->
+        <div class="crt-card rounded-xl p-5 border border-[#253041] space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 font-bold text-base font-mono">DOMAIN 4: Keyboard Input &amp; Softswitches ($C000–$C0FF)</span>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold">NEEDS LATCH CLEANUP</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="p-3 bg-[#0a0d13] rounded border border-emerald-900/40 space-y-1">
+              <strong class="text-amber-400 font-mono">Current Implementation:</strong>
+              <p class="text-stone-300">
+                • Keyboard events intercepted in JavaScript, converted to character strings, and passed to high-level statement handlers.<br>
+                • Physical key strokes do not reliably set the hardware latch at <code class="text-stone-400">$C000</code> with strobe bit 7 (<code class="text-stone-400">| 0x80</code>).
+              </p>
+            </div>
+            <div class="p-3 bg-[#0a0d13] rounded border border-emerald-900/40 space-y-1">
+              <strong class="text-emerald-400 font-mono">Pure 65C02 Target Architecture:</strong>
+              <p class="text-stone-300">
+                • DOM keydown event only does one thing: <code class="text-cyan-300">mmu.lastKeyPressed = ascii | 0x80</code>.<br>
+                • 65C02 CPU reads <code class="text-cyan-300">$C000</code> in its ROM <code class="text-cyan-300">KEYIN ($FD1B)</code> loop.<br>
+                • 65C02 clears strobe by reading/writing <code class="text-cyan-300">$C010</code>.<br>
+                • Zero UI interception or string accumulation.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain 5: Graphics & Video VRAM Subsystem -->
+        <div class="crt-card rounded-xl p-5 border border-[#253041] space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-purple-400 font-bold text-base font-mono">DOMAIN 5: Video VRAM &amp; Hi-Res Graphics Rendering</span>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs bg-purple-950 text-purple-300 border border-purple-800 font-bold">VRAM RASTERIZER READY • CODE MUST RUN ON CPU</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="p-3 bg-[#0a0d13] rounded border border-purple-900/40 space-y-1">
+              <strong class="text-purple-400 font-mono">Current Implementation:</strong>
+              <p class="text-stone-300">
+                • Standalone version used custom JS functions (<code class="text-stone-400">handleHplot</code>, <code class="text-stone-400">drawShape</code>) calculating pixel coordinates in JavaScript.<br>
+                • <strong class="text-red-300">Defect:</strong> When vintage programs call <code class="text-stone-400">HPLOT</code> or <code class="text-stone-400">XDRAW</code>, the CPU is not executing the Applesoft ROM graphics algorithms; JavaScript is doing the math.
+              </p>
+            </div>
+            <div class="p-3 bg-[#0a0d13] rounded border border-emerald-900/40 space-y-1">
+              <strong class="text-emerald-400 font-mono">Pure 65C02 Target Architecture:</strong>
+              <p class="text-stone-300">
+                • 65C02 executes Applesoft ROM routines: <code class="text-cyan-300">HPLOT0 ($F457)</code>, <code class="text-cyan-300">HLIN ($F53A)</code>, <code class="text-cyan-300">XDRAW ($F65D)</code>, <code class="text-cyan-300">DRAW ($F601)</code>.<br>
+                • CPU writes directly into Hi-Res VRAM (<code class="text-cyan-300">$2000–$3FFF</code> Page 1, <code class="text-cyan-300">$4000–$5FFF</code> Page 2).<br>
+                • The canvas display only rasterizes the raw VRAM bytes to screen (like a real CRT monitor).
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Complete Clean-Room ROM Roadmap -->
+    <section class="crt-card rounded-xl p-6 space-y-6">
+      <div class="flex items-center gap-2 border-b border-[#253041] pb-3">
+        <span class="text-lg">🗺️</span>
+        <h2 class="text-lg font-bold text-amber-400">Technical Roadmap: Pure 65C02 &amp; Clean-Room ROM Implementation</h2>
+      </div>
+
+      <div class="space-y-4">
+        
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#20293a] space-y-2">
+          <h3 class="text-sm font-bold text-cyan-300 font-mono">Phase 1: Clean-Room 32KB System ROM Assembly ($C000–$FFFF)</h3>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Construct a complete, era-accurate 32KB binary ROM image containing:
+          </p>
+          <ul class="text-xs text-stone-400 list-disc list-inside space-y-1 pl-2">
+            <li><strong class="text-amber-300">$C600–$C6FF (256 bytes):</strong> Disk II 16-Sector Boot Firmware (GCR decode &amp; Track 0 boot).</li>
+            <li><strong class="text-amber-300">$D000–$F7FF (10,240 bytes):</strong> Applesoft BASIC 6502 Interpreter (full token table, evaluator, math pack, HGR/LORES graphics engine).</li>
+            <li><strong class="text-amber-300">$F800–$FFFF (2,048 bytes):</strong> 6502 Ultra System Monitor &amp; Autostart ROM (Reset vectors, KEYIN, GETLN, COUT, memory inspection).</li>
+          </ul>
+        </div>
+
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#20293a] space-y-2">
+          <h3 class="text-sm font-bold text-cyan-300 font-mono">Phase 2: Remove All High-Level BASIC Parsing in TypeScript</h3>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Completely delete <code class="text-stone-400">executeBasicStatement</code>, <code class="text-stone-400">evalBasicExpr</code>, <code class="text-stone-400">this.basicVars</code>, and JavaScript loop controllers. When the user pastes or enters BASIC code, feed the characters sequentially into the 65C02 keyboard latch at <code class="text-cyan-300">$C000</code>. The 65C02 CPU will read the characters, parse them with its ROM tokenizer, and store them directly into program memory at <code class="text-cyan-300">$0801</code>.
+          </p>
+        </div>
+
+        <div class="p-4 bg-[#0d1117] rounded-lg border border-[#20293a] space-y-2">
+          <h3 class="text-sm font-bold text-cyan-300 font-mono">Phase 3: Verify 65C02 CPU as Single Source of Truth</h3>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Verify with automated test suites that 100% of CPU instructions, zero-page pointers, floppy stepper motor phases, and video memory pixels are generated by the 65C02 CPU core stepping cycle-by-cycle through memory.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Full 6502 Memory Map Reference -->
+    <section class="crt-card rounded-xl p-6 space-y-4">
+      <div class="flex items-center gap-2 border-b border-[#253041] pb-3">
+        <span class="text-lg">🗺️</span>
+        <h2 class="text-lg font-bold text-amber-400">Era-Accurate 64KB 6502 Memory Architecture Map</h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs font-mono text-left border border-[#253041] rounded">
+          <thead class="bg-[#121722] text-amber-400 border-b border-[#253041]">
+            <tr>
+              <th class="p-2.5">Address Range</th>
+              <th class="p-2.5">Size</th>
+              <th class="p-2.5">Subsystem / Function</th>
+              <th class="p-2.5">CPU Execution Source</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#1e2634] text-stone-300">
+            <tr>
+              <td class="p-2.5 text-cyan-300">$0000–$00FF</td>
+              <td class="p-2.5">256 B</td>
+              <td class="p-2.5">Zero Page (Applesoft pointers, FAC1 floating point, cursor positions)</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 Direct Access</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$0100–$01FF</td>
+              <td class="p-2.5">256 B</td>
+              <td class="p-2.5">6502 Hardware Stack</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 Stack Pointer (SP)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$0200–$02FF</td>
+              <td class="p-2.5">256 B</td>
+              <td class="p-2.5">Monitor / Applesoft Line Input Buffer (GETLN)</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 Mon Routine</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$0300–$03FF</td>
+              <td class="p-2.5">256 B</td>
+              <td class="p-2.5">User Vector Table &amp; Machine Code Workspace</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 User Machine Code</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$0400–$07FF</td>
+              <td class="p-2.5">1,024 B</td>
+              <td class="p-2.5">Text Page 1 / Low-Res Graphics Video RAM</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 VRAM Writes</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$0800–$1FFF</td>
+              <td class="p-2.5">6,144 B</td>
+              <td class="p-2.5">Applesoft BASIC Program Memory ($0801 TXTTAB)</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 Program Space</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$2000–$3FFF</td>
+              <td class="p-2.5">8,192 B</td>
+              <td class="p-2.5">Hi-Res Graphics Page 1 Video RAM</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 VRAM Writes</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$4000–$5FFF</td>
+              <td class="p-2.5">8,192 B</td>
+              <td class="p-2.5">Hi-Res Graphics Page 2 Video RAM</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 VRAM Writes</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$6000–$BFFF</td>
+              <td class="p-2.5">24,576 B</td>
+              <td class="p-2.5">High RAM / Shape Vector Tables / DOS 3.3 / ProDOS</td>
+              <td class="p-2.5 text-emerald-400 font-bold">65C02 RAM Space</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$C000–$C0FF</td>
+              <td class="p-2.5">256 B</td>
+              <td class="p-2.5">Hardware I/O Softswitches (Keyboard, Speaker, Display, Slots)</td>
+              <td class="p-2.5 text-emerald-400 font-bold">MMU / Softswitch Router</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$C600–$C6FF</td>
+              <td class="p-2.5">256 B</td>
+              <td class="p-2.5">Slot 6 Disk II 16-Sector Boot Firmware</td>
+              <td class="p-2.5 text-emerald-400 font-bold">ROM Firmware Binary</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$D000–$F7FF</td>
+              <td class="p-2.5">10,240 B</td>
+              <td class="p-2.5">Applesoft BASIC Interpreter ROM (or Language Card RAM)</td>
+              <td class="p-2.5 text-emerald-400 font-bold">ROM Firmware Binary</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-cyan-300">$F800–$FFFF</td>
+              <td class="p-2.5">2,048 B</td>
+              <td class="p-2.5">65C02 System Monitor &amp; Reset Vectors ($FFFC)</td>
+              <td class="p-2.5 text-emerald-400 font-bold">ROM Firmware Binary</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-6xl mx-auto w-full mt-12 pt-4 border-t border-stone-800 text-center text-xs text-stone-500 font-mono space-y-1">
+    <div>65C02 Ultra Workstation • Clean-Room 65C02 &amp; System Firmware Specification</div>
+    <div>© 2026 Ian Ohlander. All rights reserved. Zero HLL Simulation.</div>
+  </footer>
+
+</body>
+</html>

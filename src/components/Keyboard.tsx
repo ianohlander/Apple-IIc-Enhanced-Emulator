@@ -3,9 +3,11 @@ import { Apple2cUltra } from '../emulator/apple2c';
 
 interface KeyboardProps {
   emulator: Apple2cUltra;
+  onClose?: () => void;
+  isDrawer?: boolean;
 }
 
-export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
+export const Keyboard: React.FC<KeyboardProps> = ({ emulator, onClose, isDrawer }) => {
   const [openApple, setOpenApple] = useState(false);
   const [closedApple, setClosedApple] = useState(false);
   const [capsLock, setCapsLock] = useState(true);
@@ -129,14 +131,18 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
   ];
 
   return (
-    <div className="bg-[#D8D2BA] border-4 border-[#BDB59B] rounded-2xl p-4 shadow-xl max-w-4xl w-full text-stone-800 font-mono select-none">
+    <div className={`w-full max-w-4xl text-stone-800 font-mono select-none ${
+      isDrawer
+        ? 'bg-[#14181f] text-stone-200 border-t-2 border-stone-700 rounded-t-2xl p-4 shadow-2xl'
+        : 'snow-white-chassis border border-[#c4bfb0] rounded-2xl p-4 shadow-xl'
+    }`}>
       {/* Function Toggle Switches */}
-      <div className="flex items-center justify-between mb-3 px-2 border-b border-[#C3BCA2] pb-2 text-xs font-bold">
+      <div className="flex items-center justify-between mb-3 px-2 border-b border-[#bcb5a4] pb-2 text-xs font-bold">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setCol80(!col80)}
-            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition ${
-              col80 ? 'bg-amber-700 text-white border-amber-900 shadow-sm' : 'bg-stone-200 text-stone-700 border-stone-400'
+            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition shadow-sm ${
+              col80 ? 'bg-amber-700 text-white border-amber-900' : 'bg-[#dfd9cc] text-stone-700 border-[#b8b1a0]'
             }`}
           >
             40 / 80 Switch: {col80 ? '80 COLUMNS' : '40 COLUMNS'}
@@ -144,8 +150,8 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
 
           <button
             onClick={() => setCapsLock(!capsLock)}
-            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition ${
-              capsLock ? 'bg-amber-700 text-white border-amber-900 shadow-sm' : 'bg-stone-200 text-stone-700 border-stone-400'
+            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition shadow-sm ${
+              capsLock ? 'bg-amber-700 text-white border-amber-900' : 'bg-[#dfd9cc] text-stone-700 border-[#b8b1a0]'
             }`}
           >
             CAPS LOCK: {capsLock ? 'ON' : 'OFF'}
@@ -155,8 +161,8 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setOpenApple(!openApple)}
-            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition ${
-              openApple ? 'bg-red-600 text-white border-red-800' : 'bg-stone-200 text-stone-700 border-stone-400'
+            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition shadow-sm ${
+              openApple ? 'bg-red-600 text-white border-red-800' : 'bg-[#dfd9cc] text-stone-700 border-[#b8b1a0]'
             }`}
           >
              Open Apple
@@ -164,24 +170,34 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
 
           <button
             onClick={() => setClosedApple(!closedApple)}
-            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition ${
-              closedApple ? 'bg-stone-800 text-white border-stone-950' : 'bg-stone-200 text-stone-700 border-stone-400'
+            className={`px-2.5 py-1 rounded border text-[11px] font-bold transition shadow-sm ${
+              closedApple ? 'bg-stone-800 text-white border-stone-950' : 'bg-[#dfd9cc] text-stone-700 border-[#b8b1a0]'
             }`}
           >
              Solid Apple
           </button>
+
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="px-2 py-1 bg-stone-800 hover:bg-red-900 text-stone-300 hover:text-white rounded border border-stone-700 text-[11px] font-bold transition ml-2"
+              title="Close Keyboard Drawer"
+            >
+              ✕ Close
+            </button>
+          )}
         </div>
       </div>
 
       {/* Keyboard Matrix Keys */}
-      <div className="flex flex-col space-y-1.5 bg-[#C0B99F] p-3 rounded-xl border border-[#A79F84] shadow-inner">
+      <div className="flex flex-col space-y-1.5 bg-[#ded8ca] p-3 rounded-xl border border-[#bcb5a4] shadow-inner">
         {keyRows.map((row, rIdx) => (
           <div key={rIdx} className="flex justify-center space-x-1">
             {row.map((k, kIdx) => (
               <button
                 key={kIdx}
                 onClick={() => k.code > 0 && sendKey(k.code)}
-                className={`${k.w || 'w-9'} h-9 text-[11px] font-bold rounded bg-[#F4EFE0] hover:bg-amber-100 active:bg-amber-200 border-b-2 border-r-2 border-stone-400 active:border-b active:border-r text-stone-800 shadow-sm flex items-center justify-center transition`}
+                className={`${k.w || 'w-9'} h-9 text-[11px] font-bold rounded bg-[#f5f1e6] hover:bg-amber-100 active:bg-amber-200 border-b-2 border-r-2 border-stone-400 active:border-b active:border-r text-stone-800 shadow-sm flex items-center justify-center transition`}
               >
                 {k.label}
               </button>
@@ -194,7 +210,7 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
           <button
             onClick={() => setOpenApple(!openApple)}
             className={`w-14 h-9 text-[10px] font-bold rounded border-b-2 border-stone-400 shadow-sm flex items-center justify-center ${
-              openApple ? 'bg-red-600 text-white' : 'bg-[#EAE4D2] text-stone-700'
+              openApple ? 'bg-red-600 text-white' : 'bg-[#ece7da] text-stone-700'
             }`}
           >
              OPEN
@@ -202,7 +218,7 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
 
           <button
             onClick={() => sendKey(0x20)}
-            className="w-72 h-9 text-xs font-bold rounded bg-[#F4EFE0] hover:bg-amber-100 active:bg-amber-200 border-b-2 border-stone-400 text-stone-700 shadow-sm flex items-center justify-center"
+            className="w-72 h-9 text-xs font-bold rounded bg-[#f5f1e6] hover:bg-amber-100 active:bg-amber-200 border-b-2 border-stone-400 text-stone-700 shadow-sm flex items-center justify-center"
           >
             SPACE BAR
           </button>
@@ -210,7 +226,7 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
           <button
             onClick={() => setClosedApple(!closedApple)}
             className={`w-14 h-9 text-[10px] font-bold rounded border-b-2 border-stone-400 shadow-sm flex items-center justify-center ${
-              closedApple ? 'bg-stone-900 text-white' : 'bg-[#EAE4D2] text-stone-700'
+              closedApple ? 'bg-stone-900 text-white' : 'bg-[#ece7da] text-stone-700'
             }`}
           >
              SOLID
@@ -218,14 +234,14 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
 
           <button
             onClick={() => sendKey(0x08)}
-            className="w-10 h-9 text-[11px] font-bold rounded bg-[#F4EFE0] hover:bg-amber-100 border-b-2 border-stone-400 text-stone-700 shadow-sm flex items-center justify-center"
+            className="w-10 h-9 text-[11px] font-bold rounded bg-[#f5f1e6] hover:bg-amber-100 border-b-2 border-stone-400 text-stone-700 shadow-sm flex items-center justify-center"
             title="Left Arrow"
           >
             ←
           </button>
           <button
             onClick={() => sendKey(0x15)}
-            className="w-10 h-9 text-[11px] font-bold rounded bg-[#F4EFE0] hover:bg-amber-100 border-b-2 border-stone-400 text-stone-700 shadow-sm flex items-center justify-center"
+            className="w-10 h-9 text-[11px] font-bold rounded bg-[#f5f1e6] hover:bg-amber-100 border-b-2 border-stone-400 text-stone-700 shadow-sm flex items-center justify-center"
             title="Right Arrow"
           >
             →
@@ -235,3 +251,4 @@ export const Keyboard: React.FC<KeyboardProps> = ({ emulator }) => {
     </div>
   );
 };
+

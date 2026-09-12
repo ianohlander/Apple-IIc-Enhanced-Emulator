@@ -1,4 +1,4 @@
-﻿# Dependencies
+# Dependencies
 node_modules/
 .pnp
 .pnp.js
@@ -21,6 +21,8 @@ pnpm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+desktop.ini
+*.ini
 *.swp
 *.swo
 

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Hardware Schematics & Softswitch Encyclopedia</title>
+  <title>6502 Ultra — Hardware Schematics & Softswitch Encyclopedia</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -37,7 +37,7 @@
         
       </div>
       <div>
-        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Apple //c Ultra Hardware</span>
+        <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">6502 Ultra Hardware</span>
         <h1 class="text-base font-extrabold text-white">Hardware Schematics & Softswitch Encyclopedia</h1>
       </div>
     </div>
@@ -56,7 +56,7 @@
     <!-- VISUAL DIAGRAM: 50-Pin Motherboard Peripheral Bus Interconnect -->
     <div class="bg-[#12161a] border border-[#2a3642] rounded-xl p-6 space-y-3 font-mono text-xs">
       <div class="flex items-center justify-between border-b border-[#2a3642] pb-2">
-        <span class="font-bold text-amber-400 text-sm">📐 Figure H.1: Apple //c Motherboard 50-Pin Bus & 7-Slot Peripheral Routing</span>
+        <span class="font-bold text-amber-400 text-sm">📐 Figure H.1: 6502 Ultra Motherboard 50-Pin Bus & 7-Slot Peripheral Routing</span>
         <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800">Motherboard Bus Architecture</span>
       </div>
       <p class="text-gray-400 text-xs">
@@ -177,7 +177,7 @@
     <section class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 lg:p-8 space-y-4 font-mono text-xs">
       <h3 class="text-base font-bold text-emerald-400">Slinky 1MB-16MB Expanded RAM Protocol</h3>
       <p class="text-gray-300">
-        The Apple //c Ultra implements the Apple Memory Expansion Card ("Slinky") protocol. It exposes a 24-bit auto-incrementing address counter that enables rapid block transfers of up to 16 megabytes:
+        The 6502 Ultra implements the Apple Memory Expansion Card ("Slinky") protocol. It exposes a 24-bit auto-incrementing address counter that enables rapid block transfers of up to 16 megabytes:
       </p>
 
       <pre class="bg-[#0d1117] p-4 rounded border border-[#30363d] text-emerald-400"><code>; Set 24-Bit Slinky Address to $040000 (256 KB Offset)
@@ -200,7 +200,7 @@ LOOP: LDA BUFFER,X
         <span class="text-amber-400">🎛️</span> Motherboard Peripheral Expansion Architecture (Slots 1–7)
       </h3>
       <p class="text-xs text-gray-400 leading-relaxed">
-        The Apple //c Ultra implements an extensible peripheral slot architecture mapping Slots 1–7 to standard 256-byte firmware driver spaces ($C100–$C7FF) and 16-byte softswitch decoders ($C090–$C0FF).
+        The 6502 Ultra implements an extensible peripheral slot architecture mapping Slots 1–7 to standard 256-byte firmware driver spaces ($C100–$C7FF) and 16-byte softswitch decoders ($C090–$C0FF).
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs font-mono">
         <div class="p-3 bg-[#0d1117] rounded border border-[#21262d]">
@@ -240,7 +240,7 @@ LOOP: LDA BUFFER,X
           <span>Slot Universality: Custom JavaScript Virtual Cards can be Assigned to ANY Slot (1–7)</span>
         </div>
         <p class="text-gray-300 leading-relaxed">
-          The Apple //c Ultra slot bus is entirely slot-agnostic. While Slot 3 is historically designated as the default example preset in tutorials (to avoid conflicting with Slot 6 Floppy and Slot 7 SmartPort Hard Disk), users and developers can dynamically instantiate and plug custom JavaScript virtual peripheral cards into <strong>any slot from Slot 1 through Slot 7</strong>. I/O softswitch registers decode to <code>$C080 + (Slot * $10)</code> and firmware driver space decodes to <code>$C000 + (Slot * $100)</code>.
+          The 6502 Ultra slot bus is entirely slot-agnostic. While Slot 3 is historically designated as the default example preset in tutorials (to avoid conflicting with Slot 6 Floppy and Slot 7 SmartPort Hard Disk), users and developers can dynamically instantiate and plug custom JavaScript virtual peripheral cards into <strong>any slot from Slot 1 through Slot 7</strong>. I/O softswitch registers decode to <code>$C080 + (Slot * $10)</code> and firmware driver space decodes to <code>$C000 + (Slot * $100)</code>.
         </p>
       </div>
     </div>
@@ -304,7 +304,7 @@ LOOP: LDA BUFFER,X
   </main>
 
   <footer class="text-center text-xs font-mono text-gray-500 py-6 border-t border-[#30363d]">
-    Apple //c Ultra • Hardware Schematics & Softswitch Encyclopedia 
+    6502 Ultra • Hardware Schematics & Softswitch Encyclopedia 
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple //c Ultra — Complete Full-Stack Architecture & Silicon Engineering Compendium</title>
+  <title>6502 Ultra — Complete Full-Stack Architecture & Silicon Engineering Compendium</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -33,7 +33,7 @@
       <a href="index.html" class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-stone-900 font-bold text-2xl"></a>
       <div>
         <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Master Architectural Specification</span>
-        <h1 class="text-lg font-extrabold text-white">Apple //c Ultra: Complete Full-Stack Architecture & Silicon Engineering Compendium</h1>
+        <h1 class="text-lg font-extrabold text-white">6502 Ultra: Complete Full-Stack Architecture & Silicon Engineering Compendium</h1>
       </div>
     </div>
     <div class="flex items-center space-x-3 text-xs font-mono">
@@ -100,7 +100,7 @@
     <section id="sec-overview" class="space-y-6">
       <h2 class="text-3xl font-black text-white section-title">1. Full-Stack System Overview & Architecture Hierarchy</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra is an enhanced 8-bit workstation uniting authentic 1984 WDC 65C02 CMOS silicon emulation with modern high-speed extensions: 50 MHz turbo clocks, 16MB Slinky memory expansion, 32MB SmartPort hard disk block I/O, Dual AY-3-8910 Mockingboard sound synthesis, and native Ahead-Of-Time (AOT) compilers for <strong>Java</strong> and <strong>C# .NET</strong>.
+        The 6502 Ultra is an enhanced 8-bit workstation uniting authentic 1984 WDC 65C02 CMOS silicon emulation with modern high-speed extensions: 50 MHz turbo clocks, 16MB Slinky memory expansion, 32MB SmartPort hard disk block I/O, Dual AY-3-8910 Mockingboard sound synthesis, and native Ahead-Of-Time (AOT) compilers for <strong>Java</strong> and <strong>C# .NET</strong>.
       </p>
 
       
@@ -306,21 +306,21 @@
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
         <h3 class="text-lg font-bold text-amber-400 font-mono sub-section-title">Binary & BCD Decimal Arithmetic (ALU)</h3>
         <p class="text-gray-300 text-xs leading-relaxed">
-          The 65C02 ALU supports both binary two's-complement arithmetic and Binary-Coded Decimal (BCD) arithmetic controlled by the Decimal flag (\(D \in P\)).
+          The 65C02 ALU supports both binary two's-complement arithmetic and Binary-Coded Decimal (BCD) arithmetic controlled by the Decimal flag (<code class="text-amber-300">D &isin; P</code>).
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
           <div class="p-4 bg-[#0d1117] rounded border border-[#30363d] space-y-2">
             <h4 class="text-cyan-300 font-bold">Binary Mode ADC / SBC Formula</h4>
-            <p class="text-gray-300">Given Accumulator \(A\), Operand \(M\), and Carry In \(C_{in}\):</p>
-            <div class="text-emerald-400">$$\text{Sum} = A + M + C_{in}$$</div>
-            <div class="text-emerald-400">$$A_{new} = \text{Sum} \pmod{256}$$</div>
+            <p class="text-gray-300">Given Accumulator <code class="text-amber-300">A</code>, Operand <code class="text-amber-300">M</code>, and Carry In <code class="text-amber-300">C<sub>in</sub></code>:</p>
+            <div class="text-emerald-400 font-mono text-xs">Sum = A + M + C<sub>in</sub></div>
+            <div class="text-emerald-400 font-mono text-xs">A<sub>new</sub> = Sum mod 256</div>
             <p class="text-gray-400">Flags:</p>
             <ul class="list-disc list-inside text-gray-300 space-y-1">
-              <li>\(C = (\text{Sum} > 255)\)</li>
-              <li>\(Z = (A_{new} == 0)\)</li>
-              <li>\(N = (A_{new} \ \& \ 0x80) \neq 0\)</li>
-              <li>\(V = (\sim(A \oplus M) \ \& \ (A \oplus \text{Sum}) \ \& \ 0x80) \neq 0\)</li>
+              <li><code class="text-emerald-300">C = (Sum &gt; 255)</code></li>
+              <li><code class="text-emerald-300">Z = (A<sub>new</sub> == 0)</code></li>
+              <li><code class="text-emerald-300">N = (A<sub>new</sub> &amp; 0x80) &ne; 0</code></li>
+              <li><code class="text-emerald-300">V = (~(A &oplus; M) &amp; (A &oplus; Sum) &amp; 0x80) &ne; 0</code></li>
             </ul>
           </div>
 
@@ -328,12 +328,12 @@
             <h4 class="text-amber-300 font-bold">Decimal Mode (BCD) ADC Algorithm</h4>
             <p class="text-gray-300">Each byte represents two 4-bit decimal digits (00..99):</p>
             <ol class="list-decimal list-inside text-gray-300 space-y-1">
-              <li>\(AL = (A \pmod{16}) + (M \pmod{16}) + C_{in}\)</li>
-              <li>If \(AL > 9\): \(AL = (AL + 6) \pmod{16}\), \(AH_{carry} = 1\)</li>
-              <li>\(AH = \lfloor A/16 \rfloor + \lfloor M/16 \rfloor + AH_{carry}\)</li>
-              <li>If \(AH > 9\): \(AH = (AH + 6) \pmod{16}\), \(C_{out} = 1\)</li>
-              <li>\(A_{new} = (AH \times 16) + AL\)</li>
-              <li><strong>65C02 Fix:</strong> \(Z = (A_{new} == 0)\), \(N = (A_{new} \ \& \ 0x80) \neq 0\)</li>
+              <li><code class="text-emerald-300">AL = (A mod 16) + (M mod 16) + C<sub>in</sub></code></li>
+              <li>If <code class="text-emerald-300">AL &gt; 9</code>: <code class="text-emerald-300">AL = (AL + 6) mod 16</code>, <code class="text-emerald-300">AH<sub>carry</sub> = 1</code></li>
+              <li><code class="text-emerald-300">AH = &lfloor;A/16&rfloor; + &lfloor;M/16&rfloor; + AH<sub>carry</sub></code></li>
+              <li>If <code class="text-emerald-300">AH &gt; 9</code>: <code class="text-emerald-300">AH = (AH + 6) mod 16</code>, <code class="text-emerald-300">C<sub>out</sub> = 1</code></li>
+              <li><code class="text-emerald-300">A<sub>new</sub> = (AH &times; 16) + AL</code></li>
+              <li><strong>65C02 Fix:</strong> <code class="text-emerald-300">Z = (A<sub>new</sub> == 0)</code>, <code class="text-emerald-300">N = (A<sub>new</sub> &amp; 0x80) &ne; 0</code></li>
             </ol>
           </div>
         </div>
@@ -344,7 +344,7 @@
     <section id="sec-mmu" class="space-y-6">
       <h2 class="text-3xl font-black text-white section-title">3. MMU Banking, Memory Mapping & 16MB Slinky RAM</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c MMU manages bank switching between 128KB of onboard dynamic RAM (64KB Main + 64KB Auxiliary), 32KB Motherboard ROM, and 16MB of Slinky expanded RAM through hardware I/O softswitches in the $C000-$C0FF range.
+        The 6502 Ultra MMU manages bank switching between 128KB of onboard dynamic RAM (64KB Main + 64KB Auxiliary), 32KB Motherboard ROM, and 16MB of Slinky expanded RAM through hardware I/O softswitches in the $C000-$C0FF range.
       </p>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
@@ -382,7 +382,7 @@ public handleLanguageCardAccess(address: number, isWrite: boolean): void {
     <section id="sec-video" class="space-y-6">
       <h2 class="text-3xl font-black text-white section-title">4. Video Pipeline, Scanline Geometry & DHGR Graphics</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        Steve Wozniak designed the Apple II video generator to eliminate expensive multiplier circuits. The 192 scanlines are interleaved into three 64-line tiers ("boxes"), eight 8-line character rows per box, and eight scanlines per character row.
+        Steve Wozniak designed the 6502 Ultra video generator to eliminate expensive multiplier circuits. The 192 scanlines are interleaved into three 64-line tiers ("boxes"), eight 8-line character rows per box, and eight scanlines per character row.
       </p>
 
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
@@ -397,19 +397,19 @@ public handleLanguageCardAccess(address: number, isWrite: boolean): void {
     <section id="sec-audio" class="space-y-6">
       <h2 class="text-3xl font-black text-white section-title">5. Audio Synthesis: 1-Bit Speaker & Dual AY-3-8910 Mockingboard</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra provides both the classic 1-bit speaker toggle at <code>$C030</code> and a Slot 4 Mockingboard featuring dual General Instrument AY-3-8910 Programmable Sound Generator (PSG) chips driven by dual MOS 6522 VIAs.
+        The 6502 Ultra provides both the classic 1-bit speaker toggle at <code>$C030</code> and a Slot 4 Mockingboard featuring dual General Instrument AY-3-8910 Programmable Sound Generator (PSG) chips driven by dual MOS 6522 VIAs.
       </p>
 
       <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 text-xs font-mono space-y-2">
         <h3 class="text-pink-400 font-bold text-sm">AY-3-8910 Programmable Sound Generator (PSG) Register Map</h3>
         <ul class="space-y-1 text-gray-300">
-          <li><strong>R0 / R1:</strong> Channel A Tone Period (12-bit) — \(f = \frac{1022727}{16 \times \text{Period}}\)</li>
+          <li><strong>R0 / R1:</strong> Channel A Tone Period (12-bit) — <code class="text-cyan-300">f = 1022727 / (16 &times; Period)</code></li>
           <li><strong>R2 / R3:</strong> Channel B Tone Period (12-bit)</li>
           <li><strong>R4 / R5:</strong> Channel C Tone Period (12-bit)</li>
           <li><strong>R6:</strong> Noise Generator Period (5-bit) — 17-bit LFSR pseudo-random noise</li>
           <li><strong>R7:</strong> Audio Mixer Control (Tone / Noise enable mask, Active LOW)</li>
           <li><strong>R8, R9, R10:</strong> Channel A, B, C Volume (4-bit logarithmic amplitude + envelope enable bit)</li>
-          <li><strong>R11 / R12:</strong> Envelope Period (16-bit) — \(T = \frac{256 \times \text{Period}}{1022727}\)</li>
+          <li><strong>R11 / R12:</strong> Envelope Period (16-bit) — <code class="text-cyan-300">T = (256 &times; Period) / 1022727</code></li>
           <li><strong>R13:</strong> Envelope Shape / Cycle (Sawtooth, Triangle, Attack/Decay)</li>
         </ul>
       </div>
@@ -419,7 +419,7 @@ public handleLanguageCardAccess(address: number, isWrite: boolean): void {
     <section id="sec-storage" class="space-y-6">
       <h2 class="text-3xl font-black text-white section-title">6. Storage Architecture: Floppy GCR & SmartPort 32MB Hard Disk</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra supports both standard 5.25-inch 140KB floppy disks using Wozniak 6-and-2 Group Code Recording (GCR) and a 32MB SmartPort virtual hard disk volume ($/HD$) partitioned into 65,536 contiguous 512-byte blocks.
+        The 6502 Ultra supports both standard 5.25-inch 140KB floppy disks using Wozniak 6-and-2 Group Code Recording (GCR) and a 32MB SmartPort virtual hard disk volume ($/HD$) partitioned into 65,536 contiguous 512-byte blocks.
       </p>
     </section>
 
@@ -444,9 +444,9 @@ public handleLanguageCardAccess(address: number, isWrite: boolean): void {
 
     <!-- Section 8: 65C02 Complete Assembly Reference -->
     <section id="sec-assembly" class="space-y-6">
-      <h2 class="text-3xl font-black text-white section-title">8. 65C02 Assembly Language & Apple II Monitor ROM Reference</h2>
+      <h2 class="text-3xl font-black text-white section-title">8. 65C02 Assembly Language & System Monitor ROM Reference</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        Developers can interact directly with the hardware through the built-in Apple II Monitor ROM routines and 65C02 assembly language:
+        Developers can interact directly with the hardware through the built-in System Monitor ROM routines and 65C02 assembly language:
       </p>
 
       <div class="overflow-x-auto">
@@ -549,7 +549,7 @@ namespace RetroBreakout
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Full-Stack Architecture Compendium
+    <a href="index.html" class="text-amber-400 hover:underline">← Back to Developer Hub</a> • 6502 Ultra Full-Stack Architecture Compendium
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

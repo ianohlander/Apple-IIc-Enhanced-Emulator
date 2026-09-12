@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Pipeline & Double Hi-Res Graphics — Apple //c Ultra Developer Guide</title>
+  <title>Video Pipeline & Double Hi-Res Graphics — 6502 Ultra Developer Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -100,7 +100,7 @@
     <section class="space-y-4">
       <h2 class="text-2xl font-extrabold text-white section-title">1. Wozniak Scanline Interleaving & Mathematical Derivation</h2>
       <p class="text-gray-300 text-sm leading-relaxed">
-        Steve Wozniak designed the Apple II video generator to eliminate expensive multiplier circuits and FIFO line buffers. Instead of linear frame buffers, the video counter hardware generates scanline addresses by dividing the 192 scanlines into three 64-line tiers ("boxes"), eight 8-line character rows per box, and eight scanline sublines per row.
+        Steve Wozniak designed the 6502 Ultra video generator to eliminate expensive multiplier circuits and FIFO line buffers. Instead of linear frame buffers, the video counter hardware generates scanline addresses by dividing the 192 scanlines into three 64-line tiers ("boxes"), eight 8-line character rows per box, and eight scanline sublines per row.
       </p>
 
       <div class="bg-[#0d1117] border border-[#30363d] rounded-xl p-6 space-y-4 text-xs font-mono">
@@ -109,11 +109,11 @@
           For any scanline Y from 0 to 191:
         </p>
         <div class="p-4 bg-[#161b22] border border-[#30363d] rounded text-cyan-300 space-y-2 text-sm">
-          <div>• <strong>Box:</strong> \(\text{Box} = \lfloor Y / 64 \rfloor \in \{0, 1, 2\}\)</div>
-          <div>• <strong>Row:</strong> \(\text{Row} = \lfloor (Y \bmod 64) / 8 \rfloor \in \{0..7\}\)</div>
-          <div>• <strong>Subline:</strong> \(\text{Sub} = Y \bmod 8 \in \{0..7\}\)</div>
+          <div>• <strong>Box:</strong> <code class="text-cyan-300">Box = &lfloor;Y / 64&rfloor; &isin; {0, 1, 2}</code></div>
+          <div>• <strong>Row:</strong> <code class="text-cyan-300">Row = &lfloor;(Y mod 64) / 8&rfloor; &isin; {0..7}</code></div>
+          <div>• <strong>Subline:</strong> <code class="text-cyan-300">Sub = Y mod 8 &isin; {0..7}</code></div>
           <div class="text-amber-400 pt-2 font-bold border-t border-[#30363d] text-base">
-            \(\text{Base Address}(Y) = $2000 + (\text{Sub} \times $0400) + (\text{Row} \times $0080) + (\text{Box} \times $0028)\)
+            <code>Base Address(Y) = $2000 + (Sub &times; $0400) + (Row &times; $0080) + (Box &times; $0028)</code>
           </div>
         </div>
 
@@ -138,7 +138,7 @@
       <div class="bg-[#161b22] border border-[#30363d] rounded-xl p-6 space-y-4">
         <h3 class="text-purple-400 font-bold font-mono text-sm">4-Dot NTSC Phase Shift Color Synthesis</h3>
         <p class="text-gray-300 text-xs leading-relaxed">
-          Because the NTSC color subcarrier frequency is \(f_{\text{color}} = 3.579545\text{ MHz} = \frac{14.31818\text{ MHz}}{4}\), exactly 4 monochrome dots span one 360° color subcarrier cycle. The 4-bit repeating binary pattern of dots generates a specific phase angle and amplitude, synthesizing 16 solid composite colors:
+          Because the NTSC color subcarrier frequency is <code class="text-amber-300">f<sub>color</sub> = 3.579545 MHz = 14.31818 MHz / 4</code>, exactly 4 monochrome dots span one 360° color subcarrier cycle. The 4-bit repeating binary pattern of dots generates a specific phase angle and amplitude, synthesizing 16 solid composite colors:
         </p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
@@ -170,9 +170,9 @@
       </p>
       <ul class="list-disc list-inside text-xs font-mono text-gray-300 space-y-2">
         <li><strong>Color NTSC:</strong> Full 16-color composite decoding with 4-dot artifacting.</li>
-        <li><strong>P1 Green Phosphor (525nm):</strong> Classic Apple Monitor /// phosphor with long exponential persistence curve (\(I(t) = I_0 e^{-t/\tau}\) where decay time constant \(\tau \approx 28\text{ ms}\)).</li>
-        <li><strong>P3 Amber Phosphor (605nm):</strong> High-contrast amber display with medium persistence (\(\tau \approx 12\text{ ms}\)).</li>
-        <li><strong>P4 White Phosphor (Apple Monitor //c):</strong> Crisp monochrome phosphor matched to the original 9-inch Apple //c CRT display.</li>
+        <li><strong>P1 Green Phosphor (525nm):</strong> Classic Apple Monitor /// phosphor with long exponential persistence curve (<code class="text-emerald-300">I(t) = I<sub>0</sub> &middot; e<sup>-t/&tau;</sup></code> where decay time constant <code class="text-emerald-300">&tau; &approx; 28 ms</code>).</li>
+        <li><strong>P3 Amber Phosphor (605nm):</strong> High-contrast amber display with medium persistence (<code class="text-amber-300">&tau; &approx; 12 ms</code>).</li>
+        <li><strong>P4 White Phosphor (Apple Monitor //c):</strong> Crisp monochrome phosphor matched to the original 9-inch 6502 Ultra CRT display.</li>
       </ul>
     </section>
 
@@ -184,7 +184,7 @@
         <h3 class="text-lg font-bold text-white">Physical 8KB Video RAM Bit-Level Framebuffering ($2000–$3FFF)</h3>
       </div>
       <p class="text-gray-300 text-xs leading-relaxed">
-        All Hi-Res graphics rendering in the Apple //c Ultra operates on physical byte arrays in VRAM. Every byte represents 7 horizontal screen dots (Bits 0–6) plus Bit 7 ($180^\circ$ NTSC color subcarrier delay):
+        All Hi-Res graphics rendering in the 6502 Ultra operates on physical byte arrays in VRAM. Every byte represents 7 horizontal screen dots (Bits 0–6) plus Bit 7 ($180^\circ$ NTSC color subcarrier delay):
       </p>
 
       <div class="p-3 bg-[#0a0e17] rounded border border-[#21293a] text-xs font-mono text-gray-300 space-y-1">
@@ -198,7 +198,7 @@
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-purple-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+    <a href="index.html" class="text-purple-400 hover:underline">← Back to Developer Hub</a> • 65C02 Ultra Workstation
   
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Three-Domain Peripheral Card Architecture &amp; Hardware Sandbox Guide — Apple //c Ultra</title>
+  <title>The Three-Domain Peripheral Card Architecture &amp; Hardware Sandbox Guide — 65C02 Ultra Workstation</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -34,7 +34,7 @@
       <a href="../index.html" class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow text-black font-bold text-xl">🔌</a>
       <div>
         <span class="text-xs font-mono text-amber-400 font-bold tracking-widest uppercase">Developer &amp; Hardware Engineering Reference</span>
-        <h1 class="text-base font-extrabold text-white">The Three-Domain Peripheral Architecture: Apple II, Virtual Card &amp; Outside World</h1>
+        <h1 class="text-base font-extrabold text-white">The Three-Domain Peripheral Architecture: 65C02 Virtual Machine, Virtual Cards &amp; Outside World</h1>
       </div>
     </div>
     <div class="flex items-center space-x-3 text-xs font-mono">
@@ -50,6 +50,17 @@
   <!-- Content Container -->
   <main class="max-w-5xl mx-auto px-6 py-10 w-full space-y-12 text-sm">
 
+    <!-- Legal & Nominative Fair Use Notice -->
+    <div class="bg-[#0e131b] border border-[#233144] rounded-xl p-4 text-xs font-sans text-gray-400 space-y-1.5 leading-relaxed">
+      <div class="flex items-center gap-2 text-stone-300 font-bold font-mono text-[11px] uppercase tracking-wider">
+        <span>⚖️</span>
+        <span>Intellectual Property &amp; Nominative Fair Use Notice</span>
+      </div>
+      <p>
+        "Apple", "Apple II", "6502 Ultra", "ImageWriter", "Mockingboard", and "Passport" are registered trademarks of their respective copyright holders. References to these historical names throughout this documentation and codebase are made strictly for technical interoperability, educational preservation, and nominative descriptive fair use under United States trademark law (identifying authentic 1977–1988 hardware protocols, bus timings, softswitch vectors, and memory maps). This project is an independent clean-room workstation and is not affiliated with, sponsored by, or endorsed by Apple Inc. or any third-party peripheral manufacturer.
+      </p>
+    </div>
+
     <!-- Hero Banner -->
     <div class="bg-gradient-to-br from-amber-950/40 via-[#101622] to-cyan-950/40 border border-[#2a3642] rounded-2xl p-8 space-y-4 shadow-xl">
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#2a3642] pb-3">
@@ -58,14 +69,14 @@
       </div>
       <h2 class="text-2xl md:text-3xl font-black text-white">Understanding the Three-Domain Hardware Architecture</h2>
       <p class="text-gray-300 text-xs md:text-sm leading-relaxed max-w-4xl">
-        To understand how virtual expansion cards work in the Apple //c Ultra, we divide the entire system into <strong>Three Distinct Architectural Domains</strong>:
+        To understand how virtual expansion cards work in the 65C02 Ultra Workstation, we divide the entire system into <strong>Three Distinct Architectural Domains</strong>:
       </p>
       
       <!-- 3 Domains Overview Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 font-mono text-xs">
         <div class="p-3.5 bg-[#0a0e17] rounded-xl border border-amber-500/40 space-y-1.5">
           <div class="domain-tag tag-domain1">Domain 1: Inside</div>
-          <span class="text-amber-400 font-bold block">The Apple //c Ultra Computer</span>
+          <span class="text-amber-400 font-bold block">The 65C02 Virtual Computer</span>
           <p class="text-gray-400 font-sans text-[11px]">
             65C02 CPU executing Applesoft BASIC, 65C02 Machine Code, C# .NET, or Java 17. Reads/writes softswitches at <code class="text-amber-300">$C0B0–$C0BF</code>.
           </p>
@@ -124,7 +135,7 @@
           </div>
 
           <p class="text-gray-300 text-xs font-sans leading-relaxed">
-            The <strong>Custom Card JavaScript Sandbox</strong> is a built-in feature of the Apple //c Ultra emulator. It allows you to write custom hardware logic for <strong>ANY Slot (1 through 7)</strong> directly in the browser with real-time compilation:
+            The <strong>Custom Card JavaScript Sandbox</strong> is a built-in feature of the 65C02 Ultra Workstation emulator. It allows you to write custom hardware logic for <strong>ANY Slot (1 through 7)</strong> directly in the browser with real-time compilation:
           </p>
 
           <div class="bg-[#06090e] p-4 rounded-lg border border-[#1a2332] space-y-2 font-mono text-xs">
@@ -135,7 +146,7 @@
               <li>Inside the studio, click the <strong>🧪 Custom JS Card Sandbox</strong> button.</li>
               <li>Select your target slot from the <strong>Target Slot Dropdown</strong> (defaults to <strong>Slot 3</strong> at <code class="text-amber-300">$C0B0</code>, but can be set to <strong>any slot from 1 to 7</strong>).</li>
               <li>Paste or edit your JavaScript card script in the <strong>Sandbox Code Textarea</strong>.</li>
-              <li>Click the blue <strong>▶ Apply to Slot &lt;N&gt;</strong> button. Your virtual hardware card is immediately active on the 65C02 bus!</li>
+              <li>Click the blue <strong>▶ Apply to Slot <em>N</em></strong> button. Your virtual hardware card is immediately active on the 65C02 bus!</li>
             </ol>
           </div>
         </div>
@@ -160,7 +171,7 @@
               <li>In the <strong>"Under the Hood"</strong> workbench area, click the <strong>☕ Java &amp; C# CLR</strong> tab (Tab 7).</li>
               <li>Select your language (<strong>C# .NET</strong> or <strong>Java 17</strong>) from the language selector.</li>
               <li>Paste the C# or Java class into the large <strong>Source Code Textbox</strong>.</li>
-              <li>Click the gold <strong>⚡ Compile &amp; Run on Apple II</strong> button.</li>
+              <li>Click the gold <strong>⚡ Compile &amp; Run on Virtual Machine</strong> button.</li>
               <li>The AOT compiler translates the high-level code down to native 65C02 machine code, injects it into RAM at <code class="text-cyan-300">$0800</code>, and executes it (<code class="text-purple-300">CALL 2048</code>) automatically!</li>
             </ol>
           </div>
@@ -193,12 +204,12 @@
             <svg viewBox="0 0 880 180" class="w-full max-w-4xl mx-auto drop-shadow-lg" style="background: #0d1219; border-radius: 8px; border: 1px solid #212d3d;">
               <!-- Domain 1 Box -->
               <rect x="20" y="20" width="240" height="140" rx="8" fill="#141a21" stroke="#f59e0b" stroke-width="2" />
-              <text x="140" y="45" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">DOMAIN 1: APPLE //c ULTRA</text>
+              <text x="140" y="45" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">DOMAIN 1: 65C02 VIRTUAL MACHINE</text>
               <text x="140" y="65" fill="#94a3b8" font-size="8.5" text-anchor="middle" font-family="monospace">(Inside: 65C02 CPU Silicon)</text>
               <rect x="35" y="80" width="210" height="22" rx="4" fill="#2d2109" stroke="#d97706" stroke-width="1" />
               <text x="140" y="95" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">BASIC: PEEK / POKE 49328</text>
               <rect x="35" y="110" width="210" height="22" rx="4" fill="#2d2109" stroke="#d97706" stroke-width="1" />
-              <text x="140" y="125" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">C# / Java: AppleMemory.Peek/Poke</text>
+              <text x="140" y="125" fill="#fde68a" font-size="8" text-anchor="middle" font-family="monospace">C# / Java: A2Memory.Peek/Poke</text>
 
               <!-- Arrow 1-2 -->
               <line x1="260" y1="90" x2="320" y2="90" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4,4" />
@@ -275,7 +286,7 @@
             <strong>Custom JavaScript virtual cards can be assigned to ANY of the 7 slots (Slot 1 through Slot 7).</strong> There is no hardware restriction requiring custom cards to live in Slot 3.
           </p>
           <p class="text-gray-300 font-sans">
-            The Apple //c Ultra's <code class="text-purple-300 font-bold">SlotManager</code> dynamically routes 65C02 CPU bus reads and writes according to standard Apple II address decoding rules. When you plug a card into Slot $N$, the emulator automatically binds your card's <code class="text-cyan-300">onReadHandler</code> and <code class="text-cyan-300">onWriteHandler</code> to that slot's dedicated 16-byte I/O register range and 256-byte firmware ROM space.
+            The Workstation's <code class="text-purple-300 font-bold">SlotManager</code> dynamically routes 65C02 CPU bus reads and writes according to standard 8-bit bus address decoding rules. When you plug a card into Slot <em>n</em> (where <em>n</em> &isin; [1..7]), the emulator automatically binds your card's <code class="text-cyan-300">onReadHandler</code> and <code class="text-cyan-300">onWriteHandler</code> to that slot's dedicated 16-byte I/O register range and 256-byte firmware ROM space.
           </p>
         </div>
 
@@ -284,7 +295,7 @@
           <div class="p-4 bg-[#0d1219] rounded-xl border border-[#212d3d] space-y-2">
             <span class="text-amber-400 font-bold font-mono text-xs block">🏛️ Why Slot 3 is Used as the Default Example:</span>
             <p class="text-gray-400 font-sans text-[11px] leading-relaxed">
-              On the vintage 1984 Apple //e and Apple //c, Slot 3 was historically designated for the 80-Column Display Card (or Aux RAM), Slot 6 was the Disk II 5.25" floppy controller, and Slot 7 was the ProDOS SmartPort hard disk.
+              On the vintage 1984 Apple //e and 6502 Ultra, Slot 3 was historically designated for the 80-Column Display Card (or Aux RAM), Slot 6 was the Disk II 5.25" floppy controller, and Slot 7 was the ProDOS SmartPort hard disk.
             </p>
             <p class="text-gray-400 font-sans text-[11px] leading-relaxed">
               Our cookbook examples and tutorial presets default to <strong>Slot 3</strong> so that beginners can experiment with custom IoT hardware immediately without disabling their floppy drive (Slot 6) or hard disk (Slot 7).
@@ -294,7 +305,7 @@
           <div class="p-4 bg-[#0d1219] rounded-xl border border-[#212d3d] space-y-2">
             <span class="text-cyan-400 font-bold font-mono text-xs block">🚀 Ultra Reconfigurability: Replace Any Peripheral:</span>
             <p class="text-gray-400 font-sans text-[11px] leading-relaxed">
-              In the Apple //c Ultra, all 7 slots are fully reconfigurable! You can hot-swap or replace any slot:
+              In the 6502 Ultra, all 7 slots are fully reconfigurable! You can hot-swap or replace any slot:
             </p>
             <ul class="list-disc list-inside text-gray-400 text-[11px] font-sans space-y-1 pl-1">
               <li><strong>Slot 1:</strong> Replace ImageWriter Printer with a 32-Bit Math Co-Processor.</li>
@@ -507,7 +518,7 @@ Console.WriteLine($"Slot {slot} Reg 1: {result}");</code></pre>
 
         <!-- 4 Trust Pillars for Users -->
         <div class="p-4 bg-[#0a0e17] rounded-xl border border-[#212d3d] space-y-3 font-mono text-xs">
-          <span class="text-amber-400 font-bold uppercase tracking-wider block">Why Users Can Trust the Apple //c Ultra:</span>
+          <span class="text-amber-400 font-bold uppercase tracking-wider block">Why Users Can Trust the 6502 Ultra:</span>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] font-sans text-gray-300">
             <div class="p-3 bg-[#0d1219] rounded border border-[#1a2332] space-y-1">
@@ -539,14 +550,14 @@ Console.WriteLine($"Slot {slot} Reg 1: {result}");</code></pre>
       <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
         <span class="step-pill bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">3</span>
         <div>
-          <h3 class="text-base font-bold text-emerald-400 font-mono uppercase">Case Study 1: Apple II Driving an Outside Stepper Motor (Actuator Output)</h3>
+          <h3 class="text-base font-bold text-emerald-400 font-mono uppercase">Case Study 1: 6502 Ultra Driving an Outside Stepper Motor (Actuator Output)</h3>
           <p class="text-gray-400 text-xs">How the 65C02 sends motor step commands through the JS card to a physical USB Arduino and motor</p>
         </div>
       </div>
 
       <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
         <p class="text-gray-300 font-sans">
-          This example shows how an Apple II program writes a target step angle (e.g. 90 degrees) to softswitch register <code class="text-amber-300">$C0B0</code>, which the JavaScript card receives in <code class="text-cyan-300">card.onWriteHandler</code>, transmits over USB serial, and causes a physical 28BYJ-48 stepper motor to rotate in the real world!
+          This example shows how a 6502 Ultra program writes a target step angle (e.g. 90 degrees) to softswitch register <code class="text-amber-300">$C0B0</code>, which the JavaScript card receives in <code class="text-cyan-300">card.onWriteHandler</code>, transmits over USB serial, and causes a physical 28BYJ-48 stepper motor to rotate in the real world!
         </p>
 
         <!-- Domain 3: Arduino Firmware -->
@@ -567,14 +578,14 @@ void setup() {
 }
 
 void loop() {
-  // Listen for step command bytes sent from Apple //c Ultra
+  // Listen for step command bytes sent from 6502 Ultra
   if (Serial.available() > 0) {
-    byte targetAngle = Serial.read(); // Byte from Apple II (e.g. 90 deg)
+    byte targetAngle = Serial.read(); // Byte from 6502 Ultra (e.g. 90 deg)
     int stepsToMove = map(targetAngle, 0, 360, 0, STEPS_PER_REV);
     
     myMotor.step(stepsToMove); // Rotate physical motor shaft!
     
-    // Send confirmation byte back to Apple II
+    // Send confirmation byte back to 6502 Ultra
     Serial.write(0x01); // 0x01 = Movement Complete
   }
 }</code></pre>
@@ -629,11 +640,11 @@ card.onWriteHandler = async (offset, val) => {
 };</code></pre>
         </div>
 
-        <!-- Domain 1: Apple II Code in BASIC & C# -->
+        <!-- Domain 1: 6502 Ultra Code in BASIC & C# -->
         <div class="space-y-4">
           <div class="flex items-center gap-2">
-            <span class="domain-tag tag-domain1">Domain 1: Apple //c Ultra</span>
-            <span class="text-amber-400 font-bold font-mono">Programs Running on the Apple II (Applesoft BASIC &amp; Modern C#)</span>
+            <span class="domain-tag tag-domain1">Domain 1: 6502 Ultra</span>
+            <span class="text-amber-400 font-bold font-mono">Programs Running on the 6502 Ultra (Applesoft BASIC &amp; Modern C#)</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -641,7 +652,7 @@ card.onWriteHandler = async (offset, val) => {
             <!-- BASIC Motor Controller -->
             <div class="space-y-1.5">
               <span class="text-amber-300 font-bold font-mono">A. Applesoft BASIC Motor Control Listing:</span>
-              <pre><code class="text-amber-300">10 HOME : PRINT " APPLE //c STEPPER MOTOR ROBOT"
+              <pre><code class="text-amber-300">10 HOME : PRINT "6502 ULTRA STEPPER MOTOR ROBOT"
 20 PRINT "--------------------------------"
 30 INPUT "ENTER ROTATION ANGLE (0-255 DEG): "; DEG
 40 POKE 49328, DEG : REM Send angle to $C0B0
@@ -655,24 +666,24 @@ card.onWriteHandler = async (offset, val) => {
             <div class="space-y-1.5">
               <span class="text-cyan-300 font-bold font-mono">B. Modern C# .NET Motor Control Class (AOT Studio):</span>
               <pre><code class="text-cyan-300">using System;
-using Apple2.Ultra;
+using Ultra.Hardware;
 
 public class RobotArmController {
     public static void Main() {
-        AppleConsole.ClearScreen();
-        AppleConsole.WriteLine("C# ROBOT MOTOR CONTROLLER");
+        UltraConsole.ClearScreen();
+        UltraConsole.WriteLine("C# ROBOT MOTOR CONTROLLER");
         
         // Command 90 degree rotation
-        AppleMemory.Poke(0xC0B0, 90);
-        AppleConsole.WriteLine("ROTATING SHAFT 90 DEG...");
+        UltraMemory.Poke(0xC0B0, 90);
+        UltraConsole.WriteLine("ROTATING SHAFT 90 DEG...");
         
         // Poll status register until ready
-        while (AppleMemory.Peek(0xC0B0) == 1) {
+        while (UltraMemory.Peek(0xC0B0) == 1) {
             // Wait
         }
         
-        AppleAudio.Beep(frequency: 1000, durationMs: 100);
-        AppleConsole.WriteLine("POSITION REACHED!");
+        UltraAudio.Beep(frequency: 1000, durationMs: 100);
+        UltraConsole.WriteLine("POSITION REACHED!");
     }
 }</code></pre>
             </div>
@@ -690,7 +701,7 @@ public class RobotArmController {
       <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
         <span class="step-pill bg-pink-500/20 text-pink-400 border border-pink-500/40">4</span>
         <div>
-          <h3 class="text-base font-bold text-pink-400 font-mono uppercase">Case Study 2: Cloud IoT Weather Station (Telemetry Ingested by Apple II)</h3>
+          <h3 class="text-base font-bold text-pink-400 font-mono uppercase">Case Study 2: Cloud IoT Weather Station (Telemetry Ingested by 6502 Ultra)</h3>
           <p class="text-gray-400 text-xs">How live internet weather data flows from cloud REST servers into 65C02 registers</p>
         </div>
       </div>
@@ -754,11 +765,11 @@ card.onReadHandler = (offset) => {
 };</code></pre>
         </div>
 
-        <!-- Domain 1: Apple II Code in BASIC, C#, Java -->
+        <!-- Domain 1: 65C02 Code in BASIC, C#, Java -->
         <div class="space-y-4">
           <div class="flex items-center gap-2">
-            <span class="domain-tag tag-domain1">Domain 1: Apple //c Ultra</span>
-            <span class="text-amber-400 font-bold font-mono">Reading Telemetry on the Apple II (BASIC, C#, and Java)</span>
+            <span class="domain-tag tag-domain1">Domain 1: 65C02 Virtual Machine</span>
+            <span class="text-amber-400 font-bold font-mono">Reading Telemetry on the 65C02 (BASIC, C#, and Java)</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -767,8 +778,8 @@ card.onReadHandler = (offset) => {
             <div class="space-y-1">
               <span class="text-amber-300 font-bold font-mono">A. Applesoft BASIC:</span>
               <pre><code class="text-amber-300">10 HOME
-20 PRINT " CUPERTINO WEATHER"
-30 PRINT "------------------"
+20 PRINT "WEATHER TELEMETRY STATION"
+30 PRINT "-------------------------"
 40 PRINT "TEMP: "; PEEK(49328); " F"
 50 PRINT "HUM : "; PEEK(49329); " %"
 60 PRINT "WIND: "; PEEK(49332); " MPH"
@@ -779,12 +790,12 @@ card.onReadHandler = (offset) => {
             <div class="space-y-1">
               <span class="text-cyan-300 font-bold font-mono">B. Modern C# .NET (AOT Studio):</span>
               <pre><code class="text-cyan-300">using System;
-using Apple2.Ultra;
+using A2Ultra.Hardware;
 
 public class WeatherApp {
   public static void Main() {
-    byte t = AppleMemory.Peek(0xC0B0);
-    byte h = AppleMemory.Peek(0xC0B1);
+    byte t = A2Memory.Peek(0xC0B0);
+    byte h = A2Memory.Peek(0xC0B1);
     Console.WriteLine("TEMP: " + t + " F");
     Console.WriteLine("HUM : " + h + " %");
   }
@@ -794,12 +805,12 @@ public class WeatherApp {
             <!-- Java -->
             <div class="space-y-1">
               <span class="text-purple-300 font-bold font-mono">C. Modern Java 17 (AOT Studio):</span>
-              <pre><code class="text-purple-300">import apple2.hardware.AppleSystem;
+              <pre><code class="text-purple-300">import a2ultra.hardware.A2System;
 
 public class JavaWeather {
   public static void main(String[] a) {
-    int t = AppleSystem.peek(0xC0B0);
-    AppleSystem.print("TEMP: " + t + " F\n");
+    int t = A2System.peek(0xC0B0);
+    A2System.print("TEMP: " + t + " F\n");
   }
 }</code></pre>
             </div>
@@ -818,13 +829,13 @@ public class JavaWeather {
         <span class="step-pill bg-purple-500/20 text-purple-400 border border-purple-500/40">5</span>
         <div>
           <h3 class="text-base font-bold text-purple-400 font-mono uppercase">Case Study 3: Executing Local Host OS Processes &amp; Shell Commands</h3>
-          <p class="text-gray-400 text-xs">How the Apple II can trigger local Python/Node scripts on your PC via a local WebSocket daemon</p>
+          <p class="text-gray-400 text-xs">How the 6502 Ultra can trigger local Python/Node scripts on your PC via a local WebSocket daemon</p>
         </div>
       </div>
 
       <div class="card-box p-6 space-y-6 text-xs leading-relaxed">
         <p class="text-gray-300 font-sans">
-          Want the Apple II to launch a local Python script, read a file from your PC's desktop, or control smart home lights? Run a tiny 10-line WebSocket daemon on your PC and connect the virtual card to <code class="text-purple-300">ws://localhost:8080</code>!
+          Want the 6502 Ultra to launch a local Python script, read a file from your PC's desktop, or control smart home lights? Run a tiny 10-line WebSocket daemon on your PC and connect the virtual card to <code class="text-purple-300">ws://localhost:8080</code>!
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -840,7 +851,7 @@ import asyncio, websockets, subprocess
 
 async def handler(websocket):
     async for msg in websocket:
-        print(f"Apple II Command: {msg}")
+        print(f"6502 Ultra Command: {msg}")
         if msg == "LAUNCH_CALC":
             subprocess.Popen(["calc.exe"])
             await websocket.send("CALC_LAUNCHED")
@@ -848,6 +859,9 @@ async def handler(websocket):
 async def main():
     async with websockets.serve(handler, "localhost", 8080):
         await asyncio.Future()
+
+async def run():
+    await main()
 
 asyncio.run(main())</code></pre>
           </div>
@@ -862,7 +876,7 @@ asyncio.run(main())</code></pre>
 card.ws = new WebSocket("ws://localhost:8080");
 
 card.onWriteHandler = (offset, val) => {
-  // If Apple II writes 1 to $C0B0, tell Python to launch calculator!
+  // If 6502 Ultra writes 1 to $C0B0, tell Python to launch calculator!
   if (offset === 0x00 && val === 0x01) {
     if (card.ws.readyState === WebSocket.OPEN) {
       card.ws.send("LAUNCH_CALC");
@@ -872,37 +886,123 @@ card.onWriteHandler = (offset, val) => {
           </div>
 
         </div>
+
+        <!-- Domain 1: 65C02 Code to Trigger Host Processes (BASIC, Assembly, C#) -->
+        <div class="space-y-4 pt-2 border-t border-[#1f2838]">
+          <div class="flex items-center gap-2">
+            <span class="domain-tag tag-domain1">Domain 1: 65C02 Virtual Machine</span>
+            <span class="text-amber-400 font-bold font-mono">Triggering Host Processes from the Virtual Computer</span>
+          </div>
+
+          <p class="text-gray-300 font-sans text-xs">
+            From the 65C02 CPU, triggering the host process is simply writing command code <code>1</code> to the card's I/O softswitch at <code>$C0B0</code> (decimal <code>49328</code>):
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            
+            <!-- BASIC -->
+            <div class="space-y-1">
+              <span class="text-amber-300 font-bold font-mono">A. Applesoft BASIC:</span>
+              <pre><code class="text-amber-300">10 TEXT : HOME
+20 PRINT "=== HOST PROCESS LAUNCHER ==="
+30 PRINT "SLOT 3 HOST BRIDGE READY."
+40 PRINT "PRESS [C] TO LAUNCH HOST CALC"
+50 GET K$: IF K$ <> "C" THEN 50
+60 POKE 49328, 1 : REM Signal $C0B0
+70 PRINT ">> SIGNAL DISPATCHED TO HOST!"
+80 FOR D = 1 TO 2000: NEXT D
+90 GOTO 40</code></pre>
+            </div>
+
+            <!-- 65C02 Assembly -->
+            <div class="space-y-1">
+              <span class="text-cyan-300 font-bold font-mono">B. 65C02 Machine Code / Assembly:</span>
+              <pre><code class="text-cyan-300">; --- TRIGGER HOST OS PROCESS ---
+; Entry: CALL 768 ($0300)
+ORG $0300
+TRIGGER_HOST:
+    LDA #$01        ; Command 1 = LAUNCH_CALC
+    STA $C0B0       ; Write to Slot 3 softswitch
+    RTS             ; Return to caller</code></pre>
+            </div>
+
+            <!-- C# .NET -->
+            <div class="space-y-1">
+              <span class="text-purple-300 font-bold font-mono">C. Modern C# .NET (AOT Studio):</span>
+              <pre><code class="text-purple-300">using System;
+using A2Ultra.Hardware;
+
+public class HostBridgeApp {
+  public static void Main() {
+    Console.WriteLine("Dispatching host process signal...");
+    A2Memory.Poke(0xC0B0, 0x01);
+    Console.WriteLine("Command dispatched to companion daemon.");
+  }
+}</code></pre>
+            </div>
+
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ========================================================================= -->
-    <!-- SECTION 5: FULL 7-SLOT FACTORY EXPANSION CARDS CATALOG -->
+    <!-- SECTION 5: FULL 7-SLOT FACTORY EXPANSION CARDS CATALOG & API REFERENCE -->
     <!-- ========================================================================= -->
     <section id="all-cards-catalog" class="space-y-6">
       <div class="flex items-center gap-3 border-b border-[#212c3d] pb-3">
         <span class="step-pill bg-pink-500/20 text-pink-400 border border-pink-500/40">6</span>
         <div>
-          <h3 class="text-base font-bold text-pink-400 font-mono uppercase">Full 7-Slot Factory Expansion Cards Catalog</h3>
-          <p class="text-gray-400 text-xs">Complete reference for every built-in factory peripheral card in the Apple //c Ultra</p>
+          <h3 class="text-base font-bold text-pink-400 font-mono uppercase">Full 7-Slot Factory Expansion Cards Catalog &amp; API Reference</h3>
+          <p class="text-gray-400 text-xs">Exhaustive hardware registers, JavaScript hookup mechanisms, C#/Java APIs, and dual-drive storage guides</p>
+        </div>
+      </div>
+
+      <!-- Legal & Trademark Guidance Box -->
+      <div class="card-box p-5 border-l-4 border-l-amber-500 space-y-3">
+        <div class="flex items-center gap-2 text-amber-400 font-bold font-mono text-xs uppercase">
+          <span>⚖️</span>
+          <span>Legal &amp; Trademark Architecture Analysis: Peripheral Naming &amp; SDK Namespaces</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-300 font-sans leading-relaxed">
+          <div class="space-y-1.5">
+            <span class="text-white font-bold block">1. Peripheral Card Trademarks (ImageWriter, Passport, Mockingboard):</span>
+            <p>
+              Names like <em>ImageWriter</em> (Apple Computer Inc.), <em>Mockingboard</em> (Sweet Micro Systems), and <em>Passport</em> (Passport Designs) were historical commercial trademarks. Distributing virtual expansion cards under these exact proprietary brand names as standalone products could open an author to trademark infringement or false designation of origin claims under Lanham Act §43(a).
+            </p>
+            <p class="text-emerald-400">
+              <strong>The Solution:</strong> We adopt generic, descriptive functional titles (e.g. <em>Vintage 8-Pin Dot Matrix Printer Card</em>, <em>Dual 6-Channel Sound Synthesizer</em>) and state compatibility strictly through <strong>nominative fair use</strong> (e.g. <em>"ImageWriter II Protocol Compatible"</em>).
+            </p>
+          </div>
+          <div class="space-y-1.5">
+            <span class="text-white font-bold block">2. C# &amp; Java Package Namespaces (`Apple2` vs `A2Ultra`):</span>
+            <p>
+              Publishing a public SDK or library package using proprietary names like <code class="text-amber-300">Apple2.Ultra</code> or <code class="text-amber-300">package apple2.hardware</code> presents trademark liability because it creates commercial confusion implying official endorsement by Apple Inc.
+            </p>
+            <p class="text-cyan-400">
+              <strong>The Solution:</strong> The official Workstation SDK uses <code class="text-cyan-300">A2Ultra.Hardware</code> (C#) and <code class="text-cyan-300">package a2ultra.hardware</code> (Java). Legacy projects referencing <code class="text-gray-400">Apple2.Ultra</code> are supported via backward-compatible internal type aliases.
+            </p>
+          </div>
         </div>
       </div>
 
       <div class="space-y-6 text-xs">
         
-        <!-- Slot 1: ImageWriter II Printer -->
+        <!-- Slot 1: Dot Matrix Printer Card -->
         <div class="card-box p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-[#212c3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-amber-400 text-sm">
               <span>🖨️</span>
-              <span>1. ImageWriter II Printer Card (Slot 1 @ $C090)</span>
+              <span>1. Dot Matrix Printer Card (Slot 1 @ $C090 • ImageWriter II Compatible)</span>
             </div>
             <span class="domain-tag tag-domain2">Serial I/O: $C090</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
-            Redirects character output to continuous tractor-feed paper in the <strong>Slot &amp; Card Studio</strong> with 1-click text copying and PDF downloading.
+            Redirects character output to continuous tractor-feed paper in the <strong>Slot &amp; Card Studio</strong> with 1-click plain text copying and formatted PDF downloading. Emulates standard 8-pin escape sequences (bold, underline, pitch control).
           </p>
 
+          <!-- API Reference & Code Samples -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px]">
             <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
               <span class="text-amber-400 font-bold block">Applesoft BASIC Usage:</span>
@@ -915,51 +1015,104 @@ card.onWriteHandler = (offset, val) => {
             </div>
 
             <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
-              <span class="text-cyan-400 font-bold block">Modern C# .NET Usage:</span>
+              <span class="text-cyan-400 font-bold block">Modern C# .NET API (`A2Ultra.Hardware`):</span>
               <pre class="text-cyan-300">using System;
-using Apple2.Ultra;
+using A2Ultra.Hardware;
 
 public class PrintReport {
     public static void Main() {
-        ApplePrinter.SetSlot(1);
-        ApplePrinter.WriteLine("C# AOT COMPILED REPORT");
-        ApplePrinter.WriteLine("DATE: " + DateTime.Now);
-        ApplePrinter.FormFeed();
-        ApplePrinter.ResetToScreen();
+        DotMatrixPrinter.SetSlot(1);      // Select Slot 1
+        DotMatrixPrinter.WriteLine("C# AOT COMPILED REPORT");
+        // Also supports legacy alias: ApplePrinter.WriteLine(...)
+        DotMatrixPrinter.WriteLine("DATE: " + DateTime.Now);
+        DotMatrixPrinter.FormFeed();       // Advance page
+        DotMatrixPrinter.ResetToScreen();  // PR#0 equivalent
     }
 }</pre>
             </div>
           </div>
+
+          <!-- JavaScript Virtual Card Hookup Instructions -->
+          <div class="p-3.5 bg-[#0a0f18] rounded border border-cyan-500/30 space-y-2">
+            <span class="text-cyan-400 font-bold font-mono text-xs block">🔌 JavaScript Virtual Card Hookup (Connecting to Outside World):</span>
+            <p class="text-gray-300 font-sans text-[11px]">
+              The Dot Matrix card captures bytes sent to <code class="text-amber-300">$C090</code>, pushes them into a line buffer, and triggers a custom browser event or sends raw text to a network printer daemon via WebSocket:
+            </p>
+            <pre class="text-cyan-300 font-mono text-[10px]">card.paperBuffer = [];
+card.onWriteHandler = (offset, val) => {
+  if (offset === 0x00) { // $C090 Transmit Data
+    const char = String.fromCharCode(val & 0x7F);
+    card.paperBuffer.push(char);
+    window.dispatchEvent(new CustomEvent('printer-char', { detail: { char } }));
+  }
+};</pre>
+          </div>
         </div>
 
-        <!-- Slot 2: Passport Web MIDI Master Card -->
+        <!-- Slot 2: Web MIDI Master Card -->
         <div class="card-box p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-[#212c3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-cyan-400 text-sm">
               <span>🎹</span>
-              <span>2. Passport Web MIDI Master Card (Slot 2 @ $C0A0)</span>
+              <span>2. Passport Web MIDI Master Interface Card (Slot 2 @ $C0A0 • Passport Compatible)</span>
             </div>
             <span class="domain-tag tag-domain2">6850 ACIA: $C0A0</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
-            Connects the Apple II 6850 ACIA to the browser's Web MIDI API. Transmits 31.25 kBaud note data to connected physical USB pianos, synths, and DAWs.
+            Connects the 6850 ACIA UART directly to the browser's <strong>Web MIDI API</strong> (<code class="text-cyan-300">navigator.requestMIDIAccess()</code>). Transmits 31.25 kBaud note data to connected physical USB synthesizers, pianos, and digital audio workstations.
           </p>
 
-          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5 font-mono text-[11px]">
-            <span class="text-cyan-400 font-bold block">65C02 Assembly MIDI Note-On Transmission:</span>
-            <pre class="text-gray-300">; --- SEND MIDI NOTE-ON: Note $3C (Middle C), Velocity $7F ---
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px]">
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-cyan-400 font-bold block">65C02 Assembly MIDI Note-On:</span>
+              <pre class="text-gray-300">; SEND NOTE-ON: Middle C ($3C), Vel $7F
 MIDI_NOTE_ON:
-    LDA #$90        ; MIDI Status: Note-On, Channel 1
+    LDA #$90        ; Status: Note-On Ch 1
     JSR MIDI_SEND
-    LDA #$3C        ; MIDI Data 1: Note 60 (Middle C)
+    LDA #$3C        ; Note 60 (Middle C)
     JSR MIDI_SEND
-    LDA #$7F        ; MIDI Data 2: Velocity 127
+    LDA #$7F        ; Velocity 127
     JSR MIDI_SEND
     RTS
 MIDI_SEND:
-    STA $C0A1       ; Transmit to Slot 2 ACIA Data Register ($C0A1)
+    STA $C0A1       ; Transmit to ACIA
     RTS</pre>
+            </div>
+
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-purple-400 font-bold block">C# / Java MIDI API Reference:</span>
+              <pre class="text-purple-300">// C# / Java Standard Class Library
+MidiInterface.SetSlot(2);
+MidiInterface.SendNoteOn(channel: 1, note: 60, velocity: 127);
+MidiInterface.SendControlChange(channel: 1, cc: 7, value: 100);
+MidiInterface.SendNoteOff(channel: 1, note: 60);
+MidiInterface.SendProgramChange(channel: 1, patch: 5);</pre>
+            </div>
+          </div>
+
+          <!-- JavaScript Virtual Card Hookup Instructions -->
+          <div class="p-3.5 bg-[#0a0f18] rounded border border-cyan-500/30 space-y-2">
+            <span class="text-cyan-400 font-bold font-mono text-xs block">🔌 JavaScript Virtual Card Hookup (Web MIDI API Access):</span>
+            <p class="text-gray-300 font-sans text-[11px]">
+              How the JavaScript virtual card connects to real external USB synthesizers using the browser's Web MIDI API:
+            </p>
+            <pre class="text-cyan-300 font-mono text-[10px]">let midiOutput = null;
+if (navigator.requestMIDIAccess) {
+  navigator.requestMIDIAccess().then(access => {
+    const outputs = Array.from(access.outputs.values());
+    if (outputs.length > 0) midiOutput = outputs[0]; // Connect to 1st USB Synth
+  });
+}
+card.onWriteHandler = (offset, val) => {
+  if (offset === 0x01 && midiOutput) { // $C0A1 ACIA Transmit
+    card.fifo.push(val);
+    if (card.fifo.length === 3) {
+      midiOutput.send(card.fifo); // Transmit 3-byte MIDI message
+      card.fifo = [];
+    }
+  }
+};</pre>
           </div>
         </div>
 
@@ -986,12 +1139,12 @@ MIDI_SEND:
           </div>
         </div>
 
-        <!-- Slot 4: Thunderclock Plus RTC -->
+        <!-- Slot 4: Real-Time Clock Card -->
         <div class="card-box p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-[#212c3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-purple-400 text-sm">
               <span>⏰</span>
-              <span>4. Thunderclock Plus RTC (Slot 4 @ $C0C0)</span>
+              <span>4. Thunderclock Plus RTC &amp; Real-Time Clock Card (Slot 4 @ $C0C0 • Thunderclock Compatible)</span>
             </div>
             <span class="domain-tag tag-domain2">ProDOS Driver: $C400</span>
           </div>
@@ -1000,20 +1153,28 @@ MIDI_SEND:
             Supplies live host operating system date and time directly to ProDOS file creation timestamps and clock drivers at <code>$C400</code>.
           </p>
 
-          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5 font-mono text-[11px]">
-            <span class="text-purple-400 font-bold block">Reading Date/Time Directly in BASIC:</span>
-            <pre class="text-purple-300">10 HR = PEEK(49346) : MIN = PEEK(49345) : SEC = PEEK(49344)
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px]">
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-purple-400 font-bold block">Applesoft BASIC Direct Read:</span>
+              <pre class="text-purple-300">10 HR = PEEK(49346) : MIN = PEEK(49345) : SEC = PEEK(49344)
 20 MO = PEEK(49348) : DAY = PEEK(49347) : YR  = PEEK(49349)
-30 PRINT "TIME: "; HR; ":"; MIN; ":"; SEC; "  DATE: "; MO; "/"; DAY; "/20"; YR</pre>
+30 PRINT "TIME: "; HR; ":"; MIN; ":"; SEC; "  DATE: "; MO; "/"; DAY</pre>
+            </div>
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-cyan-400 font-bold block">C# / Java API Reference:</span>
+              <pre class="text-cyan-300">// High-level Object-Oriented RTC
+DateTime now = A2Clock.GetDateTime();
+Console.WriteLine("ProDOS Timestamp: " + now.ToString());</pre>
+            </div>
           </div>
         </div>
 
-        <!-- Slot 4/5: Sweet Micro Mockingboard -->
+        <!-- Slot 4/5: Programmable Sound Synthesizer Card -->
         <div class="card-box p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-[#212c3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-pink-400 text-sm">
               <span>🔊</span>
-              <span>5. Sweet Micro Mockingboard PSG Sound Card (Slot 4/5 @ $C0C0–$C0CF)</span>
+              <span>5. Sweet Micro Mockingboard &amp; Sound Synthesizer Card (Slot 4/5 @ $C0C0–$C0CF • Mockingboard Compatible)</span>
             </div>
             <span class="domain-tag tag-domain2">Dual AY-3-8910</span>
           </div>
@@ -1021,67 +1182,287 @@ MIDI_SEND:
           <p class="text-gray-300 font-sans text-xs">
             Dual AY-3-8910 programmable sound generators delivering <strong>6 simultaneous tone voices</strong>, 2 white noise generators, and 16-bit hardware envelope modulators.
           </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px]">
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-pink-400 font-bold block">Modern C# / Java Sound API:</span>
+              <pre class="text-pink-300">// Play a 3-note major chord across voices
+MockingSound.SetSlot(4);
+MockingSound.PlayTone(voice: 0, freqHz: 261.63, volume: 15); // C4
+MockingSound.PlayTone(voice: 1, freqHz: 329.63, volume: 15); // E4
+MockingSound.PlayTone(voice: 2, freqHz: 392.00, volume: 15); // G4
+MockingSound.SilenceAll();</pre>
+            </div>
+
+            <div class="p-3.5 bg-[#0a0f18] rounded border border-pink-500/30 space-y-2">
+              <span class="text-pink-400 font-bold block">🔌 Web Audio API Hookup:</span>
+              <p class="text-gray-300 font-sans text-[11px]">
+                The JavaScript virtual card connects to the browser's Web Audio API using a 6-oscillator sound node graph:
+              </p>
+              <pre class="text-pink-300 text-[10px]">const audioCtx = new AudioContext();
+const osc = audioCtx.createOscillator();
+osc.type = 'square'; // Authentic AY-3-8910 square wave
+osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+osc.connect(audioCtx.destination);</pre>
+            </div>
+          </div>
         </div>
 
-        <!-- Slot 5: Uthernet W5100 Ethernet -->
+        <!-- Slot 5: Hardware TCP/IP Network Card -->
         <div class="card-box p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-[#212c3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-blue-400 text-sm">
               <span>🌐</span>
-              <span>6. Uthernet W5100 Ethernet Card (Slot 5 @ $C0D0)</span>
+              <span>6. Uthernet W5100 Ethernet &amp; Hardware TCP/IP Network Card (Slot 5 @ $C0D0 • Uthernet W5100 Compatible)</span>
             </div>
             <span class="domain-tag tag-domain2">WIZnet TCP/IP</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
-            Hardware TCP/IP stack for telnet BBS terminals, retro web browsers (Contiki OS), and C# HTTP networking.
+            Hardware TCP/IP stack for telnet BBS terminals, retro web browsers (Contiki OS), and modern C# HTTP networking.
           </p>
 
-          <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5 font-mono text-[11px]">
-            <span class="text-blue-400 font-bold block">C# .NET HTTP Client API:</span>
-            <pre class="text-blue-300">using System;
-using Apple2.Ultra;
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px]">
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-blue-400 font-bold block">C# / Java HTTP API (`A2Ultra.Hardware`):</span>
+              <pre class="text-blue-300">using System;
+using A2Ultra.Hardware;
 
 public class WebClient {
     public static void Main() {
-        AppleNetwork.InitEthernet(slot: 5);
-        string response = AppleNetwork.HttpGet("http://api.weather.gov/status");
-        Console.WriteLine("SERVER RESPONSE: " + response);
+        EthernetCard.Init(slot: 5);
+        string body = EthernetCard.HttpGet("http://api.weather.gov/status");
+        // Also supports legacy alias: AppleNetwork.HttpGet("http://api.weather.gov/status");
+        Console.WriteLine("RESPONSE: " + body);
     }
 }</pre>
+            </div>
+
+            <div class="p-3.5 bg-[#0a0f18] rounded border border-blue-500/30 space-y-2">
+              <span class="text-blue-400 font-bold block">🔌 WebSocket Proxy Hookup:</span>
+              <p class="text-gray-300 font-sans text-[11px]">
+                Connects to local or remote telnet BBS servers via WebSocket proxy:
+              </p>
+              <pre class="text-blue-300 text-[10px]">card.ws = new WebSocket("wss://bbs.retro.net/telnet");
+card.ws.onmessage = (e) => {
+  card.rxBuffer.push(...new TextEncoder().encode(e.data));
+};</pre>
+            </div>
           </div>
         </div>
 
-        <!-- Slot 6: Disk II 5.25" Floppy -->
-        <div class="card-box p-6 space-y-4">
+
+        <!-- Slot 6: Disk II 5.25" Dual Floppy Controller Card -->
+        <div class="card-box p-6 space-y-4 border-2 border-amber-500/40">
           <div class="flex justify-between items-center border-b border-[#212c3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-amber-300 text-sm">
               <span>💾</span>
-              <span>7. Disk II 5.25" Floppy Controller (Slot 6 @ $C0E0)</span>
+              <span>7. Disk II 5.25" Floppy &amp; Dual Drive Controller Card (Slot 6 @ $C0E0 • Drive 1 &amp; Drive 2)</span>
             </div>
             <span class="domain-tag tag-domain2">Disk II $C600</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
-            Authentic Wozniak floppy controller with 6-and-2 GCR encoding and 4-phase stepper motor logic for 140KB floppy disks.
+            Authentic Wozniak floppy controller supporting <strong>Dual 140KB 5.25" Floppy Drives (Drive 1 &amp; Drive 2)</strong> simultaneously on a single controller card, using 6-and-2 GCR encoding and 4-phase stepper motor logic.
           </p>
+
+          <!-- Deep-Dive Dual Drive Hardware Architecture -->
+          <div class="p-4 bg-[#0d1219] rounded-xl border border-[#212d3d] space-y-3 font-sans">
+            <span class="text-amber-400 font-bold font-mono text-xs block">⚙️ How the Dual-Drive Hardware Works ($C0EA vs $C0EB):</span>
+            <p class="text-gray-300 text-xs leading-relaxed">
+              The Disk II controller card in Slot 6 connects to two physical drive daisy-chains via a single 20-pin ribbon header. Both drives share the 4-phase stepper motor coils (<code class="text-cyan-300">$C0E0–$C0E7</code>) and the read/write amplifier strobe (<code class="text-cyan-300">$C0EC–$C0EF</code>). The 65C02 selects which physical drive mechanism is active via dedicated softswitches:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-[11px]">
+              <div class="p-2 bg-[#05070a] rounded border border-[#1b2533]">
+                <span class="text-amber-300 font-bold">Drive 1 Select:</span> <code class="text-cyan-300">$C0EA</code> (Decimal <code>49386</code>)<br/>
+                Activates Drive 1 motor and connects Drive 1 read head.
+              </div>
+              <div class="p-2 bg-[#05070a] rounded border border-[#1b2533]">
+                <span class="text-amber-300 font-bold">Drive 2 Select:</span> <code class="text-cyan-300">$C0EB</code> (Decimal <code>49387</code>)<br/>
+                Activates Drive 2 motor and connects Drive 2 read head.
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Drive Operations in DOS 3.3 & ProDOS -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px]">
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-amber-400 font-bold block">DOS 3.3 Dual-Drive Usage:</span>
+              <pre class="text-emerald-300">] CATALOG, D1     : REM Catalog Drive 1
+] CATALOG, D2     : REM Catalog Drive 2
+] RUN GAME, D1    : REM Launch game from D1
+] SAVE SCORES, D2 : REM Save scores to D2
+] COPY S6,D1 TO S6,D2 : REM Duplicate disk</pre>
+            </div>
+
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-cyan-400 font-bold block">ProDOS Volume &amp; Drive Usage:</span>
+              <pre class="text-cyan-300">] CAT, S6, D1     : REM Catalog Drive 1
+] CAT, S6, D2     : REM Catalog Drive 2
+] PREFIX /DATA.DISK : REM Set path to D2
+] -SYSTEM.LOADER  : REM Run ProDOS binary
+] -/DATA.DISK/DATA.FILE : REM Access D2</pre>
+            </div>
+          </div>
+
+          <!-- How to Use Both Drives in the Emulator -->
+          <div class="p-3.5 bg-[#0a0f18] rounded border border-emerald-500/40 space-y-2">
+            <span class="text-emerald-400 font-bold font-mono text-xs block">💡 How to Mount and Use Both Drives Simultaneously in the Emulator:</span>
+            <ol class="list-decimal list-inside text-gray-300 font-sans text-xs space-y-1 pl-1">
+              <li>Open the <strong>Floppy &amp; 32MB Storage Bay</strong> tab.</li>
+              <li>Under <strong>Disk II Floppy Drive 1</strong>, choose your boot disk image (e.g. <em>ProDOS 2.4.2 System Disk</em> or <em>DOS 3.3 Master</em>).</li>
+              <li>Under <strong>Disk II Floppy Drive 2</strong>, choose your secondary disk image (e.g. <em>ProDOS Utilities Disk</em> or a blank data disk).</li>
+              <li>Click <strong>⚡ Boot Drive 1</strong>. When the software prompts to access data from Drive 2, it reads from Drive 2 without needing to swap disks!</li>
+            </ol>
+          </div>
         </div>
 
-        <!-- Slot 7: SmartPort 32MB Hard Disk -->
+        <!-- Slot 7: SmartPort 32MB Hard Disk Controller -->
         <div class="card-box p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-[#212c3d] pb-2">
             <div class="flex items-center gap-2 font-bold text-emerald-300 text-sm">
               <span>⚡</span>
-              <span>8. SmartPort 32MB Hard Disk Controller (Slot 7 @ $C0F0)</span>
+              <span>8. SmartPort 32MB Hard Disk Controller (Slot 7 @ $C0F0 • ProDOS MLI)</span>
             </div>
             <span class="domain-tag tag-domain2">ProDOS $C700</span>
           </div>
 
           <p class="text-gray-300 font-sans text-xs">
-            65,536-block mass storage controller (/HD). Includes the 1-click ProDOS disk exporter (.DSK / .PO / .2MG) for physical hardware deployment onto BMOW Floppy Emu and CFFA3000 cards.
+            65,536-block contiguous mass storage controller (<code class="text-emerald-300">/HD</code>). Provides instantaneous block I/O via ProDOS Machine Language Interface (MLI) driver vectors at <code>$C700</code>. Includes the 1-click ProDOS disk exporter (.DSK / .PO / .2MG) for physical deployment to CFFA3000 cards.
           </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px]">
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-emerald-400 font-bold block">ProDOS SmartPort MLI Call:</span>
+              <pre class="text-emerald-300">; Read Block 2 from Slot 7 Unit $70 (/HD)
+LDA #$01        ; MLI Command: READ_BLOCK
+STA $0800
+LDA #$70        ; Unit $70 = Slot 7, Drive 1
+STA $0801
+LDA #$02        ; Block Low = 2
+STA $0802
+LDA #$00        ; Block High = 0
+STA $0803
+LDA #$00        ; Buffer Pointer Low ($2000)
+STA $0804
+LDA #$20        ; Buffer Pointer High ($2000)
+STA $0805
+JSR $C700       ; Call SmartPort Driver</pre>
+            </div>
+
+            <div class="p-3 bg-[#080d14] rounded border border-[#1b2533] space-y-1.5">
+              <span class="text-cyan-400 font-bold block">C# / Java SmartPort API:</span>
+              <pre class="text-cyan-300">using System;
+using A2Ultra.Hardware;
+
+// Direct ProDOS 512-byte block I/O
+byte[] buffer = SmartPortHD.ReadBlock(blockNum: 2);
+Console.WriteLine("Volume Key Block Header: " + buffer[4]);
+
+// Write updated ledger back to mass storage
+SmartPortHD.WriteBlock(blockNum: 100, data: buffer);</pre>
+            </div>
+          </div>
         </div>
 
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 6: QA-DOC-20260910-07: C# & JAVA HARDWARE SDK API & DUAL-FLOPPY GUIDE -->
+    <!-- ========================================================================= -->
+    <section id="sdk-api-reference" class="space-y-6 pt-6 border-t border-[#2a3642]">
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold border border-amber-500/40">QA-DOC-20260910-07</span>
+        <h3 class="text-2xl font-black text-white">6. Custom Peripheral Cards: C# &amp; Java SDK API Reference &amp; Dual-Floppy Guide</h3>
+      </div>
+
+      <p class="text-gray-300 font-sans text-xs leading-relaxed">
+        The 65C02 Ultra Workstation provides native hardware object bindings in <strong>C# (.NET)</strong> and <strong>Java 17</strong> for every plugged-in expansion slot card. Each object maps directly to the corresponding softswitches (<code>$C080 + $n0</code>) and ROM vectors without runtime interpreter overhead.
+      </p>
+
+      <!-- Peripheral Card API Reference Table -->
+      <div class="card-box p-6 space-y-4">
+        <h4 class="text-base font-bold text-amber-300 font-mono flex items-center gap-2">
+          <span>🔌</span>
+          <span>C# &amp; Java Peripheral Card Hardware SDK Matrix</span>
+        </h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left font-mono text-[11px] border border-[#212c3d] rounded-lg">
+            <thead class="bg-[#0b0e14] text-gray-400">
+              <tr>
+                <th class="p-2.5 border-b border-[#212c3d]">Card / Slot</th>
+                <th class="p-2.5 border-b border-[#212c3d]">C# Class (<code>Ultra.Hardware</code>)</th>
+                <th class="p-2.5 border-b border-[#212c3d]">Java Class (<code>ultra.hardware</code>)</th>
+                <th class="p-2.5 border-b border-[#212c3d]">Key API Methods</th>
+                <th class="p-2.5 border-b border-[#212c3d]">Hardware Registers</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#1b2533] text-gray-300">
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Slot 1: Dot-Matrix Printer</td>
+                <td class="p-2.5 text-cyan-300"><code>DotMatrixPrinter</code></td>
+                <td class="p-2.5 text-purple-300"><code>DotMatrixPrinter</code></td>
+                <td class="p-2.5"><code>PrintString(s), FormFeed(), LineFeed(), SetCondensed(b)</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$C090, $C100 (PR#1)</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Slot 2: Web MIDI Master</td>
+                <td class="p-2.5 text-cyan-300"><code>MidiMaster</code></td>
+                <td class="p-2.5 text-purple-300"><code>MidiMaster</code></td>
+                <td class="p-2.5"><code>SendNoteOn(ch, note, vel), SendNoteOff(ch, note), SendProgramChange(ch, id)</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$C0A0–$C0A3 (6850 ACIA)</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Slot 3: Uthernet TCP/IP</td>
+                <td class="p-2.5 text-cyan-300"><code>Uthernet</code></td>
+                <td class="p-2.5 text-purple-300"><code>Uthernet</code></td>
+                <td class="p-2.5"><code>Connect(host, port), Send(buffer, len), Receive(buffer)</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$C0B0–$C0BF (CS8900A)</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Slot 4: Mockingboard PSG</td>
+                <td class="p-2.5 text-cyan-300"><code>MockingAudio</code></td>
+                <td class="p-2.5 text-purple-300"><code>MockingAudio</code></td>
+                <td class="p-2.5"><code>SetTone(v, hz), SetNoisePeriod(chip, p), SetMixer(chip, m), SetVolume(v, vol, env)</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$C0C0–$C0CF (6522 VIAs)</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Slot 4: ProDOS Clock</td>
+                <td class="p-2.5 text-cyan-300"><code>ProDosClock</code></td>
+                <td class="p-2.5 text-purple-300"><code>ProDosClock</code></td>
+                <td class="p-2.5"><code>GetDateTime(), GetTimestampBytes()</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$BF90–$BF93 (RTC)</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Slot 6: Dual 5.25" Floppy</td>
+                <td class="p-2.5 text-cyan-300"><code>StorageCore</code></td>
+                <td class="p-2.5 text-purple-300"><code>StorageCore</code></td>
+                <td class="p-2.5"><code>SelectFloppyDrive(1 | 2), ReadSector(), WriteSector()</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$C0EA (D1), $C0EB (D2), $C600</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Slot 7: SmartPort 32MB HD</td>
+                <td class="p-2.5 text-cyan-300"><code>StorageCore</code></td>
+                <td class="p-2.5 text-purple-300"><code>StorageCore</code></td>
+                <td class="p-2.5"><code>ReadBlock(unit, blk), WriteBlock(unit, blk, data)</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$C700 (ProDOS MLI)</code></td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-amber-300 font-bold">Generic User Cards (1–7)</td>
+                <td class="p-2.5 text-cyan-300"><code>SlotBus</code></td>
+                <td class="p-2.5 text-purple-300"><code>SlotBus</code></td>
+                <td class="p-2.5"><code>PeekRegister(slot, reg), PokeRegister(slot, reg, val)</code></td>
+                <td class="p-2.5 text-emerald-400"><code>$C080 + ($slot * $10)</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pt-2">
+          <a href="standard-libraries-reference.html#hardware-sdk-api" class="text-xs font-mono text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1">
+            📖 View the Complete Hardware Object SDK Method-by-Method Reference Specification →
+          </a>
+        </div>
       </div>
     </section>
 
@@ -1089,7 +1470,7 @@ public class WebClient {
 
   <!-- Footer -->
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-8 text-center text-xs text-gray-500 font-mono">
-    Apple //c Ultra Architecture • The Three-Domain Hardware Architecture &amp; Custom Peripheral Reference
+    65C02 Ultra Workstation • The Three-Domain Hardware Architecture &amp; Custom Peripheral Reference
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
 

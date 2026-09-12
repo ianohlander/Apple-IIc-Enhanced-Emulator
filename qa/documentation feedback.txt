@@ -1,0 +1,55 @@
+color bleed
+documentation for using disks
+	formatting and saving a new disk
+		dos/prodos
+	using applications with multiple disks
+
+For this QA feedback document, please generate a QA issue tracking number for each one. Please analyze and report on each issue and their fixes. Document in an HTML document in the QA folder dated to today. Organize the results document by each issue. I have subdivided the issues to Documentation and Emulator functionality. If the items need further organization principles or labels, use those. This will the first of many QA feed back documents.
+
+UX
+1) Propose a few samples for the UX interface that evokes vintage 80s home computing and Apple II color schemes or highlights. I want this to be a modern studio with a retro look and feel that pays homage to that era and this technology.
+
+Documentation
+
+
+
+1) Documentation wide- do a pass to remove/replace any ACTIONABLE references to "Apple II"/"Apple //" throughout the documentation. For example, I see many references to "Apple II"/"Apple //" on the custom-peripheral-cards.html document in both regular text and in various code samples and their comments. Fair use instances of "Apple II"/"Apple"/etc can be left as is. But anything that uses Apple as a label and is actionable as an IP violation should be changed. 
+
+2) docs/index.html
+	a) At the very top of this document under the Welcome header, we don't need quick links to the "expansion cards" manual, the "physical hardware exporter", the "QA results", "Architecture/Tutorial" and "Developer" buttons at the top. Almost all of these are linked later in the document. Duplication of buttons to the same document, especially when they have different labels, needs to be avoided at all costs. The welcome card doesn't need any buttons or links. Instead put a card under 'the Architecture Portal Map' card for the 'Architecture and Tutorial' page (comprehensive-ultra-tutorial.html). Make sure that any buttons that lead to the same link on a single page are removed. There should be only one and at the appropriate place, in terms of subject matter and organization.
+	b) Section: Expansion Cards & Peripheral Slot Subsystem
+		1) "Open Exhaustive Card Guide" button and "Open Exhaustive Expansion Cards & I/O Guide" button
+			a) These Buttons appear above and below this section card. Label is slightly different but they go to the same file. There doesn't need to be more than one button for this. It gives the wrong impression and it is just extra clutter. So remove the button at the top ("Open Exhaustive Card Guide"), leaving just the bottom one ("Open Exhaustive Expansion Cards & I/O Guide") along with the "Physical Hardware Exporter Guide" button.
+		2) "Launch Slot & Card Studio" button opens the Virtual 6502 computer to the standard screen with no flyout sections at all even though the label references the slots and Studio (Apple-II-Emulator/index-standalone.html#workbench). So this doesn't show what is expected from the label anyway. I don't think we need a differently labeled link to the same "Virtual Computer" page when we already have a button in the top right to the emulator. 	
+	c) remove the "Expansion Slots 1-7 Expansion Cards and Peripheral Slot Manual (Slots 1-7)" card. we already have the large spanning "Expansion Cards & Peripheral Slot Subsystem" card above it.
+	d) Buttons for qa-architecture.html, UAT runbook, and Full Stack QA report do not need to be linked here. Those documents are for the developer designing this application (me). It is not to be part of the documentation that will deployed for regular users. Put all QA and architectural development documentation in its own folder with an index.html that has links and descriptions to the various reports and analyses. Make sure the developer (Me) documentation is separated from documentation that users of this application will need. A documentation page for the application designer (me) would be a great central repository with links to all of the documentation in an organized format. Included in it will be QA, architectural documentation, watermark/IP protection, analyses, marketing, and so on. This documentation would NOT be shipped or available for general users, but would be solely for the developer working on this application.
+	e) Move the "Developer Architecture, Emulation & Standard Libraries Hub" to the top, just under the architecture diagram.
+3) docs\developer\custom-peripheral-cards.html
+	a) Section 2.5: is "Slot $N$" in the sentence "When you plug a card into Slot $N$, the emulator automatically binds..." a rendering error? If not, ignore my comment. If so, fix the rendering.
+	b) Section 5: Case study 3: We only see domain 2 and 3. We don't see domain 1 showing how to communicate from the emulator to that card. Of course, it will be similar to the others. But for completion, or if someone isn't reading the whole document but referencing any of the specific examples in this section, it important that they have everything they need in that place.
+	c) Section 6: 
+		1) Should we be concerned with names like ImageWriter, Passport, Mockingbird, etc for the various cards? Are those names copyrited or trademarked? would using them open me up to litigation? if so, what could we do to rectify that?
+		2) are the c#/java library packages that use the name "Apple2" in them a legal IP concern?
+		3) Is there a reference to all the c#/java library APIs? I notice that Apple2.Ultra.ApplePrinter has a number of functions (SetSlot, FormFeed, ResetToScreen). Do those libraries have a reference so that users are able to see what features they support? I think there should be a place in this document that points to that reference. The "Custom Slot Cards & Three Domain Framework" card in "developer\index.html" page said "Read Specification and API" but takes you to this document. I don't see any API reference in this document other than for the sandbox JavaScript API. The c#/java API references for those specific card peripherals is missing.
+		The same can be said for the MIDI card, the MockingBoard card, and the Ethernet Card, no instructions are given for hooking up a device to the relevant JavaScript virtual card. Shouldn't we see how the MIDI card is accessed? Are there any API calls in the C#/Java libraries (like the ApplePrinter object) for use with those cards? All functionality for the java/c# Apple2 libraries need to be defined and explained in API documentation.
+		4) given that people can create their own virtual cards, should be concerned that the API exposed for the Apple2 object in c#/java doesn't have reference to them? This isn't a show stopper. As long as the object can access the relevant registers and data from the cards, that is all that matters. I am not sure how we get around this. Basically, we have just made specialized interface methods for these premade cards with known functionality. If that's the best we can do, that is fine. I don't want to get overly complicated.
+		5) there is no real documentation explaining how to use the Floppy Controller Card or the Hard Disk card and the virtual hardware they connect to. The documentation and explanation seem thin. How would I put a secondary disk in the other drive so that I could make use of both at the same time? there is no explanation.
+
+
+4) docs\developer\physical-hardware-export.html
+	a) this needs a bit of work. there seems to be some mixing of technologies. The document appears to be about taking ANY program made to run on the emulated Apple II and physically export it to one of 3 media formats: BMOW floppy EMU, CFFA3000 card and wDrive/FujiNet/ADTPro. It would help to give some background and links to what these technologies are. 
+	b) But I also note that the focus shifted from "every game or program you compile in modern C#, Java, or transcribe in the Type-In Studio" to just compiled Java/C#. Those are certainly one of the coolest features about this. But it should also include Applesoft BASIC or even Machine Language applications created or running on the Apple II emulator. Based on the wording, a person might wrongly think that they are only exporting and running those c#/java types of programs. But the bigger picture is that any application we design that runs on the virtual emulator can be made to run on a physical Apple II. 
+	c) There are some caveats with that statement. The virtual Apple II has more resources (memory, drive space, CPU speed) than an Apple II. so there should be some compatibility verification mentioned here and implemented in the Disk Image Exporter functionality. If a c# application makes use of a few megabytes of RAM or depends on the CPU running at 50 MHz, then this should be noted for the user. That kind of application simply cannot run on a physical vintage Apple II machine. So the Exporter and the documentation need to make these limitations clear.
+	d) the 3 step deployment process seems focused around c#/java application deployment. This needs to be more agnostic. And given more detail.
+
+Emulator Funtionality
+1) I don't like that you hardcoded DSK images for World Games in the emulator. I wanted to be able choose a DSK image to boot up and used that as an example. But I think it would be a copyright violation to include those DSK images with a shortcut button.
+	a) moreover, when I DO put that disk in the drive, it doesn't boot from the disk. It doesn't do anything.
+
+
+
+ 
+
+
+
+	

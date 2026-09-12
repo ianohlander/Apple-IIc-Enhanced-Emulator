@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Apple2cUltra } from '../emulator/apple2c';
 import { ClockSpeed } from '../types/emulator';
-import { Power, RotateCcw, Volume2, VolumeX, Disc, HardDrive, Gauge, Cpu } from 'lucide-react';
+import { Power, RotateCcw, Volume2, VolumeX, Disc, HardDrive, Cpu, Layers } from 'lucide-react';
 
 interface Apple2cCaseProps {
   emulator: Apple2cUltra;
@@ -15,6 +15,7 @@ interface Apple2cCaseProps {
   volume: number;
   onVolumeChange: (vol: number) => void;
   onOpenLibrary: () => void;
+  onOpenCabinet?: (tabId: string) => void;
 }
 
 export const Apple2cCase: React.FC<Apple2cCaseProps> = ({
@@ -28,163 +29,291 @@ export const Apple2cCase: React.FC<Apple2cCaseProps> = ({
   onMuteToggle,
   volume,
   onVolumeChange,
-  onOpenLibrary
+  onOpenLibrary,
+  onOpenCabinet
 }) => {
+  const fileInputRef1 = useRef<HTMLInputElement>(null);
+  const fileInputRef2 = useRef<HTMLInputElement>(null);
+
   const d1Status = emulator.diskController.getStatus(1);
   const d2Status = emulator.diskController.getStatus(2);
   const hdStatus = emulator.smartPort.getStatus(1);
 
+  const handleFileUpload = (drive: 1 | 2, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const buffer = event.target?.result as ArrayBuffer;
+      if (buffer) {
+        emulator.diskController.insertDisk(drive, new Uint8Array(buffer), file.name);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleBootDrive1 = () => {
+    emulator.reset(false);
+    const drive1 = emulator.diskController.drive1;
+    if (drive1 && drive1.rawData && drive1.rawData.length >= 256) {
+      // Load Stage 1 Boot Sectors (Track 0 Sectors 0..sectorCount-1) into RAM $0800+
+      const sector0 = drive1.rawData.subarray(0, 256);
+      const sectorCount = Math.min(16, Math.max(1, sector0[0] || 1));
+      for (let sec = 0; sec < sectorCount; sec++) {
+        const physSector = FloppyDisk.DOS33_SKEW[sec] !== undefined ? FloppyDisk.DOS33_SKEW[sec] : sec;
+        const src = physSector * 256;
+        const dst = 0x0800 + sec * 256;
+        if (src + 256 <= drive1.rawData.length) {
+          for (let b = 0; b < 256; b++) {
+            emulator.mmu.write(dst + b, drive1.rawData[src + b]);
+          }
+        }
+      }
+      emulator.diskController.motorOn = true;
+      emulator.diskController.activeDriveNumber = 1;
+      emulator.diskController.trackQuarterSteps = 0;
+      emulator.cpu.a = 0x60;
+      emulator.cpu.x = 0x60;
+      emulator.cpu.y = 0x00;
+      emulator.cpu.sp = 0xff;
+      for (let i = 0x0100; i < 0x0200; i++) {
+        emulator.mmu.write(i, 0x00);
+      }
+      emulator.cpu.setStatusByte(0x24);
+      emulator.cpu.pc = 0x0801;
+      if (!emulator.isRunning) {
+        emulator.powerOn();
+      }
+    } else {
+      // Boot Slot 6 PR#6: standard Apple II entry point $C600
+      emulator.cpu.pc = 0xc600;
+      if (!emulator.isRunning) {
+        emulator.powerOn();
+      }
+    }
+  };
+
   return (
-    <div className="bg-[#DFD9C0] border-4 border-[#BFB79D] rounded-2xl p-5 shadow-xl max-w-4xl w-full text-stone-800 font-mono select-none">
-      {/* Top Badge Strip */}
-      <div className="flex flex-wrap items-center justify-between border-b-2 border-[#C9C2A7] pb-3 mb-4 gap-2">
-        <div className="flex items-center space-x-3">
-          <div className="text-xl font-bold tracking-widest text-stone-800 flex items-center gap-1.5">
-            <span className="text-red-500 font-black"></span>
-            <span className="font-extrabold text-stone-800">apple //c</span>
-            <span className="bg-amber-600 text-white text-xs px-2 py-0.5 rounded font-sans uppercase font-black tracking-normal">
-              ULTRA 65C02
-            </span>
+    <div id="left-drive-tower" className="w-full lg:w-80 flex-shrink-0 flex flex-col justify-between gap-3.5 bg-[#dfd9cc] p-4 rounded-2xl border border-[#bcb5a4] shadow-md font-mono text-xs select-none">
+      {/* Hidden File Inputs for Direct Floppy Loading */}
+      <input
+        type="file"
+        ref={fileInputRef1}
+        accept=".dsk,.do,.po,.woz"
+        className="hidden"
+        onChange={(e) => handleFileUpload(1, e)}
+      />
+      <input
+        type="file"
+        ref={fileInputRef2}
+        accept=".dsk,.do,.po,.woz"
+        className="hidden"
+        onChange={(e) => handleFileUpload(2, e)}
+      />
+
+      {/* Top Exhaust Ventilation Louvers */}
+      <div className="space-y-1">
+        <div className="flex items-center justify-between text-[10px] text-stone-600 font-bold px-1">
+          <span>SYSTEM CHASSIS EXHAUST</span>
+          <span>1984 FROGDESIGN</span>
+        </div>
+        <div className="w-full h-4 frog-louvers-h rounded border border-[#a8a190]" title="Chassis Cooling Fan Slats" />
+      </div>
+
+      {/* Stacked Floppy Drives Container */}
+      <div className="flex flex-col gap-3">
+        {/* Drive 1 (5.25" Floppy Upper Drive) */}
+        <div className="floppy-525-bezel rounded-xl p-3 text-stone-200 flex flex-col gap-2.5 shadow-lg">
+          {/* Drive 1 Header */}
+          <div className="flex items-center justify-between border-b border-stone-700 pb-1.5">
+            <div className="flex items-center gap-2">
+              <span className="text-amber-400 font-bold">💾</span>
+              <span className="font-bold text-xs text-white">DISK II — DRIVE 1</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                id="led-drive1"
+                className={`w-3 h-3 rounded-full border border-stone-900 transition-all duration-150 ${
+                  d1Status.isMotorOn
+                    ? 'bg-red-500 shadow-[0_0_10px_#ef4444]'
+                    : d1Status.mounted
+                    ? 'bg-emerald-500 shadow-[0_0_6px_#10b981]'
+                    : 'bg-stone-600'
+                }`}
+                title="Drive 1 Activity LED"
+              />
+              <span className="text-[10px] text-stone-400 font-bold">140 KB</span>
+            </div>
           </div>
-          <div className="text-xs bg-stone-300 text-stone-700 px-2 py-0.5 rounded border border-stone-400 font-semibold">
-            1MB+ Aux RAM
+
+          {/* Floppy Door Slot & Latch Lever */}
+          <div className="floppy-slot-bay p-2 rounded-lg flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 overflow-hidden flex-1">
+              {/* Metal Latch Lever */}
+              <div
+                className="w-5 h-7 metal-latch rounded flex items-center justify-center flex-shrink-0 cursor-pointer shadow"
+                title="Drive Latch Lever"
+                onClick={() => fileInputRef1.current?.click()}
+              >
+                <div className="w-1 h-4 bg-stone-800 rounded-full" />
+              </div>
+              {/* Disk Label */}
+              <div className="overflow-hidden">
+                <span id="chassis-drive1-label" className="text-[11px] text-amber-300 font-bold block truncate">
+                  {d1Status.mounted ? (d1Status.diskName || 'System Master DSK') : 'Empty Drive Bay'}
+                </span>
+                <span className="text-[9px] text-stone-400 block">Slot 6, Drive 1 ($C0E8)</span>
+              </div>
+            </div>
+
+            {/* Load / Boot Buttons */}
+            <div className="flex flex-col gap-1 flex-shrink-0">
+              <button
+                onClick={() => fileInputRef1.current?.click()}
+                className="px-2 py-0.5 bg-stone-700 hover:bg-stone-600 text-white rounded text-[10px] font-bold shadow transition"
+              >
+                📂 Insert
+              </button>
+              <button
+                onClick={handleBootDrive1}
+                disabled={!isRunning}
+                className="px-2 py-0.5 bg-amber-500 hover:bg-amber-400 text-black rounded text-[10px] font-black shadow transition disabled:opacity-50"
+              >
+                ⚡ Boot
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={onPowerToggle}
-            className={`px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 text-xs shadow transition ${
-              isRunning
-                ? 'bg-red-600 hover:bg-red-700 text-white border border-red-800'
-                : 'bg-green-600 hover:bg-green-700 text-white border border-green-800'
-            }`}
-          >
-            <Power className="w-3.5 h-3.5" />
-            {isRunning ? 'Power OFF' : 'Power ON'}
-          </button>
+        {/* Drive 2 (5.25" Floppy Lower Drive) */}
+        <div className="floppy-525-bezel rounded-xl p-3 text-stone-200 flex flex-col gap-2.5 shadow-lg">
+          {/* Drive 2 Header */}
+          <div className="flex items-center justify-between border-b border-stone-700 pb-1.5">
+            <div className="flex items-center gap-2">
+              <span className="text-amber-400 font-bold">💾</span>
+              <span className="font-bold text-xs text-white">DISK II — DRIVE 2</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                id="led-drive2"
+                className={`w-3 h-3 rounded-full border border-stone-900 transition-all duration-150 ${
+                  d2Status.isMotorOn
+                    ? 'bg-red-500 shadow-[0_0_10px_#ef4444]'
+                    : d2Status.mounted
+                    ? 'bg-emerald-500 shadow-[0_0_6px_#10b981]'
+                    : 'bg-stone-600'
+                }`}
+                title="Drive 2 Activity LED"
+              />
+              <span className="text-[10px] text-stone-400 font-bold">140 KB</span>
+            </div>
+          </div>
 
-          <button
-            onClick={() => onReset(false)}
-            disabled={!isRunning}
-            className="px-2.5 py-1.5 rounded-lg bg-stone-300 hover:bg-stone-400 text-stone-800 border border-stone-400 text-xs font-bold flex items-center gap-1 transition disabled:opacity-50"
-            title="Warm Reset (Ctrl+Reset)"
-          >
-            <RotateCcw className="w-3.5 h-3.5" /> Reset
-          </button>
+          {/* Floppy Door Slot & Latch Lever */}
+          <div className="floppy-slot-bay p-2 rounded-lg flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 overflow-hidden flex-1">
+              {/* Metal Latch Lever */}
+              <div
+                className="w-5 h-7 metal-latch rounded flex items-center justify-center flex-shrink-0 cursor-pointer shadow"
+                title="Drive Latch Lever"
+                onClick={() => fileInputRef2.current?.click()}
+              >
+                <div className="w-1 h-4 bg-stone-800 rounded-full" />
+              </div>
+              {/* Disk Label */}
+              <div className="overflow-hidden">
+                <span id="chassis-drive2-label" className="text-[11px] text-emerald-300 font-bold block truncate">
+                  {d2Status.mounted ? (d2Status.diskName || 'Mounted .DSK') : 'Empty Drive Bay'}
+                </span>
+                <span className="text-[9px] text-stone-400 block">Slot 6, Drive 2 ($C0E9)</span>
+              </div>
+            </div>
 
-          <button
-            onClick={() => onReset(true)}
-            disabled={!isRunning}
-            className="px-2.5 py-1.5 rounded-lg bg-amber-200 hover:bg-amber-300 text-amber-900 border border-amber-400 text-xs font-bold flex items-center gap-1 transition disabled:opacity-50"
-            title="Cold Reboot (Ctrl+Open-Apple+Reset)"
-          >
-            Cold Boot
-          </button>
+            {/* Load / Manage Buttons */}
+            <div className="flex flex-col gap-1 flex-shrink-0">
+              <button
+                onClick={() => fileInputRef2.current?.click()}
+                className="px-2 py-0.5 bg-stone-700 hover:bg-stone-600 text-white rounded text-[10px] font-bold shadow transition"
+              >
+                📂 Insert
+              </button>
+              <button
+                onClick={onOpenLibrary}
+                className="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 text-amber-300 rounded text-[10px] font-bold shadow transition border border-stone-700"
+              >
+                🎛️ Library
+              </button>
+            </div>
+          </div>
+        </div>
 
-          <button
-            onClick={onOpenLibrary}
-            className="px-3 py-1.5 rounded-lg bg-amber-700 hover:bg-amber-800 text-white border border-amber-900 text-xs font-bold flex items-center gap-1.5 shadow transition"
-          >
-            <Disc className="w-3.5 h-3.5" /> Software Library
-          </button>
+        {/* SmartPort 32MB HD Status Bar */}
+        <div className="bg-[#cdc6b7] px-2.5 py-1.5 rounded-lg border border-[#b8b09f] flex items-center justify-between text-[10px] text-stone-800 font-bold">
+          <div className="flex items-center gap-1.5">
+            <HardDrive className="w-3 h-3 text-stone-700" />
+            <span>32MB SMARTPORT HD</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className={`w-2 h-2 rounded-full ${hdStatus.mounted ? 'bg-emerald-600' : 'bg-stone-500'}`} />
+            <span>{hdStatus.mounted ? '65,536 BLOCKS' : 'OFFLINE'}</span>
+          </div>
         </div>
       </div>
 
-      {/* Hardware Status Strip: Speed Switcher, Volume, and Drive Activity LEDs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-[#D2CCB1] p-3 rounded-xl border border-[#BBB396] shadow-inner">
-        {/* Speed Selector (1.02 MHz to Turbo) */}
-        <div className="flex flex-col space-y-1">
-          <span className="text-[11px] font-bold text-stone-700 flex items-center gap-1">
-            <Cpu className="w-3.5 h-3.5" /> CPU Frequency: <span className="text-amber-800">{clockSpeed} MHz</span>
-          </span>
-          <div className="flex items-center space-x-1">
-            {[
-              { label: '1.02M', val: ClockSpeed.SPEED_1MHZ },
-              { label: '2.8M', val: ClockSpeed.SPEED_2_8MHZ },
-              { label: '4M', val: ClockSpeed.SPEED_4MHZ },
-              { label: '8M', val: ClockSpeed.SPEED_8MHZ },
-              { label: '16M', val: ClockSpeed.SPEED_16MHZ },
-              { label: 'Turbo 50M', val: ClockSpeed.SPEED_TURBO },
-            ].map((spd) => (
-              <button
-                key={spd.label}
-                onClick={() => onSpeedChange(spd.val)}
-                className={`px-1.5 py-1 rounded text-[10px] font-bold border transition ${
-                  clockSpeed === spd.val
-                    ? 'bg-amber-700 text-white border-amber-900 shadow-sm'
-                    : 'bg-[#E5DFCA] text-stone-700 border-stone-400 hover:bg-stone-200'
-                }`}
-              >
-                {spd.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Audio Volume */}
-        <div className="flex items-center space-x-2">
+      {/* Audio Volume Slider */}
+      <div className="bg-[#cdc6b7] px-3 py-2 rounded-xl border border-[#b8b09f] flex items-center justify-between shadow-inner">
+        <div className="flex items-center space-x-1.5">
           <button
             onClick={onMuteToggle}
-            className="p-1.5 rounded-lg bg-[#E5DFCA] hover:bg-stone-200 border border-stone-400 text-stone-700"
+            className="p-1 rounded bg-[#dfd9cc] hover:bg-stone-200 border border-[#bbb3a0] text-stone-800"
+            title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-red-600" /> : <Volume2 className="w-4 h-4 text-green-700" />}
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-600" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-700" />}
           </button>
-          <div className="flex-1 flex flex-col space-y-0.5">
-            <span className="text-[10px] font-bold text-stone-600">Volume: {Math.round(volume * 100)}%</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={volume}
-              onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-              className="w-full accent-amber-700 cursor-pointer h-1.5 bg-stone-300 rounded"
-            />
-          </div>
+          <span className="text-[10px] font-bold text-stone-700">AUDIO:</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume}
+            onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+            className="w-24 accent-amber-700 cursor-pointer h-1.5 bg-stone-400 rounded"
+          />
+          <span className="text-[10px] font-bold text-stone-800 w-7 text-right">{Math.round(volume * 100)}%</span>
+        </div>
+      </div>
+
+      {/* Bottom Control Bay: Physical Power Rocker & Reset Pushbutton */}
+      <div className="bg-[#cdc6b7] p-3 rounded-xl border border-[#b8b09f] flex items-center justify-between shadow-inner">
+        {/* Heavy Power Rocker Switch */}
+        <div className="flex items-center gap-2">
+          <button
+            id="power-btn"
+            onClick={onPowerToggle}
+            className={`px-3.5 py-2 ${
+              isRunning ? 'rocker-power-on text-white' : 'rocker-power-off text-stone-400'
+            } font-black rounded-lg shadow-md transition flex items-center gap-1.5 text-xs tooltip-hint`}
+            data-tooltip="Heavy Rocker Power Switch (Cold Power Reboot)"
+          >
+            <span className={`w-2 h-2 rounded-full ${isRunning ? 'bg-emerald-300 animate-pulse' : 'bg-red-500'}`} />
+            <span>POWER</span>
+          </button>
         </div>
 
-        {/* Drive Activity Lights */}
-        <div className="flex items-center justify-around space-x-2 bg-[#C7C0A4] p-2 rounded-lg border border-[#ADA487]">
-          {/* Drive 1 LED */}
-          <div className="flex items-center space-x-1.5">
-            <div className={`w-3 h-3 rounded-full border border-stone-600 transition-all ${
-              d1Status.isMotorOn
-                ? 'bg-red-500 shadow-[0_0_8px_#ff0000]'
-                : d1Status.mounted ? 'bg-green-700' : 'bg-stone-500'
-            }`} />
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-stone-800">DRIVE 1</span>
-              <span className="text-[9px] text-stone-600 truncate max-w-[65px]">{d1Status.mounted ? '5.25"' : 'Empty'}</span>
-            </div>
-          </div>
-
-          {/* Drive 2 LED */}
-          <div className="flex items-center space-x-1.5">
-            <div className={`w-3 h-3 rounded-full border border-stone-600 transition-all ${
-              d2Status.isMotorOn
-                ? 'bg-red-500 shadow-[0_0_8px_#ff0000]'
-                : d2Status.mounted ? 'bg-green-700' : 'bg-stone-500'
-            }`} />
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-stone-800">DRIVE 2</span>
-              <span className="text-[9px] text-stone-600 truncate max-w-[65px]">{d2Status.mounted ? '5.25"' : 'Empty'}</span>
-            </div>
-          </div>
-
-          {/* SmartPort HD LED */}
-          <div className="flex items-center space-x-1.5">
-            <div className={`w-3 h-3 rounded-full border border-stone-600 transition-all ${
-              hdStatus.isReading || hdStatus.isWriting
-                ? 'bg-amber-400 shadow-[0_0_8px_#ffaa00]'
-                : hdStatus.mounted ? 'bg-amber-700' : 'bg-stone-500'
-            }`} />
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-stone-800">HD 32MB</span>
-              <span className="text-[9px] text-stone-600 truncate max-w-[65px]">{hdStatus.mounted ? 'ProDOS' : 'None'}</span>
-            </div>
-          </div>
+        {/* Tactile Reset Pushbutton */}
+        <div className="flex items-center gap-2">
+          <button
+            id="reset-btn"
+            onClick={() => onReset(false)}
+            disabled={!isRunning}
+            className="px-3.5 py-2 tactile-reset text-white font-black rounded-lg shadow-md transition flex items-center gap-1.5 text-xs tooltip-hint disabled:opacity-50"
+            data-tooltip="Tactile Reset Pushbutton (Warm Reset $FFFC)"
+          >
+            <span>RESET</span>
+          </button>
         </div>
       </div>
     </div>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
+  <meta name="author" content="Ian Ohlander">
+  <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>65C02 Ultra Workstation — Developer &amp; QA Architecture Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #0b0e14; color: #e6edf3; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .rainbow-border { background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%); }
+    .card-hover { transition: all 0.2s ease; }
+    .card-hover:hover { transform: translateY(-3px); border-color: #10b981; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+  <div class="h-1.5 w-full rainbow-border sticky top-0 z-50"></div>
+
+  <!-- Top Navigation -->
+  <header class="bg-[#13171f] border-b border-[#2d333b] px-6 py-4 flex flex-wrap items-center justify-between shadow-md gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow text-stone-900 font-bold text-xl">
+        🧪
+      </div>
+      <div>
+        <span class="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">65C02 Ultra Workstation</span>
+        <h1 class="text-base font-extrabold text-white">Quality Assurance, Test Results &amp; UAT Portal</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <a href="../index-standalone.html" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded transition shadow flex items-center gap-1.5">
+        <span>⚡ Virtual Computer</span>
+      </a>
+      <a href="../docs/index.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-gray-300 rounded transition border border-[#30363d]">
+        📖 Public Docs
+      </a>
+      <a href="../docs/developer/custom-peripheral-cards.html" class="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-cyan-300 rounded transition border border-[#30363d]">
+        🔌 Card Dev Guide
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 space-y-10 text-sm">
+
+    <div class="bg-gradient-to-br from-[#121722] via-[#161d2b] to-[#1a2336] border border-[#283347] rounded-2xl p-8 md:p-10 shadow-2xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <span class="px-3 py-1 bg-emerald-500/15 border border-emerald-500/40 rounded-full text-emerald-400 text-xs font-mono font-bold">
+          INTERNAL DEVELOPER &amp; QA ARCHITECTURE PORTAL
+        </span>
+        <span class="text-xs font-mono text-gray-400">100% Automated Test Pass • 25 Guided Labs Verified • 10-Station UAT Circuit</span>
+      </div>
+
+      <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">
+        Quality Assurance, Engineering Audits &amp; Verification Hub
+      </h2>
+      <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-4xl">
+        This portal contains the complete internal engineering register, automated test suites, UAT runbooks, and architectural audits for the 65C02 Ultra Workstation (Compatible with 6502 Ultra Architecture). All dated QA feedback registers, performance profiling diagnostics, and clean-room ROM verification documents are consolidated here for core maintainers and contributors.
+      </p>
+
+      <!-- Metric Highlights -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-[#252f42] font-mono text-xs">
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a]">
+          <span class="text-gray-400 block text-[11px]">Core Architecture Suites</span>
+          <span class="text-emerald-400 font-bold text-2xl">53 / 53</span>
+          <span class="text-emerald-500 text-[10px] block mt-1">100% Automated Pass</span>
+        </div>
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a]">
+          <span class="text-gray-400 block text-[11px]">Tutorial Lab Verification</span>
+          <span class="text-cyan-400 font-bold text-2xl">37 / 37</span>
+          <span class="text-cyan-500 text-[10px] block mt-1">25 Labs Verified</span>
+        </div>
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a]">
+          <span class="text-gray-400 block text-[11px]">Surface Canvas Tests</span>
+          <span class="text-amber-400 font-bold text-2xl">23 / 23</span>
+          <span class="text-amber-500 text-[10px] block mt-1">Live Surface Validated</span>
+        </div>
+        <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a]">
+          <span class="text-gray-400 block text-[11px]">SOLID &amp; Complexity</span>
+          <span class="text-purple-400 font-bold text-2xl">CC &le; 7</span>
+          <span class="text-purple-500 text-[10px] block mt-1">Clean OO Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Dated QA Feedback & Issue Registers -->
+    <div class="space-y-4">
+      <div class="flex items-center space-x-3 border-b border-[#212836] pb-2">
+        <span class="text-lg font-black text-amber-400">01. Dated QA Feedback &amp; Issue Resolution Registers</span>
+        <span class="text-xs font-mono text-gray-500">Formal Tracking Registers</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Sept 12, 2026 Architectural Redesign Blueprint -->
+        <a href="emulator-architectural-analysis-and-redesign-report.html" class="card-hover p-6 bg-[#121722] border border-emerald-500/70 rounded-2xl shadow-xl flex flex-col justify-between space-y-4 md:col-span-2">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-mono font-bold text-xs">
+                ARCHITECTURAL BLUEPRINT • SEPTEMBER 12, 2026
+              </span>
+              <span class="text-xs font-mono text-cyan-400 font-bold">CLEAN-ROOM RE-ENGINEERING &amp; 32KB ROM ROADMAP</span>
+            </div>
+            <h3 class="text-xl font-bold text-amber-300 group-hover:text-white transition">
+              Emulator Architectural Analysis &amp; Clean-Room Re-Engineering Blueprint
+            </h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Forensic diagnosis of Adventure Construction Set (ACS) Forth text corruption and World Games Vorpal boot failure. Formal feasibility audit confirming the <code>src/emulator/</code> core can be completely remade from scratch without breaking UI or peripheral studios. Detailed specification of the Single Ingress / Single Egress "Dummy Terminal" architecture, complete authentic 32KB Apple //c ROM integration, and permanent purging of fake HLI simulators.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-emerald-400 font-bold">Open Architectural Analysis &amp; Redesign Report →</span>
+            <span class="text-emerald-400 font-bold">✅ Feasibility Confirmed &amp; Action Plan Ready</span>
+          </div>
+        </a>
+
+        <!-- Sept 10, 2026 Feedback Report -->
+        <a href="qa-feedback-report-2026-09-10.html" class="card-hover p-6 bg-[#121722] border border-amber-500/50 rounded-2xl shadow-xl flex flex-col justify-between space-y-4 md:col-span-2">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-amber-500/15 border border-amber-500/40 text-amber-400 font-mono font-bold text-xs">
+                MASTER QA REGISTER • SEPTEMBER 10, 2026
+              </span>
+              <span class="text-xs font-mono text-emerald-400 font-bold">9 ISSUES TRACKED &amp; RESOLVED</span>
+            </div>
+            <h3 class="text-xl font-bold text-amber-300 group-hover:text-white transition">
+              QA Feedback Report &amp; Issue Resolution Register (2026-09-10)
+            </h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Complete engineering feedback register for September 10, 2026. Covers QA issue tracking numbers <code>QA-UX-20260910-01</code> through <code>QA-EMU-20260910-09</code> across UX palettes (Cupertino Beige, Snow White, DHGR Midnight), clean-room trademark analysis, docs/index.html navigation cleanup, internal QA hub separation, custom peripheral C#/Java SDK API reference, physical hardware export pipelines (BMOW Floppy Emu, CFFA3000, wDrive, FujiNet, ADTPro), and real user DSK loading/booting.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-amber-400 font-bold">Open September 10 QA Register →</span>
+            <span class="text-emerald-400 font-bold">✅ 100% Complete &amp; Formally Documented</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section 2: Automated Test & Surface Certifications -->
+    <div class="space-y-4">
+      <div class="flex items-center space-x-3 border-b border-[#212836] pb-2">
+        <span class="text-lg font-black text-emerald-400">02. Automated Test &amp; Surface Certifications</span>
+        <span class="text-xs font-mono text-gray-500">Continuous Integration Reports</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Card: Full-Stack Test Report -->
+        <a href="test-report.html" class="card-hover p-6 bg-[#121722] border border-emerald-500/40 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs">
+                CORE SUITE
+              </span>
+              <span class="text-2xl">📊</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition">
+              Full-Stack Automated QA &amp; Test Certification
+            </h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Automated execution results across 53 unit/integration test suites and 23 surface tests: 65C02 BCD, Language Card MMU, GCR disk decoding, and SmartPort.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-emerald-400 font-bold">View Report →</span>
+            <span class="text-gray-500">53 Suites Passed</span>
+          </div>
+        </a>
+
+        <!-- Card: Tutorial Lab QA Report -->
+        <a href="tutorial-lab-qa-report.html" class="card-hover p-6 bg-[#121722] border border-cyan-500/40 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-xs">
+                LAB AUDIT
+              </span>
+              <span class="text-2xl">🧪</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition">
+              Tutorial Labs End-to-End QA &amp; Pedagogical Audit
+            </h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Exhaustive audit of all 25 guided labs across Chapters 1 to 10 in the Systems Engineering Textbook against the live surface with Flesch-Kincaid scoring.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-cyan-400 font-bold">View Report →</span>
+            <span class="text-gray-500">25 Labs Verified</span>
+          </div>
+        </a>
+
+        <!-- Card: Type-In Transcriber QA Report -->
+        <a href="type-in-transcriber-qa-report.html" class="card-hover p-6 bg-[#121722] border border-blue-500/40 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 font-mono font-bold text-xs">
+                BASIC AUDIT
+              </span>
+              <span class="text-2xl">📖</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-blue-400 transition">
+              Magazine Type-In Transcriber QA Report
+            </h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Verification of vintage type-in listings (Kaleidoscope, Starfield, Lunar Lander, Hex Dumps) resolving REM collapse and DIM array indexing.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-blue-400 font-bold">View Report →</span>
+            <span class="text-gray-500">22 Tests Passed</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section 3: User Acceptance Testing (UAT) Runbooks -->
+    <div class="space-y-4">
+      <div class="flex items-center space-x-3 border-b border-[#212836] pb-2">
+        <span class="text-lg font-black text-amber-400">03. User Acceptance Testing (UAT) Runbooks</span>
+        <span class="text-xs font-mono text-gray-500">Operational Checklist &amp; Verification Procedures</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Pure DOM Surface Interactive QA Audit (Realistic User Testing) -->
+        <a href="realistic-dom-uat-report.html" class="card-hover p-6 bg-[#170e14] border border-red-500/80 rounded-2xl shadow-2xl flex flex-col justify-between space-y-4 md:col-span-2">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-red-500/20 border border-red-500/50 text-red-400 font-mono font-bold text-xs flex items-center gap-1.5">
+                <span>🛑</span> REAL-WORLD BROWSER DOM AUDIT • GRADE F (39/110 — 35.5%)
+              </span>
+              <span class="text-xs font-mono text-red-400 font-bold">FAILING • NOT PRODUCTION READY</span>
+            </div>
+            <h3 class="text-xl font-bold text-red-300 group-hover:text-white transition">
+              Pure DOM Surface Interactive QA Audit &amp; Defect Evaluation (Real User Input)
+            </h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              Exhaustive real-world audit conducted strictly using browser DOM mouse and keyboard events (CDP <code>Input.dispatchKeyEvent</code> and <code>Input.dispatchMouseEvent</code>). Evaluates and captures step-by-step photographic evidence of critical defects: orphan bottom cursor at row 23 col 0 on boot, dual cursors spawning on first keystroke, BASIC 8-space tab formatting misalignment, HOME command firmware banner artifacts at row 20, and ML Monitor (<code class="text-amber-300">CALL-151</code>) memory dump inversion where subsequent inputs overwrite text ABOVE the dump.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#2d1b28] flex items-center justify-between text-xs font-mono">
+            <span class="text-red-400 font-bold">Open Real-World DOM QA Audit Report →</span>
+            <span class="text-red-400 font-bold">🛑 33 Captured Screenshots &bull; Honest Evaluation</span>
+          </div>
+        </a>
+
+        <!-- Formal UAT Checklist & Scoring Rubric -->
+        <a href="uat-checklist-and-scoring-rubric.html" class="card-hover p-6 bg-[#121722] border border-stone-700 rounded-2xl shadow-xl flex flex-col justify-between space-y-4 md:col-span-2 opacity-80 hover:opacity-100">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-amber-500/15 border border-amber-500/40 text-amber-400 font-mono font-bold text-xs">
+                LEGACY SYNTHETIC UAT RUBRIC (AUTOMATED ISOLATION)
+              </span>
+              <span class="text-xs font-mono text-emerald-400 font-bold">10/10 STATIONS &amp; 156/156 ASSERTIONS PASSED</span>
+            </div>
+            <h3 class="text-xl font-bold text-amber-300 group-hover:text-white transition">
+              Formal User Acceptance Testing (UAT) Checklist &amp; 100-Point Scoring Rubric
+            </h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Official ISO/IEC 25010-modeled 100-point evaluation rubric across 9 architectural dimensions. Features the root-cause diagnosis and permanent 44-byte resolution of scroll-induced screen corruption, photographic verification for all 10 hardware stations, complete 6-stage Adventure Construction Set (1985 EA) boot and gameplay trace, 5 vintage magazine type-in programs, 7-slot bus tractor-feed printing, and modern C#/Java AOT compilation.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-amber-400 font-bold">Open UAT Checklist &amp; Scoring Rubric →</span>
+            <span class="text-emerald-400 font-bold">✅ 100% Score • Production Ready</span>
+          </div>
+        </a>
+
+        <!-- 10-Station UAT Runbook -->
+        <a href="uat-test-runbook.html" class="card-hover p-6 bg-[#121722] border border-amber-500/40 rounded-2xl shadow-xl flex flex-col justify-between space-y-4 md:col-span-2">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono font-bold text-xs">
+                INTERACTIVE UAT RUNBOOK
+              </span>
+              <span class="text-2xl">📋</span>
+            </div>
+            <h3 class="text-xl font-bold text-white group-hover:text-amber-400 transition">
+              10-Station Master User Acceptance Testing (UAT) Runbook
+            </h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Interactive step-by-step verification checklist covering 10 testing stations: Station 1 Cold Boot &amp; CRT Phosphors, Station 2 Docked Keyboard Matrix, Station 3 Floppy Disk &amp; Hard Disk Block I/O, Station 4 Language Card Bank Switching, Station 5 Hi-Res &amp; Double Hi-Res Graphics, Station 6 4-Channel Audio Synthesizer, Station 7 Centronics &amp; Serial Communications, Station 8 Dynamic Expansion Slot Bus, Station 9 C#/Java AOT Assembly Pipeline, and Station 10 Pedagogical Tutorial Verification.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-amber-400 font-bold">Open UAT Runbook →</span>
+            <span class="text-gray-500">10 Comprehensive Verification Stations</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section 4: Architecture & Clean-Room ROM Audits -->
+    <div class="space-y-4">
+      <div class="flex items-center space-x-3 border-b border-[#212836] pb-2">
+        <span class="text-lg font-black text-purple-400">04. Architecture &amp; Clean-Room ROM Audits</span>
+        <span class="text-xs font-mono text-gray-500">System Design &amp; IP Review</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- CPU & ROM Firmware Audit -->
+        <a href="apple2-cpu-rom-architecture-audit.html" class="card-hover p-6 bg-[#121722] border border-red-500/50 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-red-500/15 border border-red-500/40 text-red-400 font-mono font-bold text-xs">
+                CORE FIRMWARE AUDIT
+              </span>
+              <span class="text-2xl">🏛️</span>
+            </div>
+            <h3 class="text-lg font-bold text-red-300 group-hover:text-white transition">
+              65C02 CPU Emulation, ROM Firmware &amp; Elimination of HLL Simulation
+            </h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Deep domain-by-domain audit of CPU instruction execution, memory banking, Applesoft BASIC ROM ($D000–$F7FF), System Monitor ($F800–$FFFF), and Disk II firmware ($C600). Eliminates JavaScript HLL simulation to make the 65C02 CPU the sole execution engine.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-red-400 font-bold">Open Firmware Audit →</span>
+            <span class="text-red-400 font-bold">Architecture Blueprint</span>
+          </div>
+        </a>
+
+        <!-- Code QA & Architecture Certification -->
+        <a href="qa-architecture.html" class="card-hover p-6 bg-[#121722] border border-purple-500/40 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 font-mono font-bold text-xs">
+                SOLID ARCHITECTURE
+              </span>
+              <span class="text-2xl">📐</span>
+            </div>
+            <h3 class="text-lg font-bold text-purple-300 group-hover:text-white transition">
+              Code Quality &amp; Clean Architecture Certification
+            </h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Formal architectural report verifying strict SOLID adherence, modular memory bank separation, Strategy pattern video renderers, decoupled 50-pin slot buses, and maximum Cyclomatic Complexity &le; 7 compliance.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-purple-400 font-bold">Open Architecture Report →</span>
+            <span class="text-purple-400 font-bold">SOLID Certified</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section 5: Performance & Headless Browser Profiling -->
+    <div class="space-y-4">
+      <div class="flex items-center space-x-3 border-b border-[#212836] pb-2">
+        <span class="text-lg font-black text-rose-400">05. Performance &amp; Headless Browser Profiling</span>
+        <span class="text-xs font-mono text-gray-500">Forensic Execution Audits</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Emulator Performance & DOM Responsiveness QA Report -->
+        <a href="emulator-performance-and-dom-responsiveness-qa-report.html" class="card-hover p-6 bg-[#121722] border border-red-400/50 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-red-500/15 border border-red-500/40 text-red-400 font-mono font-bold text-xs">
+                DOM PROFILING &amp; PERFORMANCE
+              </span>
+              <span class="text-2xl">⏱️</span>
+            </div>
+            <h3 class="text-lg font-bold text-red-300 group-hover:text-white transition">
+              Emulator Performance &amp; DOM Responsiveness QA Report
+            </h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              CDP profiling diagnosing DOM probe latencies up to 71.4 seconds, 24.6 million fillRect canvas calls/sec, and 9.98s synchronous execution blocks. Outlines raster decoupling and 32-bit ImageData blitting.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-red-400 font-bold">Open Performance Report →</span>
+            <span class="text-amber-400 font-bold">Forensic Diagnosis</span>
+          </div>
+        </a>
+
+        <!-- Bird Brain Headless QA Report -->
+        <a href="bird-brain-qa-report.html" class="card-hover p-6 bg-[#121722] border border-amber-400/50 rounded-2xl shadow-xl flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded bg-amber-500/15 border border-amber-500/40 text-amber-400 font-mono font-bold text-xs">
+                VINTAGE GAME AUDIT
+              </span>
+              <span class="text-2xl">🦅</span>
+            </div>
+            <h3 class="text-lg font-bold text-amber-300 group-hover:text-white transition">
+              "Bird Brain" Applesoft BASIC Extraction &amp; Browser QA Report
+            </h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Exhaustive QA audit of the 122-line vintage game <em>"Bird Brain"</em> (Home Computer Magazine, Vol. 4, No. 5). Includes optical scan defect fixes, 65C02 sound driver loading, and 5-stage browser captures.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#21293a] flex items-center justify-between text-xs font-mono">
+            <span class="text-amber-400 font-bold">Open Bird Brain Report →</span>
+            <span class="text-emerald-400 font-bold">✅ Browser Verified</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Automated Test Execution Command Reference -->
+    <div class="bg-[#10141d] border border-[#212836] rounded-xl p-6 md:p-8 space-y-4 font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-[#212836] pb-3">
+        <span class="text-emerald-400 font-bold text-sm">💻 Automated CLI Test Runner Reference</span>
+        <span class="text-gray-400">Node.js 18+ Clean-Room Test Suite</span>
+      </div>
+      <p class="text-gray-300 font-sans text-xs leading-relaxed">
+        You can execute all automated test suites locally from the terminal:
+      </p>
+      <div class="space-y-2">
+        <div class="p-3 bg-[#060a0f] rounded border border-[#1b2536] flex flex-wrap items-center justify-between gap-2">
+          <code>node tests/runTests.mjs</code>
+          <span class="text-gray-400 text-[11px]">Runs all 53 core emulator and architectural unit suites</span>
+        </div>
+        <div class="p-3 bg-[#060a0f] rounded border border-[#1b2536] flex flex-wrap items-center justify-between gap-2">
+          <code>node tests/surfaceTestSuite.mjs</code>
+          <span class="text-gray-400 text-[11px]">Runs 23 end-to-end interactive canvas and workbench surface tests</span>
+        </div>
+        <div class="p-3 bg-[#060a0f] rounded border border-[#1b2536] flex flex-wrap items-center justify-between gap-2">
+          <code>node tests/typeinTestSuite.mjs</code>
+          <span class="text-gray-400 text-[11px]">Runs 22 automated Type-In Transcriber &amp; Applesoft BASIC verification tests</span>
+        </div>
+        <div class="p-3 bg-[#060a0f] rounded border border-[#1b2536] flex flex-wrap items-center justify-between gap-2">
+          <code>node tests/tutorialLabTestSuite.mjs</code>
+          <span class="text-gray-400 text-[11px]">Runs all 37 guided tutorial lab assertions across Chapters 1 to 10</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#10141d] border-t border-[#212836] py-8 px-6 text-center text-xs font-mono text-gray-500">
+    65C02 Ultra Workstation Quality Assurance &amp; Verification Engineering • 1984–2026
+    <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved. Compatible with 6502 Ultra Architecture.</div>
+  </footer>
+
+</body>
+</html>

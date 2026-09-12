@@ -1,0 +1,2782 @@
+[
+  {
+    "file": "docs/index.html",
+    "lineNum": 10,
+    "text": "<title>65C02 Ultra Workstation — Documentation Portal (Apple //c Compatible)</title>"
+  },
+  {
+    "file": "docs/index.html",
+    "lineNum": 15,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/index.html",
+    "lineNum": 38,
+    "text": "<h1 class=\"text-base font-extrabold text-white\">Documentation & Guide Center <span class=\"text-xs text-stone-400 font-normal\">(Apple //c Architecture)</span></h1>"
+  },
+  {
+    "file": "docs/index.html",
+    "lineNum": 54,
+    "text": "Explore reference guides, developer manuals, architectural tutorials, and vintage magazine transcription tools for the 65C02 Ultra Workstation (Compatible with Apple //c Architecture)."
+  },
+  {
+    "file": "docs/index.html",
+    "lineNum": 468,
+    "text": "Apple, Apple II, Apple //c, ProDOS, ImageWriter, Disk II, and Applesoft are registered trademarks of Apple Inc."
+  },
+  {
+    "file": "docs/index.html",
+    "lineNum": 469,
+    "text": "This educational workstation is an independent clean-room emulator compatible with Apple //c architecture."
+  },
+  {
+    "file": "docs/typein-guide.html",
+    "lineNum": 15,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/typein-guide.html",
+    "lineNum": 61,
+    "text": "Workflow showing vintage listing ingestion, character stream pacing, line numbering sorting, and Applesoft RAM storage ($0801):"
+  },
+  {
+    "file": "docs/typein-guide.html",
+    "lineNum": 108,
+    "text": "Step-by-step instructions for bringing classic Applesoft BASIC and machine code monitor listings from <em>Compute!</em>, <em>inCider</em>, <em>Nibble</em>, and <em>Softalk</em> into the 6502 Ultra."
+  },
+  {
+    "file": "docs/typein-guide.html",
+    "lineNum": 123,
+    "text": "<li>Paste your Applesoft BASIC program (with line numbers) or Monitor hex dump (<code class=\"text-emerald-400\">300: A9 00 8D 50 C0 60</code>).</li>"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 18,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 135,
+    "text": "Running higher-level virtual machine bytecodes on an 8-bit Apple II is not a foreign concept; it is part of Apple's deepest DNA:"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 173,
+    "text": "Source lines are tokenized, isolating class definitions, methods, hardware API calls (<code class=\"text-amber-400\">AppleGraphics</code>, <code class=\"text-amber-400\">AppleAudio</code>, <code class=\"text-amber-400\">AppleSystem</code>), loops, and arithmetic assignments."
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 198,
+    "text": "<h4 class=\"text-sm font-bold text-amber-400 mb-2\">Class: AppleGraphics (Java) / AppleVideo (C#)</h4>"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 224,
+    "text": "<h4 class=\"text-sm font-bold text-purple-400 mb-2\">Class: AppleAudio (Java) / AppleSound (C#)</h4>"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 250,
+    "text": "<h4 class=\"text-sm font-bold text-cyan-400 mb-2\">Class: AppleSystem (Java) / Console (C#)</h4>"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 294,
+    "text": "<pre class=\"bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-emerald-400 overflow-x-auto text-xs\"><code>import apple2.hardware.AppleGraphics;"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 295,
+    "text": "import apple2.hardware.AppleAudio;"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 296,
+    "text": "import apple2.hardware.AppleSystem;"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 301,
+    "text": "AppleGraphics.setVideoMode(AppleGraphics.MODE_DOUBLE_HIRES);"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 302,
+    "text": "AppleGraphics.clearScreen(AppleGraphics.COLOR_BLACK);"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 305,
+    "text": "AppleAudio.beep(523, 100); // C5"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 306,
+    "text": "AppleAudio.beep(659, 100); // E5"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 307,
+    "text": "AppleAudio.beep(783, 150); // G5"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 308,
+    "text": "AppleAudio.beep(1046, 250); // C6"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 310,
+    "text": "// Step 3: Print Welcome Message to Apple //c Screen"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 311,
+    "text": "AppleSystem.print(\"APPLE //C ULTRA - JAVA RUNTIME READY\");"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 323,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 329,
+    "text": "AppleVideo.SetDoubleHiRes(true);"
+  },
+  {
+    "file": "docs/developer-guide.html",
+    "lineNum": 332,
+    "text": "AppleSound.Beep(880, 200);"
+  },
+  {
+    "file": "docs/qa-architecture.html",
+    "lineNum": 15,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/qa-architecture.html",
+    "lineNum": 122,
+    "text": "📦 Suite: Apple II Video: Address Mapping"
+  },
+  {
+    "file": "docs/qa-architecture.html",
+    "lineNum": 126,
+    "text": "📦 Suite: Apple II Storage: Floppy GCR & 32MB SmartPort HD"
+  },
+  {
+    "file": "docs/qa-architecture.html",
+    "lineNum": 130,
+    "text": "📦 Suite: Apple IIc MMU: Memory Banking & Slinky 1MB Expansion"
+  },
+  {
+    "file": "docs/qa-architecture.html",
+    "lineNum": 139,
+    "text": "✅ Detect Applesoft BASIC vs Monitor Hex Dump Mode (0.62ms)"
+  },
+  {
+    "file": "docs/hardware-reference.html",
+    "lineNum": 18,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/hardware-reference.html",
+    "lineNum": 59,
+    "text": "<span class=\"font-bold text-amber-400 text-sm\">📐 Figure H.1: Apple //c Motherboard 50-Pin Bus & 7-Slot Peripheral Routing</span>"
+  },
+  {
+    "file": "docs/hardware-reference.html",
+    "lineNum": 160,
+    "text": "<tr><td class=\"p-2 text-white font-bold\">$C061</td><td class=\"p-2 text-amber-300\">OPENAPPLE</td><td class=\"p-2\">Read</td><td>Bit 7 = 1 if Open Apple (Command) key is pressed.</td></tr>"
+  },
+  {
+    "file": "docs/hardware-reference.html",
+    "lineNum": 161,
+    "text": "<tr><td class=\"p-2 text-white font-bold\">$C062</td><td class=\"p-2 text-amber-300\">SOLIDAPPLE</td><td class=\"p-2\">Read</td><td>Bit 7 = 1 if Solid Apple (Option) key is pressed.</td></tr>"
+  },
+  {
+    "file": "docs/hardware-reference.html",
+    "lineNum": 180,
+    "text": "The 6502 Ultra implements the Apple Memory Expansion Card (\"Slinky\") protocol. It exposes a 24-bit auto-incrementing address counter that enables rapid block transfers of up to 16 megabytes:"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 10,
+    "text": "<title>65C02 Ultra Workstation — Technical Reference Manual (Apple //c Compatible)</title>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 15,
+    "text": "--apple-beige: #e8e3d5;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 16,
+    "text": "--apple-dark-beige: #d5cebc;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 17,
+    "text": "--apple-platinum: #f4f1ea;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 18,
+    "text": "--apple-red: #e03a3e;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 19,
+    "text": "--apple-orange: #f58220;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 20,
+    "text": "--apple-yellow: #fdb827;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 21,
+    "text": "--apple-green: #61bb46;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 22,
+    "text": "--apple-blue: #009ddc;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 23,
+    "text": "--apple-purple: #963d97;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 26,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 60,
+    "text": "<h1 class=\"text-sm font-extrabold text-white tracking-wide\">65C02 Ultra Workstation Reference Manual <span class=\"text-xs text-stone-400 font-normal\">(Compatible with Apple //c Architecture)</span></h1>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 118,
+    "text": "Welcome, vintage computing enthusiast! Whether you are a retrocomputing historian exploring Wozniak's ingenious hardware softswitches or a modern developer compiling object-oriented Java and C# into raw 65C02 machine code, this reference manual provides an exhaustive guide to every register, circuit, top bezel control, ImageWriter II continuous printer, fly-up keyboard, and runtime feature of the <strong>65C02 Ultra Workstation (Compatible with Apple //c Architecture)</strong>."
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 130,
+    "text": "On April 24, 1984, at the Moscone Center in San Francisco, Apple Computer declared: <em>\"Apple II Forever.\"</em> The centerpiece of that vision was the Apple //c — a lightweight, closed-architecture portable computer designed to sit elegantly on any desk."
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 134,
+    "text": "The <strong>65C02 Ultra Workstation</strong> poses a thrilling historical \"what if?\": <em>What if the 1984 Apple //c were engineered with access to future breakthroughs while preserving 100% cycle-accurate backward compatibility?</em>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 140,
+    "text": "100% binary compatibility with 6502/65C02 software, Apple DOS 3.3, ProDOS, and standard Double Hi-Res artwork."
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 161,
+    "text": "The following exhaustive matrix highlights the architectural differences between the original 1984 Apple //c and the 65C02 Ultra Workstation:"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 169,
+    "text": "<th class=\"p-3\">Original 1984 Apple //c</th>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 225,
+    "text": "<td class=\"p-3\">Applesoft BASIC, Integer BASIC</td>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 262,
+    "text": "<li><strong>Open Apple ($C061):</strong> Mapped to the left Alt / Command key or virtual ⌘ keycap.</li>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 263,
+    "text": "<li><strong>Solid Apple ($C062):</strong> Mapped to the right Alt / Option key or virtual ⌥ keycap.</li>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 348,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 356,
+    "text": "AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, block);</code></pre>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 361,
+    "text": "import apple2.hardware.AppleStorage;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 369,
+    "text": "AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 383,
+    "text": "Instead of relying on boot floppies, the <strong>Custom ROM Studio</strong> allows you to construct custom 32KB/64KB Apple //c ROM packages and flash them into the motherboard:"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 417,
+    "text": "Paste Applesoft BASIC or Monitor hex dumps (<code class=\"text-emerald-400\">300: A9 00 8D...</code>). Feed keystrokes into the keyboard strobe buffer with authentic typing rhythm or instant memory injection."
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 452,
+    "text": "<pre class=\"bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-emerald-400 overflow-x-auto\"><code>import apple2.hardware.*;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 457,
+    "text": "AppleGraphics.setVideoMode("
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 458,
+    "text": "AppleGraphics.MODE_DOUBLE_HIRES"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 460,
+    "text": "AppleGraphics.clearScreen(0);"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 463,
+    "text": "AppleAudio.beep(880, 200);"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 466,
+    "text": "AppleSystem.print(\"JAVA RUNNING ON 65C02!\");"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 474,
+    "text": "<pre class=\"bg-[#0d1117] p-4 rounded-lg border border-[#30363d] text-cyan-300 overflow-x-auto\"><code>using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 480,
+    "text": "AppleVideo.SetDoubleHiRes(true);"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 483,
+    "text": "AppleSound.Beep(523, 100);"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 484,
+    "text": "AppleSound.Beep(659, 100);"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 485,
+    "text": "AppleSound.Beep(783, 200);"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 642,
+    "text": "The 65C02 Ultra Workstation features a virtualized 50-pin expansion bus with full support for hardware peripheral cards across Slots 1 through 7. You can plug, unplug, and command cards directly from Applesoft BASIC, 65C02 machine code, or modern C# and Java:"
+  },
+  {
+    "file": "docs/manual.html",
+    "lineNum": 682,
+    "text": "65C02 Ultra Workstation • Technical Reference Manual &amp; Programming Guide • Compatible with Apple //c Architecture"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 18,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 157,
+    "text": "<text x=\"790\" y=\"60\" fill=\"#00e5ff\" font-size=\"11\" font-weight=\"bold\" text-anchor=\"middle\" font-family=\"monospace\">5. Apple //c Silicon</text>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 173,
+    "text": "Below is the clean C# implementation using classes, encapsulation, inheritance, and the <code>Apple2.Ultra</code> hardware abstraction layer:"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 177,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 204,
+    "text": "AppleVideo.DrawHLine(X, Y, Width, AppleVideo.ColorWhite);"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 222,
+    "text": "if (X <= 2 || X >= 136) { VelocityX = (sbyte)-VelocityX; AppleSound.Beep(880, 20); }"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 223,
+    "text": "if (Y <= 2)             { VelocityY = (sbyte)-VelocityY; AppleSound.Beep(880, 20); }"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 228,
+    "text": "AppleVideo.DrawPixel(X, Y, AppleVideo.ColorYellow);"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 254,
+    "text": "AppleSound.PlayMockingboard(voice: 1, freq: 440, vol: 15);"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 274,
+    "text": "AppleVideo.SetDoubleHiRes(true);"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 275,
+    "text": "AppleVideo.ClearScreen(AppleVideo.ColorBlack);"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 281,
+    "text": "char key = AppleInput.GetKey();"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 292,
+    "text": "AppleSound.Beep(523, 30);"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 374,
+    "text": "<h3 class=\"text-base font-bold text-emerald-400\">2. How C# Objects & Fields Live in Apple II Memory</h3>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 507,
+    "text": "AppleSound.Beep(880, 20);"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 557,
+    "text": "<span>C# Routine: AppleVideo.DrawPixel(X, Y, Color)</span>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 603,
+    "text": "<span>C# Routine: AppleSound.PlayMockingboard(voice, freq, vol)</span>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 661,
+    "text": "The 6502 Ultra bridges modern managed file streams (<code class=\"text-amber-300\">System.IO.File</code>, <code class=\"text-amber-300\">java.io.File</code>) and raw block device access (<code class=\"text-cyan-300\">AppleStorage.ReadBlock</code>, <code class=\"text-cyan-300\">AppleStorage.WriteBlock</code>) directly to the vintage ProDOS Machine Language Interface (MLI) Block Device Driver at <code class=\"text-amber-400\">$C700</code> (Slot 7 32MB SmartPort Hard Disk) and <code class=\"text-amber-400\">$C600</code> (Slot 6 5.25\" Floppy Disk Controller)."
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 674,
+    "text": "<text x=\"130\" y=\"115\" fill=\"#fbbf24\" font-size=\"10\" text-anchor=\"middle\" font-family=\"Space Mono\">AppleStorage.WriteBlock()</text>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 713,
+    "text": "<td class=\"border border-[#30363d] p-2 font-mono\">AppleStorage.WriteBlock(unit, blk, buf)</td>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 719,
+    "text": "<td class=\"border border-[#30363d] p-2 font-mono\">AppleStorage.ReadBlock(unit, blk)</td>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 725,
+    "text": "<td class=\"border border-[#30363d] p-2 font-mono\">AppleStorage.writeBlock(unit, blk, buf)</td>"
+  },
+  {
+    "file": "docs/csharp-game-engineering.html",
+    "lineNum": 779,
+    "text": "Demonstrates binary object serialization of a <code class=\"text-amber-300\">PlayerRecord</code> entity into 512-byte raw ProDOS blocks, invoking <code class=\"text-amber-300\">AppleStorage.WriteBlock(0x70, blockNum, buffer)</code> to persist high scores and game state to the 32MB SmartPort hard drive (<code class=\"text-amber-400\">/HD</code>)."
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 11,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 117,
+    "text": "Comprehensive validation of every functional subsystem in the enhanced Apple //c Web Workstation. This report documents full-stack compilation and runtime traces for <strong>C# .NET CLR Ahead-Of-Time</strong> arcade engineering, <strong>Java OOP bytecode lowering</strong>, vintage <strong>Compute!, inCider & Nibble magazine type-in programs</strong>, raw <strong>65C02 assembly hex injections</strong>, and bidirectional <strong>clipboard / keyboard / mouse hardware mappings</strong>."
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 181,
+    "text": "<td class=\"py-2.5 px-3 text-amber-300\">Applesoft Mode ($0801)</td>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 201,
+    "text": "<td class=\"py-2.5 px-3\">Raw Monitor Dump: Apple String Out ($0300)</td>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 208,
+    "text": "<td class=\"py-2.5 px-3\">Paste event, Key Strobe $C000, Open/Closed Apple, Mouse</td>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 392,
+    "text": "Java OOP Execution on Apple IIc Video & Audio Hardware"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 410,
+    "text": "; Apple2.clearScreen(Apple2.BLACK)"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 417,
+    "text": "; Apple2.drawString(\"JAVA VM RUNNING...\")"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 427,
+    "text": "; Apple2.beep(440, 200)"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 544,
+    "text": "<h3 class=\"text-base font-bold text-white mt-1\">Raw 65C02 Machine Code Monitor Injection ($0300: Apple String Out)</h3>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 578,
+    "text": "$0310: \"APPLE IIc Ultra\""
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 590,
+    "text": "<div>• <span class=\"text-emerald-400 font-bold\">Output:</span> \"APPLE IIc Ultra\"</div>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 626,
+    "text": "<li>• <strong> Open Apple (Alt):</strong> Reads $C061 (Bit 7)</li>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 627,
+    "text": "<li>• <strong> Closed Apple (Ctrl):</strong> Reads $C062 (Bit 7)</li>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 639,
+    "text": "<li>• <strong>Coordinate Mapping:</strong> 0..255 (Apple II)</li>"
+  },
+  {
+    "file": "docs/test-report.html",
+    "lineNum": 657,
+    "text": "Every function across CPU65C02, Apple2cMMU, Apple2cVideo, Audio, Storage, and Runtimes adheres to <strong>Single Responsibility (SRP)</strong>, contains <strong>Cyclomatic Complexity ≤ 7</strong>, and follows clean Object-Oriented patterns:"
+  },
+  {
+    "file": "docs/developer/index.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/developer/index.html",
+    "lineNum": 326,
+    "text": "Complete API specifications for java.lang, java.util, java.io, apple2.hardware, System, System.Collections.Generic, System.IO, and Apple2.Ultra."
+  },
+  {
+    "file": "docs/developer/emulation-architecture.html",
+    "lineNum": 117,
+    "text": "The 6502 Ultra is powered by an cycle-accurate emulation of the <strong>Western Design Center (WDC) 65C02 CMOS</strong> microprocessor. First released in 1983, the 65C02 represents a major evolution over the classic NMOS 6502 found in the original 1977 Apple II and II Plus. It is manufactured in high-density static CMOS silicon, drastically reducing power consumption while adding 27 new instructions, 8 new addressing modes, and fixing several notorious hardware bugs that plagued the NMOS version."
+  },
+  {
+    "file": "docs/developer/emulation-architecture.html",
+    "lineNum": 254,
+    "text": "<td class=\"p-2.5\">Low pulse on /RESET pin or pressing Control+Open-Apple+Reset.</td>"
+  },
+  {
+    "file": "docs/developer/mmu-and-memory-banking.html",
+    "lineNum": 54,
+    "text": "The Apple //c uses a unified 16-bit address bus spanning $0000 through $FFFF. The custom Apple MMU gate array partitions this address space into distinct functional regions, dynamically bank-switching between 128KB of onboard RAM (Main & Auxiliary), 32KB of Motherboard ROM, and 16MB of Slinky expanded RAM."
+  },
+  {
+    "file": "docs/developer/mmu-and-memory-banking.html",
+    "lineNum": 103,
+    "text": "<td class=\"p-2.5\">Applesoft BASIC program memory / User RAM space</td>"
+  },
+  {
+    "file": "docs/developer/mmu-and-memory-banking.html",
+    "lineNum": 140,
+    "text": "The Apple //c features 128KB of total dynamic RAM divided into 64KB Main RAM and 64KB Auxiliary RAM. The <code>80STORE</code> softswitch overrides general <code>RAMRD/RAMWRT</code> controls specifically for video memory buffers ($0400-$07FF and $2000-$3FFF):"
+  },
+  {
+    "file": "docs/developer/video-and-graphics-pipeline.html",
+    "lineNum": 173,
+    "text": "<li><strong>P1 Green Phosphor (525nm):</strong> Classic Apple Monitor /// phosphor with long exponential persistence curve (<code class=\"text-emerald-300\">I(t) = I<sub>0</sub> &middot; e<sup>-t/&tau;</sup></code> where decay time constant <code class=\"text-emerald-300\">&tau; &approx; 28 ms</code>).</li>"
+  },
+  {
+    "file": "docs/developer/video-and-graphics-pipeline.html",
+    "lineNum": 175,
+    "text": "<li><strong>P4 White Phosphor (Apple Monitor //c):</strong> Crisp monochrome phosphor matched to the original 9-inch Apple //c CRT display.</li>"
+  },
+  {
+    "file": "docs/developer/audio-sound-synthesis.html",
+    "lineNum": 113,
+    "text": "At standard Apple II clock frequency <code class=\"text-amber-300\">f<sub>cpu</sub> = 1.022727 MHz</code>, the cycle count per half-period is:"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 58,
+    "text": "The 6502 Ultra features a unified, multi-tier storage architecture bridging vintage physical media with high-capacity mass storage: from Steve Wozniak's revolutionary <strong>6-and-2 Group Code Recording (GCR)</strong> 5.25\" floppy controller, through the <strong>Apple SmartPort 32MB virtual hard disk</strong> partition protocol ($65,536$ contiguous 512-byte blocks), to the ultra-fast <strong>Slinky 1MB Auxiliary RAM Disk</strong> and managed object-oriented file persistence in <strong>C# .NET</strong> and <strong>Java 17</strong>."
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 76,
+    "text": "<text x=\"460\" y=\"58\" fill=\"#cbd5e1\" font-size=\"9\" text-anchor=\"middle\" font-family=\"monospace\">System.IO.File.ReadAllText() • java.io.File • Apple2.Ultra.AppleStorage.WriteBlock() • apple2.hardware.AppleStorage</text>"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 231,
+    "text": "The read/write head is actuated by a 4-phase unipolar stepper motor. The Apple //c motherboard addresses the motor phases via softswitches located at <code>$C0E0..$C0E7</code> (or Slot 6 standard <code>$C0EC..$C0EF</code>):"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 293,
+    "text": "The 6502 Ultra implements the extended Apple SmartPort firmware interface connected to a massive <strong>32 Megabyte virtual hard disk volume (/HD)</strong> in Slot 7. The volume contains <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 \times 512 = 33,554,432\text{ bytes}$)."
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 408,
+    "text": "The 6502 Ultra incorporates the famous <strong>Apple //c Memory Expansion Card (\"Slinky\")</strong> providing 1,048,576 bytes of fast banked memory. The hardware operates through 24-bit auto-incrementing address registers mapped at <code>$C0C8..$C0CB</code>:"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 460,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 471,
+    "text": "AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, buffer);"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 480,
+    "text": "import apple2.hardware.AppleStorage;"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 492,
+    "text": "AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 200, block);"
+  },
+  {
+    "file": "docs/developer/storage-floppy-and-smartport.html",
+    "lineNum": 554,
+    "text": "<strong>Goal:</strong> Write a C# class with a static method that serializes player coordinates and health into a 512-byte block using <code>AppleStorage.WriteBlock</code> and compiles to native 65C02 assembly."
+  },
+  {
+    "file": "docs/developer/jvm-clr-aot-runtime.html",
+    "lineNum": 222,
+    "text": "The AOT compiler allows compiling pure Java and C# without importing any Apple-specific packages:"
+  },
+  {
+    "file": "docs/developer/jvm-clr-aot-runtime.html",
+    "lineNum": 230,
+    "text": "<li><strong>Optional Hardware Packages:</strong> <code class=\"text-amber-300\">Apple2.Ultra</code> and <code class=\"text-cyan-300\">apple2.hardware</code> are purely optional interfaces for developers who specifically want direct access to retro hardware switches ($C050/$C057/$C05F Double Hi-Res, $C064 paddles, and Mockingboard PSG voices).</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 17,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 77,
+    "text": "The Apple-specific packages (<code class=\"text-emerald-300\">Apple2.Ultra</code> and <code class=\"text-emerald-300\">apple2.hardware</code>) are <strong>purely optional low-level hardware abstraction layers</strong>. They are provided for developers who specifically want direct, explicit access to vintage retro hardware features—such as Double Hi-Res 560&times;192 graphics switches (<code class=\"text-cyan-300\">$C050</code>, <code class=\"text-cyan-300\">$C057</code>, <code class=\"text-cyan-300\">$C05F</code>), analog game paddle timers (<code class=\"text-cyan-300\">$C064</code>), and Mockingboard Dual AY-3-8910 6-voice programmable sound chips."
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 86,
+    "text": "<li><code class=\"text-amber-300\">Console.WriteLine()</code> and <code class=\"text-cyan-300\">System.out.println()</code> automatically lower to Apple ROM character output (<code class=\"text-white\">$FDED [COUT]</code>).</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 95,
+    "text": "<li>Optionally imports <code class=\"text-white\">Apple2.Ultra</code> or <code class=\"text-white\">apple2.hardware</code>.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 145,
+    "text": "<td class=\"p-2\">Calls Apple ROM routine <code>$FC58 [HOME]</code> to clear text buffer and reset row/col to (0,0).</td>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 307,
+    "text": "For developers who explicitly choose to write retro-hardware software, the optional namespaces <code class=\"text-emerald-300\">Apple2.Ultra</code> (C#) and <code class=\"text-emerald-300\">apple2.hardware</code> (Java) provide direct access to the retro architecture:"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 312,
+    "text": "<h3 class=\"text-emerald-400 font-bold text-sm\">C# Hardware API: Apple2.Ultra</h3>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 314,
+    "text": "<li><strong class=\"text-white\">AppleVideo.SetDoubleHiRes(bool):</strong> Strobes softswitches <code>$C050</code>, <code>$C057</code>, <code>$C00D</code>, <code>$C05F</code>.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 315,
+    "text": "<li><strong class=\"text-white\">AppleVideo.DrawLine(x0, y0, x1, y1, color):</strong> Fast Bresenham Double Hi-Res rasterizer.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 316,
+    "text": "<li><strong class=\"text-white\">AppleSound.Beep(frequency, durationMs):</strong> Cycles 1-bit speaker flip-flop at <code>$C030</code>.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 317,
+    "text": "<li><strong class=\"text-white\">AppleSound.PlayMockingboard(voice, freq, vol):</strong> Writes AY-3-8910 PSG registers (Slot 4).</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 318,
+    "text": "<li><strong class=\"text-white\">AppleSystem.GetMouseX() / GetMouseY():</strong> Reads paddle registers <code>$C064/$C065</code>.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 319,
+    "text": "<li><strong class=\"text-white\">AppleMemory.SetSlinkyAddress(addr24):</strong> Sets 24-bit pointer into 16MB RAM (<code>$C071-$C075</code>).</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 324,
+    "text": "<h3 class=\"text-emerald-400 font-bold text-sm\">Java Hardware API: apple2.hardware</h3>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 326,
+    "text": "<li><strong class=\"text-white\">AppleGraphics.setVideoMode(mode):</strong> Sets <code>MODE_TEXT40</code>, <code>MODE_HIRES</code>, or <code>MODE_DOUBLE_HIRES</code>.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 327,
+    "text": "<li><strong class=\"text-white\">AppleGraphics.drawLine(x0, y0, x1, y1, color):</strong> Double Hi-Res line renderer.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 328,
+    "text": "<li><strong class=\"text-white\">AppleAudio.beep(freqHz, durationMs):</strong> 1-bit speaker pulse generator.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 329,
+    "text": "<li><strong class=\"text-white\">AppleAudio.playMockingboard(ch, freq, vol):</strong> 6-channel PSG voice synthesizer.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 330,
+    "text": "<li><strong class=\"text-white\">AppleSystem.readPaddle(paddleNum):</strong> Reads paddle registers.</li>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 342,
+    "text": "<h4 class=\"text-amber-400 font-bold\">Standard C# App (Zero Apple Imports)</h4>"
+  },
+  {
+    "file": "docs/developer/standard-libraries-reference.html",
+    "lineNum": 368,
+    "text": "<h4 class=\"text-cyan-400 font-bold\">Standard Java App (Zero Apple Imports)</h4>"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 54,
+    "text": "A complete, object-oriented Breakout arcade game in C# utilizing Double Hi-Res graphics, 2D brick collision physics, paddle tracking via Apple II game paddles ($C064), and Mockingboard sound effects:"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 60,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 85,
+    "text": "AppleVideo.DrawLine(X, Y + r, X + 30, Y + r, Color);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 109,
+    "text": "int[] rowColors = { AppleVideo.DeepRed, AppleVideo.Orange, AppleVideo.LightGreen, AppleVideo.Yellow };"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 121,
+    "text": "AppleVideo.SetDoubleHiRes(true);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 122,
+    "text": "AppleVideo.Clear(AppleVideo.Black);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 124,
+    "text": "AppleSound.Beep(587, 80);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 125,
+    "text": "AppleSound.Beep(880, 120);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 131,
+    "text": "int paddleX = AppleSystem.GetMouseX() * 2; // Map paddle 0..510"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 132,
+    "text": "AppleVideo.DrawLine(paddleX, 184, paddleX + 48, 184, AppleVideo.White);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 150,
+    "text": "AppleSound.Beep(1200, 20);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 162,
+    "text": "AppleSound.Beep(880, 15);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 164,
+    "text": "for (int r = 0; r < 8; r++) AppleVideo.DrawLine(b.X, b.Y + r, b.X + 30, b.Y + r, AppleVideo.Black);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 182,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 214,
+    "text": "Demonstrates binary object serialization of a <code class=\"text-amber-300\">PlayerRecord</code> entity into 512-byte raw ProDOS blocks, invoking <code class=\"text-amber-300\">AppleStorage.WriteBlock(0x70, blockNum, buffer)</code> to persist game state to the 32MB SmartPort hard drive (<code class=\"text-amber-400\">/HD</code>):"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 219,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 246,
+    "text": "AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 2, hero.Serialize());"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 262,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 271,
+    "text": "AppleSound.PlayMockingboard(voice: 0, frequency: 440, volume: 15); // Root A"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 272,
+    "text": "AppleSound.PlayMockingboard(voice: 1, frequency: 554, volume: 13); // Third C#"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 273,
+    "text": "AppleSound.PlayMockingboard(voice: 2, frequency: 659, volume: 11); // Fifth E"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 274,
+    "text": "AppleSound.Beep(880, 100);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 289,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 304,
+    "text": "AppleVideo.SetDoubleHiRes(true);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 305,
+    "text": "AppleVideo.Clear(AppleVideo.Black);"
+  },
+  {
+    "file": "docs/developer/practical-examples-and-cookbooks.html",
+    "lineNum": 309,
+    "text": "AppleVideo.DrawLine(x, y, x + 8, y, col);"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 17,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 185,
+    "text": "<text x=\"50\" y=\"209\" fill=\"#a7f3d0\" font-size=\"8\" font-family=\"monospace\">Hardware APIs: Apple2.Ultra.AppleVideo, AppleSound, AppleInput</text>"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 189,
+    "text": "<text x=\"460\" y=\"209\" fill=\"#a7f3d0\" font-size=\"8\" font-family=\"monospace\">Hardware APIs: apple2.hardware.AppleGraphics, AppleAudio, AppleSystem</text>"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 240,
+    "text": "<text x=\"325\" y=\"435\" fill=\"#f5d0fe\" font-size=\"9\" font-weight=\"bold\" font-family=\"monospace\">Apple2cMMU (128KB + 16MB Slinky)</text>"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 244,
+    "text": "<text x=\"605\" y=\"435\" fill=\"#f5d0fe\" font-size=\"9\" font-weight=\"bold\" font-family=\"monospace\">Apple2cVideo (Physical 8KB VRAM)</text>"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 347,
+    "text": "The Apple //c MMU manages bank switching between 128KB of onboard dynamic RAM (64KB Main + 64KB Auxiliary), 32KB Motherboard ROM, and 16MB of Slinky expanded RAM through hardware I/O softswitches in the $C000-$C0FF range."
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 447,
+    "text": "<h2 class=\"text-3xl font-black text-white section-title\">8. 65C02 Assembly Language & Apple II Monitor ROM Reference</h2>"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 449,
+    "text": "Developers can interact directly with the hardware through the built-in Apple II Monitor ROM routines and 65C02 assembly language:"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 514,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 522,
+    "text": "AppleVideo.SetDoubleHiRes(true);"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 523,
+    "text": "AppleVideo.Clear(AppleVideo.Black);"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 525,
+    "text": "AppleSound.Beep(587, 80);"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 526,
+    "text": "AppleSound.Beep(880, 120);"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 531,
+    "text": "int paddleX = AppleSystem.GetMouseX() * 2;"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 532,
+    "text": "AppleVideo.DrawLine(paddleX, 184, paddleX + 48, 184, AppleVideo.White);"
+  },
+  {
+    "file": "docs/developer/full-stack-architecture.html",
+    "lineNum": 540,
+    "text": "AppleSound.Beep(1200, 20);"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 17,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 71,
+    "text": "Tracing <code>AppleAudio.Beep(880, 50)</code> from high-level C# invocation down through 65C02 speaker toggle loops ($C030) to physical speaker cone displacement:"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 84,
+    "text": "<text x=\"115\" y=\"65\" fill=\"#94a3b8\" font-size=\"8\" text-anchor=\"middle\" font-family=\"monospace\">AppleSound.Beep(880, 50);</text>"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 161,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 170,
+    "text": "AppleVideo.SetDoubleHiRes(true);"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 171,
+    "text": "AppleVideo.Clear(AppleVideo.Black);"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 177,
+    "text": "int paddlePos = AppleSystem.GetMouseX(); // 0..255"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 179,
+    "text": "AppleSound.Beep(frequency, 60);"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 182,
+    "text": "AppleVideo.DrawLine(paddlePos * 2, 180, (paddlePos * 2) + 40, 180, AppleVideo.White);"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 207,
+    "text": "<td class=\"p-2.5 text-amber-300 font-bold\">AppleVideo.SetDoubleHiRes(true)</td>"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 227,
+    "text": "<td class=\"p-2.5 text-amber-300 font-bold\">AppleSound.Beep(frequency, 60)</td>"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 320,
+    "text": "// 2. Memory Bus Write Routing in Apple2cMMU.writeByte()"
+  },
+  {
+    "file": "docs/developer/full-stack-vertical-trace.html",
+    "lineNum": 325,
+    "text": "// 3. Video Mode Switch Update in Apple2cVideo.ts"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 60,
+    "text": "\"Apple\", \"Apple II\", \"Apple //c\", \"ImageWriter\", \"Mockingboard\", and \"Passport\" are registered trademarks of their respective copyright holders. References to these historical names throughout this documentation and codebase are made strictly for technical interoperability, educational preservation, and nominative descriptive fair use under United States trademark law (identifying authentic 1977–1988 hardware protocols, bus timings, softswitch vectors, and memory maps). This project is an independent clean-room workstation and is not affiliated with, sponsored by, or endorsed by Apple Inc. or any third-party peripheral manufacturer."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 81,
+    "text": "65C02 CPU executing Applesoft BASIC, 65C02 Machine Code, C# .NET, or Java 17. Reads/writes softswitches at <code class=\"text-amber-300\">$C0B0–$C0BF</code>."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 298,
+    "text": "On the vintage 1984 Apple //e and Apple //c, Slot 3 was historically designated for the 80-Column Display Card (or Aux RAM), Slot 6 was the Disk II 5.25\" floppy controller, and Slot 7 was the ProDOS SmartPort hard disk."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 407,
+    "text": "<span class=\"text-amber-300 font-bold block\">Applesoft BASIC (Any Slot S, Offset O):</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 423,
+    "text": "AppleMemory.Write((ushort)(ioBase + 0), 0x55);"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 424,
+    "text": "byte result = AppleMemory.Read((ushort)(ioBase + 1));"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 471,
+    "text": "When clicked, the browser renders an unforgeable native security modal: <em>\"apple2.ianohlander.com wants to connect to a serial port\"</em> with a dropdown of plugged-in USB COM ports. The user must manually select their device (e.g. \"Arduino Uno (COM3)\") and click <strong>\"Connect\"</strong>."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 502,
+    "text": "Modern browsers prompt the user with a permission banner: <em>\"Allow apple2.ianohlander.com to use your MIDI devices?\"</em>. The user can block or allow access at any time."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 553,
+    "text": "<h3 class=\"text-base font-bold text-emerald-400 font-mono uppercase\">Case Study 1: Apple II Driving an Outside Stepper Motor (Actuator Output)</h3>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 560,
+    "text": "This example shows how an Apple II program writes a target step angle (e.g. 90 degrees) to softswitch register <code class=\"text-amber-300\">$C0B0</code>, which the JavaScript card receives in <code class=\"text-cyan-300\">card.onWriteHandler</code>, transmits over USB serial, and causes a physical 28BYJ-48 stepper motor to rotate in the real world!"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 583,
+    "text": "byte targetAngle = Serial.read(); // Byte from Apple II (e.g. 90 deg)"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 588,
+    "text": "// Send confirmation byte back to Apple II"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 643,
+    "text": "<!-- Domain 1: Apple II Code in BASIC & C# -->"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 647,
+    "text": "<span class=\"text-amber-400 font-bold font-mono\">Programs Running on the Apple II (Applesoft BASIC &amp; Modern C#)</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 654,
+    "text": "<span class=\"text-amber-300 font-bold font-mono\">A. Applesoft BASIC Motor Control Listing:</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 655,
+    "text": "<pre><code class=\"text-amber-300\">10 HOME : PRINT \" APPLE //c STEPPER MOTOR ROBOT\""
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 669,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 673,
+    "text": "AppleConsole.ClearScreen();"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 674,
+    "text": "AppleConsole.WriteLine(\"C# ROBOT MOTOR CONTROLLER\");"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 677,
+    "text": "AppleMemory.Poke(0xC0B0, 90);"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 678,
+    "text": "AppleConsole.WriteLine(\"ROTATING SHAFT 90 DEG...\");"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 681,
+    "text": "while (AppleMemory.Peek(0xC0B0) == 1) {"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 685,
+    "text": "AppleAudio.Beep(frequency: 1000, durationMs: 100);"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 686,
+    "text": "AppleConsole.WriteLine(\"POSITION REACHED!\");"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 704,
+    "text": "<h3 class=\"text-base font-bold text-pink-400 font-mono uppercase\">Case Study 2: Cloud IoT Weather Station (Telemetry Ingested by Apple II)</h3>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 779,
+    "text": "<span class=\"text-amber-300 font-bold font-mono\">A. Applesoft BASIC:</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 832,
+    "text": "<p class=\"text-gray-400 text-xs\">How the Apple II can trigger local Python/Node scripts on your PC via a local WebSocket daemon</p>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 838,
+    "text": "Want the Apple II to launch a local Python script, read a file from your PC's desktop, or control smart home lights? Run a tiny 10-line WebSocket daemon on your PC and connect the virtual card to <code class=\"text-purple-300\">ws://localhost:8080</code>!"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 854,
+    "text": "print(f\"Apple II Command: {msg}\")"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 876,
+    "text": "// If Apple II writes 1 to $C0B0, tell Python to launch calculator!"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 902,
+    "text": "<span class=\"text-amber-300 font-bold font-mono\">A. Applesoft BASIC:</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 968,
+    "text": "Names like <em>ImageWriter</em> (Apple Computer Inc.), <em>Mockingboard</em> (Sweet Micro Systems), and <em>Passport</em> (Passport Designs) were historical commercial trademarks. Distributing virtual expansion cards under these exact proprietary brand names as standalone products could open an author to trademark infringement or false designation of origin claims under Lanham Act §43(a)."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 975,
+    "text": "<span class=\"text-white font-bold block\">2. C# &amp; Java Package Namespaces (`Apple2` vs `A2Ultra`):</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 977,
+    "text": "Publishing a public SDK or library package using proprietary names like <code class=\"text-amber-300\">Apple2.Ultra</code> or <code class=\"text-amber-300\">package apple2.hardware</code> presents trademark liability because it creates commercial confusion implying official endorsement by Apple Inc."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 980,
+    "text": "<strong>The Solution:</strong> The official Workstation SDK uses <code class=\"text-cyan-300\">A2Ultra.Hardware</code> (C#) and <code class=\"text-cyan-300\">package a2ultra.hardware</code> (Java). Legacy projects referencing <code class=\"text-gray-400\">Apple2.Ultra</code> are supported via backward-compatible internal type aliases."
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 1005,
+    "text": "<span class=\"text-amber-400 font-bold block\">Applesoft BASIC Usage:</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 1023,
+    "text": "// Also supports legacy alias: ApplePrinter.WriteLine(...)"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 1131,
+    "text": "<span class=\"text-emerald-400 font-bold block\">Applesoft BASIC Sensor Read:</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 1155,
+    "text": "<span class=\"text-purple-400 font-bold block\">Applesoft BASIC Direct Read:</span>"
+  },
+  {
+    "file": "docs/developer/custom-peripheral-cards.html",
+    "lineNum": 1232,
+    "text": "// Also supports legacy alias: AppleNetwork.HttpGet(\"http://api.weather.gov/status\");"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 55,
+    "text": "\"Apple\", \"Apple II\", \"Apple //c\", \"Apple IIe\", \"Apple IIGS\", and \"ProDOS\" are registered trademarks of their respective holders. Physical storage devices mentioned in this guide (BMOW Floppy Emu, CFFA3000, wDrive, FujiNet, ADTPro) are third-party hardware accessories developed by independent retrocomputing engineers. References to these systems are made solely for educational interoperability and physical deployment guidance."
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 67,
+    "text": "One of the most powerful features of the 65C02 Ultra Workstation is the ability to export <strong>ANY software created or tested inside the emulator</strong>—whether an <strong>Applesoft BASIC game</strong>, a handwritten <strong>65C02 Assembly routine</strong>, a <strong>System ROM firmware image</strong>, or a modern <strong>C# .NET / Java 17 AOT-compiled application</strong>—directly into authentic, bootable disk images (<code>.DSK</code>, <code>.PO</code>, <code>.2MG</code>, or <code>.HDV</code>). You can transfer these files onto SD cards, USB flash drives, or WiFi bridges and boot them instantly on real physical vintage microcomputers!"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 87,
+    "text": "Designed by Big Mess o' Wires (Steve Chamberlin). Plugs directly into the external DB-19 floppy port of the Apple //c, or Disk II controller (Slot 6) on the Apple IIe / II+. Emulates 5.25\" floppy disks, 3.5\" disks, and SmartPort hard disks from a standard micro-SD card."
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 109,
+    "text": "Compact Flash &amp; USB mass storage card designed by Rich Dreher. Plugs into Slot 7 of the Apple IIe or IIGS. Mounts up to 32MB hard disk volumes and multiple floppy drives with full ProDOS MLI support and on-screen boot menus."
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 164,
+    "text": "<!-- Scope 1: Applesoft BASIC Programs -->"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 168,
+    "text": "<span>Applesoft BASIC Programs (.BAS / Type $FC)</span>"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 171,
+    "text": "Vintage listings typed into the Magazine Transcriber (such as <em>Bird Brain</em>, <em>DHGR Kaleidoscope</em>, or <em>Lunar Lander</em>) are tokenized into authentic binary Applesoft tokens ($0801 program memory) and packaged with a ProDOS BASIC.SYSTEM loader."
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 233,
+    "text": "<th class=\"p-2.5\">Standard Apple //c / IIe</th>"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 234,
+    "text": "<th class=\"p-2.5\">Expanded Physical Apple II</th>"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 301,
+    "text": "<li><strong>Applesoft BASIC:</strong> Enter your program at the prompt or load it via the Magazine Transcriber.</li>"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 335,
+    "text": "<li><strong>BMOW Floppy Emu:</strong> Copy file to SD card root &rarr; Select file on LCD &rarr; Power on Apple II.</li>"
+  },
+  {
+    "file": "docs/developer/physical-hardware-export.html",
+    "lineNum": 378,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 18,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 111,
+    "text": "This document provides an exhaustive, step-by-step verification checklist for manual and automated user testing of the 65C02 Ultra Workstation (Compatible with Apple //c Architecture). Use this runbook to validate top bezel controls, CRT phosphors, fullscreen immersion, clipboard paste with live character toasts, fly-up 63-key matrix keyboard, ImageWriter II continuous tractor printer (with 5 paper stocks, dot-matrix fonts, form feed, buffer clear &amp; zero-blank-page PDF export), 7-slot expansion bus, universal JS card sandbox, Java &amp; C# AOT compilers, magazine type-in transcriber, CPU disassembly monitor, custom ROM studio, and legal fair-use compliance prior to deployment."
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 195,
+    "text": "<strong>1.1 Initial Boot Verification:</strong> Open <a href=\"../index-standalone.html\" target=\"_blank\" class=\"text-amber-400 underline font-mono\">index-standalone.html</a> directly in Google Chrome, Microsoft Edge, or Mozilla Firefox. Confirm the monitor displays <code>65C02 ULTRA WORKSTATION (50 MHz TURBO)</code> on Row 0, nominative fair use subtext (*\"Compatible with Apple //c Architecture\"*), and a blinking green cursor prompt <code>] █</code> on Row 2."
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 216,
+    "text": "<strong>1.4 Clock Speed Throttling (Top Bezel Dropdown):</strong> In the top bezel speed dropdown, select <code>1.02 MHz (Vintage 1984)</code>, <code>2.80 MHz (Apple IIGS)</code>, <code>8.00 MHz (ZipChip)</code>, and <code>50.0 MHz (Ultra Turbo)</code>. Verify smooth speed transitions with zero UI distortion."
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 284,
+    "text": "<span class=\"text-xs text-stone-400\">Validates physical keystrokes, bottom fly-up matrix drawer, Caps Lock, 40/80 switch, Open/Solid Apple modifiers, and strobe ($C000).</span>"
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 309,
+    "text": "<strong>3.3 Matrix Key Clicks &amp; Modifiers:</strong> Click virtual keys on the matrix (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Test the <strong>Caps Lock</strong> key, <strong>40/80 Col</strong> switch, <strong>Open Apple (⌘)</strong>, <strong>Solid Apple (⌥)</strong>, and arrow keys. Verify that HOME clears the screen and moves the cursor to row 0."
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 530,
+    "text": "<strong>7.4 65C02 Hex Dump Injection ($300):</strong> Load <code>65C02 Hex Dump ($300)</code> and inject. Confirm the machine code routine prints <code>APPLE</code> via standard ROM COUT ($FDED)."
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 631,
+    "text": "<strong>10.2 Legal Trademark Fair-Use Compliance:</strong> Verify the application clearly displays <code>65C02 Ultra Workstation</code> with the nominative fair use subtitle (<em>\"Compatible with Apple //c Architecture\"</em>) and contains appropriate educational disclaimers."
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 666,
+    "text": "<span class=\"text-emerald-400 font-bold\">apple2c.ianohlander.com</span>"
+  },
+  {
+    "file": "docs/developer/uat-test-runbook.html",
+    "lineNum": 684,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 10,
+    "text": "<title>65C02 Ultra Workstation — Systems Architecture & Engineering Textbook (Compatible with Apple //c Architecture)</title>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 114,
+    "text": "This volume provides an exhaustive, university-level breakdown of the 65C02 CMOS microprocessor (Compatible with Apple //c Architecture), memory-mapped I/O multiplexers, dual-phase clock timing, video scanline interleaving mathematics, ImageWriter II continuous tractor printing (with 5 paper stocks, dot-matrix vs clean fonts, form feed, clean buffer clearing, and zero-blank-page PDF export), dual AY-3-8910 Mockingboard synthesis, custom ROM creation, fly-up 63-key matrix keyboard, top bezel controls, and modern Ahead-Of-Time (AOT) compiler engineering. Every chapter includes rigorous theory, mathematical derivations, timing diagrams, and concrete hands-on laboratory exercises."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 215,
+    "text": "In this lab, you will leave Applesoft BASIC and enter the machine's low-level <strong>65C02 System Monitor</strong>. The System Monitor is a built-in ROM utility that gives you raw, unmediated access to physical memory ($0000–$FFFF) and CPU execution."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 226,
+    "text": "At the Applesoft BASIC prompt (<code class=\"text-emerald-400\">] █</code>), type <code class=\"text-amber-300 font-bold\">CALL -151</code> and press <kbd class=\"px-1 py-0.5 bg-stone-800 rounded border border-stone-700\">Return</kbd>.<br>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 243,
+    "text": "<em class=\"text-gray-400 text-[11px] ml-5\">Rationale: Jumps to the BASIC warm restart vector at $03D0, safely returning to the Applesoft <code class=\"text-emerald-400\">]</code> prompt with your program intact.</em>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 258,
+    "text": "* 3D0G                          ; Exit Monitor: Jump to $03D0 (Applesoft BASIC warm start)"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 259,
+    "text": "] █                             ; Returned to Applesoft BASIC prompt</code></pre>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 513,
+    "text": "<span class=\"font-bold text-white text-xs\">Inspecting the System Reset Vector ($FFFC–$FFFD) via Applesoft PEEK</span>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 522,
+    "text": "In this lab, you will query the reset vector using Applesoft BASIC <code class=\"text-pink-300\">PEEK</code> statements. Address $FFFC in decimal is 65532, and $FFFD is 65533. To reconstruct the 16-bit address in decimal, we compute: <code>PEEK(65532) + PEEK(65533) * 256</code>."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 530,
+    "text": "At the Applesoft BASIC prompt (<code class=\"text-emerald-400\">] █</code>), type:"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 543,
+    "text": "Result: Successfully verified authentic Apple //c cold boot reset entry vector!</code></pre>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 599,
+    "text": "<li>Look at the top line (Row 0) of the CRT screen: the word <code class=\"text-emerald-400 font-bold\">APPLE</code> appears instantly at columns 10–14 without using the BASIC print pipeline!</li>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 691,
+    "text": "AppleScreen.Clear();"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 692,
+    "text": "AppleSpeaker.Beep(440, 50);"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 813,
+    "text": "In Applesoft BASIC, typing <code class=\"text-blue-300\">PR#n</code> executes a jump to the Slot <code class=\"text-blue-300\">n</code> firmware ROM vector at <code>$Cn00</code>."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 840,
+    "text": "When you execute <code class=\"text-amber-300\">PR#1</code>, the Apple II vectors the system character output pointer (<code class=\"text-amber-300\">CSW @ $0036</code>) to the Slot 1 driver ROM ($C100). All subsequent <code class=\"text-amber-300\">PRINT</code> statements stream directly into the ImageWriter II continuous print feed instead of the CRT screen. Executing <code class=\"text-amber-300\">PR#0</code> restores the output vector back to the video screen."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1032,
+    "text": "In C# and Java AOT applications, file persistence APIs (e.g. <code>File.WriteAllText</code> and <code>AppleStorage.WriteBlock</code>) are automatically lowered to native ProDOS MLI driver routines, enabling persistent save games across machine power cycles."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1039,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1047,
+    "text": "AppleStorage.WriteBlock("
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1048,
+    "text": "AppleStorage.UnitSlot7Drive1, 100, data);</code></pre>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1053,
+    "text": "import apple2.hardware.AppleStorage;"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1062,
+    "text": "AppleStorage.writeBlock("
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1063,
+    "text": "AppleStorage.UNIT_SLOT7_DRIVE1, 100, buf);</code></pre>"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1153,
+    "text": "The Apple //c originally operated at 1.023 MHz, where a benchmark loop takes several seconds. The 65C02 Ultra includes a dynamic cycle throttle capable of scaling from 1.02 MHz up to 50.0 MHz (Ultra Turbo) without altering audio pitch or video frame buffer stability."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1172,
+    "text": "The fly-up keyboard recreates the physical 63-key matrix of the Apple //c, including special modifier keys like Control, Reset, and Open/Closed Apple buttons (which map to joystick pushbuttons PB0 and PB1 at $C061–$C062)."
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1253,
+    "text": "Slot 3 is decoded to I/O registers <code class=\"text-amber-300\">$C0B0–$C0BF</code> (decimal 49328–49343). In this lab, you write a custom JavaScript device driver in the JS Card Sandbox that simulates an environmental temperature sensor on register $C0B0. When Applesoft reads <code class=\"text-amber-300\">PEEK(49328)</code>, your JavaScript handler executes and feeds simulated sensor data into the 65C02 data bus!"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1292,
+    "text": "<li>At the Applesoft BASIC prompt, enter the following real-time clock reader:"
+  },
+  {
+    "file": "docs/comprehensive-ultra-tutorial.html",
+    "lineNum": 1318,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 68,
+    "text": "<h1 class=\"text-base font-extrabold text-white\">Apple //c 32KB Custom ROM & Kernel Creation Guide</h1>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 98,
+    "text": "This comprehensive guide explains how to construct, assemble, link, and flash custom <strong>32KB System ROM firmware images ($C000–$FFFF)</strong> and <strong>Character Generator ROMs</strong> for the Apple //c. Whether building custom boot diagnostics, arcade game auto-boot cartridges, or alternate operating systems, this manual provides complete assembly listings, vector maps, and step-by-step hands-on labs."
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 136,
+    "text": "<span class=\"font-bold text-amber-400 text-sm\">📐 Figure 1.1: Apple //c 32KB/64KB ROM Memory Map & Banking Architecture</span>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 158,
+    "text": "<text x=\"330\" y=\"96\" fill=\"#7dd3fc\" font-size=\"8\" text-anchor=\"middle\" font-family=\"monospace\">Applesoft BASIC High Subroutines</text>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 167,
+    "text": "<text x=\"555\" y=\"80\" fill=\"#a7f3d0\" font-size=\"9\" text-anchor=\"middle\" font-family=\"monospace\">Applesoft Core ($E000–$F7FF)</text>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 197,
+    "text": "On the Apple //c motherboard, the System ROM is housed in a 28-pin 32KB 27C256 EPROM (or 64KB 27C512 EPROM on Revision 3/4 machines). The upper 16KB of physical address space ($C000–$FFFF) is multiplexed across multiple internal sub-blocks:"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 232,
+    "text": "<td>Applesoft BASIC Interpreter</td>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 385,
+    "text": "The Apple //c Character Generator ROM stores a 7x8 dot matrix for 128 standard ASCII glyphs ($00–$7F). Each character requires 8 consecutive bytes, where each byte represents one horizontal row of 7 dots:"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 484,
+    "text": "ld65 -C apple2c_rom.cfg -o custom_rom.bin custom_rom.o</code></pre>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 486,
+    "text": "<span class=\"text-emerald-400 font-bold block pt-2\">2. Inject into Apple //c Web Workstation via JavaScript API:</span>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 515,
+    "text": "63488   <-- ($F800: Authentic Apple //c Cold Boot Vector)</code></pre>"
+  },
+  {
+    "file": "docs/rom-creation-guide.html",
+    "lineNum": 541,
+    "text": "<-- Directly deposits 'APPLE' high-bit ASCII ($C1, $D0, $D0, $CC, $C5) into Row 0 VRAM!</code></pre>"
+  },
+  {
+    "file": "docs/watermark-registry.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0b0e14; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/watermark-registry.html",
+    "lineNum": 150,
+    "text": "<td class=\"border border-[#30363d] p-2.5 font-mono text-pink-300\">Typing \"CREDITS\", \"AUTHOR\", \"COPYRIGHT\", or \"(C)\" on Apple CRT</td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 17,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 138,
+    "text": "<text x=\"440\" y=\"45\" fill=\"#bae6fd\" font-size=\"11\" font-weight=\"bold\" text-anchor=\"middle\" font-family=\"monospace\">Managed Application Code: System.IO.File (C#) • java.io.File (Java) • AppleStorage</text>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 205,
+    "text": "The 6502 Ultra implements the Apple SmartPort firmware protocol connected to an extended <strong>32 Megabyte virtual volume (/HD)</strong> in Slot 7 ($C700). The storage volume is partitioned into <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 \times 512 = 33,554,432\text{ bytes}$)."
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 251,
+    "text": "The Apple //c Memory Expansion Card (\"Slinky\") provides 1,048,576 bytes of fast banked memory accessed via 24-bit auto-incrementing registers at <code>$C0C8..$C0CB</code> (or $C071–$C075). Streaming 512 bytes of data requires zero bus wait-states, enabling instant audio and graphics texture paging."
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 301,
+    "text": "<text x=\"145\" y=\"68\" fill=\"#93c5fd\" font-size=\"8\" text-anchor=\"middle\">AppleStorage.WriteBlock(0x70, 100, buf);</text>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 339,
+    "text": "The 6502 Ultra standard library for C# provides two primary namespaces for storage access: <code>Apple2.Ultra</code> (for high-performance hardware block I/O) and <code>System.IO</code> (for file and stream abstractions)."
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 355,
+    "text": "<td class=\"text-amber-400 font-bold\"><code>AppleStorage.UnitSlot7Drive1</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 361,
+    "text": "<td class=\"text-amber-400 font-bold\"><code>AppleStorage.UnitSlot6Drive1</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 367,
+    "text": "<td class=\"text-amber-400 font-bold\"><code>AppleStorage.UnitSlot4RamDisk</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 373,
+    "text": "<td class=\"text-cyan-400 font-bold\"><code>AppleStorage.WriteBlock()</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 379,
+    "text": "<td class=\"text-cyan-400 font-bold\"><code>AppleStorage.ReadBlock()</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 385,
+    "text": "<td class=\"text-cyan-400 font-bold\"><code>AppleStorage.GetStatus()</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 394,
+    "text": "<td>Encodes string into Apple high-ASCII and persists across contiguous ProDOS volume directory blocks.</td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 417,
+    "text": "Java 17 applications utilize <code>apple2.hardware.AppleStorage</code> for direct silicon block access alongside <code>java.io.File</code> and <code>java.io.FileOutputStream</code>:"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 433,
+    "text": "<td class=\"text-amber-400 font-bold\"><code>AppleStorage.UNIT_SLOT7_DRIVE1</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 439,
+    "text": "<td class=\"text-emerald-400 font-bold\"><code>AppleStorage.writeBlock()</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 445,
+    "text": "<td class=\"text-emerald-400 font-bold\"><code>AppleStorage.readBlock()</code></td>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 491,
+    "text": "AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, payload);</code></pre>"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 537,
+    "text": "using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 568,
+    "text": "AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, SCORE_BLOCK, buffer);"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 582,
+    "text": "<pre class=\"bg-[#080d14] p-3 rounded border border-[#1b2533] text-gray-300 overflow-x-auto\"><code>using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 590,
+    "text": "byte[] blockData = AppleStorage.ReadBlock(AppleStorage.UnitSlot7Drive1, startBlock + b);"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 609,
+    "text": "<pre class=\"bg-[#080d14] p-3 rounded border border-[#1b2533] text-gray-300 overflow-x-auto\"><code>import apple2.hardware.AppleStorage;"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 623,
+    "text": "AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, currentBlock++, pageBuffer);"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 639,
+    "text": "<pre class=\"bg-[#080d14] p-3 rounded border border-[#1b2533] text-gray-300 overflow-x-auto\"><code>using Apple2.Ultra;"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 643,
+    "text": "int status = AppleStorage.GetStatus(unit);"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 645,
+    "text": "AppleVideo.Print(\"ERROR: DRIVE OFFLINE OR UNATTACHED\\n\");"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 649,
+    "text": "int result = AppleStorage.WriteBlock(unit, blockNum, data);"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 651,
+    "text": "AppleVideo.Print(\"ERROR: WRITE PROTECTED DISKETTE\\n\");"
+  },
+  {
+    "file": "docs/storage-guide.html",
+    "lineNum": 654,
+    "text": "AppleVideo.Print(\"ERROR: MLI I/O FAULT CODE: $\" + result.ToString(\"X2\") + \"\\n\");"
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 18,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 111,
+    "text": "This document provides an exhaustive, step-by-step verification checklist for manual and automated user testing of the 65C02 Ultra Workstation (Compatible with Apple //c Architecture). Use this runbook to validate top bezel controls, CRT phosphors, fullscreen immersion, clipboard paste with live character toasts, fly-up 63-key matrix keyboard, ImageWriter II continuous tractor printer (with 5 paper stocks, dot-matrix fonts, form feed, buffer clear &amp; zero-blank-page PDF export), 7-slot expansion bus, universal JS card sandbox, Java &amp; C# AOT compilers, magazine type-in transcriber, CPU disassembly monitor, custom ROM studio, and legal fair-use compliance prior to deployment."
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 195,
+    "text": "<strong>1.1 Initial Boot Verification:</strong> Open <a href=\"../index-standalone.html\" target=\"_blank\" class=\"text-amber-400 underline font-mono\">index-standalone.html</a> directly in Google Chrome, Microsoft Edge, or Mozilla Firefox. Confirm the monitor displays <code>65C02 ULTRA WORKSTATION (50 MHz TURBO)</code> on Row 0, nominative fair use subtext (*\"Compatible with Apple //c Architecture\"*), and a blinking green cursor prompt <code>] █</code> on Row 2."
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 216,
+    "text": "<strong>1.4 Clock Speed Throttling (Top Bezel Dropdown):</strong> In the top bezel speed dropdown, select <code>1.02 MHz (Vintage 1984)</code>, <code>2.80 MHz (Apple IIGS)</code>, <code>8.00 MHz (ZipChip)</code>, and <code>50.0 MHz (Ultra Turbo)</code>. Verify smooth speed transitions with zero UI distortion."
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 284,
+    "text": "<span class=\"text-xs text-stone-400\">Validates physical keystrokes, bottom fly-up matrix drawer, Caps Lock, 40/80 switch, Open/Solid Apple modifiers, and strobe ($C000).</span>"
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 309,
+    "text": "<strong>3.3 Matrix Key Clicks &amp; Modifiers:</strong> Click virtual keys on the matrix (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Test the <strong>Caps Lock</strong> key, <strong>40/80 Col</strong> switch, <strong>Open Apple (⌘)</strong>, <strong>Solid Apple (⌥)</strong>, and arrow keys. Verify that HOME clears the screen and moves the cursor to row 0."
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 530,
+    "text": "<strong>7.4 65C02 Hex Dump Injection ($300):</strong> Load <code>65C02 Hex Dump ($300)</code> and inject. Confirm the machine code routine prints <code>APPLE</code> via standard ROM COUT ($FDED)."
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 631,
+    "text": "<strong>10.2 Legal Trademark Fair-Use Compliance:</strong> Verify the application clearly displays <code>65C02 Ultra Workstation</code> with the nominative fair use subtitle (<em>\"Compatible with Apple //c Architecture\"</em>) and contains appropriate educational disclaimers."
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 666,
+    "text": "<span class=\"text-emerald-400 font-bold\">apple2c.ianohlander.com</span>"
+  },
+  {
+    "file": "docs/uat-test-runbook.html",
+    "lineNum": 684,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 262,
+    "text": "<td>Text Page 1 Row 0 ($0400), High-bit ASCII 'APPLE'</td>"
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 263,
+    "text": "<td>Word \"APPLE\" appears immediately at columns 10-14</td>"
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 325,
+    "text": "<td>C# <code>File.WriteAllText</code> / Java <code>AppleStorage</code></td>"
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 375,
+    "text": "<td>Applesoft PEEK returns live Celsius temperature</td>"
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 412,
+    "text": "<strong>Fix Applied:</strong> Expanded input buffer capacity to <strong>239 characters</strong> (authentic Applesoft GETLN limit), implemented multi-row wrapping in <code>renderCurrentInput(showCursor)</code> across 40-column boundaries with scroll-up safety, fixed <code>backspace()</code> to clear vacated rows, and updated <code>handleReturn()</code> to advance cursor rows based on wrapped line count."
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 446,
+    "text": "<strong>Fix Applied:</strong> Explicitly initialized <code>this.basicVars = {}</code> and <code>this.basicForLoops = {}</code> in both the <code>constructor()</code> and <code>reset()</code> methods of <code>Apple2cEmulator</code>."
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 474,
+    "text": "<strong>Symptom:</strong> When the user typed <code>CALL -151</code> or <code>CALL 65385</code>, the emulator did nothing and remained in Applesoft BASIC without displaying the monitor prompt (<code>* █</code>)."
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 497,
+    "text": "<strong>Fix Applied:</strong> Hooked instruction execution of <code>$FDED</code> in <code>Apple2cEmulator.execute65C02()</code> directly to <code>this.typeChar(String.fromCharCode(this.cpu.a & 0x7F))</code>, enabling seamless string printing in raw assembly programs."
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 541,
+    "text": "Verified: CMOS STZ opcodes cleanly zeroed $06 and $0800; 3D0G restored Applesoft prompt."
+  },
+  {
+    "file": "docs/tutorial-lab-qa-report.html",
+    "lineNum": 582,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 262,
+    "text": "<td>Text Page 1 Row 0 ($0400), High-bit ASCII 'APPLE'</td>"
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 263,
+    "text": "<td>Word \"APPLE\" appears immediately at columns 10-14</td>"
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 325,
+    "text": "<td>C# <code>File.WriteAllText</code> / Java <code>AppleStorage</code></td>"
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 375,
+    "text": "<td>Applesoft PEEK returns live Celsius temperature</td>"
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 412,
+    "text": "<strong>Fix Applied:</strong> Expanded input buffer capacity to <strong>239 characters</strong> (authentic Applesoft GETLN limit), implemented multi-row wrapping in <code>renderCurrentInput(showCursor)</code> across 40-column boundaries with scroll-up safety, fixed <code>backspace()</code> to clear vacated rows, and updated <code>handleReturn()</code> to advance cursor rows based on wrapped line count."
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 446,
+    "text": "<strong>Fix Applied:</strong> Explicitly initialized <code>this.basicVars = {}</code> and <code>this.basicForLoops = {}</code> in both the <code>constructor()</code> and <code>reset()</code> methods of <code>Apple2cEmulator</code>."
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 474,
+    "text": "<strong>Symptom:</strong> When the user typed <code>CALL -151</code> or <code>CALL 65385</code>, the emulator did nothing and remained in Applesoft BASIC without displaying the monitor prompt (<code>* █</code>)."
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 497,
+    "text": "<strong>Fix Applied:</strong> Hooked instruction execution of <code>$FDED</code> in <code>Apple2cEmulator.execute65C02()</code> directly to <code>this.typeChar(String.fromCharCode(this.cpu.a & 0x7F))</code>, enabling seamless string printing in raw assembly programs."
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 541,
+    "text": "Verified: CMOS STZ opcodes cleanly zeroed $06 and $0800; 3D0G restored Applesoft prompt."
+  },
+  {
+    "file": "docs/qa/tutorial-lab-qa-report.html",
+    "lineNum": 582,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 11,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 117,
+    "text": "Comprehensive validation of every functional subsystem in the enhanced Apple //c Web Workstation. This report documents full-stack compilation and runtime traces for <strong>C# .NET CLR Ahead-Of-Time</strong> arcade engineering, <strong>Java OOP bytecode lowering</strong>, vintage <strong>Compute!, inCider & Nibble magazine type-in programs</strong>, raw <strong>65C02 assembly hex injections</strong>, and bidirectional <strong>clipboard / keyboard / mouse hardware mappings</strong>."
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 181,
+    "text": "<td class=\"py-2.5 px-3 text-amber-300\">Applesoft Mode ($0801)</td>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 201,
+    "text": "<td class=\"py-2.5 px-3\">Raw Monitor Dump: Apple String Out ($0300)</td>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 208,
+    "text": "<td class=\"py-2.5 px-3\">Paste event, Key Strobe $C000, Open/Closed Apple, Mouse</td>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 392,
+    "text": "Java OOP Execution on Apple IIc Video & Audio Hardware"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 410,
+    "text": "; Apple2.clearScreen(Apple2.BLACK)"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 417,
+    "text": "; Apple2.drawString(\"JAVA VM RUNNING...\")"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 427,
+    "text": "; Apple2.beep(440, 200)"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 544,
+    "text": "<h3 class=\"text-base font-bold text-white mt-1\">Raw 65C02 Machine Code Monitor Injection ($0300: Apple String Out)</h3>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 578,
+    "text": "$0310: \"APPLE IIc Ultra\""
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 590,
+    "text": "<div>• <span class=\"text-emerald-400 font-bold\">Output:</span> \"APPLE IIc Ultra\"</div>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 626,
+    "text": "<li>• <strong> Open Apple (Alt):</strong> Reads $C061 (Bit 7)</li>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 627,
+    "text": "<li>• <strong> Closed Apple (Ctrl):</strong> Reads $C062 (Bit 7)</li>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 639,
+    "text": "<li>• <strong>Coordinate Mapping:</strong> 0..255 (Apple II)</li>"
+  },
+  {
+    "file": "docs/qa/test-report.html",
+    "lineNum": 657,
+    "text": "Every function across CPU65C02, Apple2cMMU, Apple2cVideo, Audio, Storage, and Runtimes adheres to <strong>Single Responsibility (SRP)</strong>, contains <strong>Cyclomatic Complexity ≤ 7</strong>, and follows clean Object-Oriented patterns:"
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 18,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 111,
+    "text": "This document provides an exhaustive, step-by-step verification checklist for manual and automated user testing of the 65C02 Ultra Workstation (Compatible with Apple //c Architecture). Use this runbook to validate top bezel controls, CRT phosphors, fullscreen immersion, clipboard paste with live character toasts, fly-up 63-key matrix keyboard, ImageWriter II continuous tractor printer (with 5 paper stocks, dot-matrix fonts, form feed, buffer clear &amp; zero-blank-page PDF export), 7-slot expansion bus, universal JS card sandbox, Java &amp; C# AOT compilers, magazine type-in transcriber, CPU disassembly monitor, custom ROM studio, and legal fair-use compliance prior to deployment."
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 195,
+    "text": "<strong>1.1 Initial Boot Verification:</strong> Open <a href=\"../../index-standalone.html\" target=\"_blank\" class=\"text-amber-400 underline font-mono\">index-standalone.html</a> directly in Google Chrome, Microsoft Edge, or Mozilla Firefox. Confirm the monitor displays <code>65C02 ULTRA WORKSTATION (50 MHz TURBO)</code> on Row 0, nominative fair use subtext (*\"Compatible with Apple //c Architecture\"*), and a blinking green cursor prompt <code>] █</code> on Row 2."
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 216,
+    "text": "<strong>1.4 Clock Speed Throttling (Top Bezel Dropdown):</strong> In the top bezel speed dropdown, select <code>1.02 MHz (Vintage 1984)</code>, <code>2.80 MHz (Apple IIGS)</code>, <code>8.00 MHz (ZipChip)</code>, and <code>50.0 MHz (Ultra Turbo)</code>. Verify smooth speed transitions with zero UI distortion."
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 284,
+    "text": "<span class=\"text-xs text-stone-400\">Validates physical keystrokes, bottom fly-up matrix drawer, Caps Lock, 40/80 switch, Open/Solid Apple modifiers, and strobe ($C000).</span>"
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 309,
+    "text": "<strong>3.3 Matrix Key Clicks &amp; Modifiers:</strong> Click virtual keys on the matrix (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Test the <strong>Caps Lock</strong> key, <strong>40/80 Col</strong> switch, <strong>Open Apple (⌘)</strong>, <strong>Solid Apple (⌥)</strong>, and arrow keys. Verify that HOME clears the screen and moves the cursor to row 0."
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 530,
+    "text": "<strong>7.4 65C02 Hex Dump Injection ($300):</strong> Load <code>65C02 Hex Dump ($300)</code> and inject. Confirm the machine code routine prints <code>APPLE</code> via standard ROM COUT ($FDED)."
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 631,
+    "text": "<strong>10.2 Legal Trademark Fair-Use Compliance:</strong> Verify the application clearly displays <code>65C02 Ultra Workstation</code> with the nominative fair use subtitle (<em>\"Compatible with Apple //c Architecture\"</em>) and contains appropriate educational disclaimers."
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 666,
+    "text": "<span class=\"text-emerald-400 font-bold\">apple2c.ianohlander.com</span>"
+  },
+  {
+    "file": "docs/qa/uat-test-runbook.html",
+    "lineNum": 684,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/qa/qa-architecture.html",
+    "lineNum": 15,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "docs/qa/qa-architecture.html",
+    "lineNum": 122,
+    "text": "📦 Suite: Apple II Video: Address Mapping"
+  },
+  {
+    "file": "docs/qa/qa-architecture.html",
+    "lineNum": 126,
+    "text": "📦 Suite: Apple II Storage: Floppy GCR & 32MB SmartPort HD"
+  },
+  {
+    "file": "docs/qa/qa-architecture.html",
+    "lineNum": 130,
+    "text": "📦 Suite: Apple IIc MMU: Memory Banking & Slinky 1MB Expansion"
+  },
+  {
+    "file": "docs/qa/qa-architecture.html",
+    "lineNum": 139,
+    "text": "✅ Detect Applesoft BASIC vs Monitor Hex Dump Mode (0.62ms)"
+  },
+  {
+    "file": "docs/qa/index.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif; background-color: #0b0e14; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/qa/index.html",
+    "lineNum": 65,
+    "text": "This portal contains the complete internal engineering register, automated test suites, UAT runbooks, and architectural audits for the 65C02 Ultra Workstation (Compatible with Apple //c Architecture). All dated QA feedback registers, performance profiling diagnostics, and clean-room ROM verification documents are consolidated here for core maintainers and contributors."
+  },
+  {
+    "file": "docs/qa/index.html",
+    "lineNum": 242,
+    "text": "<a href=\"apple2-cpu-rom-architecture-audit.html\" class=\"card-hover p-6 bg-[#121722] border border-red-500/50 rounded-2xl shadow-xl flex flex-col justify-between space-y-4\">"
+  },
+  {
+    "file": "docs/qa/index.html",
+    "lineNum": 254,
+    "text": "Deep domain-by-domain audit of CPU instruction execution, memory banking, Applesoft BASIC ROM ($D000–$F7FF), System Monitor ($F800–$FFFF), and Disk II firmware ($C600). Eliminates JavaScript HLL simulation to make the 65C02 CPU the sole execution engine."
+  },
+  {
+    "file": "docs/qa/index.html",
+    "lineNum": 327,
+    "text": "\"Bird Brain\" Applesoft BASIC Extraction &amp; Browser QA Report"
+  },
+  {
+    "file": "docs/qa/index.html",
+    "lineNum": 361,
+    "text": "<span class=\"text-gray-400 text-[11px]\">Runs 22 automated Type-In Transcriber &amp; Applesoft BASIC verification tests</span>"
+  },
+  {
+    "file": "docs/qa/index.html",
+    "lineNum": 375,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "docs/qa/bird-brain-qa-report.html",
+    "lineNum": 6,
+    "text": "<title>QA Report: \"Bird Brain\" Applesoft BASIC Extraction & Real Browser Execution</title>"
+  },
+  {
+    "file": "docs/qa/bird-brain-qa-report.html",
+    "lineNum": 34,
+    "text": "<p class=\"text-stone-400 text-sm mt-1\">Applesoft BASIC Extraction, Real Headless Browser Execution & Shape Table Analysis</p>"
+  },
+  {
+    "file": "docs/qa/bird-brain-qa-report.html",
+    "lineNum": 56,
+    "text": "The Applesoft BASIC video game <strong class=\"text-amber-300\">\"Bird Brain\"</strong> (by Craig Blazakis &amp; the HCM Staff, published in <em>Home Computer Magazine</em>, Vol. 4, No. 5) has been fully verified and executed end-to-end inside the <strong class=\"text-cyan-300\">Virtual 6502 Ultra Workstation</strong>. Execution was conducted strictly via <strong class=\"text-emerald-400\">Headless Chromium / Microsoft Edge automation (CDP)</strong> through authentic DOM keyboard events and real-time 6502 Ultra video memory rasterization."
+  },
+  {
+    "file": "docs/qa/bird-brain-qa-report.html",
+    "lineNum": 175,
+    "text": "<span class=\"font-bold text-sm text-amber-400 font-mono\">1. Applesoft Print Tokenizer &amp; TAB(...) Concatenation Without Semicolons</span>"
+  },
+  {
+    "file": "docs/qa/bird-brain-qa-report.html",
+    "lineNum": 179,
+    "text": "<strong>Defect Description:</strong> In vintage Applesoft BASIC, string literals immediately following <code class=\"text-cyan-300\">TAB(5)</code> or <code class=\"text-cyan-300\">SPC(8)</code> without an explicit semicolon (e.g. <code class=\"text-amber-300\">PRINT TAB( 5)\"(K)EYBOARD OR (J)OYSTICK?\"</code>) are valid. The emulator's original print expression tokenizer split only on <code class=\"text-cyan-300\">;</code> and <code class=\"text-cyan-300\">,</code>, grouping <code class=\"text-cyan-300\">TAB( 5)\"...\"</code> into a single unparseable expression that returned empty text."
+  },
+  {
+    "file": "docs/qa/bird-brain-qa-report.html",
+    "lineNum": 223,
+    "text": "<strong>Implementation:</strong> Normalization added to <code class=\"text-cyan-300\">typeChar()</code> to ensure lowercase physical keypresses (<code class=\"text-amber-300\">'k'</code>, <code class=\"text-amber-300\">'y'</code>, <code class=\"text-amber-300\">'1'</code>) are correctly pushed to the keyboard FIFO queue and translated to uppercase for Applesoft <code class=\"text-cyan-300\">GET var$</code> and <code class=\"text-cyan-300\">PEEK(-16384)</code> hardware softswitch queries."
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 96,
+    "text": "• 12KB Applesoft BASIC ROM at <code class=\"text-cyan-300\">$D000–$F7FF</code> executes entirely on the 65C02 CPU.<br>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 204,
+    "text": "• <strong class=\"text-red-300\">Defect:</strong> When vintage programs call <code class=\"text-stone-400\">HPLOT</code> or <code class=\"text-stone-400\">XDRAW</code>, the CPU is not executing the Applesoft ROM graphics algorithms; JavaScript is doing the math."
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 210,
+    "text": "• 65C02 executes Applesoft ROM routines: <code class=\"text-cyan-300\">HPLOT0 ($F457)</code>, <code class=\"text-cyan-300\">HLIN ($F53A)</code>, <code class=\"text-cyan-300\">XDRAW ($F65D)</code>, <code class=\"text-cyan-300\">DRAW ($F601)</code>.<br>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 237,
+    "text": "<li><strong class=\"text-amber-300\">$D000–$F7FF (10,240 bytes):</strong> Applesoft BASIC 6502 Interpreter (full token table, evaluator, math pack, HGR/LORES graphics engine).</li>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 238,
+    "text": "<li><strong class=\"text-amber-300\">$F800–$FFFF (2,048 bytes):</strong> Apple IIc System Monitor &amp; Autostart ROM (Reset vectors, KEYIN, GETLN, COUT, memory inspection).</li>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 259,
+    "text": "<!-- Full Apple II Memory Map Reference -->"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 263,
+    "text": "<h2 class=\"text-lg font-bold text-amber-400\">Era-Accurate 64KB Apple II Memory Architecture Map</h2>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 280,
+    "text": "<td class=\"p-2.5\">Zero Page (Applesoft pointers, FAC1 floating point, cursor positions)</td>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 292,
+    "text": "<td class=\"p-2.5\">Monitor / Applesoft Line Input Buffer (GETLN)</td>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 310,
+    "text": "<td class=\"p-2.5\">Applesoft BASIC Program Memory ($0801 TXTTAB)</td>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 346,
+    "text": "<td class=\"p-2.5\">Applesoft BASIC Interpreter ROM (or Language Card RAM)</td>"
+  },
+  {
+    "file": "docs/qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 352,
+    "text": "<td class=\"p-2.5\">Apple II System Monitor &amp; Reset Vectors ($FFFC)</td>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 6,
+    "text": "<title>QA Validation Report: Magazine Type-In Transcriber & Applesoft BASIC CPU Execution</title>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 44,
+    "text": "<p class=\"text-stone-400 text-sm mt-1\">Exhaustive Audit, Defect Analysis, and Verification of All Vintage Listings &amp; Applesoft Execution Engine</p>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 66,
+    "text": "A comprehensive end-to-end investigation and automated audit was executed across all vintage listings in the <strong class=\"text-amber-300\">Magazine Type-In Transcriber</strong> and the underlying <strong class=\"text-cyan-300\">65C02 Applesoft BASIC Execution Engine</strong>. All identified failure modes—including single-line <code class=\"text-stone-400\">REM</code> collapse, missing <code class=\"text-stone-400\">DIM</code> &amp; array indexing, missing <code class=\"text-stone-400\">INPUT</code> statement, monitor hex dump parsing confusion, and quotation mark string concatenation—have been systematically resolved, verified with automated test suites, and validated on live Apple II physical video RAM."
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 116,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC</div>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 150,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC with Arrays</div>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 184,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC Physics Sim</div>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 221,
+    "text": "<div><strong class=\"text-stone-400\">Program Execution:</strong> <span class=\"text-emerald-400\">Yes, CPU executes JSR $FDED (COUT) to print \"APPLE\" via ROM.</span></div>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 235,
+    "text": "<div class=\"text-amber-400 font-bold\">APPLE</div>"
+  },
+  {
+    "file": "docs/qa/type-in-transcriber-qa-report.html",
+    "lineNum": 254,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC + Shape Tables &amp; Assembly Sound</div>"
+  },
+  {
+    "file": "docs/qa/emulator-performance-and-dom-responsiveness-qa-report.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "docs/qa/emulator-performance-and-dom-responsiveness-qa-report.html",
+    "lineNum": 416,
+    "text": "In real Apple //c hardware, the 65C02 CPU never renders pixels to the screen. The CPU merely writes bytes to RAM ($2000–$3FFF for Hi-Res Page 1), and a dedicated hardware video scanner independently reads VRAM at 60 Hz to generate the NTSC/RGB video beam."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 80,
+    "text": "<td class=\"p-3 text-gray-200\">80s Vintage Home Computing &amp; Apple II Color Schemes</td>"
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 153,
+    "text": "<h3 class=\"text-base font-bold text-white mt-1\">UX Design Proposals: 80s Vintage Home Computing &amp; Apple II Color Schemes</h3>"
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 173,
+    "text": "<strong>Homage:</strong> Original Apple II / II Plus matte warm beige casing (<code class=\"text-amber-300\">#EFE8D8</code>), sculpted dark brown keycaps (<code class=\"text-amber-200\">#3E322A</code>), and the famous 6-color rainbow spectrum accent stripe."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 190,
+    "text": "<strong>Homage:</strong> Hartmut Esslinger’s <em>Frogdesign Snow White</em> language for the Apple //c. Clean off-white platinum panels (<code class=\"text-cyan-300\">#E2E4E0</code>), 2mm vertical ventilation louvers, and subtle recessed control bays."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 207,
+    "text": "<strong>Homage:</strong> Late-night machine code hacking on Double Hi-Res graphics. Deep graphite dark studio (<code class=\"text-emerald-300\">#0D1117</code>) with color-coded studio bays mapped to the 16 Apple II DHGR palettes."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 327,
+    "text": "<li><strong>Zero Silhouette Conflict:</strong> Does not use any apple, fruit, or bite silhouette; purely geometric silicon architecture.</li>"
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 416,
+    "text": "Under US Trademark Law (e.g. <em>New Kids on the Block v. News America Publishing, Inc.</em>, 971 F.2d 302), referencing a trademarked product name (such as <em>Apple II</em>, <em>ImageWriter</em>, or <em>Mockingboard</em>) is protected under <strong>Nominative Fair Use</strong> when:"
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 422,
+    "text": "<strong>Remedy Applied:</strong> We replaced all actionable product branding instances (e.g., using \"Apple II Ultra\" as a proprietary software brand) with clean-room descriptive terms: <code class=\"text-amber-300\">65C02 Ultra Workstation (Compatible with Apple //c Architecture)</code>. All peripheral cards are categorized by hardware function with compatibility descriptors (e.g., <em>\"9-Pin Dot-Matrix Tractor-Feed Printer (Compatible with ImageWriter II Protocol)\"</em>), and trademark disclaimers have been verified on all document footers."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 475,
+    "text": "<strong>Case Study 3 Domain 1 Completeness:</strong> Added inline, full code demonstrations for <strong>Domain 1 (65C02 Program Code)</strong> in Applesoft BASIC, 65C02 Machine Code Assembly, and C# .NET to run side-by-side with Domain 2 (JavaScript Sandbox Card) and Domain 3 (Host Process Daemon)."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 554,
+    "text": "<strong>Hardware Profiles &amp; URLs:</strong> Added complete technical background and official documentation links for all major Apple II transfer hardware devices:"
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 563,
+    "text": "<strong>Pipeline Expansion &amp; Resource Limits:</strong> Expanded deployment instructions to cover Applesoft BASIC programs, 65C02 Machine Code binaries, System ROMs, and Type-In listings. Added a mandatory <strong>Hardware Resource Pre-Flight Matrix</strong> detailing physical limits (128KB physical base RAM vs 1MB/16MB Slinky RAM, 1.023 MHz real CPU speed vs 50 MHz Turbo, physical expansion slot availability)."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 635,
+    "text": "Apple, Apple II, Apple //c, ProDOS, ImageWriter, Disk II, and Applesoft are registered trademarks of Apple Inc."
+  },
+  {
+    "file": "docs/qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 636,
+    "text": "This educational workstation is an independent clean-room emulator compatible with Apple //c architecture."
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 262,
+    "text": "<td>Text Page 1 Row 0 ($0400), High-bit ASCII 'APPLE'</td>"
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 263,
+    "text": "<td>Word \"APPLE\" appears immediately at columns 10-14</td>"
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 325,
+    "text": "<td>C# <code>File.WriteAllText</code> / Java <code>AppleStorage</code></td>"
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 375,
+    "text": "<td>Applesoft PEEK returns live Celsius temperature</td>"
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 412,
+    "text": "<strong>Fix Applied:</strong> Expanded input buffer capacity to <strong>239 characters</strong> (authentic Applesoft GETLN limit), implemented multi-row wrapping in <code>renderCurrentInput(showCursor)</code> across 40-column boundaries with scroll-up safety, fixed <code>backspace()</code> to clear vacated rows, and updated <code>handleReturn()</code> to advance cursor rows based on wrapped line count."
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 446,
+    "text": "<strong>Fix Applied:</strong> Explicitly initialized <code>this.basicVars = {}</code> and <code>this.basicForLoops = {}</code> in both the <code>constructor()</code> and <code>reset()</code> methods of <code>Apple2cEmulator</code>."
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 474,
+    "text": "<strong>Symptom:</strong> When the user typed <code>CALL -151</code> or <code>CALL 65385</code>, the emulator did nothing and remained in Applesoft BASIC without displaying the monitor prompt (<code>* █</code>)."
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 497,
+    "text": "<strong>Fix Applied:</strong> Hooked instruction execution of <code>$FDED</code> in <code>Apple2cEmulator.execute65C02()</code> directly to <code>this.typeChar(String.fromCharCode(this.cpu.a & 0x7F))</code>, enabling seamless string printing in raw assembly programs."
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 541,
+    "text": "Verified: CMOS STZ opcodes cleanly zeroed $06 and $0800; 3D0G restored Applesoft prompt."
+  },
+  {
+    "file": "qa/tutorial-lab-qa-report.html",
+    "lineNum": 582,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 11,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 117,
+    "text": "Comprehensive validation of every functional subsystem in the enhanced Apple //c Web Workstation. This report documents full-stack compilation and runtime traces for <strong>C# .NET CLR Ahead-Of-Time</strong> arcade engineering, <strong>Java OOP bytecode lowering</strong>, vintage <strong>Compute!, inCider & Nibble magazine type-in programs</strong>, raw <strong>65C02 assembly hex injections</strong>, and bidirectional <strong>clipboard / keyboard / mouse hardware mappings</strong>."
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 181,
+    "text": "<td class=\"py-2.5 px-3 text-amber-300\">Applesoft Mode ($0801)</td>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 201,
+    "text": "<td class=\"py-2.5 px-3\">Raw Monitor Dump: Apple String Out ($0300)</td>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 208,
+    "text": "<td class=\"py-2.5 px-3\">Paste event, Key Strobe $C000, Open/Closed Apple, Mouse</td>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 392,
+    "text": "Java OOP Execution on Apple IIc Video & Audio Hardware"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 410,
+    "text": "; Apple2.clearScreen(Apple2.BLACK)"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 417,
+    "text": "; Apple2.drawString(\"JAVA VM RUNNING...\")"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 427,
+    "text": "; Apple2.beep(440, 200)"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 544,
+    "text": "<h3 class=\"text-base font-bold text-white mt-1\">Raw 65C02 Machine Code Monitor Injection ($0300: Apple String Out)</h3>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 578,
+    "text": "$0310: \"APPLE IIc Ultra\""
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 590,
+    "text": "<div>• <span class=\"text-emerald-400 font-bold\">Output:</span> \"APPLE IIc Ultra\"</div>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 626,
+    "text": "<li>• <strong> Open Apple (Alt):</strong> Reads $C061 (Bit 7)</li>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 627,
+    "text": "<li>• <strong> Closed Apple (Ctrl):</strong> Reads $C062 (Bit 7)</li>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 639,
+    "text": "<li>• <strong>Coordinate Mapping:</strong> 0..255 (Apple II)</li>"
+  },
+  {
+    "file": "qa/test-report.html",
+    "lineNum": 657,
+    "text": "Every function across CPU65C02, Apple2cMMU, Apple2cVideo, Audio, Storage, and Runtimes adheres to <strong>Single Responsibility (SRP)</strong>, contains <strong>Cyclomatic Complexity ≤ 7</strong>, and follows clean Object-Oriented patterns:"
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 18,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 111,
+    "text": "This document provides an exhaustive, step-by-step verification checklist for manual and automated user testing of the 65C02 Ultra Workstation (Compatible with Apple //c Architecture). Use this runbook to validate top bezel controls, CRT phosphors, fullscreen immersion, clipboard paste with live character toasts, fly-up 63-key matrix keyboard, ImageWriter II continuous tractor printer (with 5 paper stocks, dot-matrix fonts, form feed, buffer clear &amp; zero-blank-page PDF export), 7-slot expansion bus, universal JS card sandbox, Java &amp; C# AOT compilers, magazine type-in transcriber, CPU disassembly monitor, custom ROM studio, and legal fair-use compliance prior to deployment."
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 195,
+    "text": "<strong>1.1 Initial Boot Verification:</strong> Open <a href=\"../index-standalone.html\" target=\"_blank\" class=\"text-amber-400 underline font-mono\">index-standalone.html</a> directly in Google Chrome, Microsoft Edge, or Mozilla Firefox. Confirm the monitor displays <code>65C02 ULTRA WORKSTATION (50 MHz TURBO)</code> on Row 0, nominative fair use subtext (*\"Compatible with Apple //c Architecture\"*), and a blinking green cursor prompt <code>] █</code> on Row 2."
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 216,
+    "text": "<strong>1.4 Clock Speed Throttling (Top Bezel Dropdown):</strong> In the top bezel speed dropdown, select <code>1.02 MHz (Vintage 1984)</code>, <code>2.80 MHz (Apple IIGS)</code>, <code>8.00 MHz (ZipChip)</code>, and <code>50.0 MHz (Ultra Turbo)</code>. Verify smooth speed transitions with zero UI distortion."
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 284,
+    "text": "<span class=\"text-xs text-stone-400\">Validates physical keystrokes, bottom fly-up matrix drawer, Caps Lock, 40/80 switch, Open/Solid Apple modifiers, and strobe ($C000).</span>"
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 309,
+    "text": "<strong>3.3 Matrix Key Clicks &amp; Modifiers:</strong> Click virtual keys on the matrix (e.g. <code>H</code>, <code>O</code>, <code>M</code>, <code>E</code>, <code>RETURN</code>). Test the <strong>Caps Lock</strong> key, <strong>40/80 Col</strong> switch, <strong>Open Apple (⌘)</strong>, <strong>Solid Apple (⌥)</strong>, and arrow keys. Verify that HOME clears the screen and moves the cursor to row 0."
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 530,
+    "text": "<strong>7.4 65C02 Hex Dump Injection ($300):</strong> Load <code>65C02 Hex Dump ($300)</code> and inject. Confirm the machine code routine prints <code>APPLE</code> via standard ROM COUT ($FDED)."
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 631,
+    "text": "<strong>10.2 Legal Trademark Fair-Use Compliance:</strong> Verify the application clearly displays <code>65C02 Ultra Workstation</code> with the nominative fair use subtitle (<em>\"Compatible with Apple //c Architecture\"</em>) and contains appropriate educational disclaimers."
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 666,
+    "text": "<span class=\"text-emerald-400 font-bold\">apple2c.ianohlander.com</span>"
+  },
+  {
+    "file": "qa/uat-test-runbook.html",
+    "lineNum": 684,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "qa/qa-architecture.html",
+    "lineNum": 15,
+    "text": "font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;"
+  },
+  {
+    "file": "qa/qa-architecture.html",
+    "lineNum": 122,
+    "text": "📦 Suite: Apple II Video: Address Mapping"
+  },
+  {
+    "file": "qa/qa-architecture.html",
+    "lineNum": 126,
+    "text": "📦 Suite: Apple II Storage: Floppy GCR & 32MB SmartPort HD"
+  },
+  {
+    "file": "qa/qa-architecture.html",
+    "lineNum": 130,
+    "text": "📦 Suite: Apple IIc MMU: Memory Banking & Slinky 1MB Expansion"
+  },
+  {
+    "file": "qa/qa-architecture.html",
+    "lineNum": 139,
+    "text": "✅ Detect Applesoft BASIC vs Monitor Hex Dump Mode (0.62ms)"
+  },
+  {
+    "file": "qa/index.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif; background-color: #0b0e14; color: #e6edf3; }"
+  },
+  {
+    "file": "qa/index.html",
+    "lineNum": 65,
+    "text": "This portal contains the complete internal engineering register, automated test suites, UAT runbooks, and architectural audits for the 65C02 Ultra Workstation (Compatible with Apple //c Architecture). All dated QA feedback registers, performance profiling diagnostics, and clean-room ROM verification documents are consolidated here for core maintainers and contributors."
+  },
+  {
+    "file": "qa/index.html",
+    "lineNum": 242,
+    "text": "<a href=\"apple2-cpu-rom-architecture-audit.html\" class=\"card-hover p-6 bg-[#121722] border border-red-500/50 rounded-2xl shadow-xl flex flex-col justify-between space-y-4\">"
+  },
+  {
+    "file": "qa/index.html",
+    "lineNum": 254,
+    "text": "Deep domain-by-domain audit of CPU instruction execution, memory banking, Applesoft BASIC ROM ($D000–$F7FF), System Monitor ($F800–$FFFF), and Disk II firmware ($C600). Eliminates JavaScript HLL simulation to make the 65C02 CPU the sole execution engine."
+  },
+  {
+    "file": "qa/index.html",
+    "lineNum": 327,
+    "text": "\"Bird Brain\" Applesoft BASIC Extraction &amp; Browser QA Report"
+  },
+  {
+    "file": "qa/index.html",
+    "lineNum": 361,
+    "text": "<span class=\"text-gray-400 text-[11px]\">Runs 22 automated Type-In Transcriber &amp; Applesoft BASIC verification tests</span>"
+  },
+  {
+    "file": "qa/index.html",
+    "lineNum": 375,
+    "text": "<div class=\"mt-2 text-stone-400 font-bold\">© 2026 Ian Ohlander. All rights reserved. Compatible with Apple //c Architecture.</div>"
+  },
+  {
+    "file": "qa/bird-brain-qa-report.html",
+    "lineNum": 6,
+    "text": "<title>QA Report: \"Bird Brain\" Applesoft BASIC Extraction & Real Browser Execution</title>"
+  },
+  {
+    "file": "qa/bird-brain-qa-report.html",
+    "lineNum": 34,
+    "text": "<p class=\"text-stone-400 text-sm mt-1\">Applesoft BASIC Extraction, Real Headless Browser Execution & Shape Table Analysis</p>"
+  },
+  {
+    "file": "qa/bird-brain-qa-report.html",
+    "lineNum": 56,
+    "text": "The Applesoft BASIC video game <strong class=\"text-amber-300\">\"Bird Brain\"</strong> (by Craig Blazakis &amp; the HCM Staff, published in <em>Home Computer Magazine</em>, Vol. 4, No. 5) has been fully verified and executed end-to-end inside the <strong class=\"text-cyan-300\">Virtual 6502 Ultra Workstation</strong>. Execution was conducted strictly via <strong class=\"text-emerald-400\">Headless Chromium / Microsoft Edge automation (CDP)</strong> through authentic DOM keyboard events and real-time 6502 Ultra video memory rasterization."
+  },
+  {
+    "file": "qa/bird-brain-qa-report.html",
+    "lineNum": 175,
+    "text": "<span class=\"font-bold text-sm text-amber-400 font-mono\">1. Applesoft Print Tokenizer &amp; TAB(...) Concatenation Without Semicolons</span>"
+  },
+  {
+    "file": "qa/bird-brain-qa-report.html",
+    "lineNum": 179,
+    "text": "<strong>Defect Description:</strong> In vintage Applesoft BASIC, string literals immediately following <code class=\"text-cyan-300\">TAB(5)</code> or <code class=\"text-cyan-300\">SPC(8)</code> without an explicit semicolon (e.g. <code class=\"text-amber-300\">PRINT TAB( 5)\"(K)EYBOARD OR (J)OYSTICK?\"</code>) are valid. The emulator's original print expression tokenizer split only on <code class=\"text-cyan-300\">;</code> and <code class=\"text-cyan-300\">,</code>, grouping <code class=\"text-cyan-300\">TAB( 5)\"...\"</code> into a single unparseable expression that returned empty text."
+  },
+  {
+    "file": "qa/bird-brain-qa-report.html",
+    "lineNum": 223,
+    "text": "<strong>Implementation:</strong> Normalization added to <code class=\"text-cyan-300\">typeChar()</code> to ensure lowercase physical keypresses (<code class=\"text-amber-300\">'k'</code>, <code class=\"text-amber-300\">'y'</code>, <code class=\"text-amber-300\">'1'</code>) are correctly pushed to the keyboard FIFO queue and translated to uppercase for Applesoft <code class=\"text-cyan-300\">GET var$</code> and <code class=\"text-cyan-300\">PEEK(-16384)</code> hardware softswitch queries."
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 96,
+    "text": "• 12KB Applesoft BASIC ROM at <code class=\"text-cyan-300\">$D000–$F7FF</code> executes entirely on the 65C02 CPU.<br>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 204,
+    "text": "• <strong class=\"text-red-300\">Defect:</strong> When vintage programs call <code class=\"text-stone-400\">HPLOT</code> or <code class=\"text-stone-400\">XDRAW</code>, the CPU is not executing the Applesoft ROM graphics algorithms; JavaScript is doing the math."
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 210,
+    "text": "• 65C02 executes Applesoft ROM routines: <code class=\"text-cyan-300\">HPLOT0 ($F457)</code>, <code class=\"text-cyan-300\">HLIN ($F53A)</code>, <code class=\"text-cyan-300\">XDRAW ($F65D)</code>, <code class=\"text-cyan-300\">DRAW ($F601)</code>.<br>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 237,
+    "text": "<li><strong class=\"text-amber-300\">$D000–$F7FF (10,240 bytes):</strong> Applesoft BASIC 6502 Interpreter (full token table, evaluator, math pack, HGR/LORES graphics engine).</li>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 238,
+    "text": "<li><strong class=\"text-amber-300\">$F800–$FFFF (2,048 bytes):</strong> Apple IIc System Monitor &amp; Autostart ROM (Reset vectors, KEYIN, GETLN, COUT, memory inspection).</li>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 259,
+    "text": "<!-- Full Apple II Memory Map Reference -->"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 263,
+    "text": "<h2 class=\"text-lg font-bold text-amber-400\">Era-Accurate 64KB Apple II Memory Architecture Map</h2>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 280,
+    "text": "<td class=\"p-2.5\">Zero Page (Applesoft pointers, FAC1 floating point, cursor positions)</td>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 292,
+    "text": "<td class=\"p-2.5\">Monitor / Applesoft Line Input Buffer (GETLN)</td>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 310,
+    "text": "<td class=\"p-2.5\">Applesoft BASIC Program Memory ($0801 TXTTAB)</td>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 346,
+    "text": "<td class=\"p-2.5\">Applesoft BASIC Interpreter ROM (or Language Card RAM)</td>"
+  },
+  {
+    "file": "qa/apple2-cpu-rom-architecture-audit.html",
+    "lineNum": 352,
+    "text": "<td class=\"p-2.5\">Apple II System Monitor &amp; Reset Vectors ($FFFC)</td>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 6,
+    "text": "<title>QA Validation Report: Magazine Type-In Transcriber & Applesoft BASIC CPU Execution</title>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 44,
+    "text": "<p class=\"text-stone-400 text-sm mt-1\">Exhaustive Audit, Defect Analysis, and Verification of All Vintage Listings &amp; Applesoft Execution Engine</p>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 66,
+    "text": "A comprehensive end-to-end investigation and automated audit was executed across all vintage listings in the <strong class=\"text-amber-300\">Magazine Type-In Transcriber</strong> and the underlying <strong class=\"text-cyan-300\">65C02 Applesoft BASIC Execution Engine</strong>. All identified failure modes—including single-line <code class=\"text-stone-400\">REM</code> collapse, missing <code class=\"text-stone-400\">DIM</code> &amp; array indexing, missing <code class=\"text-stone-400\">INPUT</code> statement, monitor hex dump parsing confusion, and quotation mark string concatenation—have been systematically resolved, verified with automated test suites, and validated on live Apple II physical video RAM."
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 116,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC</div>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 150,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC with Arrays</div>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 184,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC Physics Sim</div>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 221,
+    "text": "<div><strong class=\"text-stone-400\">Program Execution:</strong> <span class=\"text-emerald-400\">Yes, CPU executes JSR $FDED (COUT) to print \"APPLE\" via ROM.</span></div>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 235,
+    "text": "<div class=\"text-amber-400 font-bold\">APPLE</div>"
+  },
+  {
+    "file": "qa/type-in-transcriber-qa-report.html",
+    "lineNum": 254,
+    "text": "<div><strong class=\"text-stone-400\">Language:</strong> Applesoft BASIC + Shape Tables &amp; Assembly Sound</div>"
+  },
+  {
+    "file": "qa/emulator-performance-and-dom-responsiveness-qa-report.html",
+    "lineNum": 14,
+    "text": "body { font-family: 'Inter', -apple-system, sans-serif; background-color: #080b10; color: #e6edf3; }"
+  },
+  {
+    "file": "qa/emulator-performance-and-dom-responsiveness-qa-report.html",
+    "lineNum": 416,
+    "text": "In real Apple //c hardware, the 65C02 CPU never renders pixels to the screen. The CPU merely writes bytes to RAM ($2000–$3FFF for Hi-Res Page 1), and a dedicated hardware video scanner independently reads VRAM at 60 Hz to generate the NTSC/RGB video beam."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 80,
+    "text": "<td class=\"p-3 text-gray-200\">80s Vintage Home Computing &amp; Apple II Color Schemes</td>"
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 153,
+    "text": "<h3 class=\"text-base font-bold text-white mt-1\">UX Design Proposals: 80s Vintage Home Computing &amp; Apple II Color Schemes</h3>"
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 173,
+    "text": "<strong>Homage:</strong> Original Apple II / II Plus matte warm beige casing (<code class=\"text-amber-300\">#EFE8D8</code>), sculpted dark brown keycaps (<code class=\"text-amber-200\">#3E322A</code>), and the famous 6-color rainbow spectrum accent stripe."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 190,
+    "text": "<strong>Homage:</strong> Hartmut Esslinger’s <em>Frogdesign Snow White</em> language for the Apple //c. Clean off-white platinum panels (<code class=\"text-cyan-300\">#E2E4E0</code>), 2mm vertical ventilation louvers, and subtle recessed control bays."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 207,
+    "text": "<strong>Homage:</strong> Late-night machine code hacking on Double Hi-Res graphics. Deep graphite dark studio (<code class=\"text-emerald-300\">#0D1117</code>) with color-coded studio bays mapped to the 16 Apple II DHGR palettes."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 327,
+    "text": "<li><strong>Zero Silhouette Conflict:</strong> Does not use any apple, fruit, or bite silhouette; purely geometric silicon architecture.</li>"
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 416,
+    "text": "Under US Trademark Law (e.g. <em>New Kids on the Block v. News America Publishing, Inc.</em>, 971 F.2d 302), referencing a trademarked product name (such as <em>Apple II</em>, <em>ImageWriter</em>, or <em>Mockingboard</em>) is protected under <strong>Nominative Fair Use</strong> when:"
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 422,
+    "text": "<strong>Remedy Applied:</strong> We replaced all actionable product branding instances (e.g., using \"Apple II Ultra\" as a proprietary software brand) with clean-room descriptive terms: <code class=\"text-amber-300\">65C02 Ultra Workstation (Compatible with Apple //c Architecture)</code>. All peripheral cards are categorized by hardware function with compatibility descriptors (e.g., <em>\"9-Pin Dot-Matrix Tractor-Feed Printer (Compatible with ImageWriter II Protocol)\"</em>), and trademark disclaimers have been verified on all document footers."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 475,
+    "text": "<strong>Case Study 3 Domain 1 Completeness:</strong> Added inline, full code demonstrations for <strong>Domain 1 (65C02 Program Code)</strong> in Applesoft BASIC, 65C02 Machine Code Assembly, and C# .NET to run side-by-side with Domain 2 (JavaScript Sandbox Card) and Domain 3 (Host Process Daemon)."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 554,
+    "text": "<strong>Hardware Profiles &amp; URLs:</strong> Added complete technical background and official documentation links for all major Apple II transfer hardware devices:"
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 563,
+    "text": "<strong>Pipeline Expansion &amp; Resource Limits:</strong> Expanded deployment instructions to cover Applesoft BASIC programs, 65C02 Machine Code binaries, System ROMs, and Type-In listings. Added a mandatory <strong>Hardware Resource Pre-Flight Matrix</strong> detailing physical limits (128KB physical base RAM vs 1MB/16MB Slinky RAM, 1.023 MHz real CPU speed vs 50 MHz Turbo, physical expansion slot availability)."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 635,
+    "text": "Apple, Apple II, Apple //c, ProDOS, ImageWriter, Disk II, and Applesoft are registered trademarks of Apple Inc."
+  },
+  {
+    "file": "qa/qa-feedback-report-2026-09-10.html",
+    "lineNum": 636,
+    "text": "This educational workstation is an independent clean-room emulator compatible with Apple //c architecture."
+  }
+]

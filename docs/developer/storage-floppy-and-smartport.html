@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. Apple //c Ultra Architecture. -->
+<!-- Watermark: Copyright (c) 2026 Ian Ohlander. All rights reserved. 65C02 Ultra Workstation. -->
   <meta name="author" content="Ian Ohlander">
   <meta name="copyright" content="© 2026 Ian Ohlander. All rights reserved.">
-  <meta name="generator" content="Apple //c Ultra - Ian Ohlander (2026)">
+  <meta name="generator" content="65C02 Ultra Workstation - Ian Ohlander (2026)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Storage Architecture & SmartPort 32MB HD — Apple //c Ultra Developer Guide</title>
+  <title>Storage Architecture & SmartPort 32MB HD — 6502 Ultra Developer Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -55,7 +55,7 @@
         <span class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Tier-1 Storage Engine</span>
       </div>
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra features a unified, multi-tier storage architecture bridging vintage physical media with high-capacity mass storage: from Steve Wozniak's revolutionary <strong>6-and-2 Group Code Recording (GCR)</strong> 5.25" floppy controller, through the <strong>Apple SmartPort 32MB virtual hard disk</strong> partition protocol ($65,536$ contiguous 512-byte blocks), to the ultra-fast <strong>Slinky 1MB Auxiliary RAM Disk</strong> and managed object-oriented file persistence in <strong>C# .NET</strong> and <strong>Java 17</strong>.
+        The 6502 Ultra features a unified, multi-tier storage architecture bridging vintage physical media with high-capacity mass storage: from Steve Wozniak's revolutionary <strong>6-and-2 Group Code Recording (GCR)</strong> 5.25" floppy controller, through the <strong>Apple SmartPort 32MB virtual hard disk</strong> partition protocol ($65,536$ contiguous 512-byte blocks), to the ultra-fast <strong>Slinky 1MB Auxiliary RAM Disk</strong> and managed object-oriented file persistence in <strong>C# .NET</strong> and <strong>Java 17</strong>.
       </p>
     </div>
 
@@ -73,7 +73,7 @@
           <!-- Top Layer: Managed OOP APIs -->
           <rect x="30" y="20" width="860" height="50" rx="6" fill="#161e2e" stroke="#3b82f6" stroke-width="1.5" />
           <text x="460" y="42" fill="#93c5fd" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">High-Level Application Layer: C# .NET Core &amp; Java 17 Runtimes</text>
-          <text x="460" y="58" fill="#cbd5e1" font-size="9" text-anchor="middle" font-family="monospace">System.IO.File.ReadAllText() • java.io.File • Apple2.Ultra.AppleStorage.WriteBlock() • apple2.hardware.AppleStorage</text>
+          <text x="460" y="58" fill="#cbd5e1" font-size="9" text-anchor="middle" font-family="monospace">System.IO.File.ReadAllText() • java.io.File • Apple2.Ultra.StorageCore.WriteBlock() • apple2.hardware.StorageCore</text>
 
           <!-- Middle Layer: ProDOS MLI & Dispatcher -->
           <rect x="30" y="90" width="860" height="55" rx="6" fill="#14231b" stroke="#10b981" stroke-width="1.5" />
@@ -228,7 +228,7 @@ const uint8_t GCR_ENCODE_TABLE[64] = {
       <div class="space-y-3">
         <h3 class="text-lg font-bold text-white">4-Phase Stepper Motor Head Positioning Logic ($C0EC..$C0EF)</h3>
         <p class="text-gray-300 text-xs leading-relaxed">
-          The read/write head is actuated by a 4-phase unipolar stepper motor. The Apple //c motherboard addresses the motor phases via softswitches located at <code>$C0E0..$C0E7</code> (or Slot 6 standard <code>$C0EC..$C0EF</code>):
+          The read/write head is actuated by a 4-phase unipolar stepper motor. The 6502 Ultra motherboard addresses the motor phases via softswitches located at <code>$C0E0..$C0E7</code> (or Slot 6 standard <code>$C0EC..$C0EF</code>):
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs font-mono">
@@ -290,7 +290,7 @@ const uint8_t GCR_ENCODE_TABLE[64] = {
       <h2 class="text-2xl font-extrabold text-white section-title">2. SmartPort 32MB Virtual Hard Disk &amp; ProDOS File Allocation</h2>
       
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra implements the extended Apple SmartPort firmware interface connected to a massive <strong>32 Megabyte virtual hard disk volume (/HD)</strong> in Slot 7. The volume contains <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 	imes 512 = 33,554,432	ext{ bytes}$).
+        The 6502 Ultra implements the extended Apple SmartPort firmware interface connected to a massive <strong>32 Megabyte virtual hard disk volume (/HD)</strong> in Slot 7. The volume contains <strong>65,536 contiguous 512-byte logical blocks</strong> ($65,536 	imes 512 = 33,554,432	ext{ bytes}$).
       </p>
 
       <!-- ProDOS Volume Structure Diagram -->
@@ -405,7 +405,7 @@ BCS I_O_ERROR   ; Branch if Carry set (Error in A)</code></pre>
       <h2 class="text-2xl font-extrabold text-white section-title">3. Slinky 1MB Auxiliary RAM Disk Architecture</h2>
       
       <p class="text-gray-300 text-sm leading-relaxed">
-        The Apple //c Ultra incorporates the famous <strong>Apple //c Memory Expansion Card ("Slinky")</strong> providing 1,048,576 bytes of fast banked memory. The hardware operates through 24-bit auto-incrementing address registers mapped at <code>$C0C8..$C0CB</code>:
+        The 6502 Ultra incorporates the famous <strong>6502 Ultra Memory Expansion Card ("Slinky")</strong> providing 1,048,576 bytes of fast banked memory. The hardware operates through 24-bit auto-incrementing address registers mapped at <code>$C0C8..$C0CB</code>:
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs font-mono">
@@ -449,7 +449,7 @@ PAGE_LOOP:
       <h2 class="text-2xl font-extrabold text-white section-title">4. Modern Managed Storage APIs (C# .NET &amp; Java 17) &amp; AOT Lowering</h2>
       
       <p class="text-gray-300 text-sm leading-relaxed">
-        Modern object-oriented programs compiled through the Apple //c Ultra AOT compiler can persist state and stream assets seamlessly using standard high-level file APIs and hardware block drivers:
+        Modern object-oriented programs compiled through the 6502 Ultra AOT compiler can persist state and stream assets seamlessly using standard high-level file APIs and hardware block drivers:
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
@@ -468,7 +468,7 @@ public class GameStateManager {
         byte[] buffer = new byte[512];
         buffer[0] = (byte)(score & 0xFF);
         buffer[1] = (byte)((score >> 8) & 0xFF);
-        AppleStorage.WriteBlock(AppleStorage.UnitSlot7Drive1, 100, buffer);
+        StorageCore.WriteBlock(StorageCore.UnitSlot7Drive1, 100, buffer);
     }
 }</code></pre>
         </div>
@@ -477,7 +477,7 @@ public class GameStateManager {
         <div class="p-4 bg-[#0a0e17] rounded-lg border border-[#21293a] space-y-3">
           <span class="text-emerald-400 font-bold block border-b border-[#21293a] pb-1">Java 17 Standard Storage Interface</span>
           <pre class="text-gray-300 overflow-x-auto"><code>import java.io.File;
-import apple2.hardware.AppleStorage;
+import apple2.hardware.StorageCore;
 
 public class TelemetryLogger {
     public static void recordSample(int temp, int pressure) {
@@ -489,7 +489,7 @@ public class TelemetryLogger {
         byte[] block = new byte[512];
         block[0] = (byte)temp;
         block[1] = (byte)pressure;
-        AppleStorage.writeBlock(AppleStorage.UNIT_SLOT7_DRIVE1, 200, block);
+        StorageCore.writeBlock(StorageCore.UNIT_SLOT7_DRIVE1, 200, block);
     }
 }</code></pre>
         </div>
@@ -551,7 +551,7 @@ public class TelemetryLogger {
             <span class="px-2 py-0.5 rounded text-[10px] bg-pink-950 text-pink-300 border border-pink-800">C# .NET &amp; AOT</span>
           </div>
           <p class="text-gray-300 text-xs">
-            <strong>Goal:</strong> Write a C# class with a static method that serializes player coordinates and health into a 512-byte block using <code>AppleStorage.WriteBlock</code> and compiles to native 65C02 assembly.
+            <strong>Goal:</strong> Write a C# class with a static method that serializes player coordinates and health into a 512-byte block using <code>StorageCore.WriteBlock</code> and compiles to native 65C02 assembly.
           </p>
         </div>
 
@@ -571,7 +571,7 @@ public class TelemetryLogger {
   </main>
 
   <footer class="bg-[#13171f] border-t border-[#2d333b] py-6 text-center text-xs text-gray-500 font-mono">
-    <a href="index.html" class="text-emerald-400 hover:underline">← Back to Developer Hub</a> • Apple //c Ultra Architecture
+    <a href="index.html" class="text-emerald-400 hover:underline">← Back to Developer Hub</a> • 65C02 Ultra Workstation
     <div class="mt-2 text-stone-400 font-bold">© 2026 Ian Ohlander. All rights reserved.</div>
   </footer>
 
