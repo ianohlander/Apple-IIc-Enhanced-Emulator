@@ -23,7 +23,7 @@ export class TextRenderer implements IVideoRenderer {
     for (let row = 0; row < 24; row++) {
       const base = TextRenderer.getTextRowAddress(row) + pageOffset;
       for (let col = 0; col < 40; col++) {
-        this.drawChar(data, ram[base + col], col * 14, row * 16, 2, charRom, flash);
+        this.drawChar(data, ram[base + col], col * 14, row * 16, 2, charRom, flash, mmu.sw.altCharset);
       }
     }
   }
@@ -36,25 +36,58 @@ export class TextRenderer implements IVideoRenderer {
     for (let row = 0; row < 24; row++) {
       const base = TextRenderer.getTextRowAddress(row) + pageOffset;
       for (let col = 0; col < 40; col++) {
-        this.drawChar(data, auxRAM[base + col], (col * 2) * 7, row * 16, 1, charRom, flash);
-        this.drawChar(data, mainRAM[base + col], (col * 2 + 1) * 7, row * 16, 1, charRom, flash);
+        this.drawChar(data, auxRAM[base + col], (col * 2) * 7, row * 16, 1, charRom, flash, mmu.sw.altCharset);
+        this.drawChar(data, mainRAM[base + col], (col * 2 + 1) * 7, row * 16, 1, charRom, flash, mmu.sw.altCharset);
       }
     }
   }
 
-  public drawChar(data: Uint8ClampedArray, code: number, x: number, y: number, scaleX: number, charRom: Uint8Array, flash: boolean): void {
-    const isInverse = this.checkInverse(code, flash);
+  public drawChar(
+    data: Uint8ClampedArray,
+    code: number,
+    x: number,
+    y: number,
+    scaleX: number,
+    charRom: Uint8Array,
+    flash: boolean,
+    altChar: boolean = false
+  ): void {
+    const { glyphIndex, isInverse } = this.decodeApple2ScreenCode(code, altChar, flash);
     const fg = isInverse ? 0 : 255;
     const bg = isInverse ? 255 : 0;
-    const glyphOffset = (code & 0x7f) * 8;
+    const glyphOffset = glyphIndex * 8;
 
     this.drawGlyphMatrix(data, x, y, scaleX, charRom, glyphOffset, fg, bg);
   }
 
-  private checkInverse(code: number, flash: boolean): boolean {
-    if (code < 0x40) return true;
-    if (code < 0x80) return flash;
-    return false;
+  public decodeApple2ScreenCode(
+    raw: number,
+    altChar: boolean,
+    flash: boolean
+  ): { glyphIndex: number; isInverse: boolean } {
+    raw &= 0xff;
+    if (raw < 0x80) {
+      return this.decodeLowScreenCode(raw, altChar, flash);
+    }
+    return this.decodeHighScreenCode(raw);
+  }
+
+  private decodeLowScreenCode(
+    raw: number,
+    altChar: boolean,
+    flash: boolean
+  ): { glyphIndex: number; isInverse: boolean } {
+    if (raw < 0x20) return { glyphIndex: raw + 0x40, isInverse: true };
+    if (raw < 0x40) return { glyphIndex: raw, isInverse: true };
+    if (raw < 0x60) {
+      return altChar ? { glyphIndex: raw, isInverse: false } : { glyphIndex: raw, isInverse: flash };
+    }
+    return altChar ? { glyphIndex: raw, isInverse: true } : { glyphIndex: raw - 0x40, isInverse: flash };
+  }
+
+  private decodeHighScreenCode(raw: number): { glyphIndex: number; isInverse: boolean } {
+    if (raw < 0xa0) return { glyphIndex: raw - 0x40, isInverse: false };
+    return { glyphIndex: raw - 0x80, isInverse: false };
   }
 
   private drawGlyphMatrix(data: Uint8ClampedArray, x: number, y: number, scaleX: number, charRom: Uint8Array, offset: number, fg: number, bg: number): void {

@@ -3,6 +3,7 @@ documentation for using disks
 	formatting and saving a new disk
 		dos/prodos
 	using applications with multiple disks
+remove all actionable Apple references in the source code as well as documentation
 
 For this QA feedback document, please generate a QA issue tracking number for each one. Please analyze and report on each issue and their fixes. Document in an HTML document in the QA folder dated to today. Organize the results document by each issue. I have subdivided the issues to Documentation and Emulator functionality. If the items need further organization principles or labels, use those. This will the first of many QA feed back documents.
 

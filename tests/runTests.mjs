@@ -1470,18 +1470,11 @@ runner.suite('Epyx World Games: Vorpal Fastloader & 8 Championship Events Simula
     assertEqual(data1A.slice(0, 4).toString('ascii'), 'WOZ2', 'Disk 1A has authentic WOZ2 container header');
   });
 
-  runner.test('Title Screen, Fanfare & 8 Playable Events Execution', () => {
+  runner.test('Native 65C02 CPU Boot Pipeline & Hardware Floppy Execution', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
-    assertTrue(html.includes('class Apple2cWorldGamesEngine'), 'Apple2cWorldGamesEngine defined in index-standalone.html');
+    assertTrue(!html.includes('class Apple2cWorldGamesEngine'), 'Mock Apple2cWorldGamesEngine purged from index-standalone.html in favor of pure 65C02');
     assertTrue(html.includes('launchWorldGames'), 'launchWorldGames method exposed on emulator');
-    assertTrue(html.includes('MEXICO: CLIFF DIVING'), 'Cliff Diving event present');
-    assertTrue(html.includes('RUSSIA: WEIGHTLIFTING'), 'Weightlifting event present');
-    assertTrue(html.includes('GERMANY: BARREL JUMPING'), 'Barrel Jumping event present');
-    assertTrue(html.includes('CANADA: LOG ROLLING'), 'Log Rolling event present');
-    assertTrue(html.includes('USA: BULL RIDING'), 'Bull Riding event present');
-    assertTrue(html.includes('JAPAN: SUMO WRESTLING'), 'Sumo Wrestling event present');
-    assertTrue(html.includes('FRANCE: SLALOM SKIING'), 'Slalom Skiing event present');
-    assertTrue(html.includes('SCOTLAND: CABER TOSS'), 'Caber Toss event present');
+    assertTrue(html.includes("preset === 'worldgames'"), 'World Games preset selection wired to native hardware boot');
   });
 });
 
@@ -1543,13 +1536,13 @@ runner.suite('Adventure Construction Set: EA Fastloader & 65C02 Boot Architectur
     assertEqual(disk1Data[sec0Offset + 0x6b], 0x4c, '$086B is JMP $E000 (Applesoft BASIC entry)');
   });
 
-  runner.test('Adventure Construction Set Engine & Workstation Verification', () => {
+  runner.test('Native 65C02 CPU Boot Pipeline & Preset Mount Verification', () => {
     const htmlPath = path.join(__dirname, '..', 'index-standalone.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
-    assertTrue(html.includes('class Apple2cAdventureConstructionSetEngine'), 'Apple2cAdventureConstructionSetEngine defined in index-standalone.html');
+    assertTrue(!html.includes('class Apple2cAdventureConstructionSetEngine'), 'Mock Apple2cAdventureConstructionSetEngine purged from index-standalone.html in favor of pure 65C02');
     assertTrue(html.includes('launchAdventureConstructionSet'), 'launchAdventureConstructionSet method exposed on emulator');
-    assertTrue(html.includes('THE ENCHANTED CITADEL'), 'Adventure Construction Set default map layout present');
-    assertTrue(html.includes('MONSTER & CREATURE STUDIO'), 'Monster & Creature Studio module present');
+    assertTrue(html.includes('ACS_DISK1_BASE64'), 'Authentic 1985 Electronic Arts Adventure Construction Set Disk 1 embedded');
+    assertTrue(html.includes('mountAcsPresetDisk'), 'mountAcsPresetDisk helper available for native floppy booting');
   });
 });
 

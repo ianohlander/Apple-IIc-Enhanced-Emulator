@@ -3,8 +3,8 @@
 // Apple //c Ultra Architecture - Clean-Room 65C02 System ROM & Font Generator
 // ============================================================================
 
-// 128 Character 7x8 Font Matrix (Standard ASCII + MouseText)
-export const DEFAULT_CHARSET_ROM: Uint8Array = new Uint8Array(1024);
+// 256 Character 7x8 Font Matrix (Standard ASCII + MouseText + Alternate Charset)
+export const DEFAULT_CHARSET_ROM: Uint8Array = new Uint8Array(2048);
 
 // Initialize character generator with standard Apple II glyph bit patterns
 (function initCharRom() {
@@ -121,10 +121,24 @@ export const DEFAULT_CHARSET_ROM: Uint8Array = new Uint8Array(1024);
     0x7F: [0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F]  // Rubout / Solid Block
   };
 
+  // Populate primary 128 glyphs
   for (let c = 0; c < 128; c++) {
     const glyph = fontData[c] || fontData[c - 0x20] || fontData[0x20];
     for (let r = 0; r < 8; r++) {
       DEFAULT_CHARSET_ROM[c * 8 + r] = glyph ? (glyph[r] || 0) : 0;
+    }
+  }
+
+  // Populate alternate / MouseText 128 glyphs (bank 1: offset 1024..2047)
+  for (let c = 0; c < 128; c++) {
+    let glyph = fontData[c];
+    if (c >= 0x40 && c <= 0x5f) {
+      // Alternate MouseText glyphs
+      glyph = fontData[c] || fontData[0x5c + (c % 4)];
+    }
+    if (!glyph) glyph = fontData[c - 0x20] || fontData[0x20];
+    for (let r = 0; r < 8; r++) {
+      DEFAULT_CHARSET_ROM[(c + 128) * 8 + r] = glyph ? (glyph[r] || 0) : 0;
     }
   }
 })();

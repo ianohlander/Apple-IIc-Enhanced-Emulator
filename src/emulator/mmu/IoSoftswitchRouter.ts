@@ -151,6 +151,11 @@ export class IoSoftswitchRouter {
   }
 
   private readMmuStatus(addr: number, sw: SoftswitchesState): number | null {
+    if (addr === 0xc019) {
+      // RDVBLBAR: Apple IIc vertical blanking status (bit 7 = 0 during VBL, 0x80 otherwise)
+      const isVbl = (performance.now() % 16.666) < 1.25;
+      return isVbl ? 0x00 : 0x80;
+    }
     const statusMap: Record<number, boolean> = {
       0xc011: sw.lcBank2,
       0xc012: sw.lcReadRam,
@@ -179,10 +184,16 @@ export class IoSoftswitchRouter {
       0xc003: () => { sw.ramrd = true; },
       0xc004: () => { sw.ramwrt = false; },
       0xc005: () => { sw.ramwrt = true; },
+      0xc006: () => { sw.intcxrom = false; },
+      0xc007: () => { sw.intcxrom = true; },
       0xc008: () => { sw.altzp = false; },
       0xc009: () => { sw.altzp = true; },
+      0xc00a: () => { sw.slotc3rom = false; },
+      0xc00b: () => { sw.slotc3rom = true; },
       0xc00c: () => { sw.col80 = false; },
       0xc00d: () => { sw.col80 = true; },
+      0xc00e: () => { sw.altCharset = false; },
+      0xc00f: () => { sw.altCharset = true; },
     };
     const action = map[addr];
     if (action) { action(); return true; }

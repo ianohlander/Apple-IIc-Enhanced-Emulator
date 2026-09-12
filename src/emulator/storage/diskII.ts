@@ -591,13 +591,15 @@ export class DiskIIController {
     if (!trackData || trackData.length === 0) return 0x00;
 
     if (this.cycleProvider) {
-      const cycles = this.cycleProvider();
-      const byteIndex = Math.floor(cycles / 32) % trackData.length;
-      if (byteIndex === this.lastReadByteIndex) {
+      const currentCycle = this.cycleProvider();
+      const elapsedCycles = currentCycle - this.lastReadByteIndex;
+      if (elapsedCycles < 32 && this.lastReadByteIndex >= 0) {
         return 0x00;
       }
-      this.lastReadByteIndex = byteIndex;
-      return trackData[byteIndex];
+      const steps = this.lastReadByteIndex < 0 ? 1 : Math.max(1, Math.min(100, Math.floor(elapsedCycles / 32)));
+      this.trackBytePointer = (this.trackBytePointer + steps) % trackData.length;
+      this.lastReadByteIndex = currentCycle;
+      return trackData[this.trackBytePointer];
     }
 
     const byte = trackData[this.trackBytePointer % trackData.length];
