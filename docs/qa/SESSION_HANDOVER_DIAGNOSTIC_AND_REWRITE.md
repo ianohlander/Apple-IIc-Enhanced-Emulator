@@ -88,12 +88,107 @@ This document serves as the official handover brief for the incoming AI agent an
 
 ---
 
-## 4. Next Steps for Incoming Session
-1. In `index-standalone.html`:
-   - Fix 1: Replace all `"] █"` prompt strings with standard `"] "`; replace `0x60` with `0xA0` in `writeString`.
-   - Fix 2: Provide authentic DOS 3.3 DSK mounting for the default boot.
-   - Fix 3: Implement `mountWorldGamesPresetDisk()` to mount `World Games disk 1A.woz`.
-   - Fix 4: Add MMU softswitch reset (`lcReadRam = false`, `lcWriteRam = false`, `altzp = false`) and zero-page clearing in `bootFloppy()`.
-   - Fix 5: Remove duplicate subroutine execution in `drawShape()` and throttle BASIC statements to 60 Hz VBL.
-2. Re-run `node scratch/diagnose_user_reported_issues.mjs` to verify all 5 issues are resolved via pure DOM surface testing.
-3. Update walkthrough and commit changes to `main`.
+## 4. Comprehensive Remediation Tasks & Execution Guide
+
+### Task 1: Cursor Accent Artifact Remediation
+- **Target File**: `index-standalone.html` (Lines 4619, 503, 2263, 2268, 2275, 5546, 5552, 5579, 7063)
+- **Concrete Code Edits**:
+  1. In `writeString(row, col, text)` (line 4619):
+     - Remove `if (ch === '█') this.ram[base + col + i] = 0x60;`.
+     - Standardize all characters so that any space or padding writes `$A0` (standard Apple II normal space).
+  2. Replace all hardcoded prompt string calls from `"] █"` to standard Apple II prompt `"] "`:
+     - Line 503 (Power button): Change `writeString(4, 0, "] █")` to `writeString(4, 0, "] ")`.
+     - Lines 2263, 2268, 2275 (Preset loaders): Change to `"] "`.
+     - Lines 5546, 5552, 5579 (BASIC line exit): Change to `"] "`.
+  3. In `renderScreen()` (line 7063):
+     - Ensure the blinking block cursor `█` is rendered on top of the underlying VRAM space character exclusively when `cursorBlinkOn === true`.
+     - When `cursorBlinkOn === false`, it renders the underlying character in VRAM (`ram[base + col]`), which is `$A0` (space), rendering completely blank with zero accent artifacts.
+- **Success Criteria**: `diag_cursor_frame_0.png` shows solid block; `diag_cursor_frame_1.png` shows clean blank space behind the `]` prompt without grave accent (`).
+
+---
+
+### Task 2: Authentic DOS 3.3 Disk Boot Remediation
+- **Target File**: `index-standalone.html` (Lines 1835–1865, 2270–2278)
+- **Concrete Code Edits**:
+  1. Remove the fake hardcoded text write in `bootFloppyDrive()` (lines 2271–2277) that manually writes `"APPLESOFT BASIC READY"`.
+  2. Mount the authentic DOS 3.3 System Master disk image (`window.DOS33_DISK_BASE64` or parse from `disks/`) into `window.mountedDisks[1]`.
+  3. Invoke `window.emulator.bootFloppy(mountedDisk)` so the 65C02 CPU boots from Sector 0 via the authentic Disk II boot ROM ($C600).
+- **Success Criteria**: Booting Drive 1 executes the authentic DOS 3.3 boot sequence, displays the genuine DOS 3.3 header from disk, and drops into Applesoft BASIC through the 65C02 CPU.
+
+---
+
+### Task 3: World Games Preset Loading & Fastloader Remediation
+- **Target File**: `index-standalone.html` (Lines 1835–1840, 5307–5316)
+- **Concrete Code Edits**:
+  1. In `selectDiskPreset(preset)` (lines 1835–1840):
+     - When `preset === 'worldgames'`, do NOT leave `window.mountedDisks[1]` as `null`.
+     - Implement `window.mountWorldGamesPresetDisk()` (analogous to `mountAcsPresetDisk()`) which decodes and parses `World Games disk 1A.woz` into `window.mountedDisks[1]`.
+  2. In `launchWorldGames()`:
+     - Ensure `let parsed = (window.mountedDisks && window.mountedDisks[1]) || window.mountWorldGamesPresetDisk();` is populated.
+     - Call `this.bootFloppy(parsed)`.
+  3. In `handleDiskIo(off)` (line 3985):
+     - Ensure WOZ raw bitstream tracks are streamed through latch `$C0EC` to support Epyx Vorpal fastloader synchronization.
+- **Success Criteria**: Selecting World Games and clicking Boot transitions into graphics mode and displays the Epyx World Games splash/menu.
+
+---
+
+### Task 4: Hardware Cold Reset on Floppy Boot (ACS Reboot Fix)
+- **Target File**: `index-standalone.html` (Lines 5241–5291, `bootFloppy()`)
+- **Concrete Code Edits**:
+  1. In `bootFloppy(parsedDisk)`, perform a complete hardware state reset prior to loading sector 0:
+     - **Reset MMU Bank Switches**:
+       ```javascript
+       this.lcReadRam = false;   // $C080..$C08B: Read ROM, not LC RAM
+       this.lcWriteRam = false;  // LC RAM write-protected
+       this.lcBank2 = true;      // Default to Bank 2 ($D000)
+       this.lcPreWrite = false;
+       this.altzp = false;       // $C008: Main zero page & stack ($0000-$01FF)
+       this.store80 = false;     // $C000: 80STORE disabled
+       this.ramReadAux = false;  // $C002: Read main 48KB RAM
+       this.ramWriteAux = false; // $C004: Write main 48KB RAM
+       this.isCol80 = false;     // 40-column display
+       this.altCharset = false;  // Standard character ROM
+       ```
+     2. **Zero Out Zero Page & Language Card Flags**:
+        ```javascript
+        for (let i = 0x0000; i < 0x0100; i++) {
+          this.ram[i] = 0x00; // Clear dirty Forth pointers and vectors
+        }
+        ```
+     3. **Reset CPU Stack & Flags**:
+        ```javascript
+        this.sp = 0xFF;
+        this.status = 0x24; // Unused bit 5 set, Interrupts disabled
+        this.pc = 0x0801;
+        ```
+     4. **Reset Graphics Mode**:
+        ```javascript
+        this.isGraphicsMode = false;
+        this.mixedGraphics = false;
+        this.isHires = false;
+        this.clearHiresVram();
+        ```
+- **Success Criteria**: Booting ACS, pressing 'M' to Make Adventure, and triggering a disk reboot resets cleanly, displays the Electronic Arts logo, and responds to Spacebar to advance to the Title Screen with zero crashes (`PC != $0000`).
+
+---
+
+### Task 5: Bird Brain Wave Flickering Remediation
+- **Target File**: `index-standalone.html` (Lines 6349–6388, 5522–5596)
+- **Concrete Code Edits**:
+  1. In `drawShape(shapeNum, startX, startY, isXdraw)`:
+     - Remove the duplicate call: `this.executeSubroutine(isXdraw ? 0xF65D : 0xF601, 100);` on line 6349.
+     - Either use pure 65C02 subroutine execution OR the clean JavaScript shape parser, NEVER both.
+  2. In `executeBasicLoop()` (lines 5594–5595):
+     - Replace the unthrottled `setTimeout(() => this.executeBasicLoop(), delay)` with a requestAnimationFrame-aligned VBL pacing when `isGraphicsMode` is active.
+     - Ensure each frame executes a bounded number of statements (max 5–8 statements per 60 Hz frame slice), so wave draw/erase cycles (`XDRAW 9`) are in lockstep with CRT vertical refresh.
+- **Success Criteria**: Running Bird Brain in Type-In Studio at 1.02 MHz produces smooth ocean wave animations without high-frequency strobing or missing pixels.
+
+---
+
+### Task 6: Automated Verification via Pure Browser DOM (CDP)
+- **Target File**: `scratch/diagnose_user_reported_issues.mjs` and `tests/interactiveDomUatTest.mjs`
+- **Execution**:
+  - Run `node scratch/diagnose_user_reported_issues.mjs` to execute all 5 scenarios end-to-end via headless Chrome/Edge DOM events.
+  - Verify all 5 scenarios pass with 0 errors and capture updated screenshots in `qa/screenshots/`.
+  - Re-run `npm test` and `node tests/typeinTestSuite.mjs` to ensure zero regressions across peripheral cabinets and tutorial labs.
+
