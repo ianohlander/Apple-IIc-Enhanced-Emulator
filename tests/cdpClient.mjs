@@ -136,7 +136,7 @@ export class CDPClient extends EventEmitter {
 }
 
 export class BrowserRunner {
-  static async launch() {
+  static async launch(port = Math.floor(9222 + Math.random() * 50)) {
     const edgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
     const chromePath = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe';
     const browserPath = fs.existsSync(edgePath) ? edgePath : chromePath;
@@ -145,7 +145,7 @@ export class BrowserRunner {
 
     const proc = spawn(browserPath, [
       '--headless=new',
-      '--remote-debugging-port=9222',
+      `--remote-debugging-port=${port}`,
       '--disable-gpu',
       '--no-first-run',
       '--no-default-browser-check',
@@ -158,7 +158,7 @@ export class BrowserRunner {
     for (let i = 0; i < 40; i++) {
       try {
         pages = await new Promise((resolve, reject) => {
-          http.get('http://127.0.0.1:9222/json', (r) => {
+          http.get(`http://127.0.0.1:${port}/json`, (r) => {
             let data = '';
             r.on('data', chunk => data += chunk);
             r.on('end', () => resolve(JSON.parse(data)));
@@ -171,7 +171,7 @@ export class BrowserRunner {
 
     if (!pages || pages.length === 0) {
       proc.kill();
-      throw new Error('Failed to connect to browser CDP port 9222');
+      throw new Error(`Failed to connect to browser CDP port ${port}`);
     }
 
     const page = pages.find(p => p.type === 'page') || pages[0];
