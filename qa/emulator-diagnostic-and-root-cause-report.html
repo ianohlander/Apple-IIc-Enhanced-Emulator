@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#0a0c10] text-[#e6edf3]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple //c Ultra - Diagnostic &amp; Root Cause Forensic Report</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .font-retro { font-family: 'VT323', monospace; }
+    .rainbow-bar {
+      background: linear-gradient(90deg, #61bb46 0%, #fdb827 20%, #f58220 40%, #e03a3e 60%, #963d97 80%, #009ddc 100%);
+    }
+    .crt-card {
+      background: linear-gradient(145deg, #131720, #0c0f14);
+      border: 1px solid #253041;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+    .crt-screen {
+      background: #000;
+      border: 2px solid #222d3d;
+      box-shadow: inset 0 0 20px rgba(34, 197, 94, 0.15);
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col p-4 md:p-8">
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto w-full mb-8">
+    <div class="h-1.5 w-full rainbow-bar rounded-t mb-4"></div>
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-[#253041] pb-6">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">🔬</span>
+          <h1 class="text-2xl md:text-3xl font-black text-amber-400 tracking-tight">DIAGNOSTIC &amp; ROOT CAUSE REPORT</h1>
+        </div>
+        <p class="text-stone-400 text-sm mt-1">Forensic Analysis of 5 User-Reported Anomalies, Architectural Residue Audit &amp; Pure DOM Verification</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="px-3.5 py-1.5 rounded bg-[#1b2330] hover:bg-[#253041] text-cyan-300 border border-cyan-800 text-xs font-mono font-bold transition flex items-center gap-1.5">
+          ⬅️ Back to QA Hub
+        </a>
+        <span class="px-3 py-1.5 rounded bg-amber-950/90 text-amber-400 border border-amber-500 font-mono text-xs font-bold flex items-center gap-1.5 shadow">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> DOM SURFACE VERIFIED
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto w-full space-y-8 flex-1">
+
+    <!-- Executive Answers Section -->
+    <section class="crt-card rounded-xl p-6 border-l-4 border-l-cyan-500 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="text-cyan-400 font-bold text-sm tracking-wider uppercase">Direct Answers to Architectural Questions</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2">
+          <div class="text-amber-300 font-bold flex items-center gap-1.5">
+            <span>⚙️</span> 1. Is it the emulator?
+          </div>
+          <p class="text-stone-300 text-xs leading-relaxed">
+            <strong class="text-emerald-400">YES.</strong> Several core emulator logic flaws exist: <code class="text-amber-200">bootFloppy()</code> leaves Language Card bank softswitches dirty and zero-page uninitialized, <code class="text-amber-200">writeString()</code> bakes ASCII 96 (<code class="text-cyan-300">`</code>) into VRAM, and <code class="text-amber-200">drawShape()</code> double-renders XOR shapes.
+          </p>
+        </div>
+        <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2">
+          <div class="text-amber-300 font-bold flex items-center gap-1.5">
+            <span>📜</span> 2. Residue of old HLI application?
+          </div>
+          <p class="text-stone-300 text-xs leading-relaxed">
+            <strong class="text-red-400">YES, EXTENSIVELY.</strong> <code class="text-amber-200">index-standalone.html</code> still contains 1,500+ lines of a synthetic JavaScript BASIC interpreter (<code class="text-cyan-300">executeBasicLoop</code>, <code class="text-cyan-300">evalBasicExpr</code>) and hardcoded text prints for DOS 3.3 and ProDOS.
+          </p>
+        </div>
+        <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2">
+          <div class="text-amber-300 font-bold flex items-center gap-1.5">
+            <span>💾</span> 3. Are the ROMs completely replicated?
+          </div>
+          <p class="text-stone-300 text-xs leading-relaxed">
+            <strong class="text-amber-400">NO.</strong> The current ROM in <code class="text-amber-200">defaultRoms.ts</code> is ~500 bytes of hand-assembled stubs. Applesoft BASIC ($E000–$F7FF) and Monitor ($F800–$FFFF) are 95% unpopulated NOP (<code class="text-cyan-300">0xEA</code>) bytes rather than authentic 32 KB binaries.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comprehensive Breakdown of the 5 Issues -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between border-b border-[#253041] pb-2">
+        <h2 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+          <span>🔍</span> Deep Forensic Analysis of the 5 User-Reported Anomalies
+        </h2>
+        <span class="text-xs text-stone-400 font-mono">Verified via Headless CDP DOM Automation</span>
+      </div>
+
+      <!-- ISSUE 1: CURSOR ACCENT -->
+      <div class="crt-card rounded-xl p-6 space-y-4 border border-[#253041]">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-red-400 font-bold font-mono text-base">ISSUE 1: Cursor Blinking Accent / Backtick (`) Artifact</span>
+          </div>
+          <span class="px-2.5 py-0.5 rounded text-xs bg-red-950 text-red-300 border border-red-800 font-bold">REPRODUCED &amp; PROVEN</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Screenshot Cursor ON -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-xs text-stone-400">
+              <span class="font-bold text-emerald-400">Cursor ON Phase (Blink True)</span>
+              <span class="font-mono">diag_cursor_frame_0.png</span>
+            </div>
+            <div class="crt-screen rounded p-2 flex items-center justify-center">
+              <img src="screenshots/diag_cursor_frame_0.png" alt="Cursor ON Frame" class="rounded max-h-48 border border-stone-800 shadow">
+            </div>
+            <p class="text-xs text-stone-400">In this phase, <code class="text-cyan-300">renderScreen()</code> renders a solid block glyph: <code class="text-emerald-400">] █</code>.</p>
+          </div>
+
+          <!-- Screenshot Cursor OFF -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-xs text-stone-400">
+              <span class="font-bold text-red-400">Cursor OFF Phase (Blink False)</span>
+              <span class="font-mono">diag_cursor_frame_1.png</span>
+            </div>
+            <div class="crt-screen rounded p-2 flex items-center justify-center">
+              <img src="screenshots/diag_cursor_frame_1.png" alt="Cursor OFF Frame" class="rounded max-h-48 border border-stone-800 shadow">
+            </div>
+            <p class="text-xs text-stone-400">When cursor toggles off, it renders VRAM content: <code class="text-red-400">] `</code> (Grave Accent / Backtick)!</p>
+          </div>
+        </div>
+
+        <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2 text-xs font-mono">
+          <div class="text-amber-400 font-bold uppercase tracking-wide text-[11px]">Root Cause Code Tracing:</div>
+          <p class="text-stone-300 leading-relaxed">
+            1. In <code class="text-cyan-300">index-standalone.html</code> (line 4619):
+            <br><code class="text-red-300">writeString()</code> contains: <code class="text-amber-300">if (ch === '█') this.ram[base + col + i] = 0x60;</code>
+            <br>2. Lines 503, 2263, 2275, 5546, 5552, 5579 all execute: <code class="text-amber-300">writeString(row, 0, "] █")</code>. This bakes byte <code class="text-red-400">0x60</code> directly into VRAM at column 2.
+            <br>3. In <code class="text-cyan-300">renderScreen()</code> (line 7063): When <code class="text-stone-300">cursorBlinkOn === false</code>, it falls back to reading VRAM: <code class="text-amber-300">decodeApple2Char(this.ram[base + col])</code>.
+            <br>4. In <code class="text-cyan-300">decodeApple2Char()</code> (lines 7088-7091):
+            <br><code class="text-stone-300">if (raw >= 0x60 && raw <= 0x7f) return String.fromCharCode(raw);</code>
+            <br>Because <code class="text-amber-300">String.fromCharCode(0x60)</code> is ASCII 96 (the backtick <code class="text-red-400">`</code>), an accent appears every time the cursor is in its black/off phase!
+          </p>
+          <div class="text-emerald-400 font-bold pt-1">
+            Fix: Never write <code class="text-cyan-300">0x60</code> into VRAM. Standard Apple II prompt ends with space (<code class="text-cyan-300">0xA0</code>). The cursor is drawn over the underlying character during render time.
+          </div>
+        </div>
+      </div>
+
+      <!-- ISSUE 2: DOS 3.3 BOOT -->
+      <div class="crt-card rounded-xl p-6 space-y-4 border border-[#253041]">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-red-400 font-bold font-mono text-base">ISSUE 2: DOS 3.3 Disk Boot Prints Hardcoded "Applesoft Basic Ready"</span>
+          </div>
+          <span class="px-2.5 py-0.5 rounded text-xs bg-red-950 text-red-300 border border-red-800 font-bold">HLI MOCK RESIDUE</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <div class="crt-screen rounded p-2 flex items-center justify-center">
+            <img src="screenshots/diag_dos33_boot.png" alt="DOS 3.3 Boot Screen" class="rounded max-h-52 border border-stone-800 shadow">
+          </div>
+          <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2 text-xs font-mono">
+            <div class="text-amber-400 font-bold uppercase tracking-wide text-[11px]">Root Cause Code Tracing:</div>
+            <p class="text-stone-300 leading-relaxed">
+              In <code class="text-cyan-300">index-standalone.html</code> (lines 2271–2277):
+            </p>
+            <pre class="bg-black/60 p-2.5 rounded text-[11px] text-amber-200 border border-stone-800 overflow-x-auto">// Default DOS 3.3 Master
+window.emulator.writeString(0, 8, "APPLE //c ULTRA (50 MHz)");
+window.emulator.writeString(1, 2, "DOS 3.3 SYSTEM MASTER (1980)");
+window.emulator.writeString(2, 2, "APPLESOFT BASIC READY");
+window.emulator.writeString(4, 0, "] █");</pre>
+            <p class="text-stone-300 text-xs leading-relaxed">
+              There is NO DOS 3.3 floppy disk image mounted. The button handler simply prints four strings directly to VRAM and sets the cursor row to 4! The CPU is never involved.
+            </p>
+            <div class="text-emerald-400 font-bold pt-1">
+              Fix: Mount authentic DOS 3.3 DSK image so Slot 6 bootstrap firmware ($C600) executes genuine DOS 3.3 track/sector loaders.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISSUE 3: WORLD GAMES DISK 1 -->
+      <div class="crt-card rounded-xl p-6 space-y-4 border border-[#253041]">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-red-400 font-bold font-mono text-base">ISSUE 3: World Games Disk 1 Boots to Nothing / Stalls</span>
+          </div>
+          <span class="px-2.5 py-0.5 rounded text-xs bg-red-950 text-red-300 border border-red-800 font-bold">NULL DISK POINTER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <div class="crt-screen rounded p-2 flex items-center justify-center">
+            <img src="screenshots/diag_worldgames_boot.png" alt="World Games Boot Screen" class="rounded max-h-52 border border-stone-800 shadow">
+          </div>
+          <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2 text-xs font-mono">
+            <div class="text-amber-400 font-bold uppercase tracking-wide text-[11px]">Emulator State Dump on Boot:</div>
+            <pre class="bg-black/60 p-2.5 rounded text-[11px] text-amber-200 border border-stone-800 overflow-x-auto">{
+  "mountedDisk": null,
+  "running": true,
+  "isRunningGame": false,
+  "pc": "fd28",
+  "diskDrive": null
+}</pre>
+            <p class="text-stone-300 text-xs leading-relaxed">
+              1. In lines 1836–1840, selecting the preset <code class="text-cyan-300">'worldgames'</code> executes <code class="text-amber-300">window.mountedDisks[1] = null</code>. While ACS has <code class="text-cyan-300">mountAcsPresetDisk()</code>, there was no preset loader for World Games.
+              <br>2. In <code class="text-cyan-300">launchWorldGames()</code> (line 5311): <code class="text-amber-300">let parsed = window.mountedDisks[1]; if (parsed) { this.bootFloppy(parsed); }</code>
+              <br>Because <code class="text-stone-300">parsed</code> is <code class="text-red-400">null</code>, <code class="text-amber-200">bootFloppy</code> is never called! The emulator does nothing and CPU spins at $FD28 with no disk in the drive.
+            </p>
+            <div class="text-emerald-400 font-bold pt-1">
+              Fix: Embed or mount <code class="text-cyan-300">World Games disk 1A.woz</code> in the preset loader so the Disk II drive receives the real WOZ nibble stream.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISSUE 4: ACS REBOOT STALL -->
+      <div class="crt-card rounded-xl p-6 space-y-4 border border-[#253041]">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-red-400 font-bold font-mono text-base">ISSUE 4: Adventure Construction Set (ACS) Reboot Stuck at EA Splash</span>
+          </div>
+          <span class="px-2.5 py-0.5 rounded text-xs bg-red-950 text-red-300 border border-red-800 font-bold">DIRTY MMU BANK CRASH</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="space-y-1">
+            <div class="text-[11px] text-stone-400 font-mono">1. Workstation Main Menu</div>
+            <div class="crt-screen rounded p-1.5 flex items-center justify-center">
+              <img src="screenshots/diag_acs_main_menu.png" alt="ACS Main Menu" class="rounded max-h-36">
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="text-[11px] text-stone-400 font-mono">2. "M" -> Make Adventure</div>
+            <div class="crt-screen rounded p-1.5 flex items-center justify-center">
+              <img src="screenshots/diag_acs_make_adventure.png" alt="ACS Make Adventure" class="rounded max-h-36">
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="text-[11px] text-red-400 font-mono">3. Reboot -> Stuck on Splash</div>
+            <div class="crt-screen rounded p-1.5 flex items-center justify-center">
+              <img src="screenshots/diag_acs_after_reboot.png" alt="ACS Stuck Splash" class="rounded max-h-36 border border-red-800">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2 text-xs font-mono">
+          <div class="text-amber-400 font-bold uppercase tracking-wide text-[11px]">Hardware State Dump on Reboot Crash:</div>
+          <pre class="bg-black/60 p-2.5 rounded text-[11px] text-amber-200 border border-stone-800 overflow-x-auto">{
+  "pc": "0",
+  "totalCycles": 225820000,
+  "lcBank2": true,
+  "lcReadRam": true,
+  "lcWriteRam": true,
+  "altzp": false,
+  "isGraphicsMode": true,
+  "isHires": true
+}</pre>
+          <p class="text-stone-300 leading-relaxed">
+            1. While ACS runs, its Forth engine configures the Language Card: <code class="text-cyan-300">lcReadRam = true</code> and <code class="text-cyan-300">lcWriteRam = true</code>, using RAM at $D000–$FFFF.
+            <br>2. When a reboot is triggered, <code class="text-cyan-300">bootFloppy()</code> (lines 5241–5291) sets the CPU PC to $0801, but <strong>FAILS TO RESET MMU SOFTSWITCHES</strong>.
+            <br>3. Because <code class="text-red-400">lcReadRam is true</code>, all ROM accesses in $D000–$FFFF are redirected to the dirty Language Card RAM instead of System ROM. The boot loader crashes immediately and branches to <code class="text-red-400">PC = $0000</code>.
+            <br>4. Furthermore, Zero Page ($0000–$00FF) is not zeroed, leaving corrupt Forth memory manager pointers.
+          </p>
+          <div class="text-emerald-400 font-bold pt-1">
+            Fix: In <code class="text-cyan-300">bootFloppy()</code>, execute a full hardware reset: <code class="text-cyan-300">lcReadRam = false</code>, <code class="text-cyan-300">lcWriteRam = false</code>, <code class="text-cyan-300">altzp = false</code>, <code class="text-cyan-300">store80 = false</code>, zero memory $0000–$00FF, and reset stack pointer to $FF.
+          </div>
+        </div>
+      </div>
+
+      <!-- ISSUE 5: BIRD BRAIN WAVE FLICKERING -->
+      <div class="crt-card rounded-xl p-6 space-y-4 border border-[#253041]">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e2634] pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-red-400 font-bold font-mono text-base">ISSUE 5: Bird Brain Wave Flickering at High Rate (1.02 MHz)</span>
+          </div>
+          <span class="px-2.5 py-0.5 rounded text-xs bg-red-950 text-red-300 border border-red-800 font-bold">DOUBLE DRAW &amp; TIMING DESYNC</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <div class="crt-screen rounded p-2 flex items-center justify-center">
+            <img src="screenshots/diag_birdbrain_wave_frame_0.png" alt="Bird Brain Wave" class="rounded max-h-52 border border-stone-800 shadow">
+          </div>
+          <div class="bg-[#0e131a] p-4 rounded-lg border border-[#1e2634] space-y-2 text-xs font-mono">
+            <div class="text-amber-400 font-bold uppercase tracking-wide text-[11px]">Two Concurring Root Causes:</div>
+            <p class="text-stone-300 leading-relaxed">
+              <strong>1. Redundant Double-Draw in <code class="text-cyan-300">drawShape()</code> (lines 6349–6388):</strong>
+              <br><code class="text-amber-300">this.executeSubroutine(isXdraw ? 0xF65D : 0xF601, 100);</code>
+              <br>Immediately followed by a JavaScript loop:
+              <br><code class="text-amber-300">while (addr < 65536) { ... if (isXdraw) this.xorHiresPixel(curX, curY); }</code>
+              <br>Because <code class="text-cyan-300">XDRAW</code> performs an XOR toggle, executing the machine code subroutine AND the JavaScript shape drawer in succession XORs pixels twice, instantly toggling pixels off and corrupting the wave graphics.
+            </p>
+            <p class="text-stone-300 leading-relaxed">
+              <strong>2. Unsynchronized <code class="text-cyan-300">executeBasicLoop()</code> vs 60Hz VBL:</strong>
+              <br>The synthetic interpreter runs via <code class="text-cyan-300">setTimeout(..., 20)</code>, executing bursts of 15–25 statements. In Bird Brain lines 220–270, <code class="text-cyan-300">XDRAW 9 AT WX,167</code> erases and redraws waves repeatedly within the burst. Because this is completely decoupled from the 60 Hz <code class="text-cyan-300">requestAnimationFrame</code> loop, the canvas captures intermediate erased states, creating rapid 30–50 Hz flickering.
+            </p>
+            <div class="text-emerald-400 font-bold pt-1">
+              Fix: Remove the redundant <code class="text-cyan-300">executeSubroutine(0xF65D)</code> in <code class="text-cyan-300">drawShape()</code> and synchronize BASIC statement execution with the 60 Hz VBL frame pump.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Corrective Action Plan -->
+    <section class="crt-card rounded-xl p-6 space-y-4 border-l-4 border-l-emerald-500">
+      <h3 class="text-base font-bold text-emerald-400 flex items-center gap-2">
+        <span>🛠️</span> Summary of Implementation Fixes
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs font-mono text-stone-300">
+          <thead class="bg-[#141a24] text-stone-400 uppercase text-[10px] border-b border-[#253041]">
+            <tr>
+              <th class="p-2.5">Issue</th>
+              <th class="p-2.5">Affected File / Line</th>
+              <th class="p-2.5">Core Defect</th>
+              <th class="p-2.5">Targeted Resolution</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#1e2634]">
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">1. Cursor Accent</td>
+              <td class="p-2.5">index-standalone.html:4619, 7063</td>
+              <td class="p-2.5">`0x60` stored in VRAM, decoded as ASCII 96 (`)</td>
+              <td class="p-2.5 text-emerald-400">Write 0xA0 (space) for prompts; render cursor overlay purely in canvas loop</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">2. DOS 3.3 Boot</td>
+              <td class="p-2.5">index-standalone.html:2271</td>
+              <td class="p-2.5">Fake string write stub to VRAM without disk image</td>
+              <td class="p-2.5 text-emerald-400">Attach real DOS 3.3 disk image to preset; boot through 65C02 Disk II ROM ($C600)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">3. World Games Boot</td>
+              <td class="p-2.5">index-standalone.html:1837, 5311</td>
+              <td class="p-2.5">`mountedDisks[1]` set to null on preset selection</td>
+              <td class="p-2.5 text-emerald-400">Implement `mountWorldGamesPresetDisk()` loading `World Games disk 1A.woz`</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">4. ACS Reboot Stall</td>
+              <td class="p-2.5">index-standalone.html:5241-5291</td>
+              <td class="p-2.5">`bootFloppy` omits MMU softswitch &amp; zero page reset</td>
+              <td class="p-2.5 text-emerald-400">Full hardware reset in `bootFloppy`: clear lcReadRam, altzp, graphics, and ZP</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 text-amber-300 font-bold">5. Bird Brain Waves</td>
+              <td class="p-2.5">index-standalone.html:6349, 5594</td>
+              <td class="p-2.5">Double-draw in `drawShape()` and unthrottled setTimeout</td>
+              <td class="p-2.5 text-emerald-400">Remove duplicate `executeSubroutine(0xF65D)` and lock BASIC step loop to 60 Hz VBL</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-6xl mx-auto w-full mt-8 pt-4 border-t border-[#253041] text-xs text-stone-500 flex justify-between items-center font-mono">
+    <span>Apple //c Ultra Workstation QA Diagnostic Suite</span>
+    <span>Generated via Pure DOM Surface Instrumentation</span>
+  </footer>
+
+</body>
+</html>
