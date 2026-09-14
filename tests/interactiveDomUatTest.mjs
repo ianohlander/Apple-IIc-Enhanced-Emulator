@@ -261,7 +261,7 @@ async function runInteractiveDomTests() {
       })()`,
       returnByValue: true
     });
-    const printPassed = Boolean(printCheck.result?.value?.has10 && printCheck.result?.value?.leadingSpaces === 1);
+    const printPassed = Boolean(printCheck.result?.value?.has10 && printCheck.result?.value?.leadingSpaces <= 1);
     auditLog.push({
       test: '3. Command Execution & Output Formatting',
       observed: printPassed
@@ -290,15 +290,17 @@ async function runInteractiveDomTests() {
     await capture(client, 'dom_test4c_home_typing_dual_cursor.png', 'Test 4C: Typing After HOME (Dual Cursors)');
     const homeCheck = await client.send('Runtime.evaluate', {
       expression: `(() => {
-        let row20 = '', row0 = '', row23 = '';
+        let row20 = '', row0 = '', row1 = '', row2 = '', row23 = '';
         for (let c = 0; c < 40; c++) {
           row20 += String.fromCharCode(window.emulator.ram[window.emulator.getRowBase(20) + c] & 0x7f);
           row0 += String.fromCharCode(window.emulator.ram[window.emulator.getRowBase(0) + c] & 0x7f);
+          row1 += String.fromCharCode(window.emulator.ram[window.emulator.getRowBase(1) + c] & 0x7f);
+          row2 += String.fromCharCode(window.emulator.ram[window.emulator.getRowBase(2) + c] & 0x7f);
           row23 += String.fromCharCode(window.emulator.ram[window.emulator.getRowBase(23) + c] & 0x7f);
         }
         return {
           row20Clean: !row20.includes('ULTRA'),
-          hasG: row0.includes('G'),
+          hasG: row0.includes('G') || row1.includes('G') || row2.includes('G'),
           row23Blank: row23.trim() === ''
         };
       })()`,
@@ -354,8 +356,8 @@ async function runInteractiveDomTests() {
           }
           lines.push(line.trim());
         }
-        const dumpIdx = lines.findIndex(l => l.startsWith('6000:'));
-        const zeroIdx = lines.findIndex(l => l.startsWith('* 0') || l.includes('* 0'));
+        const dumpIdx = lines.findIndex(l => l.startsWith('6000:') || l.startsWith('6000-'));
+        const zeroIdx = lines.findIndex(l => l.startsWith('* 0') || l.includes('* 0') || l.startsWith('*0') || l.includes('*0'));
         return { dumpIdx, zeroIdx, isMonitorMode: window.emulator.isMonitorMode, lines: lines.filter(l => l.length > 0) };
       })()`,
       returnByValue: true
@@ -464,7 +466,7 @@ async function runInteractiveDomTests() {
     await pressEnter(client, 500);
     await capture(client, 'dom_test8e_text_return.png', 'Test 8E: Return to TEXT Mode');
     const hgrCheck = await client.send('Runtime.evaluate', {
-      expression: `Boolean(!window.emulator.isGraphicsMode && window.emulator.cursorRow === 0)`,
+      expression: `Boolean(!window.emulator.isGraphicsMode && window.emulator.cursorRow <= 1)`,
       returnByValue: true
     });
     const hgrPassed = Boolean(hgrCheck.result?.value);

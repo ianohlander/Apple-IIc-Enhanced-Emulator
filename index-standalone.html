@@ -500,7 +500,7 @@
           <div class="bg-[#cdc6b7] p-3 rounded-xl border border-[#b8b09f] flex items-center justify-between shadow-inner">
             <!-- Heavy Power Rocker Switch -->
             <div class="flex items-center gap-2">
-              <button id="power-btn" onclick="if(window.emulator) { window.emulator.reset(); window.emulator.clearHiresVram(); window.emulator.screen = Array.from({ length: 24 }, () => ' '.repeat(40)); window.emulator.writeString(0, 8, '6502 ULTRA (50 MHz)'); window.emulator.writeString(2, 0, '] '); window.emulator.cursorRow = 2; window.emulator.renderScreen(); if(window.showToast) window.showToast('⚡ Cold Power Cycle Completed'); }" class="px-3.5 py-2 rocker-power-on text-white font-black rounded-lg shadow-md transition flex items-center gap-1.5 text-xs tooltip-hint" data-tooltip="Heavy Rocker Power Switch (Cold Power Reboot)">
+              <button id="power-btn" onclick="if(window.emulator) { window.emulator.reset(); if(window.showToast) window.showToast('⚡ Cold Power Cycle Completed'); }" class="px-3.5 py-2 rocker-power-on text-white font-black rounded-lg shadow-md transition flex items-center gap-1.5 text-xs tooltip-hint" data-tooltip="Heavy Rocker Power Switch (Cold Power Reboot)">
                 <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
                 <span>POWER</span>
               </button>
@@ -2312,26 +2312,12 @@ namespace RetroArcade {
           window.showToast('💿 Booted DOS 3.3 System Master (65C02 Native)', 'success');
           return;
         }
-      } else if (preset === 'prodos') {
-        window.emulator.writeString(0, 8, "APPLE //c ULTRA (50 MHz)");
-        window.emulator.writeString(1, 2, "PRODOS 2.4.2 SYSTEM DISK LOADED");
-        window.emulator.writeString(2, 2, "VOLUME /PRODOS ONLINE (140 KB)");
-        window.emulator.writeString(4, 0, "] ");
-        window.emulator.cursorRow = 4;
-        window.emulator.cursorCol = 2;
-      } else if (preset === 'blank') {
-        window.emulator.writeString(0, 8, "APPLE //c ULTRA (50 MHz)");
-        window.emulator.writeString(1, 2, "BLANK FORMATTED DISK IN DRIVE 1");
-        window.emulator.writeString(3, 0, "] ");
-        window.emulator.cursorRow = 3;
-        window.emulator.cursorCol = 2;
       } else if (window.mountedDisks && window.mountedDisks[1]) {
         window.emulator.bootFloppy(window.mountedDisks[1]);
         window.closeCabinet();
         return;
       }
 
-      window.emulator.currentInput = '';
       window.emulator.renderScreen();
       window.closeCabinet();
       if (window.emulator.playBeep) window.emulator.playBeep(880, 0.1);
@@ -2626,7 +2612,7 @@ namespace RetroArcade {
 60   SY(I) = (RND(1) - 0.5) * 150
 70   SZ(I) = RND(1) * 100 + 1
 80 NEXT I
-90 FOR STEP = 1 TO 200
+90 FOR S = 1 TO 200
 100  FOR I = 1 TO 60
 110    SZ(I) = SZ(I) - 3
 120    IF SZ(I) <= 1 THEN SZ(I) = 100
@@ -2634,7 +2620,7 @@ namespace RetroArcade {
 140    PY = 96 + (SY(I) / SZ(I)) * 50
 150    IF PX >= 0 AND PX < 280 AND PY >= 0 AND PY < 192 THEN HPLOT PX, PY
 160  NEXT I
-170 NEXT STEP
+170 NEXT S
 180 TEXT : HOME : PRINT "WARP SEQUENCE COMPLETE." : END`;
         if (st) st.innerText = 'Loaded Nibble 3D Starfield Warp listing.';
       } else if (type === 'assembly') {
@@ -2918,6 +2904,22 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
     // =========================================================================
     // EMULATOR CLASS DEFINITION
     // =========================================================================
+    
+    const APPLESOFT_TOKENS = [
+      "END", "FOR", "NEXT", "DATA", "INPUT", "DEL", "DIM", "READ", "GR", "TEXT",
+      "PR#", "IN#", "CALL", "PLOT", "HLIN", "VLIN", "HGR2", "HGR", "HCOLOR=", "HPLOT",
+      "DRAW", "XDRAW", "HTAB", "HOME", "ROT=", "SCALE=", "SHLOAD", "TRACE", "NOTRACE", "NORMAL",
+      "INVERSE", "FLASH", "COLOR=", "POP", "VTAB", "HIMEM:", "LOMEM:", "ONERR", "RESUME", "RECALL",
+      "STORE", "SPEED=", "LET", "GOTO", "RUN", "IF", "RESTORE", "&", "GOSUB", "RETURN",
+      "REM", "STOP", "ON", "WAIT", "LOAD", "SAVE", "DEF", "POKE", "PRINT", "CONT",
+      "LIST", "CLEAR", "GET", "NEW", "TAB(", "TO", "FN", "SPC(", "THEN", "AT",
+      "NOT", "STEP", "+", "-", "*", "/", "^", "AND", "OR", ">",
+      "=", "<", "SGN", "INT", "ABS", "USR", "FRE", "SCRN(", "PDL", "POS",
+      "SQR", "RND", "LOG", "EXP", "COS", "SIN", "TAN", "ATN", "PEEK", "LEN",
+      "STR$", "VAL", "ASC", "CHR$", "LEFT$", "RIGHT$", "MID$"
+    ];
+    const AUTHENTIC_APPLE2C_ROM_B64 = "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";
+
     class Apple2cEmulator {
       constructor(canvas) {
         this.canvas = canvas;
@@ -3201,515 +3203,27 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
       }
 
       initSystemRom() {
-        this.rom.fill(0xEA); // Fill with NOPs
-
-        const emit = (targetAddr, bytes) => {
-          const off16 = (targetAddr - 0xC000) & 0x3FFF;
-          const off32 = targetAddr - 0x8000;
-          for (let i = 0; i < bytes.length; i++) {
-            if (off16 + i < 0x4000) this.rom[off16 + i] = bytes[i];
-            if (off32 >= 0 && off32 + i < 0x8000) this.rom[off32 + i] = bytes[i];
+        this.rom.fill(0xEA);
+        const binaryStr = (typeof atob !== 'undefined')
+          ? atob(AUTHENTIC_APPLE2C_ROM_B64)
+          : Buffer.from(AUTHENTIC_APPLE2C_ROM_B64, 'base64').toString('binary');
+        for (let i = 0; i < binaryStr.length && i < 16384; i++) {
+          const byte = binaryStr.charCodeAt(i);
+          this.rom[i] = byte;
+          if (this.rom.length >= 32768) {
+            this.rom[16384 + i] = byte;
           }
-        };
-
-        // =========================================================================
-        // 1. HARDWARE VECTORS ($FFFA–$FFFF) & Common RTI/RTS ($FFE0)
-        // =========================================================================
-        emit(0xFFE0, [0x40, 0x60]); // RTI, RTS ($FFE0..$FFE1)
-        emit(0xFFFA, [0xE0, 0xFF]); // NMI -> $FFE0
-        emit(0xFFFC, [0x00, 0xF8]); // RESET -> $F800 (Cold Start)
-        emit(0xFFFE, [0xE0, 0xFF]); // IRQ/BRK -> $FFE0
-
-        // =========================================================================
-        // 2. SYSTEM MONITOR RESET & INITIALIZATION ($F800)
-        // =========================================================================
-        const resetHandler = [
-          0xD8,             // CLD (Clear Decimal Mode)
-          0xA2, 0xFF,       // LDX #$FF
-          0x9A,             // TXS (Initialize Stack Pointer to $FF)
-          0xA9, 0x00,       // LDA #$00
-          0x8D, 0x00, 0xC0, // STA $C000 (80STORE Off)
-          0x8D, 0x02, 0xC0, // STA $C002 (RAMRD Off)
-          0x8D, 0x04, 0xC0, // STA $C004 (RAMWRT Off)
-          0x8D, 0x08, 0xC0, // STA $C008 (ALTZP Off)
-          0x8D, 0x51, 0xC0, // STA $C051 (TXTSET: Text Mode On)
-          0x8D, 0x54, 0xC0, // STA $C054 (PAGE1: Select Video Page 1)
-          0x8D, 0x56, 0xC0, // STA $C056 (LORES: Low-Res Graphics Select)
-          0x8D, 0x52, 0xC0, // STA $C052 (MIXCLR: Full Screen Text)
-          // Initialize Zero-Page Window & Cursor Pointers
-          0xA9, 0x00, 0x85, 0x20, // LDA #$00, STA $20 (WNDLFT = 0)
-          0xA9, 0x28, 0x85, 0x21, // LDA #$28, STA $21 (WNDWDTH = 40)
-          0xA9, 0x00, 0x85, 0x22, // LDA #$00, STA $22 (WNDTOP = 0)
-          0xA9, 0x18, 0x85, 0x23, // LDA #$18, STA $23 (WNDBTM = 24)
-          0xA9, 0x00, 0x85, 0x24, // LDA #$00, STA $24 (CH = 0)
-          0xA9, 0x00, 0x85, 0x25, // LDA #$00, STA $25 (CV = 0)
-          0xA9, 0xDD, 0x85, 0x33, // LDA #$DD, STA $33 (PROMPT = ']' | 0x80)
-          // Initialize CSW ($36-$37) -> $FDF0 and KSW ($38-$39) -> $FD1B
-          0xA9, 0xF0, 0x85, 0x36, // LDA #$F0, STA $36 (CSWL)
-          0xA9, 0xFD, 0x85, 0x37, // LDA #$FD, STA $37 (CSWH -> $FDF0)
-          0xA9, 0x1B, 0x85, 0x38, // LDA #$1B, STA $38 (KSWL)
-          0xA9, 0xFD, 0x85, 0x39, // LDA #$FD, STA $39 (KSWH -> $FD1B)
-          0x20, 0x22, 0xFC,       // JSR $FC22 (VTAB to row 0)
-          0x20, 0x58, 0xFC,       // JSR $FC58 (HOME: Clear text screen)
-          // Print centered banner at row 0, col 12
-          0xA9, 0x0C, 0x85, 0x24, // LDA #12, STA $24 (CH = 12)
-          0x20, 0x20, 0xFA,       // JSR $FA20 (PRINT BANNER "APPLE //c ULTRA")
-          // Set cursor to row 2, col 0 for prompt
-          0xA9, 0x02, 0x85, 0x25, // LDA #$02, STA $25 (CV = 2)
-          0xA9, 0x00, 0x85, 0x24, // LDA #$00, STA $24 (CH = 0)
-          0x20, 0x22, 0xFC,       // JSR $FC22 (VTAB to row 2)
-          0x4C, 0x00, 0xE0        // JMP $E000 (Applesoft BASIC Cold Start)
-        ];
-        emit(0xF800, resetHandler);
-
-        // =========================================================================
-        // 3. SCREEN LINE BASE CALCULATION VTAB ($FC22) & LINE TABLES ($FCDC/$FCF4)
-        // =========================================================================
-        const vtabLo = [
-          0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80,
-          0x28, 0xa8, 0x28, 0xa8, 0x28, 0xa8, 0x28, 0xa8,
-          0x50, 0xd0, 0x50, 0xd0, 0x50, 0xd0, 0x50, 0xd0
-        ];
-        const vtabHi = [
-          0x04, 0x04, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07,
-          0x04, 0x04, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07,
-          0x04, 0x04, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07
-        ];
-        emit(0xFCDC, vtabLo); // $FCDC..$FCF3 (24 bytes)
-        emit(0xFCF4, vtabHi); // $FCF4..$FD0B (24 bytes)
-
-        const vtabCode = [
-          0x48,             // PHA
-          0xDA,             // PHX
-          0xA5, 0x25,       // LDA $25 (CV)
-          0xC9, 0x18,       // CMP #24
-          0x90, 0x02,       // BCC in_range
-          0xA9, 0x17,       // LDA #23
-          // in_range:
-          0xAA,             // TAX
-          0xBD, 0xDC, 0xFC, // LDA $FCDC,X
-          0x85, 0x28,       // STA $28 (BASL)
-          0xBD, 0xF4, 0xFC, // LDA $FCF4,X
-          0x85, 0x29,       // STA $29 (BASH)
-          0xFA,             // PLX
-          0x68,             // PLA
-          0x60              // RTS
-        ];
-        emit(0xFC22, vtabCode); // $FC22..$FC37 (22 bytes)
-
-        // =========================================================================
-        // 4. HOME ($FC58, $FC3C), CLEOP ($FC42, CALL -958) & SCROLL ($FC70)
-        // =========================================================================
-        // Clean-room Monitor CLEOP routine at $FA70: Clears from cursor to end of page
-        const cleopCode = [
-          0x48,             // $FA70: PHA
-          0xDA,             // $FA71: PHX
-          0x5A,             // $FA72: PHY
-          0x20, 0x9C, 0xFC, // $FA73: JSR $FC9C (CLREOL)
-          0xA5, 0x25,       // $FA76: LDA $25 (CV)
-          0xAA,             // $FA78: TAX
-          // inx_loop ($FA79):
-          0xE8,             // $FA79: INX
-          0xE0, 0x18,       // $FA7A: CPX #24
-          0xB0, 0x15,       // $FA7C: BCS cleop_done ($FA93)
-          0xBD, 0xDC, 0xFC, // $FA7E: LDA $FCDC,X (vtabLo)
-          0x85, 0x28,       // $FA81: STA $28 (BASL)
-          0xBD, 0xF4, 0xFC, // $FA83: LDA $FCF4,X (vtabHi)
-          0x85, 0x29,       // $FA86: STA $29 (BASH)
-          0xA9, 0xA0,       // $FA88: LDA #$A0 (ASCII space)
-          0xA0, 0x27,       // $FA8A: LDY #39
-          // clr_row ($FA8C):
-          0x91, 0x28,       // $FA8C: STA ($28),Y
-          0x88,             // $FA8E: DEY
-          0x10, 0xFB,       // $FA8F: BPL clr_row (-5 -> $FA8C)
-          0x80, 0xE6,       // $FA91: BRA inx_loop (-26 -> $FA79)
-          // cleop_done ($FA93):
-          0x20, 0x22, 0xFC, // $FA93: JSR $FC22 (VTAB to restore BASL/BASH for $25)
-          0x7A,             // $FA96: PLY
-          0xFA,             // $FA97: PLX
-          0x68,             // $FA98: PLA
-          0x60              // $FA99: RTS
-        ];
-        emit(0xFA70, cleopCode);
-
-        // Clean-room Monitor HOME routine at $FA9A: Clears entire screen and homes cursor
-        const homeCode = [
-          0x64, 0x24,       // $FA9A: STZ $24 (CH = 0)
-          0x64, 0x25,       // $FA9C: STZ $25 (CV = 0)
-          0x20, 0x22, 0xFC, // $FA9E: JSR $FC22 (VTAB to row 0)
-          0x20, 0x70, 0xFA, // $FAA1: JSR $FA70 (CLEOP)
-          0x60              // $FAA4: RTS
-        ];
-        emit(0xFA9A, homeCode);
-
-        // Fixed Apple II Monitor Entry Point Vectors
-        emit(0xFC3C, [0x4C, 0x9A, 0xFA]); // JMP $FA9A (HOME alternative entry)
-        emit(0xFC42, [0x4C, 0x70, 0xFA]); // JMP $FA70 (CLEOP / CALL -958 vector)
-        emit(0xFC58, [0x4C, 0x9A, 0xFA]); // JMP $FA9A (HOME / CALL -936 vector)
-
-        // Scroll Routine ($FC70..$FC9B -> JMP $FCB4)
-        const scrollCode = [
-          0x48,             // PHA
-          0xDA,             // PHX
-          0x5A,             // PHY
-          0xA2, 0x01,       // LDX #$01
-          // scrl1 ($FC75):
-          0xBD, 0xDC, 0xFC, // LDA $FCDC,X
-          0x85, 0x2A,       // STA $2A
-          0xBD, 0xF4, 0xFC, // LDA $FCF4,X
-          0x85, 0x2B,       // STA $2B
-          0xCA,             // DEX
-          0xBD, 0xDC, 0xFC, // LDA $FCDC,X
-          0x85, 0x28,       // STA $28
-          0xBD, 0xF4, 0xFC, // LDA $FCF4,X
-          0x85, 0x29,       // STA $29
-          0xE8,             // INX
-          0xA0, 0x27,       // LDY #39
-          // scrl2 ($FC8D):
-          0xB1, 0x2A,       // LDA ($2A),Y
-          0x91, 0x28,       // STA ($28),Y
-          0x88,             // DEY
-          0x10, 0xF9,       // BPL scrl2 (-7 -> $FC8D)
-          0xE8,             // INX
-          0xE0, 0x18,       // CPX #24
-          0x90, 0xDC,       // BCC scrl1 (-36 -> $FC75)
-          0x4C, 0xB4, 0xFC  // JMP $FCB4
-        ];
-        emit(0xFC70, scrollCode); // Exactly 44 bytes: $FC70..$FC9B
-
-        // CLREOL ($FC9C) - Clear to End of Line
-        emit(0xFC9C, [
-          0xA4, 0x24, 0xA9, 0xA0, 0x91, 0x28, 0xC8, 0xC4, 0x21, 0x90, 0xF9, 0x60
-        ]); // 12 bytes: $FC9C..$FCA7
-
-        // Standard Apple II System Monitor BELL1 Routine ($FBDD)
-        const bellCode = [
-          0xA9, 0x40,             // LDA #$40
-          0x85, 0x30,             // STA $30
-          // bell_loop:
-          0x20, 0xA8, 0xFC,       // JSR $FCA8 (WAIT)
-          0xAD, 0x30, 0xC0,       // LDA $C030 (Toggle Speaker)
-          0x88,                   // DEY
-          0xD0, 0xF7,             // BNE bell_loop
-          0xC6, 0x30,             // DEC $30
-          0xD0, 0xF3,             // BNE bell_loop
-          0x60                    // RTS
-        ];
-        // Standard Apple II System Monitor PREAD Routine ($FB1E) - Paddle / Joystick Read
-        const preadCode = [
-          0xBD, 0x64, 0xC0, // LDA $C064,X (read paddle timer register for paddle X)
-          0xA8,             // TAY (transfer count to Y)
-          0x60              // RTS
-        ];
-        emit(0xFB1E, preadCode);
-
-        // Standard Apple II System Monitor WAIT Routine ($FCA8)
-        const waitCode = [
-          0x38,             // SEC
-          0x48,             // PHA
-          0xE9, 0x01,       // SBC #$01
-          0xD0, 0xFC,       // BNE $FCAA (-4 bytes to SBC #$01)
-          0x68,             // PLA
-          0xE9, 0x01,       // SBC #$01
-          0xD0, 0xF6,       // BNE $FCA9 (-10 bytes to PHA)
-          0x60              // RTS
-        ];
-        emit(0xFCA8, waitCode); // 10 bytes: $FCA8..$FCB1
-
-        // Scroll Bottom Line Clear ($FCB4) - Clears line 23 directly via STA $0750,Y without clobbering CV ($25)
-        const scrollClearCode = [
-          0xA0, 0x27,       // LDY #39
-          0xA9, 0xA0,       // LDA #$A0
-          // clr23 ($FCB8):
-          0x99, 0x50, 0x07, // STA $0750,Y (line 23 clear)
-          0x88,             // DEY
-          0x10, 0xF8,       // BPL clr23 (-8)
-          0x7A,             // PLY
-          0xFA,             // PLX
-          0x68,             // PLA
-          0x60              // RTS
-        ];
-        emit(0xFCB4, scrollClearCode); // 14 bytes: $FCB4..$FCC1
-
-        // =========================================================================
-        // 5. CHARACTER OUTPUT COUT ($FDED), CROUT ($FD8E) & COUT1 ($FDF0)
-        // =========================================================================
-        // $FDED: JMP ($0036) - Character Output Switch Vector
-        emit(0xFDED, [0x6C, 0x36, 0x00]);
-
-        // Carriage Return Output CROUT ($FD8E)
-        emit(0xFD8E, [
-          0xA9, 0x8D,       // LDA #$8D
-          0x4C, 0xED, 0xFD  // JMP $FDED
-        ]);
-
-        // $FDF0: COUT1 - Standard Screen Character Output Routine with strictly verified branch offsets
-        const coutCode = [
-          0x48,             // $FDF0: PHA
-          0xDA,             // $FDF1: PHX
-          0x5A,             // $FDF2: PHY
-          0xC9, 0x8D,       // $FDF3: CMP #$8D
-          0xF0, 0x30,       // $FDF5: BEQ do_cr ($FE27)
-          0xC9, 0x0D,       // $FDF7: CMP #$0D
-          0xF0, 0x2C,       // $FDF9: BEQ do_cr ($FE27)
-          0xC9, 0x8A,       // $FDFB: CMP #$8A
-          0xF0, 0x2C,       // $FDFD: BEQ do_lf ($FE2B)
-          0xC9, 0x0A,       // $FDFF: CMP #$0A
-          0xF0, 0x28,       // $FE01: BEQ do_lf ($FE2B)
-          0xC9, 0x88,       // $FE03: CMP #$88
-          0xF0, 0x36,       // $FE05: BEQ do_bs ($FE3D)
-          0xC9, 0x08,       // $FE07: CMP #$08
-          0xF0, 0x32,       // $FE09: BEQ do_bs ($FE3D)
-          0xC9, 0x87,       // $FE0B: CMP #$87
-          0xF0, 0x36,       // $FE0D: BEQ do_bell ($FE45)
-          0xC9, 0x07,       // $FE0F: CMP #$07
-          0xF0, 0x32,       // $FE11: BEQ do_bell ($FE45)
-
-          // Printable character ($FE13):
-          0x09, 0x80,       // $FE13: ORA #$80
-          0xA4, 0x24,       // $FE15: LDY $24 (CH)
-          0x91, 0x28,       // $FE17: STA ($28),Y
-          0xE6, 0x24,       // $FE19: INC $24 (CH++)
-          0xA5, 0x24,       // $FE1B: LDA $24
-          0xC5, 0x21,       // $FE1D: CMP $21 (WNDWDTH)
-          0x90, 0x27,       // $FE1F: BCC cout_done ($FE48)
-
-          // Wrap ($FE21):
-          0xA9, 0x00,       // $FE21: LDA #$00
-          0x85, 0x24,       // $FE23: STA $24 (CH = 0)
-          0x80, 0x04,       // $FE25: BRA do_lf ($FE2B)
-
-          // do_cr ($FE27):
-          0xA9, 0x00,       // $FE27: LDA #$00
-          0x85, 0x24,       // $FE29: STA $24 (CH = 0)
-
-          // do_lf ($FE2B):
-          0xE6, 0x25,       // $FE2B: INC $25 (CV++)
-          0xA5, 0x25,       // $FE2D: LDA $25
-          0xC5, 0x23,       // $FE2F: CMP $23 (WNDBTM)
-          0x90, 0x05,       // $FE31: BCC vtab_update ($FE38)
-          0xC6, 0x25,       // $FE33: DEC $25
-          0x20, 0x70, 0xFC, // $FE35: JSR $FC70 (SCROLL)
-          // vtab_update ($FE38):
-          0x20, 0x22, 0xFC, // $FE38: JSR $FC22 (VTAB)
-          0x80, 0x0B,       // $FE3B: BRA cout_done ($FE48)
-
-          // do_bs ($FE3D):
-          0xA5, 0x24,       // $FE3D: LDA $24
-          0xF0, 0x07,       // $FE3F: BEQ cout_done ($FE48)
-          0xC6, 0x24,       // $FE41: DEC $24
-          0x80, 0x03,       // $FE43: BRA cout_done ($FE48)
-
-          // do_bell ($FE45):
-          0xAD, 0x30, 0xC0, // $FE45: LDA $C030
-
-          // cout_done ($FE48):
-          0x7A,             // $FE48: PLY
-          0xFA,             // $FE49: PLX
-          0x68,             // $FE4A: PLA
-          0x60              // $FE4B: RTS
-        ];
-        emit(0xFDF0, coutCode);
-
-        // =========================================================================
-        // 6. KEYBOARD HARDWARE POLLING KEYIN ($FD1B) & GETLN ($FD6A -> $FD95)
-        // =========================================================================
-        // RDKEY ($FD0C) - Jump through Keyboard Input Vector ($0038-$0039)
-        emit(0xFD0C, [0x6C, 0x38, 0x00]);
-
-        // KEYIN Implementation ($FD1B..$FD35) - Clean Keyboard Polling with Cursor Glyph
-        const keyinCode = [
-          0xA4, 0x24,       // $FD1B: LDY $24 (CH)
-          0xB1, 0x28,       // $FD1D: LDA ($28),Y
-          0x85, 0x34,       // $FD1F: STA $34 (char under cursor)
-          0xEA, 0xEA,       // $FD21: NOP, NOP (Cursor overlay is rendered dynamically by renderScreen)
-          0xEA, 0xEA,       // $FD23: NOP, NOP
-          // wait_key ($FD25):
-          0xAD, 0x00, 0xC0, // $FD25: LDA $C000 (poll keyboard data register)
-          0x10, 0xFB,       // $FD28: BPL wait_key (-5 bytes -> $FD25)
-          // key_got ($FD2A):
-          0x48,             // $FD2A: PHA (save key)
-          0xA4, 0x24,       // $FD2B: LDY $24 (CH)
-          0xA5, 0x34,       // $FD2D: LDA $34
-          0x91, 0x28,       // $FD2F: STA ($28),Y (restore normal char)
-          0x8D, 0x10, 0xC0, // $FD31: STA $C010 (clear strobe)
-          0x68,             // $FD34: PLA
-          0x60              // $FD35: RTS
-        ];
-        emit(0xFD1B, keyinCode);
-        emit(0xE74C, [0x60]); // Applesoft COMBY / GETBYT parameter evaluation RTS vector
-
-        // GETLN vector at $FD6A jumps to $FD95
-        emit(0xFD6A, [0x4C, 0x95, 0xFD]);
-
-        // GETLN Implementation ($FD95..$FDD2) - Clean-Room Line Input with Verified Relative Branches
-        const getlnCode = [
-          0xA2, 0x00,       // $FD95: LDX #$00
-          // getln_loop ($FD97):
-          0x20, 0x1B, 0xFD, // $FD97: JSR $FD1B (KEYIN)
-          0xC9, 0x8D,       // $FD9A: CMP #$8D
-          0xF0, 0x26,       // $FD9C: BEQ getln_ret (+$26 -> $FDC4)
-          0xC9, 0x0D,       // $FD9E: CMP #$0D
-          0xF0, 0x22,       // $FDA0: BEQ getln_ret (+$22 -> $FDC4)
-          0xC9, 0x88,       // $FDA2: CMP #$88 (BS)
-          0xF0, 0x12,       // $FDA4: BEQ getln_bs (+$12 -> $FDB8)
-          0xC9, 0x08,       // $FDA6: CMP #$08 (BS)
-          0xF0, 0x0E,       // $FDA8: BEQ getln_bs (+$0E -> $FDB8)
-          0x9D, 0x00, 0x02, // $FDAA: STA $0200,X
-          0x20, 0xED, 0xFD, // $FDAD: JSR $FDED (COUT)
-          0xE8,             // $FDB0: INX
-          0xE0, 0xEE,       // $FDB1: CPX #$EE
-          0x90, 0xE2,       // $FDB3: BCC getln_loop (-$1E -> $FD97)
-          0xCA,             // $FDB5: DEX
-          0x80, 0xDF,       // $FDB6: BRA getln_loop (-$21 -> $FD97)
-
-          // getln_bs ($FDB8):
-          0xE0, 0x00,       // $FDB8: CPX #$00
-          0xF0, 0xDB,       // $FDBA: BEQ getln_loop (-$25 -> $FD97)
-          0xCA,             // $FDBC: DEX
-          0xA9, 0x88,       // $FDBD: LDA #$88
-          0x20, 0xED, 0xFD, // $FDBF: JSR $FDED (COUT)
-          0x80, 0xD3,       // $FDC2: BRA getln_loop (-$2D -> $FD97)
-
-          // getln_ret ($FDC4):
-          0xA9, 0x8D,       // $FDC4: LDA #$8D
-          0x9D, 0x00, 0x02, // $FDC6: STA $0200,X
-          0xE8,             // $FDC9: INX
-          0xA9, 0x00,       // $FDCA: LDA #$00
-          0x9D, 0x00, 0x02, // $FDCC: STA $0200,X
-          0x20, 0x8E, 0xFD, // $FDCF: JSR $FD8E (CROUT)
-          0x60              // $FDD2: RTS
-        ];
-        emit(0xFD95, getlnCode);
-
-        // =========================================================================
-        // 7. PRINT SYSTEM BANNER ($FA10)
-        // =========================================================================
-        const bannerString = "APPLE //c ULTRA";
-        const bannerCode = [];
-        for (let i = 0; i < bannerString.length; i++) {
-          const ch = bannerString.charCodeAt(i) | 0x80;
-          bannerCode.push(0xA9, ch, 0x20, 0xED, 0xFD);
         }
-        bannerCode.push(0x60);
-        emit(0xFA20, bannerCode);
+        // Patch WAIT delay bypass at $3CA8 ($FCA8) -> RTS
+        this.rom[0x3CA8] = 0x60;
+        if (this.rom.length >= 32768) this.rom[16384 + 0x3CA8] = 0x60;
 
-        // =========================================================================
-        // 8. APPLESOFT BASIC ENGINE & TOKENIZER ($D000–$F7FF)
-        // =========================================================================
-        const basicColdStart = [
-          0xA9, 0x01, 0x85, 0x67, // TXTTAB low = $01
-          0xA9, 0x08, 0x85, 0x68, // TXTTAB high = $08 -> $0801
-          0xA9, 0x00,
-          0x8D, 0x01, 0x08,       // STA $0801
-          0x8D, 0x02, 0x08,       // STA $0802
-          0xA9, 0x03, 0x85, 0x69, // VARTAB = $0803
-          0xA9, 0x08, 0x85, 0x6A,
-          0x85, 0x6B, 0x85, 0x6C, // ARYTAB = $0803
-          0x85, 0x6D, 0x85, 0x6E, // STREND = $0803
-          0xA9, 0x00, 0x85, 0x6F, // FRETOP low = $00
-          0xA9, 0x96, 0x85, 0x70, // FRETOP high = $96
-          0x85, 0x74,             // MEMSIZ high = $96
-          0xA9, 0xDD, 0x85, 0x33, // PROMPT = ']' ($DD)
-          0x4C, 0xBF, 0xD3        // JMP $D3BF
-        ];
-        emit(0xE000, basicColdStart);
-
-        const basicPromptLoop = [
-          0xA9, 0xDD, 0x85, 0x33, // ensure prompt is ']'
-          0xA5, 0x33,             // LDA $33
-          0x20, 0xED, 0xFD,       // JSR $FDED (print prompt)
-          0xA9, 0xA0,             // LDA #$A0 (' ')
-          0x20, 0xED, 0xFD,       // JSR $FDED (print space)
-          0x20, 0x6A, 0xFD,       // JSR $FD6A (GETLN)
-          0x20, 0x2C, 0xD5,       // JSR $D52C (Tokenize)
-          0x4C, 0xBF, 0xD3        // JMP $D3BF
-        ];
-        emit(0xD3BF, basicPromptLoop);
-        emit(0xFA00, basicPromptLoop);
-
-        // Tokenizer ($D52C)
-        emit(0xD52C, [
-          0xA2, 0x00, 0xBD, 0x00, 0x02, 0xC9, 0xB0, 0x90, 0x18, 0xC9, 0xBA, 0xB0, 0x12,
-          0x20, 0x59, 0xD5, 0x60,
-          0xBD, 0x00, 0x02, 0xC9, 0xD2, 0xD0, 0x06, 0x4C, 0x00, 0xD6,
-          0xC9, 0xCC, 0xD0, 0x06, 0x4C, 0x50, 0xD6,
-          0xC9, 0xC8, 0xD0, 0x03, 0x20, 0x58, 0xFC, 0x60
-        ]);
-
-        // Line Linker ($D559) & RUN Engine ($D600)
-        emit(0xD559, [
-          0xA0, 0x00, 0xBD, 0x00, 0x02, 0x9D, 0x05, 0x08, 0xE8, 0xC9, 0x8D, 0xD0, 0xF4, 0x60
-        ]);
-        emit(0xD600, [
-          0xA9, 0x01, 0x85, 0x67, 0xA9, 0x08, 0x85, 0x68, 0xA0, 0x04,
-          0xB1, 0x67, 0xF0, 0x20, 0xC8, 0x4C, 0xBF, 0xD3
-        ]);
-
-        // Graphics Routines: HGR ($F3E2), HGR2 ($F3D8), HCOLOR ($F3F2), HPLOT ($F457), XDRAW ($F65D)
-        emit(0xF3E2, [
-          0x8D, 0x50, 0xC0, 0x8D, 0x57, 0xC0, 0x8D, 0x53, 0xC0, 0x8D, 0x54, 0xC0,
-          0xA0, 0x00, 0xA9, 0x00, 0xA2, 0x20, 0x86, 0x27,
-          0x84, 0x26, 0x91, 0x26, 0xC8, 0xD0, 0xFB,
-          0xE6, 0x27, 0xA5, 0x27, 0xC9, 0x40, 0x90, 0xF0, 0x60
-        ]);
-        emit(0xF3D8, [
-          0x8D, 0x50, 0xC0, 0x8D, 0x57, 0xC0, 0x8D, 0x52, 0xC0, 0x8D, 0x55, 0xC0,
-          0xA0, 0x00, 0xA9, 0x00, 0xA2, 0x40, 0x86, 0x27,
-          0x84, 0x26, 0x91, 0x26, 0xC8, 0xD0, 0xFB,
-          0xE6, 0x27, 0xA5, 0x27, 0xC9, 0x60, 0x90, 0xF0, 0x60
-        ]);
-        emit(0xF3F2, [0x85, 0xE4, 0x60]);
-        emit(0xF457, [
-          0x48, 0xDA, 0x5A, 0xA5, 0xE2, 0x48, 0x29, 0x07, 0x85, 0x27,
-          0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x85, 0x26, 0x68,
-          0x4A, 0x4A, 0x4A, 0x18, 0x69, 0x20, 0x85, 0x27,
-          0xA5, 0xE0, 0x4A, 0x4A, 0x4A, 0xA8, 0xA5, 0xE4, 0x91, 0x26,
-          0x7A, 0xFA, 0x68, 0x60
-        ]);
-        emit(0xF65D, [
-          0x48, 0xDA, 0x5A, 0xA0, 0x00, 0xB1, 0xE8, 0x45, 0xE4, 0x20, 0x57, 0xF4, 0x7A, 0xFA, 0x68, 0x60
-        ]);
-        emit(0xF601, [
-          0x48, 0xDA, 0x5A, 0xA0, 0x00, 0xB1, 0xE8, 0x45, 0xE4, 0x20, 0x57, 0xF4, 0x7A, 0xFA, 0x68, 0x60
-        ]);
-
-        // Slot 6 Disk II Boot ROM ($C600–$C6FF) - Authentic 256-Byte P5A Firmware
-        emit(0xC600, [
-          0xa2,0x20,0xa0,0x00,0xa2,0x03,0x86,0x3c,
-          0x8a,0x0a,0x24,0x3c,0xf0,0x10,0x05,0x3c,
-          0x49,0xff,0x29,0x7e,0xb0,0x08,0x4a,0xd0,
-          0xfb,0x98,0x9d,0x56,0x03,0xc8,0xe8,0x10,
-          0xe5,0x20,0x58,0xff,0xba,0xbd,0x00,0x01,
-          0x0a,0x0a,0x0a,0x0a,0x85,0x2b,0xaa,0xbd,
-          0x8e,0xc0,0xbd,0x8c,0xc0,0xbd,0x8a,0xc0,
-          0xbd,0x89,0xc0,0xa0,0x50,0xbd,0x80,0xc0,
-          0x98,0x29,0x03,0x0a,0x05,0x2b,0xaa,0xbd,
-          0x81,0xc0,0xa9,0x56,0x20,0xa8,0xfc,0x88,
-          0x10,0xeb,0x85,0x26,0x85,0x3d,0x85,0x41,
-          0xa9,0x08,0x85,0x27,0x18,0x08,0xbd,0x8c,
-          0xc0,0x10,0xfb,0x49,0xd5,0xd0,0xf7,0xbd,
-          0x8c,0xc0,0x10,0xfb,0xc9,0xaa,0xd0,0xf3,
-          0xea,0xbd,0x8c,0xc0,0x10,0xfb,0xc9,0x96,
-          0xf0,0x09,0x28,0x90,0xdf,0x49,0xad,0xf0,
-          0x25,0xd0,0xd9,0xa0,0x03,0x85,0x40,0xbd,
-          0x8c,0xc0,0x10,0xfb,0x2a,0x85,0x3c,0xbd,
-          0x8c,0xc0,0x10,0xfb,0x25,0x3c,0x88,0xd0,
-          0xec,0x28,0xc5,0x3d,0xd0,0xbe,0xa5,0x40,
-          0xc5,0x41,0xd0,0xb8,0xb0,0xb7,0xa0,0x56,
-          0x84,0x3c,0xbc,0x8c,0xc0,0x10,0xfb,0x59,
-          0xd6,0x02,0xa4,0x3c,0x88,0x99,0x00,0x03,
-          0xd0,0xee,0x84,0x3c,0xbc,0x8c,0xc0,0x10,
-          0xfb,0x59,0xd6,0x02,0xa4,0x3c,0x91,0x26,
-          0xc8,0xd0,0xef,0xbc,0x8c,0xc0,0x10,0xfb,
-          0x59,0xd6,0x02,0xd0,0x87,0xa0,0x00,0xa2,
-          0x56,0xca,0x30,0xfb,0xb1,0x26,0x5e,0x00,
-          0x03,0x2a,0x5e,0x00,0x03,0x2a,0x91,0x26,
-          0xc8,0xd0,0xee,0xe6,0x27,0xe6,0x3d,0xa5,
-          0x3d,0xcd,0x00,0x08,0xa6,0x2b,0x90,0xdb,
-          0x4c,0x01,0x08,0x00,0x00,0x00,0x00,0x00
-        ]);
-        emit(0xFAFE, [0x60]); // RTS hook for executeSubroutine
+        // Patch KEYIN at $3D1B ($FD1B) for instant hardware strobe polling ($C000/$C010)
+        const keyinPatch = [0xAD, 0x00, 0xC0, 0x10, 0xFB, 0x8D, 0x10, 0xC0, 0x60];
+        for (let j = 0; j < keyinPatch.length; j++) {
+          this.rom[0x3D1B + j] = keyinPatch[j];
+          if (this.rom.length >= 32768) this.rom[16384 + 0x3D1B + j] = keyinPatch[j];
+        }
       }
 
       reset() {
@@ -3741,24 +3255,82 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         this.lcReadRam = false;
         this.lcWriteRam = false;
         this.lcBank2 = true;
+        this.lcPreWrite = false;
         this.keyQueue = [];
+
+        // Clear Zero Page ($0000–$00FF)
+        for (let i = 0x0000; i < 0x0100; i++) {
+          this.ram[i] = 0x00;
+        }
 
         // Clear Video RAM Text Page 1 ($0400–$07FF) in both Main and Auxiliary RAM
         for (let i = 0x0400; i < 0x0800; i++) {
-          this.ram[i] = 0xA0;
+          this.ram[i] = 0xa0;
           if (this.ram.length > 0x10800) {
-            this.ram[0x10000 + i] = 0xA0;
+            this.ram[0x10000 + i] = 0xa0;
           }
         }
+
+        // Center Apple //c Ultra banner at row 0 (cols 12..26)
+        const banner = "APPLE //c ULTRA";
+        const bannerCol = 12;
+        for (let c = 0; c < banner.length; c++) {
+          this.ram[0x0400 + bannerCol + c] = banner.charCodeAt(c) | 0x80;
+        }
+
+        // Setup Applesoft zero page & cursor state for clean prompt at row 2
+        this.ram[0x00] = 0x4C; this.ram[0x03] = 0x4C; this.ram[0x0A] = 0x4C; this.ram[0x0B] = 0x99; this.ram[0x0C] = 0xE1;
+        this.ram[0x20] = 0;    // WNDLFT
+        this.ram[0x21] = 40;   // WNDWDTH
+        this.ram[0x22] = 0;    // WNDTOP
+        this.ram[0x23] = 24;   // WNDBTM
+        this.ram[0x24] = 0;    // CH = 0
+        this.ram[0x25] = 1;    // CV = 1
+        this.ram[0x28] = 0x80; // BASL row 1
+        this.ram[0x29] = 0x04; // BASH row 1
+        this.ram[0x32] = 0xFF;
+        this.ram[0x33] = 0xDD; // PROMPT = ']' | 0x80
+        this.ram[0x36] = 0xF0; // CSWL
+        this.ram[0x37] = 0xFD; // CSWH -> $FDF0
+        this.ram[0x38] = 0x1B; // KSWL
+        this.ram[0x39] = 0xFD; // KSWH -> $FD1B
+        this.ram[0x4C] = 0x01; this.ram[0x4D] = 0x08;
+        this.ram[0x6F] = 0x00; this.ram[0x70] = 0x96;
+        this.ram[0x73] = 0x00; this.ram[0x74] = 0x96;
+        this.ram[0x76] = 0xFF;
+        this.ram[0x8F] = 0x03; this.ram[0x90] = 0x4C;
+        this.ram[0xAF] = 0x03; this.ram[0xB0] = 0x08;
+        this.ram[0xF1] = 0x01;
+
+        const chrgetProto = [0xE6, 0xB8, 0xD0, 0x02, 0xE6, 0xB9, 0xAD, 0x60, 0xEA, 0xC9, 0x3A, 0xB0, 0x0A, 0xC9, 0x20, 0xF0, 0xEF, 0x38, 0xE9, 0x30, 0x38, 0xE9, 0xD0, 0x60, 0x80, 0x4F, 0xC7, 0x52];
+        for (let k = 0; k < chrgetProto.length; k++) this.ram[0x00B1 + k] = chrgetProto[k];
+
+        this.ram[0x03D0] = 0x4C; // JMP $D43C (Warm start vector)
+        this.ram[0x03D1] = 0x3C;
+        this.ram[0x03D2] = 0xD4;
+        this.ram[0x03F0] = 0x3C; this.ram[0x03F1] = 0xD4; this.ram[0x03F2] = 0x3C; this.ram[0x03F3] = 0xD4; this.ram[0x03F4] = 0x71;
+
+        // Initialize Applesoft TXTTAB ($0801) empty program
+        this.ram[0x67] = 0x01; // TXTTAB low
+        this.ram[0x68] = 0x08; // TXTTAB high
+        this.ram[0x69] = 0x03; // VARTAB low
+        this.ram[0x6A] = 0x08; // VARTAB high
+        this.ram[0x6B] = 0x03; // ARYTAB low
+        this.ram[0x6C] = 0x08; // ARYTAB high
+        this.ram[0x6D] = 0x03; // STREND low
+        this.ram[0x6E] = 0x08; // STREND high
+        this.ram[0x0800] = 0x00;
+        this.ram[0x0801] = 0x00;
+        this.ram[0x0802] = 0x00;
 
         // Fetch Reset Vector ($FFFC–$FFFD)
         const l = this.readMem(0xfffc);
         const h = this.readMem(0xfffd);
         this.pc = (h << 8) | l;
 
-        // Execute 65C02 CPU Cold Boot Firmware ($F800)
-        // Clean-room ROM clears screen via HOME ($FC58), prints centered banner via $FA10, sets CV=2, CH=0, and enters Applesoft prompt
-        this.runCycles(20000);
+        // Execute Applesoft entry: $D43C advances CV to 2, prints prompt ']' at row 2 col 0, space at col 1, and enters KEYIN with CV=2, CH=2
+        this.pc = 0xD43C;
+        this.runCycles(1000);
 
         this.inputStartRow = 2;
         this.cursorRow = 2;
@@ -3794,7 +3366,7 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           }
           if (addr === 0xc010) {
             // Keyboard Strobe Clear ($C010)
-            if (!this.isRunningBasic && this.keyQueue && this.keyQueue.length > 0) {
+            if (this.keyQueue && this.keyQueue.length > 0) {
               this.lastKeyPressed = this.keyQueue.shift();
             }
             return 0x00;
@@ -3933,8 +3505,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
             this.handlePrinterByte(val);
             return;
           }
-          if (addr === 0xc010) {
-            if (!this.isRunningBasic && this.keyQueue && this.keyQueue.length > 0) this.lastKeyPressed = this.keyQueue.shift();
+          if (addr >= 0xc010 && addr <= 0xc01f) {
+            if (this.keyQueue && this.keyQueue.length > 0) this.lastKeyPressed = this.keyQueue.shift();
             return;
           }
           if (addr === 0xc030) {
@@ -4076,7 +3648,7 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           let high = (this.a >> 4) + (val >> 4);
           if (low > 9) { low += 6; high++; }
           const binSum = this.a + val + carry;
-          const overflow = (!((this.a ^ val) & 0x80) && ((this.a ^ binSum) & 0x80)) !== 0;
+          const overflow = Boolean(~(this.a ^ val) & (this.a ^ binSum) & 0x80);
           if (overflow) this.status |= 0x40; else this.status &= ~0x40;
           if (high > 9) high += 6;
           if (high > 15) this.status |= 0x01; else this.status &= ~0x01;
@@ -4084,7 +3656,7 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           this.setZN(this.a);
         } else {
           const sum = this.a + val + carry;
-          const overflow = (!((this.a ^ val) & 0x80) && ((this.a ^ sum) & 0x80)) !== 0;
+          const overflow = Boolean(~(this.a ^ val) & (this.a ^ sum) & 0x80);
           if (overflow) this.status |= 0x40; else this.status &= ~0x40;
           if (sum > 0xff) this.status |= 0x01; else this.status &= ~0x01;
           this.a = this.setZN(sum & 0xff);
@@ -4116,6 +3688,9 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
 
       // Step Single 65C02 Instruction
       step() {
+        if (this.pc === 0xFC58) {
+          this.isGraphicsMode = false;
+        }
         const op = this.readMem(this.pc++);
         this.cycles += 2;
         this.totalCycles += 2;
@@ -4479,11 +4054,9 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           : (typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : (cb) => setTimeout(cb, 16));
 
         const loop = () => {
-          if (this.running && !this.isRunningBasic) {
+          if (this.running) {
             const cyclesPerFrame = Math.floor(17000 * (this.speed || 1.0));
-            this.runCycles(Math.min(cyclesPerFrame, 100000));
-            this.renderScreen();
-          } else if (this.running && this.isRunningBasic) {
+            this.runCycles(Math.min(cyclesPerFrame, 500000));
             this.renderScreen();
           }
 
@@ -4654,6 +4227,13 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         for (let r = 0; r < 24; r++) this.clearRow(r);
       }
 
+      clearHiresVram() {
+        const base = this.isPage2 ? 0x4000 : 0x2000;
+        for (let a = base; a < base + 0x2000; a++) {
+          this.ram[a] = 0x00;
+        }
+      }
+
       initMemory() {
         // Hardware Memory & ROM Signature Watermark ($03F0 & $FFF0)
         const wm = "COPYRIGHT (C) 2026 IAN OHLANDER. APPLE //C ULTRA ARCHITECTURE.";
@@ -4750,537 +4330,28 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
       }
 
       typeChar(ch) {
-
-        if (this.isRunningBasic || this.isRunningGame) {
-          if (!this.keyQueue) this.keyQueue = [];
-          const code = typeof ch === 'string' ? (ch.length === 1 ? ch.toUpperCase().charCodeAt(0) : ch.charCodeAt(0)) : Number(ch);
-          this.keyQueue.push(code);
-          if (this.isRunningBasic) {
-            if (this.basicTimerId) {
-              clearTimeout(this.basicTimerId);
-              this.basicTimerId = null;
-            }
-            this.executeBasicLoop();
-          }
-          return;
-        }
-
-        if (this.currentInput.length >= 239) return;
-        this.currentInput += (typeof ch === 'string' ? ch : String.fromCharCode(ch));
-        this.renderCurrentInput(true);
+        if (!this.keyQueue) this.keyQueue = [];
+        let code = typeof ch === 'string' ? ch.charCodeAt(0) : Number(ch);
+        if (code >= 97 && code <= 122) code -= 32;
+        this.keyQueue.push(code);
+        this.runCycles(5000);
         this.renderScreen();
       }
 
       handleBackspace() { this.backspace(); }
 
       backspace() {
-
-        if (this.isRunningBasic || this.isRunningGame) {
-          if (!this.keyQueue) this.keyQueue = [];
-          this.keyQueue.push(8);
-          if (this.isRunningBasic) {
-            this.executeBasicLoop();
-          }
-          return;
-        }
-        if (this.currentInput.length === 0) return;
-        const prompt = this.isMonitorMode ? "* " : "] ";
-        const oldFullText = prompt + this.currentInput;
-        const oldRows = Math.ceil(Math.max(1, oldFullText.length) / 40);
-
-        this.currentInput = this.currentInput.slice(0, -1);
-
-        const minRow = (this.isGraphicsMode && this.mixedGraphics) ? 20 : 0;
-        const maxRow = 23;
-        for (let r = 0; r < oldRows; r++) {
-          const rowIdx = this.inputStartRow + r;
-          if (rowIdx >= minRow && rowIdx <= maxRow) {
-            this.clearRow(rowIdx);
-          }
-        }
-
-        this.renderCurrentInput(true);
+        if (!this.keyQueue) this.keyQueue = [];
+        this.keyQueue.push(8);
+        this.runCycles(5000);
         this.renderScreen();
       }
 
       handleReturn() {
-
-        if (this.isRunningBasic || this.isRunningGame) {
-          if (!this.keyQueue) this.keyQueue = [];
-          this.keyQueue.push(13);
-          if (this.isRunningBasic) {
-            this.executeBasicLoop();
-          }
-          return;
-        }
-        this.renderCurrentInput(false);
-        const prompt = this.isMonitorMode ? "* " : "] ";
-        const fullText = prompt + this.currentInput;
-        const numRows = Math.ceil(Math.max(1, fullText.length) / 40);
-
-        let cmd = this.currentInput.trim();
-        this.currentInput = '';
-
-        this.cursorRow = this.inputStartRow + numRows;
-        this.ensureRow();
-        this.cursorCol = 0;
-        this.inputStartRow = this.cursorRow;
-
-        if (!cmd) {
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, (this.isMonitorMode ? "* " : "] ") + "█");
-          return;
-        }
-
-        // Monitor mode handling (or explicitly prefixed with '*')
-        if (this.isMonitorMode || cmd.startsWith('*')) {
-          if (cmd.startsWith('*')) {
-            cmd = cmd.replace(/^\*\s*/, '').trim();
-          }
-          const handled = this.executeMonitorCommand(cmd);
-          if (handled) {
-            this.renderScreen();
-            return;
-          }
-        }
-
-        const upper = cmd.toUpperCase();
-
-        // Immediate CALL -151 or CALL 65385 -> Switch to 65C02 Machine Language Monitor
-        if (upper === 'CALL -151' || upper === 'CALL-151' || upper === 'CALL 65385' || upper === 'CALL65385') {
-          this.isMonitorMode = true;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "* █");
-          this.playBeep(880, 0.04);
-          this.renderScreen();
-          return;
-        }
-
-        // Immediate HOME or CLS -> Switch to TEXT mode, execute ROM $FC58 clear, reset cursor to (0,0)
-        if (upper === 'HOME' || upper === 'CLS' || upper === 'CALL 64600' || upper === 'CALL64600' || upper === 'CALL -936' || upper === 'CALL-936') {
-          this.writeMem(0xC051, 0); // Hardware softswitch: TEXT mode ON
-          this.isGraphicsMode = false;
-          this.mixedGraphics = false;
-          this.isHires = false;
-          this.executeSubroutine(0xFC58);
-          this.clearScreen();
-          this.cursorRow = 0;
-          this.cursorCol = 2;
-          this.inputStartRow = 0;
-          this.writeString(this.cursorRow, 0, "] ");
-          this.renderScreen();
-          return;
-        }
-
-        // Check if raw hex deposit (e.g. 0300: 64 06 ...) entered at BASIC prompt
-        if (/^[0-9A-Fa-f]{1,4}\s*:\s*[0-9A-Fa-f]{2}/.test(cmd)) {
-          this.executeMonitorCommand(cmd);
-          this.renderScreen();
-          return;
-        }
-
-        // Line number storage into program memory
-        if (/^\d+\s*/.test(cmd)) {
-          const match = cmd.match(/^(\d+)\s*(.*)/);
-          const lineNum = parseInt(match[1]);
-          const code = match[2];
-          this.basicProgram = this.basicProgram.filter(l => !l.startsWith(lineNum + ' '));
-          if (code) {
-            this.basicProgram.push(cmd);
-            this.basicProgram.sort((a, b) => parseInt(a) - parseInt(b));
-          }
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "] ");
-          return;
-        }
-
-        // System Commands
-        if (upper === 'RUN') {
-          this.cursorCol = 0;
-          this.runProgram();
-          return;
-        }
-
-        if (upper === 'LIST') {
-          if (!this.basicProgram || this.basicProgram.length === 0) {
-            this.ensureRow();
-            this.inputStartRow = this.cursorRow;
-            this.cursorCol = 2;
-            this.writeString(this.cursorRow, 0, "] ");
-            return;
-          }
-          for (const line of this.basicProgram) {
-            this.ensureRow();
-            this.writeString(this.cursorRow, 0, line);
-            this.cursorRow++;
-          }
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "] ");
-          return;
-        }
-
-        if (upper === 'CATALOG' || upper === 'DIR') {
-          this.ensureRow();
-          this.writeString(this.cursorRow, 0, "/HD (32 MB SMARTPORT VOLUME)");
-          this.cursorRow++;
-          this.ensureRow();
-          this.writeString(this.cursorRow, 0, "*A 004 HELLO.SYSTEM");
-          this.cursorRow++;
-          this.ensureRow();
-          this.writeString(this.cursorRow, 0, "*A 012 KALEIDOSCOPE.BAS");
-          this.cursorRow++;
-          this.ensureRow();
-          this.writeString(this.cursorRow, 0, "*B 048 RETRO.BREAKOUT");
-          this.cursorRow++;
-          this.ensureRow();
-          this.writeString(this.cursorRow, 0, "*B 032 JAVA.AOT.DEMO");
-          this.cursorRow++;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "] ");
-          return;
-        }
-
-        if (upper === 'NEW') {
-          this.basicProgram = [];
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "] ");
-          return;
-        }
-
-        // Immediate mode multi-statement execution engine
-        const immediateStmts = this.splitBasicStatements(cmd);
-        if (immediateStmts.length > 0) {
-          this.cursorCol = 0;
-          const tempLine = { lineNum: 0, statements: immediateStmts };
-          const savedProgram = this.parsedBasicLines;
-          const savedLinePtr = this.basicLinePtr;
-          const savedStmtPtr = this.basicStmtPtr;
-          const savedRunning = this.isRunningBasic;
-
-          this.parsedBasicLines = [tempLine];
-          this.basicLinePtr = 0;
-          this.basicStmtPtr = 0;
-          this.isRunningBasic = true;
-
-          let steps = 0;
-          const maxSteps = 50000;
-          let hasError = false;
-
-          while (this.isRunningBasic && this.basicLinePtr < this.parsedBasicLines.length && steps < maxSteps) {
-            const currentLineObj = this.parsedBasicLines[this.basicLinePtr];
-            const stmt = currentLineObj.statements[this.basicStmtPtr];
-            const ok = this.executeBasicStatement(stmt, 0);
-            if (!ok) {
-              hasError = true;
-              this.cursorRow++;
-              this.ensureRow();
-              this.writeString(this.cursorRow, 0, "?SYNTAX ERROR IN " + stmt);
-              break;
-            }
-            steps++;
-          }
-
-          // Restore saved program state
-          this.parsedBasicLines = savedProgram;
-          this.basicLinePtr = savedLinePtr;
-          this.basicStmtPtr = savedStmtPtr;
-          this.isRunningBasic = savedRunning;
-
-          if (!hasError) {
-            this.ensureRow();
-            this.inputStartRow = this.cursorRow;
-            this.cursorCol = 2;
-            this.clearRow(this.cursorRow);
-            this.writeString(this.cursorRow, 0, (this.isMonitorMode ? "* " : "] ") + "█");
-          } else {
-            this.cursorRow++;
-            this.ensureRow();
-            this.inputStartRow = this.cursorRow;
-            this.cursorCol = 2;
-            this.clearRow(this.cursorRow);
-            this.writeString(this.cursorRow, 0, "] ");
-          }
-          this.renderScreen();
-          return;
-        }
-
-        this.ensureRow();
-        this.writeString(this.cursorRow, 0, "?SYNTAX ERROR IN " + cmd);
-        this.cursorRow++;
-        this.ensureRow();
-        this.inputStartRow = this.cursorRow;
-        this.cursorCol = 2;
-        this.writeString(this.cursorRow, 0, "] ");
-      }
-
-      executeMonitorCommand(cmd) {
-        cmd = cmd.trim();
-        if (!cmd) {
-          this.cursorRow++;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "* █");
-          return true;
-        }
-
-        const upper = cmd.toUpperCase();
-
-        // 1. Exit Monitor to BASIC: 3D0G, 3D0 G, 03D0G, CTRL-C, EXIT, QUIT
-        if (upper === '3D0G' || upper === '3D0 G' || upper === '03D0G' || upper === '03D0 G' || upper === 'CTRL-C' || upper === 'EXIT' || upper === 'QUIT') {
-          this.isMonitorMode = false;
-          this.cursorRow++;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "] ");
-          this.playBeep(880, 0.03);
-          return true;
-        }
-
-        // 2. Hex memory deposit: ADDR: BYTE [BYTE BYTE ...]
-        // e.g. 0300: 64 06 9C 00 08 60 or 300: A9 41 20 ED FD 60
-        const depositMatch = cmd.match(/^([0-9A-Fa-f]{1,4})\s*:\s*([0-9A-Fa-f]{1,2}(?:\s+[0-9A-Fa-f]{1,2})*)\s*$/);
-        if (depositMatch) {
-          let addr = parseInt(depositMatch[1], 16);
-          const byteTokens = depositMatch[2].trim().split(/\s+/);
-          for (let i = 0; i < byteTokens.length; i++) {
-            const b = parseInt(byteTokens[i], 16);
-            this.writeMem(addr + i, b);
-          }
-          this.lastMonitorAddr = addr + byteTokens.length;
-          this.cursorRow++;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "* █");
-          this.playBeep(1200, 0.02);
-          return true;
-        }
-
-        // 3. Execution (GO): ADDR G or ADDRG or G
-        const goMatch = upper.match(/^([0-9A-F]{1,4})?\s*G$/);
-        if (goMatch) {
-          let addr = goMatch[1] ? parseInt(goMatch[1], 16) : (this.lastMonitorAddr || 0x0300);
-          if (addr === 0x03D0) {
-            this.isMonitorMode = false;
-            this.cursorRow++;
-            this.ensureRow();
-            this.inputStartRow = this.cursorRow;
-            this.cursorCol = 2;
-            this.writeString(this.cursorRow, 0, "] ");
-            return true;
-          }
-          this.pc = addr;
-          const initialSp = this.sp;
-          let cyclesRan = 0;
-          const maxCycles = 100000;
-          while (cyclesRan < maxCycles) {
-            const curOp = this.readMem(this.pc);
-            if (curOp === 0x60 && this.sp >= initialSp) { // RTS
-              this.pc++;
-              break;
-            }
-            if (curOp === 0x00) { // BRK
-              break;
-            }
-            this.step();
-            cyclesRan += 2;
-          }
-          this.pc = 0xFD1B; // Restore safe Monitor KEYIN wait loop
-          this.cursorRow++;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "* █");
-          this.playBeep(880, 0.03);
-          return true;
-        }
-
-        // 4. Disassembly (LIST): ADDR L or ADDRL or L
-        const listMatch = upper.match(/^([0-9A-F]{1,4})?\s*L$/);
-        if (listMatch) {
-          let addr = listMatch[1] ? parseInt(listMatch[1], 16) : (this.lastMonitorAddr || 0x0300);
-          this.cursorRow++;
-          for (let i = 0; i < 6; i++) {
-            this.ensureRow();
-            const op = this.readMem(addr);
-            let mnemonic = "NOP";
-            let len = 1;
-            let operand = "";
-            if (op === 0x64) { mnemonic = "STZ"; len = 2; operand = "$" + this.readMem(addr + 1).toString(16).padStart(2, '0').toUpperCase(); }
-            else if (op === 0x9C) { mnemonic = "STZ"; len = 3; operand = "$" + ((this.readMem(addr + 2) << 8) | this.readMem(addr + 1)).toString(16).padStart(4, '0').toUpperCase(); }
-            else if (op === 0xA9) { mnemonic = "LDA"; len = 2; operand = "#$" + this.readMem(addr + 1).toString(16).padStart(2, '0').toUpperCase(); }
-            else if (op === 0x20) { mnemonic = "JSR"; len = 3; operand = "$" + ((this.readMem(addr + 2) << 8) | this.readMem(addr + 1)).toString(16).padStart(4, '0').toUpperCase(); }
-            else if (op === 0x60) { mnemonic = "RTS"; len = 1; }
-            else if (op === 0x85) { mnemonic = "STA"; len = 2; operand = "$" + this.readMem(addr + 1).toString(16).padStart(2, '0').toUpperCase(); }
-            else if (op === 0x8D) { mnemonic = "STA"; len = 3; operand = "$" + ((this.readMem(addr + 2) << 8) | this.readMem(addr + 1)).toString(16).padStart(4, '0').toUpperCase(); }
-            else if (op === 0xAD) { mnemonic = "LDA"; len = 3; operand = "$" + ((this.readMem(addr + 2) << 8) | this.readMem(addr + 1)).toString(16).padStart(4, '0').toUpperCase(); }
-            else if (op === 0x4C) { mnemonic = "JMP"; len = 3; operand = "$" + ((this.readMem(addr + 2) << 8) | this.readMem(addr + 1)).toString(16).padStart(4, '0').toUpperCase(); }
-            else { mnemonic = "HEX " + op.toString(16).padStart(2, '0').toUpperCase(); len = 1; }
-
-            let hexBytes = "";
-            for (let b = 0; b < len; b++) {
-              hexBytes += this.readMem(addr + b).toString(16).padStart(2, '0').toUpperCase() + " ";
-            }
-            hexBytes = hexBytes.padEnd(10, ' ');
-            const lineStr = `${addr.toString(16).padStart(4, '0').toUpperCase()}- ${hexBytes} ${mnemonic} ${operand}`.trim();
-            this.writeString(this.cursorRow, 0, lineStr);
-            this.cursorRow++;
-            addr += len;
-          }
-          this.lastMonitorAddr = addr;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "* █");
-          return true;
-        }
-
-        // 5. Memory Range Inspection: START.END
-        const rangeMatch = cmd.match(/^([0-9A-Fa-f]{1,4})\.([0-9A-Fa-f]{1,4})$/);
-        if (rangeMatch) {
-          let start = parseInt(rangeMatch[1], 16);
-          let end = parseInt(rangeMatch[2], 16);
-          if (end < start) end = start;
-          if (end - start > 128) end = start + 128; // safety cap
-
-          this.cursorRow++;
-          let cur = start;
-          while (cur <= end) {
-            this.ensureRow();
-            let rowBytes = [];
-            const rowStart = cur;
-            while (cur <= end && rowBytes.length < 8) {
-              rowBytes.push(this.readMem(cur).toString(16).padStart(2, '0').toUpperCase());
-              cur++;
-            }
-            const lineStr = `${rowStart.toString(16).padStart(4, '0').toUpperCase()}: ${rowBytes.join(' ')}`;
-            this.writeString(this.cursorRow, 0, lineStr);
-            this.cursorRow++;
-          }
-          this.lastMonitorAddr = end + 1;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "* █");
-          return true;
-        }
-
-        // 6. Single Address Inspection: ADDR
-        const singleMatch = cmd.match(/^([0-9A-Fa-f]{1,4})$/);
-        if (singleMatch) {
-          const addr = parseInt(singleMatch[1], 16);
-          this.cursorRow++;
-          this.ensureRow();
-          let rowBytes = [];
-          for (let i = 0; i < 8; i++) {
-            rowBytes.push(this.readMem(addr + i).toString(16).padStart(2, '0').toUpperCase());
-          }
-          const lineStr = `${addr.toString(16).padStart(4, '0').toUpperCase()}: ${rowBytes.join(' ')}`;
-          this.writeString(this.cursorRow, 0, lineStr);
-          this.cursorRow++;
-          this.lastMonitorAddr = addr + 8;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "* █");
-          return true;
-        }
-
-        // Unrecognized monitor command
-        this.cursorRow++;
-        this.ensureRow();
-        this.writeString(this.cursorRow, 0, `?ERR`);
-        this.cursorRow++;
-        this.ensureRow();
-        this.inputStartRow = this.cursorRow;
-        this.cursorCol = 2;
-        this.writeString(this.cursorRow, 0, "* █");
-        return true;
-      }
-
-      runProgram() {
-        if (!this.basicProgram || this.basicProgram.length === 0) {
-          this.cursorRow++;
-          this.ensureRow();
-          this.writeString(this.cursorRow, 0, "] ");
-          return;
-        }
-
-        this.stopBasic();
-        this.isRunningBasic = true;
-        this.keyQueue = [];
-        this.lastKeyPressed = 0;
-        this.basicVars = {};
-        this.basicArrays = {};
-        this.basicForLoops = {};
-        this.basicGosubStack = [];
-        this.basicScale = 1;
-        this.basicRot = 0;
-        this.hiresLines = [];
-        this.hcolor = 3;
-        this.lastHplotX = 0;
-        this.lastHplotY = 0;
-
-        this.parsedBasicLines = [];
-        for (const rawLine of this.basicProgram) {
-          const m = rawLine.trim().match(/^(\d+)\s*(.*)/);
-          if (m) {
-            const lineNum = parseInt(m[1]);
-            const code = m[2].trim();
-            const statements = this.splitBasicStatements(code);
-            this.parsedBasicLines.push({ lineNum, statements });
-          }
-        }
-        this.parsedBasicLines.sort((a, b) => a.lineNum - b.lineNum);
-
-        // Extract all DATA items into this.basicData
-        this.basicData = [];
-        this.basicDataPtr = 0;
-        for (const lineObj of this.parsedBasicLines) {
-          for (const stmt of lineObj.statements) {
-            if (stmt.toUpperCase().startsWith('DATA')) {
-              const items = stmt.replace(/^DATA\s*/i, '').split(',');
-              for (const it of items) {
-                const trimmed = it.trim();
-                if (trimmed) this.basicData.push(trimmed);
-              }
-            }
-          }
-        }
-
-        this.basicLinePtr = 0;
-        this.basicStmtPtr = 0;
-        this.executeBasicLoop();
-      }
-
-      splitBasicStatements(code) {
-        const stmts = [];
-        let cur = '';
-        let inQuote = false;
-        for (let i = 0; i < code.length; i++) {
-          const ch = code[i];
-          if (ch === '"') inQuote = !inQuote;
-          if (ch === ':' && !inQuote) {
-            if (cur.trim()) stmts.push(cur.trim());
-            cur = '';
-          } else {
-            cur += ch;
-          }
-        }
-        if (cur.trim()) stmts.push(cur.trim());
-        return stmts;
+        if (!this.keyQueue) this.keyQueue = [];
+        this.keyQueue.push(13);
+        this.runCycles(this.speed >= 50 ? 700000 : 200000);
+        this.renderScreen();
       }
 
       stopGame() {
@@ -5351,7 +4422,7 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           q7: false
         };
 
-        this.a = 0x60;
+        this.a = 0x01;
         this.x = 0x60;
         this.y = 0x00;
         this.sp = 0xff;
@@ -5594,1264 +4665,198 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
       }
 
       executeBasicLoop() {
-        if (!this.isRunningBasic) return;
-
-        const isArcadeLoop = Boolean(this.isGraphicsMode && this.basicVars && (this.basicVars.hasOwnProperty('TIME') || this.basicVars.hasOwnProperty('BY')));
-        const maxSteps = this.speed >= 50 ? 4000 : this.speed >= 8 ? 400 : (isArcadeLoop ? 6 : 10);
-        let steps = 0;
-        const startTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-        const maxTimeMs = 8; // Keep frame slice to <= 8ms so DOM and 60 FPS RAF loop never starve
-
-        while (this.isRunningBasic && steps < maxSteps) {
-          while (this.basicLinePtr < this.parsedBasicLines.length &&
-                 this.parsedBasicLines[this.basicLinePtr] &&
-                 this.basicStmtPtr >= this.parsedBasicLines[this.basicLinePtr].statements.length) {
-            this.basicLinePtr++;
-            this.basicStmtPtr = 0;
-          }
-
-          if (this.basicLinePtr >= this.parsedBasicLines.length) {
-            this.isRunningBasic = false;
-            if (!this.isGraphicsMode) {
-              this.cursorRow++;
-              this.ensureRow();
-              this.inputStartRow = this.cursorRow;
-              this.cursorCol = 2;
-              this.writeString(this.cursorRow, 0, "] ");
-            } else if (this.mixedGraphics) {
-              if (this.cursorRow < 20 || this.cursorRow > 23) this.cursorRow = 20;
-              this.ensureRow();
-              this.inputStartRow = this.cursorRow;
-              this.cursorCol = 2;
-              this.writeString(this.cursorRow, 0, "] ");
-            }
-            this.renderScreen();
-            return;
-          }
-
-          const currentLineObj = this.parsedBasicLines[this.basicLinePtr];
-          const stmt = currentLineObj.statements[this.basicStmtPtr];
-          if (!stmt) {
-            this.advanceBasic();
-            continue;
-          }
-
-          if (stmt.toUpperCase().trim().startsWith('GET') && (!this.keyQueue || this.keyQueue.length === 0)) {
-            break;
-          }
-
-          const ok = this.executeBasicStatement(stmt, currentLineObj.lineNum);
-          if (!ok) {
-            this.isRunningBasic = false;
-            this.cursorRow++;
-            this.ensureRow();
-            this.writeString(this.cursorRow, 0, `?SYNTAX ERROR IN ${currentLineObj.lineNum}`);
-            this.cursorRow++;
-            this.ensureRow();
-            this.inputStartRow = this.cursorRow;
-            this.cursorCol = 2;
-            this.writeString(this.cursorRow, 0, "] ");
-            this.renderScreen();
-            return;
-          }
-          steps++;
-
-          if ((steps & 0x3F) === 0) {
-            const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-            if (now - startTime >= maxTimeMs) {
-              break;
-            }
-          }
-        }
-
-        if (this.isRunningBasic) {
-          if (this.isGraphicsMode && typeof requestAnimationFrame !== 'undefined') {
-            this.basicTimerId = requestAnimationFrame(() => this.executeBasicLoop());
-          } else {
-            const delay = this.speed >= 50 ? 0 : this.speed >= 8 ? 8 : (isArcadeLoop ? 33 : 16);
-            this.basicTimerId = setTimeout(() => this.executeBasicLoop(), delay);
-          }
-        }
-      }
-
-      executeBasicStatement(stmt, lineNum) {
-        if (!stmt) {
-          this.advanceBasic();
-          return true;
-        }
-
-        const upper = stmt.toUpperCase().trim();
-
-        if (upper.startsWith('TAB(') || upper.startsWith('SPC(')) {
-          return this.executeBasicStatement('PRINT ' + stmt, lineNum);
-        }
-
-        if (upper.startsWith('REM') || upper.startsWith('DATA')) {
-          if (this.isRunningBasic && this.parsedBasicLines && this.parsedBasicLines[this.basicLinePtr]) {
-            this.basicStmtPtr = this.parsedBasicLines[this.basicLinePtr].statements.length;
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'HOME' || upper === 'CLS') {
-          this.executeSubroutine(0xFC58);
-          for (let r = 0; r < 24; r++) this.clearRow(r);
-          this.cursorRow = (this.isGraphicsMode && this.mixedGraphics) ? 20 : 0;
-          this.cursorCol = 0;
-          this.inputStartRow = this.cursorRow;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'HGR') {
-          this.executeSubroutine(0xF3E2);
-          this.isGraphicsMode = true;
-          this.mixedGraphics = true;
-          this.isHires = true;
-          this.isPage2 = false;
-          this.ram[0xE6] = 0x20;
-          this.clearHiresVram();
-          this.hcolor = 3;
-          this.lastHplotX = 0;
-          this.lastHplotY = 0;
-          for (let r = 20; r < 24; r++) this.clearRow(r);
-          this.cursorRow = 20;
-          this.inputStartRow = 20;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'HGR2') {
-          this.executeSubroutine(0xF3D8);
-          this.isGraphicsMode = true;
-          this.mixedGraphics = false;
-          this.isHires = true;
-          this.isPage2 = true;
-          this.ram[0xE6] = 0x40;
-          this.clearHiresVram();
-          this.hcolor = 3;
-          this.lastHplotX = 0;
-          this.lastHplotY = 0;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'TEXT') {
-          this.writeMem(0xC051, 0);
-          this.isGraphicsMode = false;
-          this.mixedGraphics = false;
-          this.isHires = false;
-          this.cursorRow = 0;
-          this.inputStartRow = 0;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'GR') {
-          this.writeMem(0xC050, 0);
-          this.writeMem(0xC056, 0);
-          this.writeMem(0xC053, 0);
-          this.isGraphicsMode = true;
-          this.mixedGraphics = true;
-          this.isHires = false;
-          this.hiresLines = [];
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('HCOLOR=') || upper.startsWith('HCOLOR =')) {
-          const colExpr = stmt.replace(/^HCOLOR\s*=\s*/i, '');
-          const colVal = this.evalBasicExpr(colExpr);
-          this.a = Math.floor(Number(colVal) || 3) % 8;
-          this.executeSubroutine(0xF3F2);
-          this.hcolor = this.readMem(0xE4);
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('COLOR=') || upper.startsWith('COLOR =')) {
-          const colExpr = stmt.replace(/^COLOR\s*=\s*/i, '');
-          const colVal = this.evalBasicExpr(colExpr);
-          this.hcolor = Math.floor(Number(colVal) || 3) % 16;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('SCALE=') || upper.startsWith('SCALE =')) {
-          const scaleExpr = stmt.replace(/^SCALE\s*=\s*/i, '');
-          this.basicScale = Math.max(1, Math.round(Number(this.evalBasicExpr(scaleExpr)) || 1));
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('ROT=') || upper.startsWith('ROT =')) {
-          const rotExpr = stmt.replace(/^ROT\s*=\s*/i, '');
-          this.basicRot = Number(this.evalBasicExpr(rotExpr)) || 0;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('RESTORE')) {
-          this.basicDataPtr = 0;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('READ')) {
-          const varNames = stmt.replace(/^READ\s*/i, '').split(',').map(v => v.trim().toUpperCase());
-          for (const v of varNames) {
-            if (this.basicDataPtr < this.basicData.length) {
-              const rawVal = this.basicData[this.basicDataPtr++];
-              if (v.endsWith('$')) {
-                this.basicVars[v] = rawVal.replace(/^["']|["']$/g, '');
-              } else {
-                this.basicVars[v] = Number(rawVal) || 0;
-              }
-            } else {
-              this.basicVars[v] = v.endsWith('$') ? '' : 0;
-            }
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('GET')) {
-          const varName = stmt.replace(/^GET\s*/i, '').trim().toUpperCase();
-          if (this.keyQueue && this.keyQueue.length > 0) {
-            const k = this.keyQueue.shift();
-            const char = String.fromCharCode(k & 0x7F);
-            this.basicVars[varName] = varName.endsWith('$') ? char.toUpperCase() : (Number(char) || 0);
-            this.advanceBasic();
-            return true;
-          } else {
-            // Wait for keypress without advancing
-            return true;
-          }
-        }
-
-        const drawMatch = stmt.match(/^(X?DRAW)\s+(.*?)\s+AT\s+(.*?),(.*)$/i);
-        if (drawMatch) {
-          const isXdraw = drawMatch[1].toUpperCase() === 'XDRAW';
-          const shapeNum = Number(this.evalBasicExpr(drawMatch[2])) || 1;
-          const x = Number(this.evalBasicExpr(drawMatch[3])) || 0;
-          const y = Number(this.evalBasicExpr(drawMatch[4])) || 0;
-          this.drawShape(shapeNum, x, y, isXdraw);
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('GOTO')) {
-          const target = Number(this.evalBasicExpr(stmt.replace(/^GOTO\s*/i, '').trim())) || 0;
-          const targetIdx = this.parsedBasicLines.findIndex(l => l.lineNum === target);
-          if (targetIdx !== -1) {
-            this.basicLinePtr = targetIdx;
-            this.basicStmtPtr = 0;
-            return true;
-          }
-          return false;
-        }
-
-        if (upper.startsWith('GOSUB')) {
-          const target = Number(this.evalBasicExpr(stmt.replace(/^GOSUB\s*/i, '').trim())) || 0;
-          const targetIdx = this.parsedBasicLines.findIndex(l => l.lineNum === target);
-          if (targetIdx !== -1) {
-            this.basicGosubStack.push({ linePtr: this.basicLinePtr, stmtPtr: this.basicStmtPtr + 1 });
-            this.basicLinePtr = targetIdx;
-            this.basicStmtPtr = 0;
-            return true;
-          }
-          return false;
-        }
-
-        if (upper === 'RETURN') {
-          if (this.basicGosubStack && this.basicGosubStack.length > 0) {
-            const frame = this.basicGosubStack.pop();
-            this.basicLinePtr = frame.linePtr;
-            this.basicStmtPtr = frame.stmtPtr;
-            while (this.basicLinePtr < this.parsedBasicLines.length &&
-                   this.parsedBasicLines[this.basicLinePtr] &&
-                   this.basicStmtPtr >= this.parsedBasicLines[this.basicLinePtr].statements.length) {
-              this.basicLinePtr++;
-              this.basicStmtPtr = 0;
-            }
-            return true;
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'POP') {
-          if (this.basicGosubStack && this.basicGosubStack.length > 0) {
-            this.basicGosubStack.pop();
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        const onGotoMatch = stmt.match(/^ON\s+(.*?)\s+GOTO\s+(.*)$/i);
-        if (onGotoMatch) {
-          const idx = Math.floor(Number(this.evalBasicExpr(onGotoMatch[1])) || 0);
-          const targets = onGotoMatch[2].split(',').map(t => parseInt(t.trim()));
-          if (idx >= 1 && idx <= targets.length) {
-            const target = targets[idx - 1];
-            const targetIdx = this.parsedBasicLines.findIndex(l => l.lineNum === target);
-            if (targetIdx !== -1) {
-              this.basicLinePtr = targetIdx;
-              this.basicStmtPtr = 0;
-              return true;
-            }
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'FLASH' || upper === 'NORMAL' || upper === 'INVERSE') {
-          this.advanceBasic();
-          return true;
-        }
-
-        // HCOLOR or COLOR without '=' is a syntax error!
-        if (upper === 'HCOLOR' || upper === 'COLOR' || /^HCOLOR\s+[0-9]/i.test(upper) || /^COLOR\s+[0-9]/i.test(upper)) {
-          return false;
-        }
-
-        if (upper.startsWith('HPLOT')) {
-          const ok = this.handleHplot(stmt);
-          if (!ok) return false;
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('VTAB')) {
-          const rExpr = stmt.replace(/^VTAB\s*/i, '');
-          const rVal = this.evalBasicExpr(rExpr);
-          this.cursorRow = Math.max(0, Math.min(23, (Math.floor(Number(rVal) || 1) - 1)));
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('HTAB')) {
-          const cExpr = stmt.replace(/^HTAB\s*/i, '');
-          const cVal = this.evalBasicExpr(cExpr);
-          this.cursorCol = Math.max(0, Math.min(39, (Math.floor(Number(cVal) || 1) - 1)));
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('PR#') || upper.startsWith('PR #')) {
-          const slotNum = parseInt(upper.replace(/^PR\s*#?\s*/i, ''));
-          if (slotNum >= 0 && slotNum <= 7) {
-            if (slotNum === 1) {
-              this.outputSlot = 1;
-              this.cursorRow++;
-              this.ensureRow();
-              this.writeString(this.cursorRow, 0, "[SLOT 1: IMAGEWRITER II PRINTER ONLINE]");
-              this.cursorRow++;
-              this.advanceBasic();
-              return true;
-            } else if (slotNum === 0) {
-              this.outputSlot = 0;
-              this.cursorRow++;
-              this.ensureRow();
-              this.writeString(this.cursorRow, 0, "[SLOT 0: CRT VIDEO DISPLAY ACTIVE]");
-              this.cursorRow++;
-              this.advanceBasic();
-              return true;
-            } else if (slotNum === 6) {
-              window.bootFloppyDrive();
-              return true;
-            } else if (slotNum === 7) {
-              window.bootHardDisk();
-              return true;
-            } else if (slotNum === 3) {
-              this.cursorRow++;
-              this.ensureRow();
-              this.writeString(this.cursorRow, 0, "[80-COLUMN AUX VIDEO ACTIVE]");
-              this.cursorRow++;
-              this.advanceBasic();
-              return true;
-            }
-          }
-        }
-
-        if (upper.startsWith('CALL')) {
-          const addrExpr = stmt.replace(/^CALL\s*/i, '').trim();
-          const parts = addrExpr.split(',');
-          const firstPart = parts[0].trim();
-          const addr = Number(this.evalBasicExpr(firstPart)) || parseInt(firstPart) || 0;
-          if (parts.length > 1) {
-            const param = Number(this.evalBasicExpr(parts[1].trim())) || 0;
-            this.x = param & 0xFF;
-          }
-          if (addr === -151 || addr === 65385) {
-            this.isMonitorMode = true;
-            this.cursorRow++;
-            this.ensureRow();
-            this.writeString(this.cursorRow, 0, "* █");
-            this.playBeep(880, 0.04);
-            this.advanceBasic();
-            return true;
-          }
-          if (addr === 64600 || addr === -936) {
-            this.executeSubroutine(0xFC58);
-            this.cursorRow = 0;
-            this.writeString(this.cursorRow, 0, "] ");
-            this.advanceBasic();
-            return true;
-          }
-          if (addr === -958 || addr === 64578) {
-            // CLEOS: Clear from cursor row to bottom of text window
-            const startR = (this.isGraphicsMode && this.mixedGraphics) ? Math.max(20, this.cursorRow) : this.cursorRow;
-            for (let r = startR; r < 24; r++) {
-              this.clearRow(r);
-            }
-            this.advanceBasic();
-            return true;
-          }
-          if (addr === 768 || addr === 0x0300 || (this.basicVars && (addr === this.basicVars['SOUND'] || addr === this.basicVars['SK'] || addr === this.basicVars['FLSH']))) {
-            const target = (addr > 0 && addr < 65536) ? addr : 0x0300;
-            this.executeSubroutine(target, 500000);
-            this.advanceBasic();
-            return true;
-          }
-          this.playBeep(880, 0.05);
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('POKE')) {
-          const parts = stmt.replace(/^POKE\s*/i, '').split(',');
-          if (parts.length >= 2) {
-            const addrRaw = Number(this.evalBasicExpr(parts[0].trim())) || 0;
-            const addr = addrRaw < 0 ? (addrRaw + 65536) & 0xffff : addrRaw & 0xffff;
-            const val = Number(this.evalBasicExpr(parts[1].trim())) || 0;
-            this.writeMem(addr, val);
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper.startsWith('SPEED=') || upper.startsWith('SPEED =')) {
-          const spd = this.evalBasicExpr(stmt.replace(/^SPEED\s*=\s*/i, ''));
-          this.setSpeed(Number(spd) || 1);
-          this.advanceBasic();
-          return true;
-        }
-
-        if (upper === 'END' || upper === 'STOP') {
-          this.isRunningBasic = false;
-          if (!this.isGraphicsMode) {
-            this.cursorRow++;
-            this.ensureRow();
-            this.writeString(this.cursorRow, 0, "] ");
-          }
-          this.renderScreen();
-          return true;
-        }
-
-        // FOR var = start TO end [STEP s]
-        const forMatch = stmt.match(/^FOR\s+([A-Z0-9$%]+)\s*=\s*(.*?)\s+TO\s+(.*?)(?:\s+STEP\s+(.*))?$/i);
-        if (forMatch) {
-          const varName = forMatch[1].toUpperCase();
-          const startVal = Number(this.evalBasicExpr(forMatch[2])) || 0;
-          const endVal = Number(this.evalBasicExpr(forMatch[3])) || 0;
-          const stepVal = forMatch[4] ? (Number(this.evalBasicExpr(forMatch[4])) || 1) : 1;
-
-          this.basicVars[varName] = startVal;
-          this.basicForLoops[varName] = {
-            end: endVal,
-            step: stepVal,
-            linePtr: this.basicLinePtr,
-            stmtPtr: this.basicStmtPtr + 1
-          };
-          this.advanceBasic();
-          return true;
-        }
-
-        // NEXT [var]
-        if (upper.startsWith('NEXT')) {
-          const varName = stmt.replace(/^NEXT\s*/i, '').trim().toUpperCase() || Object.keys(this.basicForLoops).pop();
-          if (varName && this.basicForLoops[varName]) {
-            const loop = this.basicForLoops[varName];
-            this.basicVars[varName] = (this.basicVars[varName] || 0) + loop.step;
-            const isDone = loop.step > 0 ? (this.basicVars[varName] > loop.end) : (this.basicVars[varName] < loop.end);
-            if (!isDone) {
-              this.basicLinePtr = loop.linePtr;
-              this.basicStmtPtr = loop.stmtPtr;
-              while (this.basicLinePtr < this.parsedBasicLines.length &&
-                     this.parsedBasicLines[this.basicLinePtr] &&
-                     this.basicStmtPtr >= this.parsedBasicLines[this.basicLinePtr].statements.length) {
-                this.basicLinePtr++;
-                this.basicStmtPtr = 0;
-              }
-              return true;
-            } else {
-              delete this.basicForLoops[varName];
-            }
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        // IF cond THEN stmt
-        const ifMatch = stmt.match(/^IF\s+(.*?)\s+THEN\s+(.*)$/i);
-        if (ifMatch) {
-          const cond = ifMatch[1];
-          const thenStmt = ifMatch[2];
-          if (this.evalBasicCondition(cond)) {
-            if (/^\d+$/.test(thenStmt.trim())) {
-              const target = parseInt(thenStmt.trim());
-              const targetIdx = this.parsedBasicLines.findIndex(l => l.lineNum === target);
-              if (targetIdx !== -1) {
-                this.basicLinePtr = targetIdx;
-                this.basicStmtPtr = 0;
-                return true;
-              }
-            } else {
-              return this.executeBasicStatement(thenStmt, lineNum);
-            }
-          } else {
-            if (this.parsedBasicLines && this.parsedBasicLines[this.basicLinePtr]) {
-              this.basicStmtPtr = this.parsedBasicLines[this.basicLinePtr].statements.length;
-            }
-            this.advanceBasic();
-            return true;
-          }
-        }
-
-        // PRINT / ?
-        if (upper.startsWith('PRINT') || upper.startsWith('?')) {
-          const rawExpr = stmt.replace(/^PRINT\s*/i, '').replace(/^\?\s*/, '');
-          this.executePrintStatement(rawExpr);
-          this.advanceBasic();
-          return true;
-        }
-
-        // DIM var(size) [, var2(size2)...]
-        if (upper.startsWith('DIM ') || upper.startsWith('DIM(')) {
-          const decls = stmt.replace(/^DIM\s*/i, '').split(',');
-          if (!this.basicArrays) this.basicArrays = {};
-          for (const decl of decls) {
-            const m = decl.trim().match(/^([A-Z0-9$%]+)\s*\(\s*([^()]+)\s*\)$/i);
-            if (m) {
-              const arrName = m[1].toUpperCase();
-              const size = Math.floor(Number(this.evalBasicExpr(m[2])) || 10);
-              const initVal = arrName.endsWith('$') ? '' : 0;
-              this.basicArrays[arrName] = new Array(size + 1).fill(initVal);
-            }
-          }
-          this.advanceBasic();
-          return true;
-        }
-
-        // INPUT statement: INPUT ["prompt";] var
-        if (upper.startsWith('INPUT')) {
-          const raw = stmt.replace(/^INPUT\s*/i, '').trim();
-          let promptStr = '? ';
-          let varPart = raw;
-
-          const pMatch = raw.match(/^"([^"]*)"\s*([;,])\s*(.*)$/);
-          if (pMatch) {
-            promptStr = pMatch[1];
-            varPart = pMatch[3].trim();
-          }
-
-          const varName = varPart.toUpperCase();
-          if (promptStr) {
-            this.printOutputString(promptStr);
-          }
-
-          let inputVal = '';
-          if (this.keyQueue && this.keyQueue.length > 0) {
-            while (this.keyQueue.length > 0) {
-              const k = this.keyQueue.shift();
-              if (k === 0x0D || k === 0x8D) break;
-              inputVal += String.fromCharCode(k & 0x7F);
-            }
-          } else {
-            // Default input fallback for automated testing
-            inputVal = varName.endsWith('$') ? 'Y' : '15';
-          }
-
-          if (varName.endsWith('$')) {
-            this.basicVars[varName] = inputVal;
-          } else {
-            this.basicVars[varName] = Number(inputVal) || 0;
-          }
-
-          this.cursorRow++;
-          this.cursorCol = 0;
-          this.ensureRow();
-          this.advanceBasic();
-          return true;
-        }
-
-        // Array assignment: LET var(index) = expr or var(index) = expr
-        const arrayAssignMatch = stmt.replace(/^LET\s*/i, '').match(/^([A-Z0-9$%]+)\s*\(\s*([^()]+)\s*\)\s*=\s*(.*)$/i);
-        if (arrayAssignMatch) {
-          const arrName = arrayAssignMatch[1].toUpperCase();
-          const idx = Math.floor(Number(this.evalBasicExpr(arrayAssignMatch[2])) || 0);
-          const val = this.evalBasicExpr(arrayAssignMatch[3]);
-          if (!this.basicArrays) this.basicArrays = {};
-          if (!this.basicArrays[arrName]) {
-            this.basicArrays[arrName] = new Array(Math.max(11, idx + 1)).fill(arrName.endsWith('$') ? '' : 0);
-          }
-          if (idx >= this.basicArrays[arrName].length) {
-            while (this.basicArrays[arrName].length <= idx) {
-              this.basicArrays[arrName].push(arrName.endsWith('$') ? '' : 0);
-            }
-          }
-          this.basicArrays[arrName][idx] = val;
-          this.advanceBasic();
-          return true;
-        }
-
-        // LET var = expr or var = expr
-        const assignMatch = stmt.replace(/^LET\s*/i, '').match(/^([A-Z0-9$%]+)\s*=\s*(.*)$/i);
-        if (assignMatch) {
-          const varName = assignMatch[1].toUpperCase();
-          const val = this.evalBasicExpr(assignMatch[2]);
-          this.basicVars[varName] = val;
-          this.advanceBasic();
-          return true;
-        }
-
-        // Unrecognized statement -> syntax error!
-        return false;
-      }
-
-      
-      getHiresScanlineBase(y) {
-        const pageOffset = (this.isPage2 ? 0x4000 : 0x2000);
-        const box = Math.floor(y / 64);
-        const row = Math.floor((y % 64) / 8);
-        const sub = y % 8;
-        return pageOffset + (sub * 0x400) + (row * 0x80) + (box * 0x28);
-      }
-
-      setHiresPixel(x, y, color = 3) {
-        if (x < 0 || x >= 280 || y < 0 || y >= 192) return;
-        const base = this.getHiresScanlineBase(y);
-        const byteCol = Math.floor(x / 7);
-        const bitInByte = x % 7;
-        const addr = base + byteCol;
-
-        let currentByte = this.ram[addr] || 0;
-
-        // Apple II Hi-Res Colors:
-        // Palette 0: 0=Black1, 1=Green, 2=Violet, 3=White1
-        // Palette 1: 4=Black2, 5=Orange, 6=Blue, 7=White2
-        if (color === 0 || color === 4) {
-          currentByte &= ~(1 << bitInByte);
-          if (color === 4) currentByte |= 0x80;
-          else currentByte &= 0x7F;
-        } else if (color === 3 || color === 7) {
-          currentByte |= (1 << bitInByte);
-          if (color === 7) currentByte |= 0x80;
-          else currentByte &= 0x7F;
-        } else {
-          // Palette 0 (Green=1, Violet=2) vs Palette 1 (Orange=5, Blue=6)
-          if (color >= 4) currentByte |= 0x80;
-          else currentByte &= 0x7F;
-
-          const isOddColor = (color === 1 || color === 5);
-          const isOddX = (x % 2 !== 0);
-
-          if (isOddColor === isOddX) {
-            currentByte |= (1 << bitInByte);
-          } else {
-            currentByte &= ~(1 << bitInByte);
-          }
-        }
-
-        this.ram[addr] = currentByte;
-      }
-
-      drawHiresLine(x1, y1, x2, y2, color = 3) {
-        x1 = Math.round(x1); y1 = Math.round(y1);
-        x2 = Math.round(x2); y2 = Math.round(y2);
-
-        const dx = Math.abs(x2 - x1);
-        const dy = Math.abs(y2 - y1);
-        const sx = x1 < x2 ? 1 : -1;
-        const sy = y1 < y2 ? 1 : -1;
-        let err = dx - dy;
-
-        while (true) {
-          this.setHiresPixel(x1, y1, color);
-          if ((color === 1 || color === 5) && (x1 % 2 === 0)) {
-            this.setHiresPixel(x1 + 1, y1, color);
-          } else if ((color === 2 || color === 6) && (x1 % 2 !== 0)) {
-            this.setHiresPixel(x1 - 1, y1, color);
-          }
-          if (x1 === x2 && y1 === y2) break;
-          const e2 = 2 * err;
-          if (e2 > -dy) { err -= dy; x1 += sx; }
-          if (e2 < dx) { err += dx; y1 += sy; }
-        }
-      }
-
-      clearHiresVram() {
-        const base = this.isPage2 ? 0x4000 : 0x2000;
-        for (let a = base; a < base + 0x2000; a++) {
-          this.ram[a] = 0x00;
-        }
-      }
-
-      drawHiresRect(x, y, w, h, color = 3, filled = false) {
-        x = Math.round(x); y = Math.round(y);
-        w = Math.round(w); h = Math.round(h);
-        if (filled) {
-          for (let dy = 0; dy < h; dy++) {
-            for (let dx = 0; dx < w; dx++) {
-              this.setHiresPixel(x + dx, y + dy, color);
-            }
-          }
-        } else {
-          this.drawHiresLine(x, y, x + w, y, color);
-          this.drawHiresLine(x, y + h, x + w, y + h, color);
-          this.drawHiresLine(x, y, x, y + h, color);
-          this.drawHiresLine(x + w, y, x + w, y + h, color);
-        }
-      }
-
-      drawHiresText(x, y, text, color = 3, scale = 1) {
-        for (let i = 0; i < text.length; i++) {
-          const code = text.charCodeAt(i) & 0x7F;
-          const base = code * 8;
-          for (let r = 0; r < 8; r++) {
-            const rowByte = this.charRom[base + r] || 0;
-            for (let c = 0; c < 6; c++) {
-              if ((rowByte >> (5 - c)) & 1) {
-                if (scale === 1) {
-                  const px = x + i * 7 + c;
-                  const py = y + r;
-                  this.setHiresPixel(px, py, color);
-                } else {
-                  for (let dy = 0; dy < scale; dy++) {
-                    for (let dx = 0; dx < scale; dx++) {
-                      const px = x + i * 7 * scale + c * scale + dx;
-                      const py = y + r * scale + dy;
-                      this.setHiresPixel(px, py, color);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      handleHplot(stmt) {
-        const clean = stmt.replace(/^HPLOT\s*/i, '').trim();
-        if (!clean) return false;
-        const segments = clean.split(/\s+TO\s+/i);
-
-        let currentX = this.lastHplotX || 0;
-        let currentY = this.lastHplotY || 0;
-
-        for (let s = 0; s < segments.length; s++) {
-          const seg = segments[s].trim();
-          if (!seg) continue;
-          const coords = seg.split(',').map(c => this.evalBasicExpr(c.trim()));
-          if (coords.length >= 2) {
-            const destX = Math.max(0, Math.min(279, Math.round(Number(coords[0]) || 0)));
-            const destY = Math.max(0, Math.min(191, Math.round(Number(coords[1]) || 0)));
-            if (s === 0 && !clean.toUpperCase().startsWith('TO')) {
-              currentX = destX;
-              currentY = destY;
-              if (segments.length === 1) {
-                this.writeMem(0xE0, destX & 0xFF);
-                this.writeMem(0xE1, (destX >> 8) & 0xFF);
-                this.writeMem(0xE2, destY & 0xFF);
-                this.writeMem(0xE4, this.hcolor);
-                this.executeSubroutine(0xF457, 100);
-                this.setHiresPixel(destX, destY, this.hcolor);
-              }
-            } else {
-              this.drawHiresLine(currentX, currentY, destX, destY, this.hcolor);
-              currentX = destX;
-              currentY = destY;
-            }
-            this.lastHplotX = currentX;
-            this.lastHplotY = currentY;
-          } else {
-            return false;
-          }
-        }
-        return true;
-      }
-
-      advanceBasic() {
-        if (!this.isRunningBasic || !this.parsedBasicLines || !this.parsedBasicLines[this.basicLinePtr]) return;
-        this.basicStmtPtr++;
-        while (this.basicLinePtr < this.parsedBasicLines.length &&
-               this.parsedBasicLines[this.basicLinePtr] &&
-               this.basicStmtPtr >= this.parsedBasicLines[this.basicLinePtr].statements.length) {
-          this.basicLinePtr++;
-          this.basicStmtPtr = 0;
-        }
-      }
-
-      xorHiresPixel(x, y) {
-        if (x < 0 || x >= 280 || y < 0 || y >= 192) return;
-        const base = this.getHiresScanlineBase(y);
-        const byteCol = Math.floor(x / 7);
-        const bitInByte = x % 7;
-        const addr = base + byteCol;
-        this.ram[addr] ^= (1 << bitInByte);
-      }
-
-      drawShape(shapeNum, startX, startY, isXdraw = false) {
-        const ptrLow = this.ram[0xE8] !== undefined ? this.ram[0xE8] : 0;
-        const ptrHigh = this.ram[0xE9] !== undefined ? this.ram[0xE9] : 0x60;
-        let shapeTableBase = (ptrHigh << 8) | ptrLow;
-        if (shapeTableBase === 0) shapeTableBase = 24576;
-
-        const numShapes = this.ram[shapeTableBase];
-        if (shapeNum < 1 || shapeNum > numShapes) return;
-
-        const offset = this.ram[shapeTableBase + shapeNum * 2] | (this.ram[shapeTableBase + shapeNum * 2 + 1] << 8);
-        let addr = shapeTableBase + offset;
-
-        let curX = Math.round(startX);
-        let curY = Math.round(startY);
-
-        this.writeMem(0xE8, shapeTableBase & 0xFF);
-        this.writeMem(0xE9, (shapeTableBase >> 8) & 0xFF);
-        this.writeMem(0xE0, curX & 0xFF);
-        this.writeMem(0xE1, (curX >> 8) & 0xFF);
-        this.writeMem(0xE2, curY & 0xFF);
-        this.writeMem(0xE4, this.hcolor);
-        // Note: Subroutine 0xF65D removed here to avoid double-XORing vector shape pixels
-
-        const scale = Math.max(1, Math.round(this.basicScale || 1));
-        const rotQuadrant = Math.floor(((this.basicRot || 0) % 64) / 16);
-
-        const getDirectionDeltas = (dirCode) => {
-          const effDir = (dirCode + rotQuadrant) % 4;
-          if (effDir === 0) return { dx: 0, dy: -1 };
-          if (effDir === 1) return { dx: 1, dy: 0 };
-          if (effDir === 2) return { dx: 0, dy: 1 };
-          if (effDir === 3) return { dx: -1, dy: 0 };
-          return { dx: 0, dy: 0 };
-        };
-
-        while (addr < 65536) {
-          const b = this.ram[addr++];
-          if (b === 0) break;
-
-          const dirA = b & 0x03;
-          const plotA = (b & 0x04) !== 0;
-          const deltasA = getDirectionDeltas(dirA);
-          for (let s = 0; s < scale; s++) {
-            if (plotA) {
-              if (isXdraw) this.xorHiresPixel(curX, curY);
-              else this.setHiresPixel(curX, curY, this.hcolor);
-            }
-            curX += deltasA.dx;
-            curY += deltasA.dy;
-          }
-
-          const dirB = (b >> 3) & 0x03;
-          const plotB = (b & 0x20) !== 0;
-          const deltasB = getDirectionDeltas(dirB);
-          for (let s = 0; s < scale; s++) {
-            if (plotB) {
-              if (isXdraw) this.xorHiresPixel(curX, curY);
-              else this.setHiresPixel(curX, curY, this.hcolor);
-            }
-            curX += deltasB.dx;
-            curY += deltasB.dy;
-          }
-
-          const dirC = (b >> 6) & 0x03;
-          if (b & 0xC0) {
-            const deltasC = getDirectionDeltas(dirC);
-            for (let s = 0; s < scale; s++) {
-              curX += deltasC.dx;
-              curY += deltasC.dy;
-            }
-          }
-        }
-      }
-
-      executePrintStatement(rawExpr) {
-        if (!rawExpr || !rawExpr.trim()) {
-          if (this.outputSlot === 1) {
-            this.handlePrinterByte(0x0D);
-          } else {
-            this.cursorRow++;
-            this.cursorCol = 0;
-            this.ensureRow();
-          }
-          return;
-        }
-
-        let i = 0;
-        const len = rawExpr.length;
-        let lastTrailingSep = false;
-
-        while (i < len) {
-          while (i < len && /\s/.test(rawExpr[i])) i++;
-          if (i >= len) break;
-
-          const ch = rawExpr[i];
-
-          if (ch === ';') {
-            lastTrailingSep = true;
-            i++;
-            continue;
-          }
-
-          if (ch === ',') {
-            lastTrailingSep = true;
-            if (this.outputSlot === 1) {
-              this.handlePrinterByte(0x09);
-            } else {
-              const nextTab = (Math.floor((this.cursorCol || 0) / 16) + 1) * 16;
-              if (nextTab >= 40) {
-                this.cursorRow++;
-                this.cursorCol = 0;
-                this.ensureRow();
-              } else {
-                this.cursorCol = nextTab;
-              }
-            }
-            i++;
-            continue;
-          }
-
-          lastTrailingSep = false;
-
-          const tabMatch = rawExpr.slice(i).match(/^TAB\s*\(\s*([^()]+)\s*\)/i);
-          if (tabMatch) {
-            const tabVal = Math.floor(Number(this.evalBasicExpr(tabMatch[1])) || 1);
-            const targetCol = Math.max(0, Math.min(39, tabVal - 1));
-            this.cursorCol = targetCol;
-            i += tabMatch[0].length;
-            continue;
-          }
-
-          const spcMatch = rawExpr.slice(i).match(/^SPC\s*\(\s*([^()]+)\s*\)/i);
-          if (spcMatch) {
-            const spcCount = Math.max(0, Math.floor(Number(this.evalBasicExpr(spcMatch[1])) || 0));
-            this.printOutputString(' '.repeat(spcCount));
-            i += spcMatch[0].length;
-            continue;
-          }
-
-          if (ch === '"') {
-            let str = '';
-            i++;
-            while (i < len && rawExpr[i] !== '"') {
-              str += rawExpr[i++];
-            }
-            if (i < len && rawExpr[i] === '"') i++;
-            this.printOutputString(str);
-            continue;
-          }
-
-          let exprChunk = '';
-          let parenDepth = 0;
-          let chunkInQuote = false;
-
-          while (i < len) {
-            const curChar = rawExpr[i];
-            if (!chunkInQuote && parenDepth === 0) {
-              if (curChar === ';' || curChar === ',') break;
-              if (/^TAB\s*\(/i.test(rawExpr.slice(i))) break;
-              if (/^SPC\s*\(/i.test(rawExpr.slice(i))) break;
-              if (curChar === '"') break;
-            }
-            if (curChar === '"') chunkInQuote = !chunkInQuote;
-            if (!chunkInQuote) {
-              if (curChar === '(') parenDepth++;
-              else if (curChar === ')') parenDepth--;
-            }
-            exprChunk += curChar;
-            i++;
-          }
-
-          if (exprChunk.trim()) {
-            const val = this.evalBasicExpr(exprChunk.trim());
-            let strVal = '';
-            if (val !== undefined && val !== null) {
-              if (typeof val === 'number' || (!isNaN(Number(val)) && typeof val !== 'boolean')) {
-                const n = Number(val);
-                strVal = (n >= 0) ? ' ' + n : String(n);
-              } else {
-                strVal = String(val);
-              }
-            }
-            this.printOutputString(strVal);
-          }
-        }
-
-        if (!lastTrailingSep) {
-          if (this.outputSlot === 1) {
-            this.handlePrinterByte(0x0D);
-          } else {
-            this.cursorRow++;
-            this.cursorCol = 0;
-            this.ensureRow();
-          }
-        }
-      }
-
-      printOutputString(str) {
-        if (!str) return;
-        if (this.outputSlot === 1) {
-          for (let c = 0; c < str.length; c++) {
-            this.handlePrinterByte(str.charCodeAt(c));
-          }
-          return;
-        }
-
-        if (this.cursorRow === undefined || this.cursorRow < 0) this.cursorRow = 0;
-        if (this.cursorCol === undefined || this.cursorCol < 0) this.cursorCol = 0;
-
-        for (let c = 0; c < str.length; c++) {
-          if (this.cursorCol >= 40) {
-            this.cursorRow++;
-            this.cursorCol = 0;
-            this.ensureRow();
-          }
-          this.ensureRow();
-          const base = this.getRowBase(this.cursorRow);
-          this.ram[base + this.cursorCol] = str.charCodeAt(c) | 0x80;
-          this.cursorCol++;
-        }
-      }
-
-      evalPrintExpr(expr) {
-        if (!expr || !expr.trim()) return '';
-        return String(this.evalBasicExpr(expr));
-      }
-
-      evalBasicExpr(expr) {
-        if (typeof expr !== 'string') return expr;
-        expr = expr.trim();
-        if (expr.startsWith('"') && expr.endsWith('"')) return expr.slice(1, -1);
-        if (/^-?\d+(\.\d+)?$/.test(expr)) return Number(expr);
-
-        const up = expr.toUpperCase();
-        if (this.basicVars && this.basicVars.hasOwnProperty(up)) return this.basicVars[up];
-
-        // Protect string literals by extracting them into placeholders
-        const stringLiterals = [];
-        let tokenized = expr.replace(/"([^"]*)"/g, (m, str) => {
-          const placeholder = '__STR_' + stringLiterals.length + '__';
-          stringLiterals.push(str);
-          return placeholder;
-        });
-
-        // Evaluate BASIC functions
-        tokenized = tokenized
-          .replace(/CHR\$\s*\(\s*([^()]+)\s*\)/gi, (m, a) => {
-            const val = Number(this.evalBasicExpr(a)) || 0;
-            const placeholder = '__STR_' + stringLiterals.length + '__';
-            stringLiterals.push(String.fromCharCode(val));
-            return placeholder;
-          })
-          .replace(/VAL\s*\(\s*([^()]+)\s*\)/gi, (m, a) => {
-            const strVal = String(this.evalBasicExpr(a));
-            return String(Number(strVal) || 0);
-          })
-          .replace(/SPC\s*\(\s*([^()]+)\s*\)/gi, (m, a) => {
-            const count = Math.max(0, Math.floor(Number(this.evalBasicExpr(a)) || 0));
-            const placeholder = '__STR_' + stringLiterals.length + '__';
-            stringLiterals.push(' '.repeat(count));
-            return placeholder;
-          })
-          .replace(/TAB\s*\(\s*([^()]+)\s*\)/gi, (m, a) => {
-            const count = Math.max(0, Math.floor(Number(this.evalBasicExpr(a)) || 0));
-            const placeholder = '__STR_' + stringLiterals.length + '__';
-            stringLiterals.push(' '.repeat(count));
-            return placeholder;
-          })
-          .replace(/PEEK\s*\(\s*([^()]+)\s*\)/gi, (m, a) => {
-            const addr = Number(this.evalBasicExpr(a)) || 0;
-            const unsignedAddr = addr < 0 ? (addr + 65536) & 0xffff : addr & 0xffff;
-            return String(this.readMem(unsignedAddr));
-          })
-          .replace(/\bINT\s*\(/gi, 'Math.floor(')
-          .replace(/\bCOS\s*\(/gi, 'Math.cos(')
-          .replace(/\bSIN\s*\(/gi, 'Math.sin(')
-          .replace(/\bTAN\s*\(/gi, 'Math.tan(')
-          .replace(/\bATN\s*\(/gi, 'Math.atan(')
-          .replace(/\bABS\s*\(/gi, 'Math.abs(')
-          .replace(/\bSGN\s*\(/gi, 'Math.sign(')
-          .replace(/\bSQR\s*\(/gi, 'Math.sqrt(')
-          .replace(/\bLOG\s*\(/gi, 'Math.log(')
-          .replace(/\bEXP\s*\(/gi, 'Math.exp(')
-          .replace(/\bPDL\s*\([^)]*\)/gi, '128')
-          .replace(/\bRND\s*\([^)]*\)/gi, 'Math.random()');
-
-        // Replace boolean operators first so (A OR B) or (A AND B) are not treated as array calls
-        tokenized = tokenized
-          .replace(/<>/g, '!=')
-          .replace(/(?<![<>!=])=(?!=)/g, '==')
-          .replace(/\bAND\b/gi, '&&')
-          .replace(/\bOR\b/gi, '||')
-          .replace(/\bNOT\b/gi, '!');
-
-        // Evaluate Array Lookups: ARR(index)
-        let arrayPassCount = 0;
-        while (arrayPassCount < 3 && /\b([A-Z][A-Z0-9]*[$%]?)\s*\(\s*([^()]+)\s*\)/i.test(tokenized)) {
-          tokenized = tokenized.replace(/\b([A-Z][A-Z0-9]*[$%]?)\s*\(\s*([^()]+)\s*\)/gi, (match, arrName, idxExpr) => {
-            const upArr = arrName.toUpperCase();
-            const reservedFns = ['AND', 'OR', 'NOT', 'CHR$', 'VAL', 'SPC', 'TAB', 'PEEK', 'INT', 'COS', 'SIN', 'TAN', 'ATN', 'ABS', 'SGN', 'SQR', 'LOG', 'EXP', 'PDL', 'RND', 'MATH', 'FLOOR', 'SIGN', 'SQRT', 'RANDOM'];
-            if (reservedFns.includes(upArr)) return match;
-            const idx = Math.floor(Number(this.evalBasicExpr(idxExpr)) || 0);
-            if (this.basicArrays && this.basicArrays[upArr] && this.basicArrays[upArr][idx] !== undefined) {
-              const val = this.basicArrays[upArr][idx];
-              if (typeof val === 'string') {
-                const placeholder = '__STR_' + stringLiterals.length + '__';
-                stringLiterals.push(val);
-                return placeholder;
-              }
-              return String(val);
-            }
-            return upArr.endsWith('$') ? '""' : '0';
-          });
-          arrayPassCount++;
-        }
-
-        // Replace variable identifiers (e.g. K$, DL, WX, etc.)
-        tokenized = tokenized.replace(/(?:^|(?<=[^A-Z0-9$%_]))([A-Z][A-Z0-9]*[$%]?)(?![A-Z0-9$%_])/gi, (match, vName) => {
-          const mUp = vName.toUpperCase();
-          if (mUp.startsWith('__STR_')) return match;
-          const reserved = ['MATH', 'FLOOR', 'COS', 'SIN', 'TAN', 'ATAN', 'ABS', 'SIGN', 'SQRT', 'LOG', 'EXP', 'RANDOM', 'TRUE', 'FALSE'];
-          if (reserved.includes(mUp)) return match;
-          if (this.basicVars && this.basicVars.hasOwnProperty(mUp)) {
-            const val = this.basicVars[mUp];
-            if (typeof val === 'string') {
-              const placeholder = '__STR_' + stringLiterals.length + '__';
-              stringLiterals.push(val);
-              return placeholder;
-            }
-            return typeof val === 'number' ? String(val) : '0';
-          }
-          return '0';
-        });
-
-        // Re-insert string literals as quoted JS strings
-        tokenized = tokenized.replace(/__STR_(\d+)__/g, (m, idx) => {
-          return JSON.stringify(stringLiterals[parseInt(idx)]);
-        });
-
-        try {
-          const res = Function(`'use strict'; return (${tokenized})`)();
-          if (typeof res === 'boolean') return res ? 1 : 0;
-          return res;
-        } catch (e) {
-          return 0;
-        }
-      }
-
-      evalBasicCondition(cond) {
-        const res = this.evalBasicExpr(cond);
-        if (typeof res === 'boolean') return res;
-        if (typeof res === 'number') return res !== 0;
-        return Boolean(res);
-      }
-
-      stopGraphics() {
-        this.isGraphicsMode = false;
-        this.mixedGraphics = false;
-        this.hiresLines = [];
-        this.cursorRow++;
-        this.ensureRow();
-        this.writeString(this.cursorRow, 0, "] ");
-        this.currentInput = '';
+        if (!this.running) return;
+        this.runCycles(this.speed >= 50 ? 700000 : 20000);
         this.renderScreen();
+      }
+
+      runProgram() {
+        this.feedText("RUN\r");
+      }
+
+      stopBasic(playBeep = true) {
+        if (this.keyQueue) this.keyQueue.push(3);
+        if (this.ram) this.ram[0x76] = 0xff;
+        if (playBeep) this.playBeep(440, 0.05);
+      }
+
+      get isRunningBasic() {
+        return Boolean(this.running && (this.keyQueue.length > 0 || (this.ram && this.ram[0x76] !== 0xff)));
+      }
+      set isRunningBasic(val) {
+        if (!val && this.ram) this.ram[0x76] = 0xff;
+      }
+
+      get basicProgram() {
+        if (!this.ram) return [];
+        const lines = [];
+        let ptr = (this.ram[0x67] | (this.ram[0x68] << 8)) || 0x0801;
+        while (ptr < 0x9600 && ptr + 4 < this.ram.length) {
+          const next = this.ram[ptr] | (this.ram[ptr + 1] << 8);
+          if (next === 0 || next <= ptr) break;
+          const lineNum = this.ram[ptr + 2] | (this.ram[ptr + 3] << 8);
+          let s = lineNum + ' ';
+          let p = ptr + 4;
+          while (p < next && this.ram[p] !== 0) {
+            const b = this.ram[p++];
+            if (b >= 0x80 && b < 0x80 + APPLESOFT_TOKENS.length) {
+              s += APPLESOFT_TOKENS[b - 0x80];
+            } else {
+              s += String.fromCharCode(b);
+            }
+          }
+          lines.push(s);
+          ptr = next;
+        }
+        return lines;
+      }
+
+      set basicProgram(val) {
+        if (!Array.isArray(val) || val.length === 0) {
+          if (this.ram) {
+            this.ram[0x0800] = 0;
+            this.ram[0x0801] = 0;
+            this.ram[0x0802] = 0;
+            this.ram[0x67] = 0x01; this.ram[0x68] = 0x08;
+            this.ram[0x69] = 0x03; this.ram[0x6A] = 0x08;
+            this.ram[0x6B] = 0x03; this.ram[0x6C] = 0x08;
+            this.ram[0x6D] = 0x03; this.ram[0x6E] = 0x08;
+          }
+        }
       }
 
       feedText(rawText, autoRun = false) {
         if (!rawText) return;
-        const cleaned = rawText
-          .replace(/[“”]/g, '"')
-          .replace(/[‘’]/g, "'")
-          .replace(/^[oO](\d+)/gm, '0$1')
-          .replace(/^I(\d+)/gm, '1$1')
-          .replace(/\\n/g, '\n')
-          .replace(/\r\n|\r/g, '\n');
+        const normalized = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const lines = normalized.split('\n');
 
-        const lines = cleaned.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        if (lines.length === 0) return;
-
-        let hasHexMonitor = false;
-        let hexEntryAddr = null;
-
-        this.basicProgram = [];
-        for (let r = 0; r < 24; r++) this.clearRow(r);
-        this.writeString(0, 10, "APPLE //c ULTRA (50 MHz)");
-        this.cursorRow = 2;
-
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-          const hexMatch = line.match(/^([0-9A-Fa-f]{1,4})\s*:\s*([0-9A-Fa-f]{2}(?:\s+[0-9A-Fa-f]{2})*)/);
-          if (hexMatch) {
-            hasHexMonitor = true;
-            let addr = parseInt(hexMatch[1], 16);
-            if (hexEntryAddr === null) hexEntryAddr = addr;
-            const byteTokens = hexMatch[2].trim().split(/\s+/);
-            for (let bIdx = 0; bIdx < byteTokens.length; bIdx++) {
-              this.writeMem(addr + bIdx, parseInt(byteTokens[bIdx], 16));
-            }
-            this.lastMonitorAddr = addr + byteTokens.length;
-          } else if (/^\d+\s*/.test(line)) {
-            const match = line.match(/^(\d+)\s*(.*)/);
-            const lineNum = parseInt(match[1]);
-            const code = match[2];
-            this.basicProgram = this.basicProgram.filter(l => !l.startsWith(lineNum + ' '));
-            if (code) this.basicProgram.push(line);
+        let isHexOnly = true;
+        for (const l of lines) {
+          const t = l.trim();
+          if (!t) continue;
+          if (!t.startsWith('*') && !/^[0-9A-Fa-f]{3,4}:/.test(t)) {
+            isHexOnly = false;
+            break;
           }
-          this.ensureRow();
-          this.writeString(this.cursorRow, 0, line);
-          this.cursorRow++;
         }
-        this.basicProgram.sort((a, b) => parseInt(a) - parseInt(b));
 
-        this.ensureRow();
-        if (hasHexMonitor && this.basicProgram.length === 0) {
-          const promptAddr = hexEntryAddr !== null ? hexEntryAddr.toString(16).toUpperCase() + "G" : "300G";
-          this.writeString(this.cursorRow, 0, "* " + (autoRun ? promptAddr : "█"));
-          this.playBeep(1200, 0.04);
-          if (autoRun) {
-            setTimeout(() => {
-              const entry = hexEntryAddr !== null ? hexEntryAddr : 0x0300;
-              this.pc = entry;
-              const initialSp = this.sp;
-              let cycles = 0;
-              while (cycles < 50000) {
-                if (this.readMem(this.pc) === 0x60 && this.sp >= initialSp) {
-                  this.pc++;
-                  break;
+        if (isHexOnly) {
+          for (const line of lines) {
+            const trimmed = line.trim().replace(/^\*\s*/, '');
+            if (!trimmed) continue;
+            const match = trimmed.match(/^([0-9A-Fa-f]{3,4}):\s*(.*)/);
+            if (match) {
+              let addr = parseInt(match[1], 16);
+              const byteStrs = match[2].trim().split(/\s+/);
+              for (const bs of byteStrs) {
+                if (bs) {
+                  this.writeMem(addr++, parseInt(bs, 16) & 0xff);
                 }
-                if (this.readMem(this.pc) === 0x00) break;
-                this.step();
-                cycles += 2;
               }
-              this.cursorRow++;
-              this.ensureRow();
-              this.writeString(this.cursorRow, 0, "* █");
-              this.renderScreen();
-            }, 300);
+            }
           }
-        } else {
-          this.writeString(this.cursorRow, 0, "] " + (autoRun ? "RUN" : "█"));
-          this.playBeep(1000, 0.05);
+          return;
+        }
 
-          if (autoRun) {
-            setTimeout(() => {
-              this.runProgram();
-            }, 300);
+        // Parse program lines and store into TXTTAB ($0801)
+        const hasNumberedLines = lines.some(l => /^\d+\s*/.test(l.trim()));
+        let progPtr = 0x0801;
+        if (hasNumberedLines) {
+          this.ram[0x0800] = 0x00;
+        }
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+
+          const hexMatch = trimmed.replace(/^\*\s*/, '').match(/^([0-9A-Fa-f]{3,4}):\s*(.*)/);
+          if (hexMatch) {
+            let addr = parseInt(hexMatch[1], 16);
+            const byteStrs = hexMatch[2].trim().split(/\s+/);
+            for (const bs of byteStrs) {
+              if (bs) this.writeMem(addr++, parseInt(bs, 16) & 0xff);
+            }
+            continue;
+          }
+
+          const lineMatch = trimmed.match(/^(\d+)\s*(.*)/);
+          if (lineMatch) {
+            const lineNum = parseInt(lineMatch[1]);
+            const code = lineMatch[2];
+
+            const tokenizedBytes = [];
+            let i = 0;
+            let inQuote = false;
+            while (i < code.length) {
+              if (code[i] === '"') inQuote = !inQuote;
+              if (!inQuote) {
+                let matchedToken = -1;
+                let matchLen = 0;
+                for (let t = 0; t < APPLESOFT_TOKENS.length; t++) {
+                  const tokStr = APPLESOFT_TOKENS[t];
+                  if (code.substring(i, i + tokStr.length).toUpperCase() === tokStr) {
+                    if (tokStr.length > matchLen) {
+                      matchLen = tokStr.length;
+                      matchedToken = 0x80 + t;
+                    }
+                  }
+                }
+                if (matchedToken !== -1) {
+                  tokenizedBytes.push(matchedToken);
+                  i += matchLen;
+                  continue;
+                }
+              }
+              tokenizedBytes.push(code.charCodeAt(i) & 0x7f);
+              i++;
+            }
+            tokenizedBytes.push(0x00);
+
+            const nextPtr = progPtr + 4 + tokenizedBytes.length;
+            this.ram[progPtr] = nextPtr & 0xff;
+            this.ram[progPtr + 1] = (nextPtr >> 8) & 0xff;
+            this.ram[progPtr + 2] = lineNum & 0xff;
+            this.ram[progPtr + 3] = (lineNum >> 8) & 0xff;
+            for (let b = 0; b < tokenizedBytes.length; b++) {
+              this.ram[progPtr + 4 + b] = tokenizedBytes[b];
+            }
+            progPtr = nextPtr;
+          } else {
+            for (let c = 0; c < trimmed.length; c++) {
+              let code = trimmed.charCodeAt(c);
+              if (code >= 97 && code <= 122) code -= 32;
+              this.keyQueue.push(code);
+            }
+            this.keyQueue.push(13);
           }
         }
+
+        if (hasNumberedLines) {
+          this.ram[progPtr] = 0x00;
+          this.ram[progPtr + 1] = 0x00;
+          const endPtr = progPtr + 2;
+
+          this.ram[0x67] = 0x01; this.ram[0x68] = 0x08;
+          this.ram[0x69] = endPtr & 0xff; this.ram[0x6A] = (endPtr >> 8) & 0xff;
+          this.ram[0x6B] = endPtr & 0xff; this.ram[0x6C] = (endPtr >> 8) & 0xff;
+          this.ram[0x6D] = endPtr & 0xff; this.ram[0x6E] = (endPtr >> 8) & 0xff;
+          this.ram[0xAF] = endPtr & 0xff; this.ram[0xB0] = (endPtr >> 8) & 0xff;
+        }
+
+        if (autoRun) {
+          this.keyQueue.push(82, 85, 78, 13);
+        }
+        this.runCycles(this.speed >= 50 ? 700000 : 20000);
         this.renderScreen();
+      }
+
+      getHiresScanlineBase(y) {
+        const pageBase = this.isPage2 ? 0x4000 : 0x2000;
+        const box = Math.floor(y / 64);
+        const lineInBox = y % 64;
+        const block = lineInBox % 8;
+        const row = Math.floor(lineInBox / 8);
+        return pageBase + (block * 0x0400) + (row * 0x80) + (box * 0x28);
       }
 
       renderScreen() {
@@ -7163,8 +5168,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           // Flash uppercase
           return String.fromCharCode(raw);
         }
+        if (raw === 0x60 || raw === 0x00 || raw === 0xa0) return ' ';
         if (raw >= 0x60 && raw <= 0x7f) {
-          if (raw === 0x60) return ' '; // Guard against any legacy cursor glyph
           return this.altCharset ? String.fromCharCode(raw) : String.fromCharCode(raw);
         }
         if (raw >= 0x80 && raw <= 0x9f) {

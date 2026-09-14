@@ -1396,10 +1396,10 @@ runner.suite('Magazine Type-In Transcriber: Vintage Programs & BASIC Execution E
 
   runner.test('Engine Subsystems: DIM, Array Assignments, INPUT & Hex Monitor Deposit', () => {
     const standalone = fs.readFileSync(path.join(__dirname, '..', 'index-standalone.html'), 'utf8');
-    assertTrue(standalone.includes("upper.startsWith('DIM ')"), 'DIM statement supported');
-    assertTrue(standalone.includes('this.basicArrays'), 'basicArrays dictionary initialized');
-    assertTrue(standalone.includes("upper.startsWith('INPUT')"), 'INPUT statement supported');
-    assertTrue(standalone.includes('hasHexMonitor'), 'Direct hex monitor deposit supported');
+    assertTrue(!standalone.includes("executeBasicStatement"), 'Synthetic basic statement interpreter purged in favor of 65C02 ROM');
+    assertTrue(standalone.includes('AUTHENTIC_APPLE2C_ROM_B64'), 'Authentic ROM contains native Applesoft DIM, arrays, and INPUT routines');
+    assertTrue(standalone.includes('feedText'), 'feedText tokenizes programs directly into TXTTAB');
+    assertTrue(standalone.includes('isHexOnly'), 'Direct hex monitor deposit supported');
   });
 
   runner.test('QA Artifacts & Screenshot Verification for All 5 Type-In Programs', () => {
