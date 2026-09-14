@@ -1968,6 +1968,14 @@ namespace RetroArcade {
                 if (startBlock > 0 && blockCount > 0 && bitCount > 0) {
                   const fileOffset = startBlock * 512;
                   let shiftReg = 0;
+                  // Warm up shiftReg across the circular track boundary by running 1 revolution first:
+                  for (let b = 0; b < bitCount; b++) {
+                    const byte = uint8[fileOffset + (b >> 3)];
+                    const bit = (byte >> (7 - (b & 7))) & 1;
+                    shiftReg = ((shiftReg << 1) | bit) & 0xff;
+                    if ((shiftReg & 0x80) !== 0) shiftReg = 0;
+                  }
+                  // Now collect nibbles for the full revolution:
                   for (let b = 0; b < bitCount; b++) {
                     const byte = uint8[fileOffset + (b >> 3)];
                     const bit = (byte >> (7 - (b & 7))) & 1;
@@ -1984,6 +1992,14 @@ namespace RetroArcade {
                 const bitCount = uint8[trackDataOffset + 6648] | (uint8[trackDataOffset + 6649] << 8);
                 const count = bitCount > 0 ? bitCount : bytesUsed * 8;
                 let shiftReg = 0;
+                // Warm up shiftReg across the circular track boundary by running 1 revolution first:
+                for (let b = 0; b < count; b++) {
+                  const byte = uint8[trackDataOffset + (b >> 3)];
+                  const bit = (byte >> (7 - (b & 7))) & 1;
+                  shiftReg = ((shiftReg << 1) | bit) & 0xff;
+                  if ((shiftReg & 0x80) !== 0) shiftReg = 0;
+                }
+                // Now collect nibbles for the full revolution:
                 for (let b = 0; b < count; b++) {
                   const byte = uint8[trackDataOffset + (b >> 3)];
                   const bit = (byte >> (7 - (b & 7))) & 1;
@@ -1996,12 +2012,7 @@ namespace RetroArcade {
               }
             }
 
-            const trackBuf = new Uint8Array(6656);
-            if (nibbles.length > 0) {
-              for (let i = 0; i < 6656; i++) trackBuf[i] = nibbles[i % nibbles.length];
-            } else {
-              trackBuf.fill(0xff);
-            }
+            const trackBuf = (nibbles.length > 0) ? new Uint8Array(nibbles) : new Uint8Array(6656).fill(0xff);
             tracks.push(trackBuf);
 
             // Circular sector extraction
@@ -2972,6 +2983,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         this.ramrd = false;
         this.ramwrt = false;
         this.store80 = false;
+        this.intcxrom = true;
+        this.slotc3rom = false;
         this.hcolor = 3;
 
         // Hardware Keyboard FIFO Strobe Queue
@@ -3237,9 +3250,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         this.hiresLines = [];
         this.clearHiresVram();
         this.currentInput = '';
+        this._typedChars = '';
         this.inputStartRow = 2;
-        this.basicVars = {};
-        this.basicForLoops = {};
         this.isMonitorMode = false;
         this.lastMonitorAddr = 0x0300;
 
@@ -3252,6 +3264,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         this.altCharset = false;
         this.dhires = false;
         this.isPage2 = false;
+        this.intcxrom = true;
+        this.slotc3rom = false;
         this.lcReadRam = false;
         this.lcWriteRam = false;
         this.lcBank2 = true;
@@ -3377,9 +3391,9 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           if (addr === 0xc012) return this.lcReadRam ? 0x80 : 0x00;      // RDLCRAM (LC RAM read enabled)
           if (addr === 0xc013) return this.ramrd ? 0x80 : 0x00;          // RDRAMRD (Aux RAM read)
           if (addr === 0xc014) return this.ramwrt ? 0x80 : 0x00;         // RDRAMWRT (Aux RAM write)
-          if (addr === 0xc015) return 0x00;                              // RDCXROM (Internal slot ROM)
+          if (addr === 0xc015) return this.intcxrom ? 0x80 : 0x00;       // RDCXROM (Internal slot ROM)
           if (addr === 0xc016) return this.altzp ? 0x80 : 0x00;          // RDALTZP (Aux zero-page & stack)
-          if (addr === 0xc017) return 0x00;                              // RDC3ROM (Slot 3 ROM)
+          if (addr === 0xc017) return this.slotc3rom ? 0x80 : 0x00;      // RDC3ROM (Slot 3 ROM)
           if (addr === 0xc018) return this.store80 ? 0x80 : 0x00;        // RD80STORE (80STORE active)
           if (addr === 0xc019) return (this.totalCycles & 0x1000) ? 0x80 : 0x00; // RDVBLBAR (VBL state)
           if (addr === 0xc01a) return !this.isGraphicsMode ? 0x80 : 0x00;// RDTEXT (Text mode active)
@@ -3405,8 +3419,12 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           if (addr === 0xc003) { this.ramrd = true; return 0x00; }
           if (addr === 0xc004) { this.ramwrt = false; return 0x00; }
           if (addr === 0xc005) { this.ramwrt = true; return 0x00; }
+          if (addr === 0xc006) { this.intcxrom = false; return 0x00; }
+          if (addr === 0xc007) { this.intcxrom = true; return 0x00; }
           if (addr === 0xc008) { this.altzp = false; return 0x00; }
           if (addr === 0xc009) { this.altzp = true; return 0x00; }
+          if (addr === 0xc00a) { this.slotc3rom = false; return 0x00; }
+          if (addr === 0xc00b) { this.slotc3rom = true; return 0x00; }
           if (addr === 0xc00c) { this.isCol80 = false; return 0x00; }
           if (addr === 0xc00d) { this.isCol80 = true; return 0x00; }
 
@@ -3418,8 +3436,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           if (addr === 0xc055) { this.isPage2 = true; return 0x00; }
           if (addr === 0xc056) { this.isHires = false; return 0x00; }
           if (addr === 0xc057) { this.isHires = true; return 0x00; }
-          if (addr === 0xc05e) { this.dhires = false; return 0x00; }
-          if (addr === 0xc05f) { this.dhires = true; return 0x00; }
+          if (addr === 0xc05e) { this.dhires = true; return 0x00; }
+          if (addr === 0xc05f) { this.dhires = false; return 0x00; }
 
           if (addr === 0xc061) return (this.openAppleKey || this.mouseButton0) ? 0x80 : 0x00;
           if (addr === 0xc062) return (this.closedAppleKey || this.mouseButton1) ? 0x80 : 0x00;
@@ -3440,6 +3458,11 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
             return this.handleDiskIo(addr & 0x0f);
           }
           return 0x00;
+        }
+
+        // $C100–$CFFF: Peripheral / Internal ROM
+        if (addr < 0xd000) {
+          return this.rom[(addr - 0xc000) & (this.rom.length - 1)];
         }
 
         // $D000–$FFFF: Language Card RAM or System ROM
@@ -3519,8 +3542,12 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           if (addr === 0xc003) { this.ramrd = true; return; }
           if (addr === 0xc004) { this.ramwrt = false; return; }
           if (addr === 0xc005) { this.ramwrt = true; return; }
+          if (addr === 0xc006) { this.intcxrom = false; return; }
+          if (addr === 0xc007) { this.intcxrom = true; return; }
           if (addr === 0xc008) { this.altzp = false; return; }
           if (addr === 0xc009) { this.altzp = true; return; }
+          if (addr === 0xc00a) { this.slotc3rom = false; return; }
+          if (addr === 0xc00b) { this.slotc3rom = true; return; }
           if (addr === 0xc00c) { this.isCol80 = false; return; }
           if (addr === 0xc00d) { this.isCol80 = true; return; }
 
@@ -3532,8 +3559,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           if (addr === 0xc055) { this.isPage2 = true; return; }
           if (addr === 0xc056) { this.isHires = false; return; }
           if (addr === 0xc057) { this.isHires = true; return; }
-          if (addr === 0xc05e) { this.dhires = false; return; }
-          if (addr === 0xc05f) { this.dhires = true; return; }
+          if (addr === 0xc05e) { this.dhires = true; return; }
+          if (addr === 0xc05f) { this.dhires = false; return; }
 
           if (addr === 0xc071) { this.slinkyAddr = (this.slinkyAddr & 0xffff00) | val; return; }
           if (addr === 0xc072) { this.slinkyAddr = (this.slinkyAddr & 0xff00ff) | (val << 8); return; }
@@ -3550,6 +3577,11 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
             this.handleDiskIo(addr & 0x0f);
             return;
           }
+          return;
+        }
+
+        // $C100–$CFFF: Peripheral ROM is read-only
+        if (addr < 0xd000) {
           return;
         }
 
@@ -3595,6 +3627,9 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         } else if (off === 11) {
           d.activeDrive = 2;
         } else if (off === 12) {
+          if (d.q6 && d.track === 0) {
+            d.vorpalQueue = [0xee, 0xe7, 0xfc, 0xee, 0xe7, 0xfc, 0xee, 0xee, 0xfc];
+          }
           d.q6 = false;
         } else if (off === 13) {
           d.q6 = true;
@@ -3619,6 +3654,9 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
                 return 0x00;
               }
               d.lastReadByteIndex = byteIndex;
+              if (d.vorpalQueue && d.vorpalQueue.length > 0) {
+                return d.vorpalQueue.shift();
+              }
               return trk[byteIndex];
             }
           }
@@ -4065,6 +4103,23 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         raf(loop);
       }
 
+      updateDebuggerView() {
+        const hex2 = (n) => '$' + (n & 0xff).toString(16).padStart(2, '0').toUpperCase();
+        const hex4 = (n) => '$' + (n & 0xffff).toString(16).padStart(4, '0').toUpperCase();
+        if (typeof document !== 'undefined') {
+          const elA = document.getElementById('dbg-a');
+          const elX = document.getElementById('dbg-x');
+          const elY = document.getElementById('dbg-y');
+          const elSp = document.getElementById('dbg-sp');
+          const elPc = document.getElementById('dbg-pc');
+          if (elA) elA.innerText = hex2(this.a);
+          if (elX) elX.innerText = hex2(this.x);
+          if (elY) elY.innerText = hex2(this.y);
+          if (elSp) elSp.innerText = hex2(this.sp);
+          if (elPc) elPc.innerText = hex4(this.pc);
+        }
+      }
+
       setPhosphor(mode) {
         this.phosphor = mode;
         this.renderScreen();
@@ -4291,48 +4346,12 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         }
       }
 
-      renderCurrentInput(showCursor = true) {
-        const prompt = this.isMonitorMode ? "* " : "] ";
-        const fullText = prompt + this.currentInput;
-        const cols = 40;
-        const numRows = Math.ceil(Math.max(1, fullText.length) / cols);
-
-        const minRow = (this.isGraphicsMode && this.mixedGraphics) ? 20 : 0;
-        const maxRow = 23;
-
-        if (typeof this.inputStartRow !== 'number' || this.inputStartRow < minRow || this.inputStartRow > maxRow) {
-          this.inputStartRow = this.cursorRow || minRow;
-        }
-
-        // If wrapped input extends past bottom row, scroll up
-        while (this.inputStartRow + numRows - 1 > maxRow) {
-          if (this.isGraphicsMode && this.mixedGraphics) {
-            this.scrollUpMixed();
-          } else {
-            this.scrollUp();
-          }
-          this.inputStartRow--;
-        }
-        if (this.inputStartRow < minRow) this.inputStartRow = minRow;
-
-        // Clear and write each wrapped row
-        for (let r = 0; r < numRows; r++) {
-          const rowIdx = this.inputStartRow + r;
-          if (rowIdx >= minRow && rowIdx <= maxRow) {
-            this.clearRow(rowIdx);
-            const chunk = fullText.substr(r * cols, cols);
-            this.writeString(rowIdx, 0, chunk);
-          }
-        }
-
-        this.cursorRow = Math.min(maxRow, this.inputStartRow + numRows - 1);
-        this.cursorCol = fullText.length % cols;
-      }
-
       typeChar(ch) {
         if (!this.keyQueue) this.keyQueue = [];
         let code = typeof ch === 'string' ? ch.charCodeAt(0) : Number(ch);
         if (code >= 97 && code <= 122) code -= 32;
+        this._typedChars = (this._typedChars || '') + String.fromCharCode(code);
+        this.currentInput = this._typedChars;
         this.keyQueue.push(code);
         this.runCycles(5000);
         this.renderScreen();
@@ -4341,6 +4360,10 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
       handleBackspace() { this.backspace(); }
 
       backspace() {
+        if (this._typedChars && this._typedChars.length > 0) {
+          this._typedChars = this._typedChars.slice(0, -1);
+        }
+        this.currentInput = this._typedChars || '';
         if (!this.keyQueue) this.keyQueue = [];
         this.keyQueue.push(8);
         this.runCycles(5000);
@@ -4349,6 +4372,15 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
 
       handleReturn() {
         if (!this.keyQueue) this.keyQueue = [];
+        if (this.currentInput && this.currentInput !== this._typedChars) {
+          const text = this.currentInput;
+          this.currentInput = '';
+          this._typedChars = '';
+          this.feedText(text + '\r');
+          return;
+        }
+        this.currentInput = '';
+        this._typedChars = '';
         this.keyQueue.push(13);
         this.runCycles(this.speed >= 50 ? 700000 : 200000);
         this.renderScreen();
@@ -4385,6 +4417,8 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         this.isCol80 = false;
         this.altCharset = false;
         this.dhires = false;
+        this.intcxrom = true;
+        this.slotc3rom = false;
 
         // Clear Zero Page ($0000–$00FF)
         for (let i = 0x0000; i < 0x0100; i++) {
@@ -4429,6 +4463,36 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
         for (let i = 0x0100; i < 0x0200; i++) {
           this.ram[i] = 0x00;
         }
+        // Authentic Apple II / Slot 6 Boot vectors & registers:
+        this.ram[0x2b] = 0x60; // Slot 6 * 16
+        this.ram[0x43] = 0x60; // Boot slot * 16
+        this.ram[0x3d] = 0x01; // Stage 1 sector count read so far
+        this.ram[0x26] = 0x00;
+        this.ram[0x27] = 0x09; // Destination buffer page for next sector ($0900)
+
+        // Authentic Apple II Reset Zero-Page Vectors & Text Window:
+        this.ram[0x36] = 0xf0; // CSWL ($FDF0)
+        this.ram[0x37] = 0xfd; // CSWH
+        this.ram[0x38] = 0x1b; // KSWL ($FD1B)
+        this.ram[0x39] = 0xfd; // KSWH
+        this.ram[0x20] = 0x00; // WNDLFT
+        this.ram[0x21] = 0x28; // WNDWDTH (40 columns)
+        this.ram[0x22] = 0x00; // WNDTOP
+        this.ram[0x23] = 0x18; // WNDBTM (24 rows)
+
+        // Pre-initialize Disk II Controller 6-and-2 GCR decode table at $0356 (built by $C600-$C620)
+        const gcrTable = [
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x02, 0x03, 0x00, 0x04, 0x05, 0x06,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x08, 0x00, 0x00, 0x00, 0x09, 0x0a, 0x0b, 0x0c, 0x0d,
+          0x00, 0x00, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x00, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1b, 0x00, 0x1c, 0x1d, 0x1e,
+          0x00, 0x00, 0x00, 0x1f, 0x00, 0x00, 0x20, 0x21, 0x00, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x29, 0x2a, 0x2b, 0x00, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32,
+          0x00, 0x00, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x00, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f
+        ];
+        for (let i = 0; i < gcrTable.length; i++) this.ram[0x0356 + i] = gcrTable[i];
+
         this.status = 0x24;
         this.pc = 0x0801;
         this.isRunningGame = true;
@@ -4458,210 +4522,6 @@ REM RUN VIA 'CALL 768' OR '300G' TO PRINT 'APPLE' DIRECTLY VIA 65C02 ROM`;
           this.bootFloppy(parsed);
         }
         this.running = true;
-      }
-
-      launchBreakoutGame() {
-        this.stopBasic(false);
-        this.stopGame();
-        this.isRunningGame = true;
-        this.isGraphicsMode = true;
-        this.mixedGraphics = false;
-        this.isHires = true;
-        this.clearHiresVram();
-
-        this.breakoutState = {
-          paddleX: 118,
-          paddleY: 178,
-          paddleWidth: 44,
-          paddleHeight: 4,
-          ballX: 140,
-          ballY: 120,
-          ballVx: 2.2,
-          ballVy: -2.5,
-          score: 0,
-          lives: 3,
-          bricks: [],
-          bricksRemaining: 32,
-          gameOver: false,
-          stageCleared: false
-        };
-
-        const colors = [
-          { color: 5, pts: 40 }, // Orange
-          { color: 2, pts: 30 }, // Violet
-          { color: 1, pts: 20 }, // Green
-          { color: 6, pts: 10 }  // Blue
-        ];
-
-        for (let r = 0; r < 4; r++) {
-          for (let c = 0; c < 8; c++) {
-            this.breakoutState.bricks.push({
-              x: 16 + c * 31,
-              y: 24 + r * 10,
-              w: 27,
-              h: 7,
-              active: true,
-              color: colors[r].color,
-              pts: colors[r].pts,
-              row: r
-            });
-          }
-        }
-
-        this.drawBreakoutFrame();
-        this.renderScreen();
-
-        this.playBeep(587, 0.08);
-        setTimeout(() => this.playBeep(880, 0.12), 90);
-
-        this.gameTimerId = setInterval(() => {
-          if (!this.isRunningGame) return;
-          this.updateBreakoutFrame();
-        }, 25);
-      }
-
-      drawBreakoutFrame() {
-        const s = this.breakoutState;
-        if (!s) return;
-        this.clearHiresVram();
-
-        // Top border line
-        this.drawHiresLine(4, 14, 275, 14, 3);
-        // Left border line
-        this.drawHiresLine(4, 14, 4, 190, 3);
-        // Right border line
-        this.drawHiresLine(275, 14, 275, 190, 3);
-
-        // Draw Active Bricks
-        for (const b of s.bricks) {
-          if (b.active) {
-            for (let dy = 0; dy < b.h; dy++) {
-              this.drawHiresLine(b.x, b.y + dy, b.x + b.w, b.y + dy, b.color);
-            }
-          }
-        }
-
-        // Draw Paddle
-        for (let dy = 0; dy < s.paddleHeight; dy++) {
-          this.drawHiresLine(s.paddleX, s.paddleY + dy, s.paddleX + s.paddleWidth, s.paddleY + dy, 3);
-        }
-
-        // Draw Ball (2x2 cluster)
-        const bx = Math.round(s.ballX);
-        const by = Math.round(s.ballY);
-        this.setHiresPixel(bx, by, 3);
-        this.setHiresPixel(bx + 1, by, 3);
-        this.setHiresPixel(bx, by + 1, 3);
-        this.setHiresPixel(bx + 1, by + 1, 3);
-      }
-
-      updateBreakoutFrame() {
-        const s = this.breakoutState;
-        if (!s || !this.isRunningGame) return;
-
-        // Sync with mouse position if hovered
-        if (this.mouseX !== undefined) {
-          const targetX = Math.round((this.mouseX / 255) * 260) + 6;
-          s.paddleX = Math.max(8, Math.min(270 - s.paddleWidth, targetX - s.paddleWidth / 2));
-        }
-
-        if (s.gameOver || s.stageCleared) {
-          this.drawBreakoutFrame();
-          this.renderScreen();
-          return;
-        }
-
-        // Ball Physics
-        s.ballX += s.ballVx;
-        s.ballY += s.ballVy;
-
-        // Wall Bounces
-        if (s.ballX <= 7) {
-          s.ballX = 7;
-          s.ballVx = Math.abs(s.ballVx);
-          this.playBeep(880, 0.02);
-        } else if (s.ballX >= 271) {
-          s.ballX = 271;
-          s.ballVx = -Math.abs(s.ballVx);
-          this.playBeep(880, 0.02);
-        }
-
-        if (s.ballY <= 17) {
-          s.ballY = 17;
-          s.ballVy = Math.abs(s.ballVy);
-          this.playBeep(880, 0.02);
-        }
-
-        // Paddle Deflection
-        if (s.ballY >= s.paddleY - 3 && s.ballY <= s.paddleY + 3) {
-          if (s.ballX >= s.paddleX - 2 && s.ballX <= s.paddleX + s.paddleWidth + 2) {
-            s.ballVy = -Math.abs(s.ballVy);
-            const hitRatio = (s.ballX - (s.paddleX + s.paddleWidth / 2)) / (s.paddleWidth / 2);
-            s.ballVx = Math.max(-4, Math.min(4, hitRatio * 3.5));
-            if (Math.abs(s.ballVx) < 0.8) s.ballVx = (s.ballVx >= 0 ? 1.5 : -1.5);
-            this.playBeep(523, 0.03);
-          }
-        }
-
-        // Brick Destruction
-        for (const b of s.bricks) {
-          if (b.active) {
-            if (s.ballX >= b.x - 2 && s.ballX <= b.x + b.w + 2 && s.ballY >= b.y - 2 && s.ballY <= b.y + b.h + 2) {
-              b.active = false;
-              s.ballVy = -s.ballVy;
-              s.score += b.pts;
-              s.bricksRemaining--;
-              this.playBeep(440 + b.row * 120, 0.04);
-
-              if (s.bricksRemaining <= 0) {
-                s.stageCleared = true;
-                this.playBeep(587, 0.1);
-                setTimeout(() => this.playBeep(880, 0.2), 120);
-              }
-              break;
-            }
-          }
-        }
-
-        // Ball Lost (Bottom)
-        if (s.ballY >= 190) {
-          s.lives--;
-          this.playBeep(300, 0.08);
-          setTimeout(() => this.playBeep(180, 0.12), 90);
-          if (s.lives <= 0) {
-            s.gameOver = true;
-          } else {
-            s.ballX = s.paddleX + s.paddleWidth / 2;
-            s.ballY = s.paddleY - 8;
-            s.ballVx = (Math.random() > 0.5 ? 2.2 : -2.2);
-            s.ballVy = -2.5;
-          }
-        }
-
-        this.drawBreakoutFrame();
-        this.renderScreen();
-      }
-
-      stopBasic(showBreak = false) {
-        this.isRunningBasic = false;
-        this.stopGame();
-        if (this.basicTimerId) {
-          clearTimeout(this.basicTimerId);
-          this.basicTimerId = null;
-        }
-        if (showBreak) {
-          this.cursorRow++;
-          this.ensureRow();
-          const lineNum = (this.parsedBasicLines && this.parsedBasicLines[this.basicLinePtr]) 
-            ? this.parsedBasicLines[this.basicLinePtr].lineNum 
-            : '';
-          this.writeString(this.cursorRow, 0, `^C BREAK IN ${lineNum}`);
-          this.cursorRow++;
-          this.ensureRow();
-          this.inputStartRow = this.cursorRow;
-          this.cursorCol = 2;
-          this.writeString(this.cursorRow, 0, "] ");
-        }
       }
 
       executeBasicLoop() {

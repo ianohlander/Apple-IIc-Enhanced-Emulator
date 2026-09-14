@@ -146,6 +146,7 @@ export class BrowserRunner {
     const proc = spawn(browserPath, [
       '--headless=new',
       `--remote-debugging-port=${port}`,
+      '--remote-debugging-address=127.0.0.1',
       '--disable-gpu',
       '--no-first-run',
       '--no-default-browser-check',
@@ -155,7 +156,7 @@ export class BrowserRunner {
 
     // Wait for CDP endpoint
     let pages = null;
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 80; i++) {
       try {
         pages = await new Promise((resolve, reject) => {
           http.get(`http://127.0.0.1:${port}/json`, (r) => {

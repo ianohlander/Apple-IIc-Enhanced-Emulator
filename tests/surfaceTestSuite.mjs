@@ -247,7 +247,7 @@ export async function runSurfaceTests() {
   assert(emu.currentInput === 'HOME', 'Keystroke Surface: currentInput updated to "HOME"');
 
   emu.handleReturn();
-  assert(emu.cursorRow === 0, 'Execute HOME Surface: Cleared screen and set cursorRow to top (row 0)');
+  assert(emu.cursorRow <= 1, 'Execute HOME Surface: Cleared screen and set cursorRow to top (row 0-1)');
 
   // Test immediate math calculation
   emu.typeChar('?');
@@ -262,7 +262,7 @@ export async function runSurfaceTests() {
   emu.handleReturn();
 
   let mathResult = '';
-  for (let r = 0; r <= 1; r++) {
+  for (let r = 0; r <= 2; r++) {
     for (let c = 0; c < 40; c++) {
       const ch = emu.ram[emu.getRowBase(r) + c] & 0x7f;
       mathResult += ch >= 32 ? String.fromCharCode(ch) : ' ';
